@@ -5,6 +5,7 @@ import { HomeComponent } from './Views/Components/Pages/home/home.component';
 import { MetasComponent } from './Views/Components/Pages/metas/metas.component';
 import { TiposComponent } from './Views/Components/Pages/tipos/tipos.component';
 import { EmpleadosComponent } from './Views/Components/Pages/empleados/empleados.component';
+import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-evaluacion/periodos-evaluacion.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
   },
   { path:'Empleado', 
     component: EmpleadosComponent,
+    canActivate: [AuthGuard]
+  },
+  { path:'PeriodoEvaluacion', 
+    component: PeriodosEvaluacionComponent,
     canActivate: [AuthGuard]
   },
 ];

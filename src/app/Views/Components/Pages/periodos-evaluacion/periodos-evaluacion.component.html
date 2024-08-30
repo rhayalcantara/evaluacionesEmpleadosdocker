@@ -1,0 +1,30 @@
+<h2>Periodos Evaluacion</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Period ID</th>
+      <th>Position Secuential</th>
+      <th>Goal ID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let periodoEvaluacion of periodosEvaluacion">
+      <td>{{ periodoEvaluacion.id }}</td>
+      <td>{{ periodoEvaluacion.periodId }}</td>
+      <td>{{ periodoEvaluacion.positionSecuential }}</td>
+      <td>{{ periodoEvaluacion.goalId }}</td>
+      <td>
+        <button (click)="onSelect(periodoEvaluacion)">Edit</button>
+        <button (click)="onDelete(periodoEvaluacion.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-form-periodo-evaluacion
+  [periodoEvaluacion]="selectedPeriodoEvaluacion"
+  (formSubmit)="onFormSubmit($event)"
+></app-form-periodo-evaluacion>

@@ -16,11 +16,16 @@ import { ErrorInterceptorService } from './Services/error-interceptor.service';
 import { CommonsLibService } from '@commons-lib';
 import { SegurityService } from './Services/segurity.service';
 
+// Importar los nuevos componentes
+import { FormPeriodoEvaluacionComponent } from './Views/Components/Forms/form-periodo-evaluacion/form-periodo-evaluacion.component';
+import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-evaluacion/periodos-evaluacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavmenuComponent
+    NavmenuComponent,
+    FormPeriodoEvaluacionComponent,
+    PeriodosEvaluacionComponent
   ],
   imports: [
     BrowserModule,

@@ -11,8 +11,8 @@ import { ModelResponse } from '../Models/Usuario/modelResponse';
 })
 export class DatosServiceService {
   
-  public URL:string='http://192.168.8.45:9090'
-  //public URL:string='https://localhost:7067'
+  //public URL:string='http://192.168.8.45:9090'
+  public URL:string='https://localhost:7067'
   //public URL:string='http://192.168.7.222:9292'
   constructor(private http: HttpClient,) { }
    headers:HttpHeaders = new HttpHeaders({    

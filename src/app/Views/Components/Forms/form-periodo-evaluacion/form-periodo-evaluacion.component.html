@@ -1,0 +1,15 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="periodId">Period ID:</label>
+    <input type="number" id="periodId" formControlName="periodId" required>
+  </div>
+  <div>
+    <label for="positionSecuential">Position Secuential:</label>
+    <input type="number" id="positionSecuential" formControlName="positionSecuential" required>
+  </div>
+  <div>
+    <label for="goalId">Goal ID:</label>
+    <input type="number" id="goalId" formControlName="goalId" required>
+  </div>
+  <button type="submit" [disabled]="!form.valid">Submit</button>
+</form>

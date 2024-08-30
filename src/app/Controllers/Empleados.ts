@@ -103,7 +103,7 @@ export class Empleados implements OnInit{
 }
 
 public Get(id:string):Observable<IEmpleado>{
-return this.datos.getbyid<IEmpleado>(this.rutaapi+`/${id}`)
+  return this.datos.getbyid<IEmpleado>(this.rutaapi+`/${id}`)
 }
 public GetCount():Observable<number>{
 
