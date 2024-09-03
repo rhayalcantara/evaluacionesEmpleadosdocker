@@ -1,0 +1,29 @@
+<div class="container-fluid">
+  <h2>Políticas de Evaluación</h2>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="term" (keyup)="filtro()" placeholder="Buscar por nombre">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" (click)="filtro()">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <app-tables 
+    [campos]="campos" 
+    campokey="id"
+    [arraydatos]="politicaEvaluacion.arraymodel"
+    [titulos]="tituloslocal"
+    (accion)="opcion($event)"
+    [config]="config"
+    (paginacambio)="paginacambio($event)"
+    (idtable)="actualizaelidtable($event)"
+    [term]="term"
+    [totalregistros]="politicaEvaluacion.totalregistros"
+    [currentPage]="politicaEvaluacion.actualpage"
+    [config]="config">
+  </app-tables>
+</div>

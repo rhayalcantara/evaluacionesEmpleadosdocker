@@ -47,6 +47,11 @@ const routes: Routes = [
     component: PeriodosEvaluacionComponent,
     canActivate: [AuthGuard]
   },
+  { path:'PoliticaEvaluacion', 
+    loadComponent:()=> import('./Views/Components/Pages/politicas-evaluacion/politicas-evaluacion.component')
+    .then((m)=> m.PoliticasEvaluacionComponent),
+     canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
