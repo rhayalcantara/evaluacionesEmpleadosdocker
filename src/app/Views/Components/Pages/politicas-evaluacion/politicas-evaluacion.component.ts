@@ -7,8 +7,9 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
-import { IPoliticaEvaluacion } from 'src/app/Models/PoliticaEvaluacion/IPoliticaEvaluacion';
 import { LoadingComponent } from '../../loading/loading.component';
+import { IPoliticaEvaluacion } from 'src/app/Models/PoliticaEvaluacion/IPoliticaEvaluacion';
+import { FormPoliticaEvaluacionComponent } from '../../Forms/form-politica-evaluacion/form-politica-evaluacion.component';
 
 
 @Component({
@@ -19,9 +20,8 @@ import { LoadingComponent } from '../../loading/loading.component';
   styleUrls: ['./politicas-evaluacion.component.css']
 })
 export class PoliticasEvaluacionComponent implements OnInit {
-opcion($event: TableResponse) {
-throw new Error('Method not implemented.');
-}
+
+
   constructor(
     public politicaEvaluacion: PoliticaEvaluacion,
     private ServiceComunicacion: ComunicacionService,
@@ -94,5 +94,57 @@ throw new Error('Method not implemented.');
 
   pdf() { }
 
+  opcion(event: TableResponse) {
+    console.log(event);
+    const acct: any = {
+      edit: this.edita,
+      del: this.delete
+    };
+    
+    const handler = acct[event.option](event.key, this.politicaEvaluacion, this.toastr);
+    handler.then((rep: IPoliticaEvaluacion) => {
+      this.politicaEvaluacion.getdatos();
+    }, (err: Error) => {
+      this.datos.showMessage("Error: " + err.message, "Error", "error");
+    });
+  }
 
+  edita(prod: IPoliticaEvaluacion, p: PoliticaEvaluacion, t: MatDialog): Promise<any> {
+    return new Promise((resolve: any, reject: any) => {
+      p.model = prod;
+      console.log('Periodo edit', p.model);
+      
+      const dialogRef = t.open(FormPoliticaEvaluacionComponent, {
+        width: '800px',
+        data: { model: p.model }
+      });
+      dialogRef.afterClosed().subscribe((result: IPoliticaEvaluacion) => {
+        if (result) {
+          resolve(result);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+  agregar() {
+    this.abrirmodalperiodo(this.toastr,this.politicaEvaluacion)
+    }
+
+  abrirmodalperiodo(t: MatDialog, p: PoliticaEvaluacion) {
+    p.model = p.inicializamodelo();
+    
+    const dialogRef = t.open(FormPoliticaEvaluacionComponent, {
+      width: '800px',
+      data: { model: p.model }
+    });
+    dialogRef.afterClosed().subscribe((rep: IPoliticaEvaluacion) => {
+      this.politicaEvaluacion.arraymodel.push(rep);
+      this.datos.showMessage("Registro Insertado Correctamente", this.politicaEvaluacion.titulomensage, "success");
+    });
+  }
+
+  delete(prod: IPoliticaEvaluacion, p: PoliticaEvaluacion, t: MatDialog): Promise<any> {
+    return new Promise((resolve, reject) => { resolve(prod); });
+  }
 }

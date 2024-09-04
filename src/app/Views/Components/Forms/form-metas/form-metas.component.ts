@@ -32,6 +32,7 @@ export class FormMetasComponent implements OnInit {
   public selectedPuesto: IPuesto | null = null;
   public selectedPeriodo: IPeriodo | null = null;
   public selectedTipo:ITipo | null = null;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,

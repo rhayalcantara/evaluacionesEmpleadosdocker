@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+       <!-- {{PE.model | json}}                               -->
+  <h2>{{ PE.model.id!=0 ? 'Editar' : 'Agregar' }} Politica</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="politicaEvaluacionForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required formControlName="nombre">
+    </div>
+    
+    <div class="form-group">
+        <label for="tipo">Tipo:</label>
+        <input type="text" id="tipo" name="tipo" formControlName="tipo" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="minimoMesesEmpresaDesde">Mínimo Meses Empresa Desde:</label>
+        <input type="number" id="minimoMesesEmpresaDesde" name="minimoMesesEmpresaDesde" formControlName="minimoMesesEmpresaDesde" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="minimoMesesEmpresaHasta">Mínimo Meses Empresa Hasta:</label>
+        <input type="number" id="minimoMesesEmpresaHasta" name="minimoMesesEmpresaHasta"  formControlName="minimoMesesEmpresaHasta"required>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="permitirEntradaEvaluacion" name="permitirEntradaEvaluacion" formControlName="permitirEntradaEvaluacion">
+            Permitir Entrada Evaluación
+        </label>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="considerarParaIncremento" name="considerarParaIncremento" formControlName="considerarParaIncremento">
+            Considerar Para Incremento
+        </label>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="considerarParaPromocion" name="considerarParaPromocion" formControlName="considerarParaPromocion">
+            Considerar Para Promoción
+        </label>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="evaluarSoloParaIncremento" name="evaluarSoloParaIncremento" formControlName="evaluarSoloParaIncremento">
+            Evaluar Solo Para Incremento
+        </label>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="evaluarSolo" name="evaluarSolo" formControlName="evaluarSolo">
+            Evaluar Solo
+        </label>
+    </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!politicaEvaluacionForm.valid">Guardar</button>
+    </form>
+  </div>
+</div>
+</div>
+
+
+
+

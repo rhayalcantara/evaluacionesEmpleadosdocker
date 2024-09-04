@@ -6,6 +6,7 @@ import { IPoliticaEvaluacion } from "../Models/PoliticaEvaluacion/IPoliticaEvalu
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { Observable } from "rxjs/internal/Observable";
 import { LoadingComponent } from "../Views/Components/loading/loading.component";
+import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 
 @Injectable({
   providedIn: 'root'
@@ -48,13 +49,13 @@ export class PoliticaEvaluacion implements OnInit {
       id: 0,
       nombre: "",
       tipo: "",
-      MinimoMesesEmpresaDesde: 0,
-      MinimoMesesEmpresaHasta: 0,
-      PermitirEntradaEvaluacion: false,
-      ConsiderarParaIncremento: false,
-      ConsiderarParaPromocion: false,
-      EvaluarSoloParaIncremento: false,
-      EvaluarSolo: false
+      minimoMesesEmpresaDesde: 0,
+      minimoMesesEmpresaHasta: 0,
+      permitirEntradaEvaluacion: false,
+      considerarParaIncremento: false,
+      considerarParaPromocion: false,
+      evaluarSoloParaIncremento: false,
+      evaluarSolo: false
     }
   }
 
@@ -89,5 +90,53 @@ export class PoliticaEvaluacion implements OnInit {
 
   public GetCount(): Observable<number> {
     return this.datos.getdatoscount(this.rutaapi + `/count`)
+  }
+  public insert(obj:IPoliticaEvaluacion):Observable<IPoliticaEvaluacion>{  
+
+    return this.datos.insertardatos<IPoliticaEvaluacion>(this.rutaapi, obj ); 
+  }
+  public Update(obj:IPoliticaEvaluacion):Observable<IPoliticaEvaluacion>{
+    return this.datos.updatedatos<IPoliticaEvaluacion>(this.rutaapi+`/${obj.id}`,obj); 
+  }
+
+  public async grabar(): Promise<boolean> {
+    // Envuelve el código en una nueva Promise
+    
+    return new Promise<boolean>(async (resolve) => {
+      if (this.model.id == 0) {
+        // inserta el registro
+        await firstValueFrom(this.insert(this.model)).then(
+          (rep: IPoliticaEvaluacion) => {
+
+            this.model = rep;
+            this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
+            resolve(true); // Devuelve true si la operación fue exitosa
+          },
+          (err: Error) => {
+            this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+            resolve(false); // Devuelve false si la operación falló
+          }
+        );
+      } else {
+        // actualiza el registro
+        
+        await firstValueFrom(this.Update(this.model)).then(
+          (rep: IPoliticaEvaluacion) => {
+            
+            this.model = rep;
+        
+            this.TRegistros.emit(this.totalregistros)
+
+            resolve(true); // Devuelve true si la operación fue exitosa
+          },
+          (err: Error) => {
+            this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+            resolve(false); // Devuelve false si la operación falló
+          }
+        );
+      }
+     
+
+    });
   }
 }
