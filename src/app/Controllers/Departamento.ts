@@ -1,11 +1,10 @@
 import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { ExcelService } from "../Services/excel.service";
 import { DatosServiceService } from "../Services/datos-service.service";
-import { MatDialog } from "@angular/material/dialog";
 import { IDepartamento } from "../Models/Departamento/IDepartamento";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { Observable } from "rxjs/internal/Observable";
-import { LoadingComponent } from "../Views/Components/loading/loading.component";
+
 
 
 @Injectable({
@@ -34,7 +33,6 @@ export class Departamento implements OnInit{
  
  constructor(
   private datos:DatosServiceService,
- // private toastr: MatDialog
                   
  ){}
     ngOnInit(): void {

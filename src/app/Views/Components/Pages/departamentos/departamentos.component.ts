@@ -5,14 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { Departamento } from 'src/app/Controllers/Departamento';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { IDepartamento } from 'src/app/Models/Departamento/IDepartamento';
 
 @Component({
   selector: 'app-departamentos',
   standalone: true,
-  imports: [FormsModule,TablesComponent,CommonModule],
+  imports: [FormsModule,TablesComponent,CommonModule,MatDialogModule],
   templateUrl: './departamentos.component.html',
   styleUrls: ['./departamentos.component.css']
 })

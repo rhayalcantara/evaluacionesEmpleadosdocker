@@ -5,7 +5,7 @@ import { TablesComponent } from '../../tables/tables.component';
 import { Puestos } from 'src/app/Controllers/Puestos';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { IPuesto } from 'src/app/Models/Puesto/IPuesto';
 import { FormPuestosComponent } from '../../Forms/form-puestos/form-puestos.component';
@@ -15,7 +15,7 @@ import { Departamento } from 'src/app/Controllers/Departamento';
 @Component({
   selector: 'app-puestos',
   standalone: true,
-  imports: [FormsModule,TablesComponent,CommonModule],
+  imports: [FormsModule,TablesComponent,CommonModule,MatDialogModule],
   templateUrl: './puestos.component.html',
   styleUrls: ['./puestos.component.css']
 })

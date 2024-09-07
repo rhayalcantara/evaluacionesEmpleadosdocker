@@ -1,10 +1,9 @@
 import { EventEmitter, Injectable, OnInit, Output } from '@angular/core';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { ITipo } from '../Models/Tipo/ITipo';
-import { MatDialog } from '@angular/material/dialog';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { firstValueFrom, Observable } from 'rxjs';
-import { LoadingComponent } from '../Views/Components/loading/loading.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +28,7 @@ export class Tipos implements OnInit{
  public operationSuccessful: boolean = false;
  @Output() TRegistros = new EventEmitter<number>();
   constructor(
-      private datosServiceService: DatosServiceService,
-      private toastr: MatDialog) { 
+      private datosServiceService: DatosServiceService) { 
     
   }
 
@@ -49,12 +47,7 @@ export class Tipos implements OnInit{
     this.getdatos()
 }
   getdatos() {
-    const dialogRef = this.toastr.open(LoadingComponent, {
-      width: '340px',
-      height: '180px', 
-
-    }); 
-
+   
     this.Gets()        
       .subscribe({        
      next:(rep:ModelResponse)=>{
@@ -65,9 +58,6 @@ export class Tipos implements OnInit{
        console.log(rep.data)
        this.TRegistros.emit(this.totalregistros)        
        
-
-
-     dialogRef.close()
     
      }
    }

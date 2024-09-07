@@ -1,8 +1,6 @@
 import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ExcelService } from "../Services/excel.service";
-import { MatDialog } from "@angular/material/dialog";
-import { LoadingComponent } from "../Views/Components/loading/loading.component";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, Observable } from 'rxjs';
 import { Meta } from "@angular/platform-browser";
@@ -36,9 +34,7 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
 
     constructor(
         private datos:DatosServiceService,
-        public datosMeta:Meta,
-        private excel:ExcelService,
-        private toastr: MatDialog,
+        public datosMeta:Meta
         
                         
        ){}
@@ -64,11 +60,7 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
 
     public  getdatos(){
   
-          const dialogRef = this.toastr.open(LoadingComponent, {
-           width: '340px',
-           height: '180px', 
 
-         }); 
     
          this.Gets()        
            .subscribe({        
@@ -82,7 +74,7 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
             
   
   
-          dialogRef.close()
+ 
          
           }
         }

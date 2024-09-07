@@ -5,13 +5,13 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormPeriodosComponent } from '../../Forms/form-periodos/form-periodos.component';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, TablesComponent],
+  imports: [FormsModule, TablesComponent,MatDialogModule],
   selector: 'app-periodos',
   templateUrl: './periodos.component.html',
   styleUrls: ['./periodos.component.css']

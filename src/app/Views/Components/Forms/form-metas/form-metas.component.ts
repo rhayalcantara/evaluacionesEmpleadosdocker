@@ -43,7 +43,6 @@ export class FormMetasComponent implements OnInit {
     public TipoDatos:Tipos,
     private dialogRef: MatDialogRef<FormMetasComponent>,
     private datService: DatosServiceService,
-    private comunicacionService: ComunicacionService
   ) {
     this.fg = this.fb.group({});
   }

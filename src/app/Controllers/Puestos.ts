@@ -1,10 +1,8 @@
 import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { ExcelService } from "../Services/excel.service";
 import { DatosServiceService } from "../Services/datos-service.service";
-import { MatDialog } from "@angular/material/dialog";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { Observable } from "rxjs/internal/Observable";
-import { LoadingComponent } from "../Views/Components/loading/loading.component";
 import { IPuesto } from "../Models/Puesto/IPuesto";
 import { firstValueFrom } from "rxjs";
 
@@ -37,8 +35,7 @@ export class Puestos implements OnInit{
  @Output() TRegistros = new EventEmitter<number>();
  
  constructor(
-  private datos:DatosServiceService,
-  private toastr: MatDialog
+  private datos:DatosServiceService
                   
  ){}
     ngOnInit(): void {
