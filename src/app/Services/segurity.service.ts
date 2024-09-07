@@ -15,7 +15,7 @@ export class SegurityService {
   }
   agregarusuario(value:Usuario){
     this._usuario=value;
-    this.commons.sendData('nuevousuario');
+   // this.commons.sendData('loguiado');
   }
   public logout(){}
   constructor( @Inject(CommonsLibService) private commons: CommonsLibService,) { }

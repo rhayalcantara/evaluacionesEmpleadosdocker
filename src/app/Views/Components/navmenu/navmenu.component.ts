@@ -14,26 +14,32 @@ import { SegurityService } from 'src/app/Services/segurity.service';
 export class NavmenuComponent implements OnInit {
   public logg:string = 'Login'
   mostramenu:Boolean=false
-  
+
  public imagen:any ="assets/user.png"
   usuarioSegurity: any;
   constructor(private router: Router,
               @Inject(CommonsLibService) private commons: CommonsLibService,
               @Inject(SegurityService)  private usuarioservicio:SegurityService
-
               ) 
   { 
      
       this.commons.mensaje$.subscribe((mess)=>{
         
-       
+        
         if (mess=='loguiado'){
           
-          this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
-          
+         console.log(localStorage.getItem('usuario'))
+         this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
+         console.log('elsusuario',this.usuarioservicio.usuario)
           this.mostramenu=true
           this.router.navigate(['/Home'])
           this.logg='LogOut'
+        }
+        if (mess=='nologuiado'){
+          console.log('entro en nologiado')
+          this.mostramenu=false
+          this.logg='Login'
+          this.router.navigate(['login'])
         }
         if (mess=='nuevousuario'){
           this.mostramenu=false
@@ -77,6 +83,17 @@ export class NavmenuComponent implements OnInit {
         //this.login()
   }
   ngOnInit(): void {
+    //console.log('usu',localStorage.getItem('usuario'))
+    if(localStorage.getItem('usuario')==null){
+      this.mostramenu=false
+      this.router.navigate(['/login']);
+    }else{
+      this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
+      this.mostramenu=true
+      this.router.navigate(['/Home'])
+      this.logg='LogOut'
+    }
+    
     
     // let token = this.getCookie('token')
      
@@ -87,8 +104,8 @@ export class NavmenuComponent implements OnInit {
     //   this.datos.setuser(usuario);
     // }else{
       //this.datos.logout();
-      this.mostramenu=false
-      this.router.navigate(['login'])
+     // this.mostramenu=false
+     // this.router.navigate(['login'])
       //this.login();
     //}
 

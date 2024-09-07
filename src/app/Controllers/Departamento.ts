@@ -34,7 +34,7 @@ export class Departamento implements OnInit{
  
  constructor(
   private datos:DatosServiceService,
-  private toastr: MatDialog
+ // private toastr: MatDialog
                   
  ){}
     ngOnInit(): void {
@@ -52,10 +52,7 @@ export class Departamento implements OnInit{
   }
   public  getdatos(){
       //console.log('entro y llama a cargando')
-      const dialogRef = this.toastr.open(LoadingComponent, {
-       width: '340px',
-       height: '180px', 
-     }); 
+
     
      //console.log('entro y llama a los datos')
 
@@ -73,7 +70,7 @@ export class Departamento implements OnInit{
         console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)      
 
-        dialogRef.close()
+        //dialogRef.close()
      
       }
     }

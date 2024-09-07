@@ -37,7 +37,7 @@ export class Empleados implements OnInit{
  
  constructor(
   private datos:DatosServiceService,
-  private toastr: MatDialog
+  //private toastr: MatDialog
                   
  ){}
     ngOnInit(): void {
@@ -66,11 +66,7 @@ export class Empleados implements OnInit{
   }
   public  getdatos(){
       //console.log('entro y llama a cargando')
-      const dialogRef = this.toastr.open(LoadingComponent, {
-       width: '340px',
-       height: '180px', 
-     }); 
-    
+
      //console.log('entro y llama a los datos')
 
 
@@ -86,12 +82,15 @@ export class Empleados implements OnInit{
         //filtrar los que estan activos
         // this.arraymodel = this.arraymodel.filter(x => x.codigoestado === "A");
         //ordena los datos por nombre alfabeticamente
-        this.arraymodel.sort((a, b) => a.nombreunido.localeCompare(b.nombreunido));
+        if (this.arraymodel){
+          this.arraymodel.sort((a, b) => a.nombreunido.localeCompare(b.nombreunido));
+        }
+        
 
         console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)      
 
-        dialogRef.close()
+        //dialogRef.close()
      
       }
     }
@@ -105,6 +104,13 @@ export class Empleados implements OnInit{
 public Get(id:string):Observable<IEmpleado>{
   return this.datos.getbyid<IEmpleado>(this.rutaapi+`/${id}`)
 }
+public GetByCedula(Cedula:string){
+  return this.datos.getbyid<IEmpleado>(this.rutaapi+`/empcedu/${Cedula}`)
+}
+public GetByUsuario(Usuario:string){
+  return this.datos.getbyid<IEmpleado>(this.rutaapi+`/empuser/${Usuario}`)
+}
+
 public GetCount():Observable<number>{
 
 return this.datos.getdatoscount(this.rutaapi+`/count`)

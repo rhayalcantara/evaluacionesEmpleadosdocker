@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TableResponse } from 'src/app/Helpers/Interfaces';
+import { Empleados } from 'src/app/Controllers/Empleados';
+import { TableResponse, Usuario } from 'src/app/Helpers/Interfaces';
+import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +17,21 @@ export class HomeComponent implements OnInit {
     'Descripcion',
     'Cantidad   ',
     'Unidad     '
-    
-  ]
+    ]
+    public empleado:IEmpleado={
+      secuencial: 0,
+      codigousuario: '',
+      nombreunido: '',
+      identificacion: '',
+      sdept: 0,
+      departamento: '',
+      codigoestado: '',
+      scargo: 0,
+      cargo: '',
+      esjefatura: 0,
+      tienejefe: 0,
+      nivel: 0
+    }
   public arraydatos:any[]=
   [
     {
@@ -44,10 +59,18 @@ export class HomeComponent implements OnInit {
       'Unidad':'Botellon'
     }
   ]
-  constructor() { }
-
+  constructor(private empl:Empleados) {
+    this.usuario= JSON.parse(localStorage.getItem('usuario') ?? "")
+   }
+  public usuario:Usuario
+ 
   ngOnInit(): void {
-
+    //console.log('usuario',this.usuario)
+   this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep:IEmpleado)=>{
+      this.empleado=rep
+      //console.log('empleado',this.empleado)
+   })
+ //  console.log("usuario",localStorage.getItem('usuario'))
   }
   onPageChange(event:any){}
   opcion(event:TableResponse){

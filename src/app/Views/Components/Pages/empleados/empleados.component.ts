@@ -6,15 +6,16 @@ import { IEmpleado } from '../../../../Models/Empleado/IEmpleado';
 import { Empleados } from '../../../../Controllers/Empleados';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { Departamento } from 'src/app/Controllers/Departamento';
 import { IDepartamento } from 'src/app/Models/Departamento/IDepartamento';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-empleados',
   standalone: true,
-  imports: [FormsModule,TablesComponent,CommonModule],
+  imports: [FormsModule,TablesComponent,CommonModule,MatDialogModule],
   templateUrl: './empleados.component.html',
   styleUrls: ['./empleados.component.css']
 })
@@ -36,6 +37,11 @@ export class EmpleadosComponent implements OnInit {
 
   ngOnInit() {
     this.cargarDepartamentos();
+    const dialogRef = this.toastr.open(LoadingComponent, {
+      width: '340px',
+      height: '180px', 
+    }); 
+   
     this.empleadosController.getdatos()
     
     this.empleadosController.TRegistros.subscribe({
@@ -43,6 +49,7 @@ export class EmpleadosComponent implements OnInit {
       console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
+       dialogRef.close()
      }
      
     })

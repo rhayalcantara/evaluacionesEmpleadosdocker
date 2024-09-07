@@ -29,7 +29,7 @@ export class Puestos implements OnInit{
  public estado:string='`'
  public totalregistros:number=0
  public actualpage:number=1
- public pagesize:number=600
+ public pagesize:number=10
  public filtro:string=''
  public arraymodel:IPuesto[]=[]
  public arraytotal:IPuesto[]=[]
@@ -45,7 +45,7 @@ export class Puestos implements OnInit{
       this.filtro=""
       this.estado=""
       this.actualpage=1
-      this.pagesize=600
+      this.pagesize=10
       this.getdatos()
   }
   public inicializamodelo():IPuesto{
@@ -57,11 +57,7 @@ export class Puestos implements OnInit{
    }
   }
   public  getdatos(){
-      //console.log('entro y llama a cargando')
-      const dialogRef = this.toastr.open(LoadingComponent, {
-       width: '340px',
-       height: '180px', 
-     }); 
+ 
     
      //console.log('entro y llama a los datos')
 
@@ -79,7 +75,7 @@ export class Puestos implements OnInit{
         console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)        
 
-        dialogRef.close()
+      
      
       }
     }

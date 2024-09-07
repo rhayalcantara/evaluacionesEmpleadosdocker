@@ -1,12 +1,12 @@
 
 export interface Usuario{
-    usuario:string;
-    clave:string;
-    nombres:string;
-    apellidos:string;
-    email:string;
-    created_at: Date;
-    updateed_ad:Date;
+    id: number
+    codigo: string
+    nombre: string
+    emailinterno: string
+    identificacion: string
+    esnulo: number
+    verificado: number
 
   }
   export interface AuthRequest{
