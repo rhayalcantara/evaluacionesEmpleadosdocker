@@ -101,7 +101,7 @@ export class DatosServiceService {
             let newFormControl: FormControl = new FormControl();      
             newFormControl.setValue(obj[control]);
             formGroup.addControl(control, newFormControl);
-            console.log({campo:control,fg:newFormControl.value})
+            //console.log({campo:control,fg:newFormControl.value})
           //}
 
         } 

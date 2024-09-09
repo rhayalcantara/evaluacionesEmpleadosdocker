@@ -84,15 +84,15 @@ export class NavmenuComponent implements OnInit {
   }
   ngOnInit(): void {
     //console.log('usu',localStorage.getItem('usuario'))
-    if(localStorage.getItem('usuario')==null){
+    //if(localStorage.getItem('usuario')==null){
       this.mostramenu=false
       this.router.navigate(['/login']);
-    }else{
+    /*}else{
       this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
       this.mostramenu=true
       this.router.navigate(['/Home'])
       this.logg='LogOut'
-    }
+    }*/
     
     
     // let token = this.getCookie('token')

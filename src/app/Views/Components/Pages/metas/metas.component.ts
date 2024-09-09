@@ -6,7 +6,7 @@ import { Metas } from 'src/app/Controllers/Metas';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { IMeta } from 'src/app/Models/Meta/IMeta';
+import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { FormMetasComponent } from '../../Forms/form-metas/form-metas.component';
 
 
@@ -119,7 +119,7 @@ abrirmodalzona(t:MatDialog,p:Metas ){
   
   const  dialogRef = t.open(FormMetasComponent,{
     width: '800px',data:{model:p.model}})
-    dialogRef.afterClosed().subscribe((rep:IMeta )=>{
+    dialogRef.afterClosed().subscribe((rep:IMetaDts )=>{
       //console.log('llego del formulario de Meta ',result)
       this.meta.arraymodel.push(rep)
       this.datos.showMessage("Registro Insertado Correctamente",this.meta.titulomensage,"sucess")

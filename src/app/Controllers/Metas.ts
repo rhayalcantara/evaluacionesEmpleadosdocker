@@ -28,7 +28,7 @@ import { Meta } from "@angular/platform-browser";
        public actualpage:number=1
        public pagesize:number=10
        public filtro:string=''
-       public arraymodel:IMeta[]=[]
+       public arraymodel:IMetaDts[]=[]
        
 
        public operationSuccessful: boolean = false;
@@ -61,7 +61,17 @@ import { Meta } from "@angular/platform-browser";
         puesto:"",
         departamento:"",
         periodo:"",
-        Tipo:""
+        Tipo:"",
+        position:{
+          secuencial: 0,
+          descripcion: "",
+          departmentsecuencial: 0,
+          departamento: ""
+        },
+        elTipo:{
+          id: 0,
+          descripcion: ""
+        }
       } 
       
     }
@@ -82,17 +92,12 @@ import { Meta } from "@angular/platform-browser";
 
          this.Gets()        
            .subscribe({        
-          next:(rep:ModelResponse)=>{
-            
+          next:(rep:ModelResponse)=>{            
             this.totalregistros =  rep.count
             this.arraymodel=[]
             this.arraymodel=rep.data    
             console.log(rep.data)
             this.TRegistros.emit(this.totalregistros)        
-            
-  
-  
-         
           }
         }
         ) 

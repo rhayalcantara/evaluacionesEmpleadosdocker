@@ -6,3 +6,7 @@ export interface IPuesto{
     departmentsecuencial:number
     departamento:string
 }
+export interface IPuestoDts extends IPuesto{
+   deparment:IDepartamento
+   
+}

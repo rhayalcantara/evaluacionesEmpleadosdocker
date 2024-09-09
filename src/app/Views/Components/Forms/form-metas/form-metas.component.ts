@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { Metas } from 'src/app/Controllers/Metas';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
-import { IMeta } from 'src/app/Models/Meta/IMeta';
+import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { IPuesto } from 'src/app/Models/Puesto/IPuesto';
 import { SeleccionPuestoComponent } from '../seleccion-puesto/seleccion-puesto.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
@@ -27,6 +27,28 @@ export class FormMetasComponent implements OnInit {
 
   public campos: string[] = [];
   public meta: IMeta = this.metasDatos.model;
+  public metadts:IMetaDts = {
+    puesto: '',
+    departamento: '',
+    periodo: '',
+    Tipo: '',
+    id: 0,
+    name: '',
+    periodId: 0,
+    weight: 0,
+    positionSecuencial: 0,
+    tiposid: 0,
+    position: {
+      secuencial: 0,
+      descripcion: '',
+      departmentsecuencial: 0,
+      departamento: ''
+    },
+    elTipo: {
+      id: 0,
+      descripcion: ''
+    }
+  }
   public tipo: ITipo = this.TipoDatos.model;
   public fg: FormGroup = new FormGroup({});
   public selectedPuesto: IPuesto | null = null;
@@ -50,6 +72,7 @@ export class FormMetasComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.data.model);
     this.meta = this.data.model;
+    this.metadts=this.data.model;
     this.TipoDatos.getdatos()
     //this.campos = Object.keys(this.meta);
     this.metasDatos.titulos.map((x:string|any)=>{
@@ -60,11 +83,14 @@ export class FormMetasComponent implements OnInit {
     this.fg = this.datService.llenarFormGrup(this.meta);
     
     if (this.meta.positionSecuencial != 0){
-      this.puestoDatos.Get(this.meta.positionSecuencial.toString()).subscribe((rep:IPuesto)=>{        
+      console.log('llego',this.metadts.position)
+      this.selectedPuesto=this.metadts.position
+      /*this.puestoDatos.Get(this.meta.positionSecuencial.toString()).subscribe((rep:IPuesto)=>{        
         this.selectedPuesto = rep;
         this.fg
-      })
+      })*/
     }
+  
     if (this.meta.periodId !=0 ){
         this.periodoDatos.Get(this.meta.periodId.toString()).subscribe((rep:IPeriodo)=>{
           this.selectedPeriodo = rep
