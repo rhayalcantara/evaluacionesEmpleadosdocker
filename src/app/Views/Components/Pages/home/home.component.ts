@@ -1,10 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { TableResponse, Usuario } from 'src/app/Helpers/Interfaces';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 
 @Component({
   selector: 'app-home',
+  standalone:true,
+  imports:[FormsModule,CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

@@ -3,6 +3,9 @@
     margin: 0 auto;
     padding: 20px;
   }
+  strong{
+    margin-right: 10px;
+  }
 .employee-card {
     background-color: white;
     border-radius: 8px;

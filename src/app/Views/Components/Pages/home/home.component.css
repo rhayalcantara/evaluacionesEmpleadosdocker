@@ -4,6 +4,9 @@
     margin: 10 auto;
     padding: 20px;
   }
+  strong{
+    margin-right: 10px;
+  }
   h2 {
     display: block;
     font-size: 1.5em;

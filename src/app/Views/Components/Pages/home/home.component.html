@@ -11,9 +11,10 @@
       <img src="https://randomuser.me/api/portraits/men/83.jpg" alt="Employee photo" width="100" height="100">
     </div>
     <div class="employee-details">
-      <p><strong>Nombre:</strong> {{usuario.nombre}} </p>
-      <p><strong>Departamento:</strong>{{empleado.departamento}}</p>
-      <p><strong>Posicion:</strong>{{empleado.cargo}}</p>      
+      <p><strong>Nombre:       </strong>     {{usuario.nombre}} </p>
+      <p><strong>Departamento: </strong>     {{empleado.departamento}}</p>
+      <p><strong>Posicion:     </strong>     {{empleado.cargo}}</p>  
+      <p><strong>Fecha Ingreso:</strong>     {{empleado.fechapostulacion | date : 'dd/MM/yyyy'}}</p>    
     </div>
   </div>
   

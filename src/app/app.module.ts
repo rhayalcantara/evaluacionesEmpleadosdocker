@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 
 import { Empleados } from './Controllers/Empleados';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -19,6 +20,7 @@ import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule
