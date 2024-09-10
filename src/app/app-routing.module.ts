@@ -57,6 +57,12 @@ const routes: Routes = [
     .then((m)=> m.RolesComponent),
      canActivate: [AuthGuard]
   },
+  { path:'Evaluacion', 
+    loadComponent:()=> import('./Views/Components/Pages/evaluacion/evaluacion.component')
+    .then((m)=> m.EvaluacionComponent),
+     canActivate: [AuthGuard]
+  }
+
 ];
 
 @NgModule({

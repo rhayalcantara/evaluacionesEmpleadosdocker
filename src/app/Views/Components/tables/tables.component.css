@@ -7,7 +7,7 @@
 /* Estilo para el contenedor de la tabla */
 #div1 {
   overflow: scroll;
-  height: 300px;
+  height: 70%;
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 5px;

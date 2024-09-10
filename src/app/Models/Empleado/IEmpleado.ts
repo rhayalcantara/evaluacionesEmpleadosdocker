@@ -11,4 +11,5 @@ export interface IEmpleado {
   esjefatura: number;
   tienejefe: number;
   nivel: number;
+  fechapostulacion:string
 }

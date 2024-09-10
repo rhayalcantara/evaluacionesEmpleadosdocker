@@ -44,7 +44,7 @@ export class FormMetasComponent implements OnInit {
       departmentsecuencial: 0,
       departamento: ''
     },
-    elTipo: {
+    elTipos: {
       id: 0,
       descripcion: ''
     }

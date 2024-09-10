@@ -2,9 +2,11 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ExcelService } from "../Services/excel.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { IMeta, IMetaDts } from "../Models/Meta/IMeta";
 import { Meta } from "@angular/platform-browser";
+import { IPeriodo } from "../Models/Periodos/IPeriodo";
+import { IPuesto } from "../Models/Puesto/IPuesto";
 
 
 @Injectable({
@@ -68,7 +70,7 @@ import { Meta } from "@angular/platform-browser";
           departmentsecuencial: 0,
           departamento: ""
         },
-        elTipo:{
+        elTipos:{
           id: 0,
           descripcion: ""
         }
@@ -101,6 +103,15 @@ import { Meta } from "@angular/platform-browser";
           }
         }
         ) 
+    }
+    public GetMetasPorPeriodoYPuesto(periodoid:number,puestosecuencial:number):Observable<IMetaDts[]>{
+      //obtiene todas las metas
+      return this.Gets().pipe(
+        map((rep: ModelResponse) => {
+          let metas: IMetaDts[] = rep.data;
+          return metas.filter(x => x.periodId == periodoid && x.positionSecuencial == puestosecuencial);
+        })
+      );
     }
 
     public filtrar(){

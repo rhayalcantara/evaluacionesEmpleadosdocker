@@ -17,6 +17,7 @@ export class Empleados implements OnInit{
   public model:IEmpleado=this.inicializamodelo()
  titulos=[
     {secuencial:'Codigo'},
+    {fechapostulacion:'Ingreso'},
     {codigousuario:'Usuario'},
     {identificacion:'Cedula'},
     {nombreunido:'Nombres/Apellidos'},
@@ -61,7 +62,8 @@ export class Empleados implements OnInit{
       cargo: '',
       esjefatura: 0,
       tienejefe: 0,
-      nivel: 0
+      nivel: 0,
+      fechapostulacion:""
    }
   }
   public  getdatos(){

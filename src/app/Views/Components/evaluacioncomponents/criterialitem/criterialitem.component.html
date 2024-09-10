@@ -1,0 +1,11 @@
+<div class="criteria-section" *ngFor="let met of metas">
+    <h3>{{met.elTipos}}</h3>
+    <div class="criteria-item">
+        <div class="criteria-info">
+            <!-- <span class="criteria-label">{{met.}}:</span> -->
+            <p class="criteria-description">{{met.name}}</p>  
+            <p class="criteria-weight">Peso: {{met.weight}}%</p>    
+        </div>
+        <app-emojirating></app-emojirating>
+    </div>
+</div>

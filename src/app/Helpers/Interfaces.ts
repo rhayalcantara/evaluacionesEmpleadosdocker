@@ -1,4 +1,7 @@
-
+export interface FotoPadron {
+  identificacion: string;
+  imagen:Uint8Array[];
+}
 export interface Usuario{
     id: number
     codigo: string

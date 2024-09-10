@@ -22,3 +22,9 @@
     padding: 20px; /* Reduce el padding */
     flex-grow: 1; /* Permite que el contenido se expanda para ocupar el espacio disponible */
   }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+  }

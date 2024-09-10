@@ -10,6 +10,8 @@ import { Empleados } from './Controllers/Empleados';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

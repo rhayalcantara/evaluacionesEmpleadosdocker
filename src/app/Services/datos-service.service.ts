@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
+import { FotoPadron } from '../Helpers/Interfaces';
 //import { ModelResponse } from '../Models/modelResponse';
 
 @Injectable({
@@ -78,6 +79,12 @@ export class DatosServiceService {
   });
       
   }
+
+  public GetFotouser(identificacion:string): Observable<FotoPadron[]>{
+
+    return this.http.get<FotoPadron[]>( `http://192.168.7.222:8080/api/FotoPadron?identificacion=${identificacion}`)
+  }
+
    public llenarFormGrup<T>(obj:any):FormGroup {
          
          

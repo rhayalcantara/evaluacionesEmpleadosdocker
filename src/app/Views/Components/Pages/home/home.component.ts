@@ -30,7 +30,8 @@ export class HomeComponent implements OnInit {
       cargo: '',
       esjefatura: 0,
       tienejefe: 0,
-      nivel: 0
+      nivel: 0,
+      fechapostulacion:""
     }
   public arraydatos:any[]=
   [
@@ -68,6 +69,7 @@ export class HomeComponent implements OnInit {
     //console.log('usuario',this.usuario)
    this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep:IEmpleado)=>{
       this.empleado=rep
+      localStorage.setItem("empleado",JSON.stringify(this.empleado))
       //console.log('empleado',this.empleado)
    })
  //  console.log("usuario",localStorage.getItem('usuario'))
