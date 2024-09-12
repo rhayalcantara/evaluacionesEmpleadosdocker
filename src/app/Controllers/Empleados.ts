@@ -1,8 +1,6 @@
 import { EventEmitter, Injectable, OnInit, Output } from '@angular/core';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { IEmpleado } from '../Models/Empleado/IEmpleado';
-import { MatDialog } from '@angular/material/dialog';
-import { LoadingComponent } from '../Views/Components/loading/loading.component';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { Observable } from 'rxjs';
 
@@ -24,7 +22,8 @@ export class Empleados implements OnInit{
     {departamento:'Departamento'},
     {cargo:'Puesto'},
     {codigoestado:'Estatus'},
-    {nivel:'Nivel'}
+    {nivel:'Nivel'},
+    {jefeinmediato:'Jefe Inmediato'}
  ]
  public estado:string='`'
  public totalregistros:number=0
@@ -32,6 +31,7 @@ export class Empleados implements OnInit{
  public pagesize:number=600
  public filtro:string=''
  public arraymodel:IEmpleado[]=[]
+ public arraymodelsubordinados:IEmpleado[]=[]
 
  public operationSuccessful: boolean = false;
  @Output() TRegistros = new EventEmitter<number>();
@@ -47,6 +47,7 @@ export class Empleados implements OnInit{
       this.actualpage=1
       this.pagesize=600
       this.getdatos()
+      
   }
   public inicializamodelo():IEmpleado{
   
@@ -63,7 +64,9 @@ export class Empleados implements OnInit{
       esjefatura: 0,
       tienejefe: 0,
       nivel: 0,
-      fechapostulacion:""
+      fechapostulacion:"",
+      jefeinmediatO_SECUENCIAL:0,
+      jefeinmediato:''
    }
   }
   public  getdatos(){
@@ -98,11 +101,28 @@ export class Empleados implements OnInit{
     }
     ) 
   }
+  public  getsubordinados(){
+    this.arraymodelsubordinados=[]
+    if (this.model.secuencial==0){
+      return
+    }
+   this.Getsub(this.model.secuencial.toString()).subscribe({next:(rep:ModelResponse)=>{
+      console.log('llegaron los datos ',rep.count)
+      //se obtiene los datos y se ponen en los array
+      this.arraymodelsubordinados=rep.data 
+
+    }
+  }
+  ) 
+}
   public Gets():Observable<ModelResponse> {
     console.log(this.rutaapi)
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
-
+public Getsub(empleado_secuencial:string):Observable<ModelResponse> {
+  console.log(this.rutaapi+`/equipo/${empleado_secuencial}`)
+  return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/${empleado_secuencial}`)
+}
 public Get(id:string):Observable<IEmpleado>{
   return this.datos.getbyid<IEmpleado>(this.rutaapi+`/${id}`)
 }

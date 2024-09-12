@@ -61,8 +61,12 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/evaluacion/evaluacion.component')
     .then((m)=> m.EvaluacionComponent),
      canActivate: [AuthGuard]
+  },
+  { path:'EvaluarSubordinados', 
+    loadComponent:()=> import('./Views/Components/Pages/evaluar-subordinados/evaluar-subordinados.component')
+    .then((m)=> m.EvaluarSubordinadosComponent),
+     canActivate: [AuthGuard]
   }
-
 ];
 
 @NgModule({

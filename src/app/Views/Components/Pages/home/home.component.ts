@@ -4,24 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { TableResponse, Usuario } from 'src/app/Helpers/Interfaces';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
+import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
 
 @Component({
   selector: 'app-home',
   standalone:true,
-  imports:[FormsModule,CommonModule],
+  imports:[FormsModule,CommonModule,CardEmpleadoComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
   
   
-  public term: string='';
-  public campos:string[]=[
-    '#',
-    'Descripcion',
-    'Cantidad   ',
-    'Unidad     '
-    ]
+  
     public empleado:IEmpleado={
       secuencial: 0,
       codigousuario: '',
@@ -35,8 +30,11 @@ export class HomeComponent implements OnInit {
       esjefatura: 0,
       tienejefe: 0,
       nivel: 0,
-      fechapostulacion:""
+      fechapostulacion: "",
+      jefeinmediatO_SECUENCIAL: 0,
+      jefeinmediato: ''
     }
+   
   public arraydatos:any[]=
   [
     {
@@ -64,25 +62,25 @@ export class HomeComponent implements OnInit {
       'Unidad':'Botellon'
     }
   ]
-  constructor(private empl:Empleados) {
+  constructor(public empl:Empleados) {
     this.usuario= JSON.parse(localStorage.getItem('usuario') ?? "")
    }
   public usuario:Usuario
  
   ngOnInit(): void {
-    //console.log('usuario',this.usuario)
+    
    this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep:IEmpleado)=>{
+      this.empl.model=rep
+      this.empl.getsubordinados()
       this.empleado=rep
       localStorage.setItem("empleado",JSON.stringify(this.empleado))
-      //console.log('empleado',this.empleado)
+      
    })
- //  console.log("usuario",localStorage.getItem('usuario'))
+ 
   }
   onPageChange(event:any){}
   opcion(event:TableResponse){
     console.log(event)
   }
-  filter(){
-    console.log(this.term)
-  }
+
 }

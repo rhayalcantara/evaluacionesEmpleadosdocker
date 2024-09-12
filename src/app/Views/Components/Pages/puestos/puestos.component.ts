@@ -15,7 +15,8 @@ import { Departamento } from 'src/app/Controllers/Departamento';
 @Component({
   selector: 'app-puestos',
   standalone: true,
-  imports: [FormsModule,TablesComponent,CommonModule,MatDialogModule],
+  imports: [FormsModule,TablesComponent,
+    CommonModule,MatDialogModule],
   templateUrl: './puestos.component.html',
   styleUrls: ['./puestos.component.css']
 })

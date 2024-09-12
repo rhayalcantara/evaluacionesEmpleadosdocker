@@ -12,4 +12,7 @@ export interface IEmpleado {
   tienejefe: number;
   nivel: number;
   fechapostulacion:string
+  jefeinmediatO_SECUENCIAL:number
+  jefeinmediato:string
+
 }

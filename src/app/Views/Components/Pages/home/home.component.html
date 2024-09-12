@@ -1,48 +1,18 @@
-
 <div class="container">
-<h2>Bienvenido al Sistema de Evaluación de Empleados</h2>
-<p>Utiliza este sistema para gestionar y realizar evaluaciones de empleados, rastrear el rendimiento y generar informes</p>
-
-<div class="dashboard">
   <div class="logo-div" style="margin: auto ;"></div>
-  <div class="card">
-    <h3>Usuario</h3>
-    <div class="employee-photo">
-      <img src="https://randomuser.me/api/portraits/men/83.jpg" alt="Employee photo" width="100" height="100">
-    </div>
-    <div class="employee-details">
-      <p><strong>Nombre:       </strong>     {{usuario.nombre}} </p>
-      <p><strong>Departamento: </strong>     {{empleado.departamento}}</p>
-      <p><strong>Posicion:     </strong>     {{empleado.cargo}}</p>  
-      <p><strong>Fecha Ingreso:</strong>     {{empleado.fechapostulacion | date : 'dd/MM/yyyy'}}</p>    
-    </div>
-  </div>
-  
- <!--  <div class="card">
-    <h3>Recent Activity</h3>
-    <ul>
-      <li>John Doe's evaluation completed</li>
-      <li>New evaluation cycle started</li>
-      <li>2 new employees added to the system</li>
-    </ul>
-  </div>
-  
-  <div class="card">
-    <h3>Quick Reports</h3>
-    <p>Generate quick reports on employee performance.</p>
-    <a href="ReportesInstitucional" class="btn">View Reports</a>
-  </div>
-  
-  <div class="card">
-    <h3>System Updates</h3>
-    <p>New features added:</p>
-    <ul>
-      <li>Enhanced reporting capabilities</li>
-      <li>Mobile-friendly interface</li>
-      <li>Integration with HR system</li>
-    </ul>
-  </div> -->
+  <h2>Bienvenido al Sistema de Evaluación de Empleados</h2>
+  <p>Utiliza este sistema para gestionar y realizar evaluaciones de empleados, rastrear el rendimiento y generar
+    informes</p>
 
-</div>
+  <div class="dashboard">
+    <app-card-empleado [empleado]="empleado"></app-card-empleado>
     
+  </div>
+  <div *ngIf="empl.arraymodelsubordinados.length>0">
+    <h2>Equipo</h2>
+    <p>Total Integrantes en el Equipo {{empl.arraymodelsubordinados.length}}</p>
+    <div class="Equipo">
+      <app-card-empleado [empleado]="emple" *ngFor="let emple of empl.arraymodelsubordinados"></app-card-empleado>
+    </div>
+  </div>
 </div>

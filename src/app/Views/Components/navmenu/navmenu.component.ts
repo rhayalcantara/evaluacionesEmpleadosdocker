@@ -70,56 +70,30 @@ export class NavmenuComponent implements OnInit {
       menuhome:0
     }
     this.usuarioSegurity.agregarusuario (usuario)
-    //this.router.navigate([''])
-    /*this.datos.logout();
-    const dialogRef = this.dialog.open(LoginComponent,{
-      width: '500px',
-      height: '400px', 
-      disableClose:true });
-      dialogRef.afterClosed().subscribe((result) => {
-          //this.router.navigateByUrl('Producto');  
-          dialogRef.close()    
-          });*/
-        //this.login()
+
   }
   ngOnInit(): void {
-    //console.log('usu',localStorage.getItem('usuario'))
-    //if(localStorage.getItem('usuario')==null){
+    console.log('entro al navbar')
       this.mostramenu=false
       this.router.navigate(['/login']);
-    /*}else{
-      this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
-      this.mostramenu=true
-      this.router.navigate(['/Home'])
-      this.logg='LogOut'
-    }*/
+ 
     
-    
-    // let token = this.getCookie('token')
-     
-    // if (token!=''){
-    //   let usuario: Usuario = JSON.parse(this.getCookie('usuario'))                                             
-    //   localStorage.setItem('usuario',JSON.stringify(usuario));
-    //   localStorage.setItem('token',token);      
-    //   this.datos.setuser(usuario);
-    // }else{
-      //this.datos.logout();
-     // this.mostramenu=false
-     // this.router.navigate(['login'])
-      //this.login();
-    //}
-
-    //this.datos.logout();
-    //this.mostramenu=false
-    //this.router.navigate(['']);
   }
   log():void{
+    console.log(this.logg)
     if (this.logg!='LogOut'){
-        this.logg= 'Login'        
+              
+        this.logg= 'LogOut'
+
+        this.mostramenu=true
+       // this.router.navigate(['/login'])
+    }else{
+      
+        this.logg= 'Login'
         localStorage.removeItem('usuario');
         localStorage.removeItem('token');
-        this.router.navigate([''])
-    }else{
+        localStorage.removeItem('empleado');
+       
       this.mostramenu=false
        this.router.navigate(['/login']);
     }

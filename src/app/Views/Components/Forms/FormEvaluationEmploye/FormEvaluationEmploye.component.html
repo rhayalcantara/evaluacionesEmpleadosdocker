@@ -1,0 +1,15 @@
+
+  <form id="evaluationForm" (ngSubmit)="onSubmit()">
+    <h1>{{titulo}}</h1>
+    <div class="performance-criteria">
+      <app-criterialitem 
+        [empleado]="empleado"
+        [periodo]="periodo"
+      ></app-criterialitem>
+    </div>
+    
+    <label for="comments">Additional Comments:</label>
+    <textarea id="comments" name="comments"></textarea>
+
+    <button type="submit">Submit Evaluation</button>
+  </form>

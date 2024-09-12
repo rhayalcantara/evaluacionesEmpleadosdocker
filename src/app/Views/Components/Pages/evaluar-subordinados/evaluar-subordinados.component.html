@@ -1,0 +1,15 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Evaluación de Subordinados</h2>
+
+  <!-- Supervisor Card --> 
+<app-card-empleado [empleado]="empleado"></app-card-empleado>
+<!-- Seleciona al subordinado para evaluar -->
+<div class="Equipo">
+  <app-card-empleado [empleado]="emple" [llamarevaluacion]="true"
+    *ngFor="let emple of empl.arraymodelsubordinados">
+  </app-card-empleado>
+</div>
+
+
+  
+ 
