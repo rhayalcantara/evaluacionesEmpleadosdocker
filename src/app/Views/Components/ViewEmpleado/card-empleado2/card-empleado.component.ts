@@ -8,13 +8,13 @@ import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component';
 
 @Component({
-  selector: 'app-card-empleado',
+  selector: 'app-card-empleado2',
   standalone: true,
   imports: [FormsModule, CommonModule,MatDialogModule],
   templateUrl: './card-empleado.component.html',
   styleUrls: ['./card-empleado.component.css']
 })
-export class CardEmpleadoComponent implements OnInit {
+export class CardEmpleadoComponent2 implements OnInit {
  
   constructor(private cdr: ChangeDetectorRef,
     private toastr: MatDialog,) {}
@@ -52,7 +52,11 @@ export class CardEmpleadoComponent implements OnInit {
   openEvaluationForm(): void {
     //this.evaluateEmployee.emit(this.empleado);
     const dialogRef = this.toastr.open(FormEvaluacionSupervisorComponent,
-      {width:'1200px',disableClose:true,data:{empleado:this.empleado,periodo:this.periodo,titutlo:"Evaluacion Equipo"}}
+      {width: '1200px',
+       disableClose: true,
+       data:{empleado:this.empleado,
+             periodo:this.periodo,
+             titutlo:"Evaluacion Equipo"}}
     );
     dialogRef.afterClosed().subscribe((rep)=>{
       

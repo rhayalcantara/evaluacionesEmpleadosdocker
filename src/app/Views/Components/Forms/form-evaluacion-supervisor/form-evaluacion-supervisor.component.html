@@ -1,10 +1,11 @@
 <div class="container">
     <div class="empleadotitulo">
-      <app-card-empleado [empleado]="empleado"></app-card-empleado>
+      <app-card-empleado2 [empleado]="empleado"></app-card-empleado2>
     </div>
     <app-form-evaluation-employe
-    [empleado]="subordinado"
+    [empleado]="empleado"
     [periodo]="periodo"
     titulo="Evaluacion Equipo"
+    (dataEmitter)="cancelar()"
   ></app-form-evaluation-employe>
   </div>

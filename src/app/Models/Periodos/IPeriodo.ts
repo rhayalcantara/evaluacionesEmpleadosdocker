@@ -6,5 +6,5 @@ export interface IPeriodo{
     fechaInicio:Date
     fechaFin:Date
     activa:boolean
-    
+    estadoid:number
 }

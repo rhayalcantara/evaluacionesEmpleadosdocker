@@ -1,5 +1,5 @@
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -43,4 +43,19 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+button[type="cancelar"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ec0c7c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  float: right;
+}
+
+button[type="cancelar"]:hover {
+  background-color: #cf7a0b;
 }

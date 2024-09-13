@@ -1,6 +1,8 @@
 
   <form id="evaluationForm" (ngSubmit)="onSubmit()">
     <h1>{{titulo}}</h1>
+    <h3>Periodo:{{periodo.descripcion}}</h3>
+    <p>Fecha:{{fecha | date}}</p>
     <div class="performance-criteria">
       <app-criterialitem 
         [empleado]="empleado"
@@ -12,4 +14,5 @@
     <textarea id="comments" name="comments"></textarea>
 
     <button type="submit">Submit Evaluation</button>
+    <button type="cancelar" (click)="cancelar()">Cancelar</button>
   </form>

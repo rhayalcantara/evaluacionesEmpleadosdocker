@@ -5,13 +5,14 @@ import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-emp
 import { FormEvaluationEmployeComponent } from '../FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CardEmpleadoComponent2 } from '../../ViewEmpleado/card-empleado2/card-empleado.component';
 
 @Component({
   selector: 'app-form-evaluacion-supervisor',
   standalone:true,
   imports:[FormsModule,CommonModule,ReactiveFormsModule,
-    CardEmpleadoComponent,FormEvaluationEmployeComponent],
+    CardEmpleadoComponent2,FormEvaluationEmployeComponent],
   templateUrl: './form-evaluacion-supervisor.component.html',
   styleUrls: ['./form-evaluacion-supervisor.component.css']
 })
@@ -20,12 +21,15 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
   public periodo!:IPeriodo;
   public subordinado!:IEmpleado;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data:any,
-   
+    @Inject(MAT_DIALOG_DATA) public data:any, 
+    private dialogre:MatDialogRef<FormEvaluacionSupervisorComponent>,  
   ){}
   ngOnInit(): void {
     this.empleado=this.data.empleado;
     this.periodo=this.data.periodo;
     this.subordinado=this.data.subordinado;
+  }
+  cancelar(){
+    this.dialogre.close(null)
   }
 }

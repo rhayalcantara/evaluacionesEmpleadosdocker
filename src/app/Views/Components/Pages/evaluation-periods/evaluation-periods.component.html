@@ -1,0 +1,21 @@
+<div class="evaluation-periods">
+  <h2>Evaluation Periods</h2>
+  <div *ngIf="periods.length === 0" class="no-periods">
+    No evaluation periods available.
+  </div>
+  <app-tables 
+    [arraydatos]="Periodo.arraymodel"
+    campokey="secuencial"
+    [selected]="true" 
+    (accion)="opcion($event)"
+    (paginacambio)="paginacambio($event)"
+    (idtable)="actualizaelidtable($event)" 
+    [campos]="campos"
+    [titulos]="tituloslocal"
+    [term]="term"
+    [totalregistros]="Periodo.totalregistros"
+    [currentPage]="Periodo.actualpage"
+    [config]="config"
+    
+  ></app-tables>  
+</div>

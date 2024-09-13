@@ -6,6 +6,7 @@ import { MetasComponent } from './Views/Components/Pages/metas/metas.component';
 import { TiposComponent } from './Views/Components/Pages/tipos/tipos.component';
 import { EmpleadosComponent } from './Views/Components/Pages/empleados/empleados.component';
 import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-evaluacion/periodos-evaluacion.component';
+import { EvaluationPeriodsComponent } from './Views/Components/Pages/evaluation-periods/evaluation-periods.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,10 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/evaluar-subordinados/evaluar-subordinados.component')
     .then((m)=> m.EvaluarSubordinadosComponent),
      canActivate: [AuthGuard]
+  },
+  { path:'evaluation-periods', 
+    component: EvaluationPeriodsComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

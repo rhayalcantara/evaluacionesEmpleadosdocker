@@ -16,7 +16,7 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
   })
 
   export class Periodos implements OnInit{
-
+      
       rutaapi:string = this.datos.URL+'/api/Periods'
       titulomensage:string='Periodos'
       
