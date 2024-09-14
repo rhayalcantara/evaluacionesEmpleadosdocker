@@ -82,20 +82,20 @@ throw new Error('Method not implemented.');
       period.activa = true;
       period.estadoid = 2;
       // TODO: Update the period in the backend
-      console.log(`Period ${period.nombre} activated and set to Configurando state`);
+      console.log(`Period ${period.descripcion} activated and set to Configurando state`);
     }
   }
 
-  changeState(period: IPeriodo, newState: string): void {
-    if (this.isValidTransition(period.estadoid, newState)) {
-      if (confirm(`Are you sure you want to change the state of ${period.nombre} to ${newState}?`)) {
-        period.estadoid = newState;
-        // TODO: Update the period in the backend
-        console.log(`Period ${period.nombre} state changed to ${newState}`);
-      }
-    } else {
-      alert('Invalid state transition');
-    }
+  changeState(period: IPeriodo, newState: number): void {
+    // if (this.isValidTransition(period.estadoid, newState)) {
+    //   if (confirm(`Are you sure you want to change the state of ${period.nombre} to ${newState}?`)) {
+    //     period.estadoid = newState;
+    //     // TODO: Update the period in the backend
+    //     console.log(`Period ${period.nombre} state changed to ${newState}`);
+    //   }
+    // } else {
+    //   alert('Invalid state transition');
+    // }
   }
 
   private isValidTransition(currentState: string, newState: string): boolean {

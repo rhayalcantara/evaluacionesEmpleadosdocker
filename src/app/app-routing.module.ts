@@ -71,6 +71,11 @@ const routes: Routes = [
   { path:'evaluation-periods', 
     component: EvaluationPeriodsComponent,
     canActivate: [AuthGuard]
+  },
+  { path:'Estado', 
+    loadComponent:()=> import('./Views/Components/Pages/Estado/estado.component')
+    .then((m)=> m.EstadoComponent),
+     canActivate: [AuthGuard]
   }
 ];
 

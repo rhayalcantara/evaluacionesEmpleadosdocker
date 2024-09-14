@@ -53,7 +53,8 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
         descripcion:'',
         fechaInicio:new Date(),
         fechaFin:new Date(),
-        activa:true 
+        activa:true, 
+        estadoid:0
       } 
       
     }

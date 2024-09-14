@@ -23,7 +23,8 @@ cancelar() {
     descripcion: '',
     fechaInicio: new Date(),
     fechaFin: new Date(),
-    activa: false
+    activa: false,
+    estadoid: 0
   };
   public fg: FormGroup = new FormGroup({});
   public campos: string[] = [];

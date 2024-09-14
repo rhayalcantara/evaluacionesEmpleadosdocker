@@ -38,7 +38,8 @@ export class FormEvaluationEmployeComponent {
     descripcion: '',
     fechaInicio: new Date(),
     fechaFin: new Date(),
-    activa: false
+    activa: false,
+    estadoid:0
   }; // You might want to create a proper interface for this
   @Input() titulo:string="";
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();

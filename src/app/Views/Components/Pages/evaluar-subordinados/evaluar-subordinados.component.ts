@@ -26,7 +26,8 @@ throw new Error('Method not implemented.');
     descripcion: 'Evaluacion de Medio Año 2024',
     fechaInicio: new Date('2024-01-01'),
     fechaFin: new Date('2024-06-30'),
-    activa: true
+    activa: true,
+    estadoid: 0
   }
   public empleado:IEmpleado={
     secuencial: 0,
