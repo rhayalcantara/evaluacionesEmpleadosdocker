@@ -1,7 +1,7 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 .card {
     margin-top: 30px;
-    display: flex;
+    display:flex;
     flex-direction: column; 
     background-color: #fff;
     border-radius: 10px;

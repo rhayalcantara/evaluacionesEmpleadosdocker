@@ -113,7 +113,7 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         })
       );
     }
-
+    
     public filtrar(){
         this.Gets().subscribe(
                         (m:ModelResponse)=>{

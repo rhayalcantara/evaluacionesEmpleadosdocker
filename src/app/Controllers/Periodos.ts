@@ -4,7 +4,7 @@ import { ExcelService } from "../Services/excel.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, Observable } from 'rxjs';
 import { Meta } from "@angular/platform-browser";
-import { IPeriodo } from "../Models/Periodos/IPeriodo";
+import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
 
 
 
@@ -58,7 +58,22 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
       } 
       
     }
-
+    public InicializaModeloDTS():IPeriodo_Dts{
+      let p:IPeriodo_Dts={
+        estado: {
+          id: 0,
+          descripcion: ""
+        },
+        goals: [],
+        id: 0,
+        descripcion: "",
+        fechaInicio: new Date(),
+        fechaFin: new Date(),
+        activa: false,
+        estadoid: 0
+      }
+      return p;
+    } 
     public  getdatos(){
   
 
@@ -105,6 +120,10 @@ import { IPeriodo } from "../Models/Periodos/IPeriodo";
       public Get(id:string):Observable<IPeriodo>{
           return this.datos.getbyid<IPeriodo>(this.rutaapi+`/${id}`)
       }
+      public GetActivo():Observable<IPeriodo_Dts>{
+        return this.datos.getbyid<IPeriodo_Dts>(this.rutaapi+`/activo`)
+    }
+
       public GetCount():Observable<number>{
         
         return this.datos.getdatoscount(this.rutaapi+`/count`)

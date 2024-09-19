@@ -11,6 +11,7 @@ import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
 import { CommonModule } from '@angular/common';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

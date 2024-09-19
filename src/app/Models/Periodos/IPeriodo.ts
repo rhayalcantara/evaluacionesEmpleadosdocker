@@ -1,4 +1,5 @@
-import { IMeta } from "../Meta/IMeta"
+import { IEstado } from "../Estado/IEstado"
+import { IMeta, IMetaDts } from "../Meta/IMeta"
 
 export interface IPeriodo{
     id:number
@@ -7,4 +8,9 @@ export interface IPeriodo{
     fechaFin:Date
     activa:boolean
     estadoid:number
+}
+
+export interface IPeriodo_Dts extends IPeriodo{
+    estado:IEstado
+    goals:IMetaDts[]
 }

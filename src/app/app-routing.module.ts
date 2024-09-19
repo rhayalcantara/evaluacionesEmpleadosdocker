@@ -76,6 +76,11 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/Estado/estado.component')
     .then((m)=> m.EstadoComponent),
      canActivate: [AuthGuard]
+  },
+  { path:'supervisor-goals', 
+    loadComponent:()=> import('./Views/Components/Pages/supervisor-goals/supervisor-goals.component')
+    .then((m)=> m.SupervisorGoalsComponent),
+     canActivate: [AuthGuard]
   }
 ];
 

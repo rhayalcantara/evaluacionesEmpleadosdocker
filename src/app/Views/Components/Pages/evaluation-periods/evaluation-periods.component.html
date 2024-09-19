@@ -1,21 +1,99 @@
 <div class="evaluation-periods">
-  <h2>Evaluation Periods</h2>
-  <div *ngIf="periods.length === 0" class="no-periods">
-    No evaluation periods available.
-  </div>
-  <app-tables 
-    [arraydatos]="Periodo.arraymodel"
-    campokey="secuencial"
-    [selected]="true" 
-    (accion)="opcion($event)"
-    (paginacambio)="paginacambio($event)"
-    (idtable)="actualizaelidtable($event)" 
-    [campos]="campos"
-    [titulos]="tituloslocal"
-    [term]="term"
-    [totalregistros]="Periodo.totalregistros"
-    [currentPage]="Periodo.actualpage"
-    [config]="config"
+  <div *ngIf="period.id !== 0" class="period-card">
+    <h1 class="period-title">{{ period.descripcion }}</h1>
     
-  ></app-tables>  
+    <div class="period-info">
+      <div class="info-row">
+        <label class="info-label">Fecha Inicio:</label>
+        <label class="info-value">{{ period.fechaInicio | date:'yyyy-MM-dd' }}</label>
+      </div>
+      <div class="info-row">
+        <label class="info-label">Fecha Fin:</label>
+        <label class="info-value">{{ period.fechaFin | date:'yyyy-MM-dd' }}</label>
+      </div>
+      <div class="info-row">
+        <label class="info-label">Estatus:</label>
+        <label class="info-value">{{ period.activa ? 'Active' : 'Inactive' }}</label>
+      </div>
+      <div class="info-row">
+        <label class="info-label">Estado:</label>
+        <label class="info-value">{{ period.estado.descripcion }}</label>
+      </div>
+      <div class="info-row">
+        <label class="info-label">Cantida de Puestos Activos:</label>
+        <label class="info-value">{{ puestosactivos.length }}</label>
+      </div>
+      <div class="info-row">
+        <label class="info-label">Cantida de Puestos Con Metas:</label>
+        <label class="info-value">{{ cntgoal }}</label>
+      </div>
+    </div>
+    <button class="change-state-btn" (click)="changeState()">Change State</button>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="cardx shadow-sm">
+          <div class="card-header ">
+            <h3 class="h5 mb-0">Puestos Activos</h3>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center" 
+                *ngFor="let position of puestosactivos" 
+                (click)="selectPosition(position)"
+                [class.active]="position === selectedPosition">
+              {{ position.descripcion }}
+              
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    
+      <!-- <div class="col-md-8">
+       <h3>Puesto: {{selectedPosition.descripcion}}</h3>
+       <h3>Departamento: {{selectedPosition.departamento}}</h3>
+        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <h2>Metas Digitadas</h2>
+           <app-tables 
+          [arraydatos]="metas"
+          campokey="id"
+          (accion)="opcion($event)"            
+          (paginacambio)="paginacambio($event)"
+          (idtable)="actualizaelidtable($event)" 
+          [campos]="campos"
+          [titulos]="tituloslocal"
+          [term]="term"
+          [totalregistros]="metas.length"
+          [currentPage]="actualpage"
+          [config]="config"
+          
+        ></app-tables> 
+      </div>
+      </div> 
+    </div> -->
+    <div class="col-md-8" *ngIf="selectedPosition">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="h5 mb-0">Metas para: {{ selectedPosition.descripcion }}</h3>
+        </div>
+        <div class="card-body">
+
+          <h4 class="mt-4 mb-3">Metas Existentes:</h4>
+
+          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <app-tables 
+          [arraydatos]="metas"
+          campokey="id"
+          (accion)="opcion($event)"            
+          (paginacambio)="paginacambio($event)"
+          (idtable)="actualizaelidtable($event)" 
+          [campos]="campos"
+          [titulos]="tituloslocal"
+          [term]="term"
+          [totalregistros]="metas.length"
+          [currentPage]="actualpage"
+          [config]="config"
+          
+        ></app-tables>
+      </div>
+        </div>
 </div>

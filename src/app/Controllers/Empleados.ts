@@ -3,6 +3,7 @@ import { DatosServiceService } from '../Services/datos-service.service';
 import { IEmpleado } from '../Models/Empleado/IEmpleado';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { Observable } from 'rxjs';
+import { IPuesto } from '../Models/Puesto/IPuesto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class Empleados implements OnInit{
   rutaapi:string =this.datos.URL+'/api/Empleadoes'
   titulomensage:string='Empleados'
   public arraytotal:IEmpleado[]=[];
+  public arraypuestossub:IPuesto[]=[]
+  public arrayempleadosactivos:IEmpleado[]=[]
   
   public model:IEmpleado=this.inicializamodelo()
  titulos=[
@@ -42,6 +45,7 @@ export class Empleados implements OnInit{
                   
  ){}
     ngOnInit(): void {
+
       this.filtro=""
       this.estado=""
       this.actualpage=1
@@ -74,9 +78,10 @@ export class Empleados implements OnInit{
 
      //console.log('entro y llama a los datos')
 
-
+     this.arraymodel=[]
+     this.arraymodelsubordinados=[]
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-        console.log('llegaron los datos datos',rep.count)
+       // console.log('llegaron los datos datos',rep.count)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
@@ -84,7 +89,10 @@ export class Empleados implements OnInit{
         this.arraytotal=[];
         this.arraymodel=rep.data //.filter((x:IEmpleado) => x.codigoestado === "A");
         this.arraytotal=rep.data
+        this.arrayempleadosactivos=[];
         //filtrar los que estan activos
+        this.arrayempleadosactivos=this.arraymodel
+        .filter(x=>x.codigoestado=="A")
         // this.arraymodel = this.arraymodel.filter(x => x.codigoestado === "A");
         //ordena los datos por nombre alfabeticamente
         if (this.arraymodel){
@@ -92,7 +100,7 @@ export class Empleados implements OnInit{
         }
         
 
-        console.log('datos',this.arraymodel)     
+        //console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)      
 
         //dialogRef.close()
@@ -106,11 +114,19 @@ export class Empleados implements OnInit{
     if (this.model.secuencial==0){
       return
     }
+    this.arraypuestossub=[];
    this.Getsub(this.model.secuencial.toString()).subscribe({next:(rep:ModelResponse)=>{
       console.log('llegaron los datos ',rep.count)
       //se obtiene los datos y se ponen en los array
       this.arraymodelsubordinados=rep.data 
-
+      //llena los puestos
+      this.arraymodelsubordinados.map((x:IEmpleado)=>{
+         this.datos.getbyid<IPuesto>(this.datos.URL+`/api/Positions/${x.scargo}`).subscribe((puesto:IPuesto)=>{
+            this.arraypuestossub.push(puesto);
+            console.log('emmpleados subpueto',this.arraypuestossub)
+         })
+      })
+      
     }
   }
   ) 
