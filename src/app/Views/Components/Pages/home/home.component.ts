@@ -7,14 +7,17 @@ import { TableResponse, Usuario } from 'src/app/Helpers/Interfaces';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
 import { SupervisorGoalsComponent } from '../supervisor-goals/supervisor-goals.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule,MatDialogRef } from '@angular/material/dialog';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { EmpleadoTeamComponent } from '../../ViewEmpleado/empleadoteam/empleadoteam.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule, CardEmpleadoComponent, RouterModule], // Add RouterModule here
+  imports: [FormsModule, CommonModule, 
+    CardEmpleadoComponent, RouterModule,
+    EmpleadoTeamComponent], // Add RouterModule here
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

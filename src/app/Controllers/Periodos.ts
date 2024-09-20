@@ -134,6 +134,7 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
         return this.datos.insertardatos<IPeriodo>(this.rutaapi, obj ); 
       }
       public Update(obj:IPeriodo):Observable<IPeriodo>{
+        console.log('llego a grabar',obj)
         return this.datos.updatedatos<IPeriodo>(this.rutaapi+`/${obj.id}`,obj); 
       }
   

@@ -6,6 +6,8 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component';
+import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
+import { EmpleadoTeamComponent2 } from '../empleadoteam2/empleadoteam2.component';
 
 @Component({
   selector: 'app-card-empleado',
@@ -15,6 +17,7 @@ import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-s
   styleUrls: ['./card-empleado.component.css']
 })
 export class CardEmpleadoComponent implements OnInit {
+
  
   constructor(private cdr: ChangeDetectorRef,
     private toastr: MatDialog,) {}
@@ -47,6 +50,16 @@ export class CardEmpleadoComponent implements OnInit {
     this.nfoto = this.empleado.secuencial > 99 ? Math.floor(this.empleado.secuencial/10) : this.empleado.secuencial;
     this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
+  }
+
+  subdelsub() {
+    //throw new Error('Method not implemented.');
+    const dialogRef = this.toastr.open(EmpleadoTeamComponent2 ,
+      {width:'1200px',height:'950px',disableClose:false,data:{empleado:this.empleado,periodo:this.periodo}}
+    );
+    dialogRef.afterClosed().subscribe((rep)=>{
+      
+    }); 
   }
 
   openEvaluationForm(): void {

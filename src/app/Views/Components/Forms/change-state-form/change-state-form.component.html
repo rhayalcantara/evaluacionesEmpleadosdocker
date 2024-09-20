@@ -1,0 +1,12 @@
+<form [formGroup]="changeStateForm" (ngSubmit)="onSubmit()">
+  <h2>Cambio de Estado para {{ activePeriod.descripcion }}</h2>
+  <div class="form-group">
+    <label for="newState">Nuevo Estado:</label>
+    <select id="newState" formControlName="newState" class="form-control">
+      <option value="">Selecione un nuevo estado </option>
+      <option *ngFor="let state of availableStates" [value]="state.id">{{ state.descripcion }}</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="!changeStateForm.valid">Change State</button>
+  <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+</form>
