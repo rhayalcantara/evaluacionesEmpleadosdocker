@@ -129,7 +129,6 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
     }
     
     
-
       public Gets():Observable<ModelResponse> {
         return this.datos.getdatos<ModelResponse>( this.rutaapi)
       }

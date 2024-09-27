@@ -116,6 +116,7 @@ export class EvaluationPeriodsComponent implements OnInit {
       currentPage: 1,
       totalItems: this.period.goals.length
     };
+    console.log('La Configuracion',this.config)
     this.ServiceComunicacion.enviarMensaje(this.config)
     console.log('Metas del periodo',this.period.goals)
     const puestosUnicos = this.getUniquePositions(this.period.goals)

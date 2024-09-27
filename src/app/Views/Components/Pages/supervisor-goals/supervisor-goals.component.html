@@ -1,46 +1,9 @@
-<!-- <div class="container mt-4">
-  <h2 class="mb-4">Agregar Metas para Puestos Subordinados</h2>
 
-  <div class="row">
-    <div class="col-md-4">
-      <h3>Puestos Subordinados</h3>
-      <ul class="list-group">
-        <li *ngFor="let position of empl.arraypuestossub" 
-            class="list-group-item list-group-item-action"
-            [class.active]="position === selectedPosition"
-            (click)="onPositionSelect(position)">
-          {{ position.descripcion }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="col-md-8" *ngIf="selectedPosition">
-      <h3>Metas para: {{ selectedPosition.descripcion }}</h3>
-      
-      <form (ngSubmit)="onSubmitGoal()" class="mb-4">
-        <div class="form-group">
-          <label for="goalInput">Nueva Meta:</label>
-          <input type="text" id="goalInput" name="goalInput" 
-                 [(ngModel)]="goalInput" class="form-control" 
-                 placeholder="Ingrese la meta para este puesto">
-        </div>
-        <button type="submit" class="btn btn-primary mt-2" [disabled]="!goalInput">Agregar Meta</button>
-      </form>
-
-      <h4>Metas Existentes:</h4>
-      <ul class="list-group">
-        <li *ngFor="let goal of goals" class="list-group-item">
-          {{ goal.description }}
-        </li>
-      </ul>
-
-      <button (click)="onFinish()" class="btn btn-secondary mt-3">Terminar y Regresar</button>
-    </div>
-  </div>
-</div> -->
 <div class="container-fluid mt-5">
-    <h2 class="text-primary mb-4">Agregar Metas para Puestos Subordinados</h2>
-    
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+      <h1 class="text-primary mb-4">Agregar Metas para Puestos Subordinados</h1>
+    </div>
     <div class="row">
       <div class="col-md-4">
         <div class="card shadow-sm">
@@ -63,26 +26,10 @@
             <h3 class="h5 mb-0">Metas para: {{ selectedPosition.descripcion }}</h3>
           </div>
           <div class="card-body">
-            <!-- <form (ngSubmit)="addGoal()">
-              <div class="form-group mb-3">
-                <label for="newGoal">Nueva Meta:</label>
-                <input type="text" id="newGoal" class="form-control" 
-                       [(ngModel)]="newGoal" name="newGoal" 
-                       placeholder="Ingrese la meta para este puesto">
-              </div>
-              <button type="submit" class="btn btn-primary mb-3">Agregar Meta</button>
-            </form> -->
+          
             <button type="submit" class="btn btn-primary mb-3" (click)="addGoal()">Agregar Meta</button>
             <h4 class="mt-4 mb-3">Metas Existentes:</h4>
-            <!-- <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center" 
-                  *ngFor="let goal of selectedPosition.goals">
-                {{ goal.description }}
-                <button class="btn btn-sm btn-outline-danger" (click)="removeGoal(goal)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </li>
-            </ul> -->
+
             <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <app-tables 
             [arraydatos]="metas"
@@ -107,3 +54,4 @@
       </div>
     </div>
   </div>
+</div>

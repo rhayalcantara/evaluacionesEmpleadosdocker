@@ -81,7 +81,7 @@ export class Empleados implements OnInit{
      this.arraymodel=[]
      this.arraymodelsubordinados=[]
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-       // console.log('llegaron los datos datos',rep.count)
+        console.log('llegaron los datos datos',rep.count)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
