@@ -73,6 +73,10 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         elTipos:{
           id: 0,
           descripcion: ""
+        },
+        tipos:{
+          id: 0, 
+          descripcion: ""
         }
       } 
       
@@ -85,7 +89,11 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         periodId:0,
         weight:1,
         positionSecuencial:0,
-        tiposid:0
+        tiposid:0,
+        tipos:{
+          id: 0,
+          descripcion: ""
+        }
       } 
       
     }

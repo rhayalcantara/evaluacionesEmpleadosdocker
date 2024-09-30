@@ -116,14 +116,14 @@ export class Empleados implements OnInit{
     }
     this.arraypuestossub=[];
    this.Getsub(this.model.secuencial.toString()).subscribe({next:(rep:ModelResponse)=>{
-      console.log('llegaron los datos ',rep.count)
+      //console.log('llegaron los datos ',rep.count)
       //se obtiene los datos y se ponen en los array
       this.arraymodelsubordinados=rep.data 
       //llena los puestos
       this.arraymodelsubordinados.map((x:IEmpleado)=>{
          this.datos.getbyid<IPuesto>(this.datos.URL+`/api/Positions/${x.scargo}`).subscribe((puesto:IPuesto)=>{
             this.arraypuestossub.push(puesto);
-            console.log('emmpleados subpueto',this.arraypuestossub)
+           // console.log('emmpleados subpueto',this.arraypuestossub)
          })
       })
       

@@ -47,8 +47,10 @@ export class FormMetasComponent implements OnInit {
     elTipos: {
       id: 0,
       descripcion: ''
-    }
-  }
+    },
+    tipos:{   id: 0,
+      descripcion: ''}
+  } 
   public tipo: ITipo = this.TipoDatos.model;
   public fg: FormGroup = new FormGroup({});
   public selectedPuesto: IPuesto | null = null;

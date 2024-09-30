@@ -1,6 +1,5 @@
-import {IEmpleado} from '../Empleado/IEmpleado'
-import { IMeta } from '../Meta/IMeta'
-import { IPeriodo } from '../Periodos/IPeriodo'
+import { IMeta } from "../Meta/IMeta"
+
 export interface IEvaluacion {
     id: number
     periodId: number
@@ -8,8 +7,6 @@ export interface IEvaluacion {
     totalCalculo: number
     fechaRepuestas: string
     observacion: string
-    empleado: IEmpleado
-    period: IPeriodo
     evaluacionGoals: IEvaluacionGoal[]
     goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
   }
@@ -17,8 +14,7 @@ export interface IEvaluacion {
     id: number
     evaluacionId: number
     goalId: number
-    goal: IMeta
-    evaluacion: IEvaluacion
+    goal:IMeta
   }
 
   export interface IGoalEmpleadoRespuesta {
@@ -26,6 +22,7 @@ export interface IEvaluacion {
     evaluacionId: number
     goalId: number
     repuesta: number
+    repuestasupervisor:number
     weight: number
     observacion: string
   }

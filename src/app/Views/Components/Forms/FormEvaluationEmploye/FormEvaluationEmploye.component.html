@@ -7,11 +7,14 @@
       <app-criterialitem 
         [empleado]="empleado"
         [periodo]="periodo"
+        [evaluacion]="evaluacionempleado"
+        [supervisor]="supervisor"
+        (onEvaluacionChange)="onEvaluacionChange($event)"
       ></app-criterialitem>
     </div>
     
-    <label for="comments">Additional Comments:</label>
-    <textarea id="comments" name="comments"></textarea>
+    <label for="comments">Comentario Adiccional:</label>
+    <textarea id="comments" [(ngModel)]="comentarioAdicional" name="comments"></textarea>
 
     <button type="submit">Submit Evaluation</button>
     <button type="cancelar" (click)="cancelar()">Cancelar</button>

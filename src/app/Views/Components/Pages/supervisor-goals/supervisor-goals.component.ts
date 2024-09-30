@@ -39,7 +39,11 @@ newGoal: IMeta={
   periodId: 0,
   weight: 0,
   positionSecuencial: 0,
-  tiposid: 0
+  tiposid: 0,
+  tipos:{
+       id: 0,
+      descripcion: ''
+  }
 };
 
 subordinatePositions: Position[] = [];

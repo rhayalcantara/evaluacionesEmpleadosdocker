@@ -9,7 +9,7 @@ import { IEvaluacion, IEvaluacionGoal, IGoalEmpleadoRespuesta } from "../Models/
 })
 export class Evaluacion implements OnInit {
 
-    rutaapi: string = this.datos.URL + '/api/Evaluaciones';
+    rutaapi: string = this.datos.URL + '/api/Evaluacions';
     titulomensage: string = 'Evaluaciones';
     public model: IEvaluacion = this.inicializamodelo();
     public titulos = [
@@ -50,31 +50,6 @@ export class Evaluacion implements OnInit {
             totalCalculo: 0,
             fechaRepuestas: '',
             observacion: '',
-            empleado: {
-                secuencial: 0,
-                codigousuario: "",
-                nombreunido: "",
-                identificacion: "",
-                sdept: 0,
-                departamento: "",
-                codigoestado: "",
-                scargo: 0,
-                cargo: "",
-                esjefatura: 0,
-                tienejefe: 0,
-                nivel: 0,
-                fechapostulacion: "",
-                jefeinmediatO_SECUENCIAL: 0,
-                jefeinmediato: ""
-            },
-            period: {
-                id: 0,
-                descripcion: "",
-                fechaInicio: new Date(),
-                fechaFin: new Date(),
-                activa: false,
-                estadoid: 0
-            },
             evaluacionGoals: [],
             goalEmpleadoRespuestas: []
         };
@@ -175,7 +150,7 @@ export class Evaluacion implements OnInit {
         );
     }
     public GetEvaluacionePorEmpleadoyPeriodo(secuencialempleado: number,periodId:number): Observable<IEvaluacion> {
-        return this.datos.getbyid<IEvaluacion>(`${this.rutaapi}/empleadoid=${secuencialempleado}&periodoid=${periodId}`)
+        return this.datos.getbyid<IEvaluacion>(`${this.rutaapi}/evaluacion?empleadoid=${secuencialempleado}&periodoid=${periodId}`)
                
     }
 

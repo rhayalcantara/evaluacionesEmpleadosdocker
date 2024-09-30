@@ -9,6 +9,7 @@ export interface IMeta{
     weight:number
     positionSecuencial:number
     tiposid:number
+    tipos:ITipo
 }
 export interface IMetaDts extends IMeta{
     position:IPuesto,
