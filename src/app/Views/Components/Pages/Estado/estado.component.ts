@@ -15,7 +15,8 @@ import { FormEstadoComponent } from '../../Forms/form-estado/form-estado.compone
 @Component({
   selector: 'app-estado',
   standalone: true,
-  imports: [FormsModule, TablesComponent, CommonModule, MatDialogModule, FormEstadoComponent],
+  imports: [FormsModule, TablesComponent,
+     CommonModule, MatDialogModule, FormEstadoComponent],
   templateUrl: './estado.component.html',
   styleUrls: ['./estado.component.css']
 })

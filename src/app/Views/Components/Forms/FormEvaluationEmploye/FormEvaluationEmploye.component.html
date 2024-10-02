@@ -1,5 +1,6 @@
 
   <form id="evaluationForm" (ngSubmit)="onSubmit()">
+    {{evaluacionempleado | json}}
     <h1>{{titulo}}</h1>
     <h3>Periodo:{{periodo.descripcion}}</h3>
     <p>Fecha:{{fecha | date}}</p>

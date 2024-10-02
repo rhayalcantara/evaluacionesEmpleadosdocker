@@ -6,6 +6,7 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component';
+import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
 
 @Component({
   selector: 'app-card-empleado2',
@@ -48,7 +49,15 @@ export class CardEmpleadoComponent2 implements OnInit {
     this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
   }
-
+  subdelsub() {
+    //throw new Error('Method not implemented.');
+    const dialogRef = this.toastr.open(EmpleadoTeamComponent ,
+      {width:'1200px',height:'950px',disableClose:false,data:{empleado:this.empleado,periodo:this.periodo}}
+    );
+    dialogRef.afterClosed().subscribe((rep)=>{
+      
+    }); 
+  }
   openEvaluationForm(): void {
     //this.evaluateEmployee.emit(this.empleado);
     const dialogRef = this.toastr.open(FormEvaluacionSupervisorComponent,

@@ -93,3 +93,19 @@
     .employee-details p {
       margin: 5px 0;
     }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+  
+    .action-buttons button {
+      flex: 1;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+  
+    .action-buttons button:last-child {
+      margin-right: 0;
+    }

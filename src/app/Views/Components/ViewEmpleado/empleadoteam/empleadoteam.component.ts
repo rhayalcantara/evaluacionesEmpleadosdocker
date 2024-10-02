@@ -9,6 +9,7 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { SupervisorGoalsComponent } from '../../Pages/supervisor-goals/supervisor-goals.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { CardEmpleadoComponent2 } from '../card-empleado2/card-empleado.component';
+import { ObjetivosComponent } from '../../Pages/objetivos/objetivos.component';
 
 
 @Component({
@@ -39,6 +40,17 @@ export class EmpleadoTeamComponent implements OnInit {
     console.log('Agregar metas para subordinados');
     // You may need to inject necessary services and implement the logic
     const dialogRef = this.dialog.open(SupervisorGoalsComponent, {
+      width: '1200px', data: { empl: this.empl,periodo:this.periodo }
+    });
+    dialogRef.afterClosed().subscribe((rep) => {
+      
+    });
+  }
+  objetivoscall() {
+    // Implement the agregametasub functionality here
+    console.log('Agregar metas para subordinados');
+    // You may need to inject necessary services and implement the logic
+    const dialogRef = this.dialog.open(ObjetivosComponent, {
       width: '1200px', data: { empl: this.empl,periodo:this.periodo }
     });
     dialogRef.afterClosed().subscribe((rep) => {
