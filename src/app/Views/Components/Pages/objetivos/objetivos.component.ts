@@ -6,6 +6,7 @@ import { TablesComponent } from '../../tables/tables.component';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { FormObjetivosComponent } from '../../Forms/form-objetivos/form-objetivos.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 
 @Component({
   selector: 'app-objetivos',
@@ -26,7 +27,8 @@ export class ObjetivosComponent implements OnInit {
   public tituloslocal: string[] = []
 
   constructor(
-    private objetivoController: Objetivo,
+    private ServiceComunicacion:ComunicacionService,
+    public objetivoController: Objetivo,
     private cd: ChangeDetectorRef,
     private toastr: MatDialog
   ) { }
@@ -36,15 +38,22 @@ export class ObjetivosComponent implements OnInit {
     this.objetivoController.TRegistros.subscribe({
       next: (rep: number) => {
         console.log("evento#:", rep);
-        this.objetivos = this.objetivoController.arraymodel;
-        console.log('los datos', this.objetivos)
+        this.config.totalItems=rep
+        this.ServiceComunicacion.enviarMensaje(this.config)
       }
     });
+    this.config = {
+      id:'',
+       itemsPerPage: 2,
+       currentPage: 1,
+       totalItems: this.objetivoController.totalregistros
+     };
     this.objetivoController.titulos.map((x: string | any) => {
       let nx: string = x[Object.keys(x)[0]]
       this.campos.push(...Object.keys(x))
       this.tituloslocal.push(nx)
     })
+    console.log('los campos',this.campos,'los titulos',this.tituloslocal)
     this.cd.detectChanges();
   }
 
@@ -105,14 +114,16 @@ export class ObjetivosComponent implements OnInit {
   }
 
   actualizaelidtable($event: string) {
-    throw new Error('Method not implemented.');
+   this.config.id = $event
   }
 
   paginacambio($event: number) {
-    throw new Error('Method not implemented.');
+    this.objetivoController.actualpage=$event
   }
 
   opcion($event: TableResponse) {
-    throw new Error('Method not implemented.');
+    if($event.option == 'edit'){
+      this.onSelect($event.key as IObjetivo)
+    }
   }
 }

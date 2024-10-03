@@ -27,6 +27,7 @@ export class Objetivo {
     public model: IObjetivo = this.inicializamodelo();
     public arraymodel: IObjetivoDts[] = [];
     public totalregistros: number = 0;
+    public actualpage:number=0;
     @Output() TRegistros = new EventEmitter<number>();
 
     constructor(private datos: DatosServiceService) {}

@@ -3,33 +3,23 @@
   
   <button (click)="onNew()" class="btn btn-primary mb-3">Nuevo Objetivo</button>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Periodo ID</th>
-        <th>Estado ID</th>
-        <th>Grupo Competencia ID</th>
-        <th>Fecha</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let objetivo of objetivos">
-        <td>{{ objetivo.id }}</td>
-        <td>{{ objetivo.nombre }}</td>
-        <td>{{ objetivo.descripcion }}</td>
-        <td>{{ objetivo.periodoId }}</td>
-        <td>{{ objetivo.estadoId }}</td>
-        <td>{{ objetivo.grupocompetenciaid }}</td>
-        <td>{{ objetivo.fecha | date:'dd/MM/yyyy' }}</td>
-        <td>
-          <button (click)="onSelect(objetivo)" class="btn btn-sm btn-info mr-2">Editar</button>
-          <button (click)="onDelete(objetivo)" class="btn btn-sm btn-danger">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div  class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      
+    <app-tables 
+    [arraydatos]="objetivoController.arraymodel"
+    campokey="id"
+    (accion)="opcion($event)"
+    
+    (paginacambio)="paginacambio($event)"
+    (idtable)="actualizaelidtable($event)" 
+    [campos]="campos"
+    [titulos]="tituloslocal"
+    [term]="term"
+    [totalregistros]="objetivoController.totalregistros"
+    [currentPage]="objetivoController.actualpage"
+    [config]="config"
+    
+  ></app-tables>  
+  </div>
+
+  
