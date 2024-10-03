@@ -7,6 +7,7 @@ import { TiposComponent } from './Views/Components/Pages/tipos/tipos.component';
 import { EmpleadosComponent } from './Views/Components/Pages/empleados/empleados.component';
 import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-evaluacion/periodos-evaluacion.component';
 import { EvaluationPeriodsComponent } from './Views/Components/Pages/evaluation-periods/evaluation-periods.component';
+import { GrupoCompetenciasComponent } from './Views/Components/Pages/grupo-competencias/grupo-competencias.component';
 
 const routes: Routes = [
   {
@@ -86,7 +87,8 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/objetivos/objetivos.component')
     .then((m)=> m.ObjetivosComponent),
      canActivate: [AuthGuard]
-  }
+  },
+  { path: 'grupo-competencias', component: GrupoCompetenciasComponent },
 ];
 
 @NgModule({

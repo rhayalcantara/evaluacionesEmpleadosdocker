@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IObjetivo, IGrupoCompetencia } from '../Models/Objetivo/IObjetivo';
+import { IObjetivo, IGrupoCompetencia, IObjetivoDts } from '../Models/Objetivo/IObjetivo';
 import { IPeriodo } from '../Models/Periodos/IPeriodo';
 import { IEstado } from '../Models/Estado/IEstado';
 import { DatosServiceService } from '../Services/datos-service.service';
@@ -16,14 +16,16 @@ export class Objetivo {
     titulomensage: string = 'Objetivos';
   
     titulos=[
+      {grupoc: 'Grupo Competencia'},
       {nombre: 'Nombre'},
       {descripcion:'Descripcion'},
-      {grupocompetenciaid: 'Grupo Competencia ID'},
+      {periodo:'Periodo'},
+      {estad:'Estado'},
       {fecha:'Fecha'}
    ]
 
     public model: IObjetivo = this.inicializamodelo();
-    public arraymodel: IObjetivo[] = [];
+    public arraymodel: IObjetivoDts[] = [];
     public totalregistros: number = 0;
     @Output() TRegistros = new EventEmitter<number>();
 
@@ -119,13 +121,13 @@ export class Objetivo {
     }
 
     public getEstados(): Observable<IEstado[]> {
-      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Estados').pipe(
+      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Estadoes').pipe(
         map((response: ModelResponse) => response.data as IEstado[])
       );
     }
 
     public getGruposCompetencia(): Observable<IGrupoCompetencia[]> {
-      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/GruposCompetencia').pipe(
+      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/GrupoCompetencias').pipe(
         map((response: ModelResponse) => response.data as IGrupoCompetencia[])
       );
     }

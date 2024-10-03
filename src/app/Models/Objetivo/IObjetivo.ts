@@ -14,6 +14,9 @@ export interface IObjetivo {
     period: IPeriodo
     estado: IEstado
     grupocompetencia:IGrupoCompetencia
+    periodo:string
+    estad:string
+    grupoc:string
   }
   export interface IGrupoCompetencia{
     id:number
