@@ -7,16 +7,32 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { FormObjetivosComponent } from '../../Forms/form-objetivos/form-objetivos.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-objetivos',
   templateUrl: './objetivos.component.html',
   styleUrls: ['./objetivos.component.css'],
   standalone: true,
-  imports: [CommonModule, TablesComponent, FormObjetivosComponent,MatDialogModule]
+  imports: [CommonModule, TablesComponent, 
+          FormObjetivosComponent,MatDialogModule,
+        ReactiveFormsModule]
 })
 export class ObjetivosComponent implements OnInit {
-  term: string = "";
+filtro() {
+throw new Error('Method not implemented.');
+}
+  public term:string=""
+agregar() {
+throw new Error('Method not implemented.');
+}
+pdf() {
+throw new Error('Method not implemented.');
+}
+excel() {
+throw new Error('Method not implemented.');
+}
+  
   totalregistros: number = 0;
   actualpage: number = 1;
   config: any;
