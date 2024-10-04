@@ -83,7 +83,7 @@ export class PuestosComponent implements OnInit {
     this.Puestos.arraymodel=this.Puestos.arraytotal
     if (this.selectedDepartamento) {
       this.Puestos.arraymodel = this.Puestos.arraymodel.filter(
-        puesto => puesto.departmentsecuencial === this.selectedDepartamento
+        puesto => puesto.departmentSecuencial === this.selectedDepartamento
       );
 
     }       

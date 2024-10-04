@@ -50,7 +50,7 @@ export class FormPuestosComponent implements OnInit {
   grabar() {
     this.puestodatos.model.secuencial = +this.fg.controls['secuencial'].value
     this.puestodatos.model.descripcion = this.fg.controls['descripcion'].value    
-    this.puestodatos.model.departmentsecuencial=+this.fg.controls['departmentsecuencial'].value        
+    this.puestodatos.model.departmentSecuencial=+this.fg.controls['departmentSecuencial'].value        
     this.puestodatos.grabar()
     this.dialogre.close(this.puestodatos.model)
   }

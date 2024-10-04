@@ -69,11 +69,19 @@ export class SeleccionPuestoComponent implements OnInit {
   }
 
   filtrarPuestos() {
-    console.log(this.selectedDepartamento)
-    if (this.selectedDepartamento) {
-      this.puestosService.arraymodel = this.puestosService.arraymodel.filter(
-        puesto => puesto.departmentsecuencial === this.selectedDepartamento
-      );
+    console.log('departamento selecionado',this.selectedDepartamento)
+    if (this.selectedDepartamento!=null) {
+      // this.puestosService.arraymodel = this.puestosService.arraymodel.filter(
+      //   puesto => puesto.departmentSecuencial === this.selectedDepartamento
+      // );
+      console.log('datos antes del filtrado',this.puestosService.arraymodel)
+      this.puestosService.arraymodel = this.puestosService.arraymodel.filter(puesto => {
+        if (puesto.departmentSecuencial === this.selectedDepartamento) {
+          return true;
+        }
+        return false;
+      });
+      console.log('datos filtrados',this.puestosService.arraymodel)
     } else {
       this.puestosService.getdatos()
     }

@@ -49,7 +49,7 @@ export class Puestos implements OnInit{
     return {
       secuencial:0,
       descripcion:'',
-      departmentsecuencial:0,
+      departmentSecuencial:0,
       departamento:""
    }
   }
@@ -131,7 +131,7 @@ public async grabar(): Promise<boolean> {
           if (m!=undefined){
             m.secuencial = this.model.secuencial
             m.descripcion = this.model.descripcion
-            m.departmentsecuencial=this.model.departmentsecuencial
+            m.departmentSecuencial=this.model.departmentSecuencial
           }
 
           this.TRegistros.emit(this.totalregistros)

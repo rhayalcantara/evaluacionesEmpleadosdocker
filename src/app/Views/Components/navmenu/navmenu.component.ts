@@ -28,15 +28,15 @@ export class NavmenuComponent implements OnInit {
         
         if (mess=='loguiado'){
           
-         console.log(localStorage.getItem('usuario'))
+         //console.log(localStorage.getItem('usuario'))
          this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
-         console.log('elsusuario',this.usuarioservicio.usuario)
+         //console.log('elsusuario',this.usuarioservicio.usuario)
           this.mostramenu=true
           this.router.navigate(['/Home'])
           this.logg='LogOut'
         }
         if (mess=='nologuiado'){
-          console.log('entro en nologiado')
+          //console.log('entro en nologiado')
           this.mostramenu=false
           this.logg='Login'
           this.router.navigate(['login'])

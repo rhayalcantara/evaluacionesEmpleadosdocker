@@ -16,6 +16,7 @@ import { ITipo } from 'src/app/Models/Tipo/ITipo';
 import { Tipos } from 'src/app/Controllers/Tipos';
 import { IGrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
 import { IObjetivo } from 'src/app/Models/Objetivo/IObjetivo';
+import { Objetivo } from 'src/app/Controllers/Objetivo';
 
 @Component({
   selector: 'app-form-metas',
@@ -29,32 +30,8 @@ export class FormMetasComponent implements OnInit {
   public Objetivos:IObjetivo[]=[]
   public campos: string[] = [];
   public meta: IMeta = this.metasDatos.model;
-  public metadts:IMetaDts = {
-    puesto: '',
-    departamento: '',
-    periodo: '',
-    Tipo: '',
-    id: 0,
-    name: '',
-    periodId: 0,
-    weight: 0,
-    positionSecuencial: 0,
-    tiposid: 0,
-    position: {
-      secuencial: 0,
-      descripcion: '',
-      departmentsecuencial: 0,
-      departamento: ''
-    },
-    elTipos: {
-      id: 0,
-      descripcion: ''
-    },
-    tipos:{   id: 0,     
-      descripcion: ''},
-      objetivoid:0
-  } 
-  public tipo: ITipo = this.TipoDatos.model;
+  public metadts:IMetaDts =  this.metasDatos.inicializamodeloDts()
+  // public tipo: ITipo = this.TipoDatos.model;
   public fg: FormGroup = new FormGroup({});
   public selectedPuesto: IPuesto | null = null;
   public selectedPeriodo: IPeriodo | null = null;
@@ -67,7 +44,7 @@ export class FormMetasComponent implements OnInit {
     public metasDatos: Metas,
     public puestoDatos:Puestos,
     public periodoDatos:Periodos,
-    public TipoDatos:Tipos,
+    public Objetivocontrolador:Objetivo,
     private dialogRef: MatDialogRef<FormMetasComponent>,
     private datService: DatosServiceService,
   ) {
@@ -78,7 +55,15 @@ export class FormMetasComponent implements OnInit {
     console.log(this.data.model);
     this.meta = this.data.model;
     this.metadts=this.data.model;
-    this.TipoDatos.getdatos()
+    // si se esta agregando se le pone el periodo activo
+    if (this.meta.id == 0){
+      //obtener el periodo activo de localstore
+      this.selectedPeriodo = JSON.parse(localStorage.getItem('periodo') ?? "")
+      if (this.selectedPeriodo!=undefined){
+        this.meta.periodId==this.selectedPeriodo.id
+      }
+    }
+    //this.TipoDatos.getdatos()
     this.loadObjetivos()
     //this.campos = Object.keys(this.meta);
     this.metasDatos.titulos.map((x:string|any)=>{
@@ -102,12 +87,9 @@ export class FormMetasComponent implements OnInit {
           this.selectedPeriodo = rep
         })
     }
-    if (this.meta.tiposid!=0){
-        this.TipoDatos.Get(this.meta.tiposid.toString())
-                      .subscribe((rep:ITipo)=>{
-                        this.selectedTipo=rep
-                        console.log(rep)
-                      })
+    if (this.meta.objetivoid!=0){
+        // busca en el array de objetivos el que tenga el id == this.meta.objetivoid
+
     }
 
   }
@@ -117,21 +99,7 @@ export class FormMetasComponent implements OnInit {
       this.Objetivos = objetivo;
     });
   }
-  onTipoChange(event:any) {
-    console.log("cambio el tipo",event)
-      let tipo:string = event.target.value
-      const partes = tipo.split(":");
-      const despuesDeDosPuntos = partes[1];
-      let t = this.TipoDatos.arraymodel
-                  .find(x=>x.id== Number.parseInt(despuesDeDosPuntos)) ? 
-                  this.TipoDatos.arraymodel
-                  .find(x=>x.id== Number.parseInt(despuesDeDosPuntos)) :
-                  this.TipoDatos.model
-      if (t!=null){
-        this.selectedTipo=t
-      }
-      console.log("cambio tipo",event.target.value,this.selectedTipo)
-    }
+  
   openSeleccionPuesto() {
     const dialogRef = this.dialog.open(SeleccionPuestoComponent, {
       width: '800px',
@@ -169,7 +137,7 @@ export class FormMetasComponent implements OnInit {
       this.metasDatos.model = this.fg.value as IMeta  
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0
       console.log('la meta a grabar',this.metasDatos.model)
-      this.metasDatos.model.tiposid = n
+      //this.metasDatos.model.tiposid = n
       let nn:number = this.selectedPuesto ? this.selectedPuesto.secuencial : 0
       this.metasDatos.model.positionSecuencial = nn
       console.log({meta:this.metasDatos.model},{fg:this.fg.value as IMeta}) 

@@ -33,25 +33,13 @@ interface Goal {
 })
 export class SupervisorGoalsComponent implements OnInit {
 
-newGoal: IMeta={
-  id: 0,
-  name: '',
-  periodId: 0,
-  weight: 0,
-  positionSecuencial: 0,
-  tiposid: 0,
-  tipos:{
-       id: 0,
-      descripcion: ''
-  },
-  objetivoid:0
-};
+newGoal: IMeta=this.metascontroller.inicializamodelo()
 
 subordinatePositions: Position[] = [];
 selectedPosition: IPuesto  ={
   secuencial: 0,
   descripcion: '',
-  departmentsecuencial: 0,
+  departmentSecuencial: 0,
   departamento: ''
 };
 periodo:IPeriodo={

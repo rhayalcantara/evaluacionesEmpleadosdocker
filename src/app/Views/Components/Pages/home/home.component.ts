@@ -23,23 +23,8 @@ import { EmpleadoTeamComponent } from '../../ViewEmpleado/empleadoteam/empleadot
 })
 export class HomeComponent implements OnInit {
   
-  public empleado: IEmpleado = {
-    secuencial: 0,
-    codigousuario: '',
-    nombreunido: '',
-    identificacion: '',
-    sdept: 0,
-    departamento: '',
-    codigoestado: '',
-    scargo: 0,
-    cargo: '',
-    esjefatura: 0,
-    tienejefe: 0,
-    nivel: 0,
-    fechapostulacion: "",
-    jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
-  }
+  public empleado: IEmpleado = this.empl.inicializamodelo() 
+
    public periodo:IPeriodo ={
      id: 0,
      descripcion: '',

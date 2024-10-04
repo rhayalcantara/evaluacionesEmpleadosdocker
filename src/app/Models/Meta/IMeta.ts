@@ -1,3 +1,4 @@
+import { IObjetivo } from "../Objetivo/IObjetivo"
 import { IPuesto } from "../Puesto/IPuesto"
 import { ITipo } from "../Tipo/ITipo"
 
@@ -7,17 +8,15 @@ export interface IMeta{
     periodId:number
     weight:number
     positionSecuencial:number
-    tiposid:number
-    tipos:ITipo
     objetivoid:number    
 }
 export interface IMetaDts extends IMeta{
     position:IPuesto,
-    elTipos:ITipo,
+    Objetivo:IObjetivo
     puesto: string
     departamento:string
     periodo:string
-    Tipo:string
+    objj:string
 }
 
 export interface IMetadto{
@@ -26,6 +25,5 @@ export interface IMetadto{
     periodId:number
     weight:number
     positionSecuencial:number
-    tiposid:number    
     objetivoid:number
 }

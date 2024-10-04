@@ -23,7 +23,7 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
        public titulos=[{periodo:'Periodo'},
                        {departamento:"Departamento"},
                        {puesto:"Puesto"},
-                       {elTipos:"Tipo Evaluacion"},
+                       {objj:"Competencia"},
                        {name:'Descripcion'},
                        {weight:'Peso'}]
 
@@ -61,26 +61,26 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
         periodId:0,
         weight:1,
         positionSecuencial:0,
-        tiposid:0,
         puesto:"",
         departamento:"",
         periodo:"",
-        Tipo:"",
         position:{
           secuencial: 0,
           descripcion: "",
-          departmentsecuencial: 0,
+          departmentSecuencial: 0,
           departamento: ""
         },
-        elTipos:{
+        objetivoid:0,
+        objj:"",
+        Objetivo:{
           id: 0,
-          descripcion: ""
-        },
-        tipos:{
-          id: 0, 
-          descripcion: ""
-        },
-        objetivoid:0
+          grupoCompetenciaId: 0,
+          nombre: "",
+          descripcion: "",
+          periodoId: 0,
+          estadoId: 0,
+          fecha: ""
+        }
       } 
       
     }
@@ -92,11 +92,6 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
         periodId:0,
         weight:1,
         positionSecuencial:0,
-        tiposid:0,
-        tipos:{
-          id: 0,
-          descripcion: ""
-        },
         objetivoid:0
       } 
       
@@ -165,7 +160,6 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
           periodId: obj.periodId,
           weight: obj.weight,
           positionSecuencial: obj.positionSecuencial,
-          tiposid: obj.tiposid,
           objetivoid: obj.objetivoid
         }
         return this.datos.insertardatos<IMetadto>(this.rutaapi, m ); 
@@ -179,7 +173,7 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
       public exportexcel(){}
               
       public async grabar(): Promise<boolean> {
-        // Envuelve el código en una nueva Promise        
+        // Envuelve el código en una nueva Promise       
         return new Promise<boolean>(async (resolve) => {
           if (this.model.id == 0) {
             // inserta el registro

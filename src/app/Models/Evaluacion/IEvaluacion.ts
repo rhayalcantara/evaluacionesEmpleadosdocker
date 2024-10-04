@@ -1,4 +1,4 @@
-import { IMeta } from "../Meta/IMeta"
+import { IMeta, IMetaDts } from "../Meta/IMeta"
 
 export interface IEvaluacion {
     id: number
@@ -14,7 +14,7 @@ export interface IEvaluacion {
     id: number
     evaluacionId: number
     goalId: number
-    goal:IMeta
+    goal:IMetaDts
   }
 
   export interface IGoalEmpleadoRespuesta {

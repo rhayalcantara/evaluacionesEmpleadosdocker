@@ -31,7 +31,7 @@ export class EvaluationPeriodsComponent implements OnInit {
   selectedPosition: IPuesto={
     secuencial: 0,
     descripcion: '',
-    departmentsecuencial: 0,
+    departmentSecuencial: 0,
     departamento: ''
   };
   fg!:FormGroup;
@@ -73,7 +73,7 @@ export class EvaluationPeriodsComponent implements OnInit {
         .map((empleado) => (
           { secuencial: empleado.scargo, 
             descripcion: empleado.cargo,
-            departmentsecuencial:empleado.sdept,
+            departmentSecuencial:empleado.sdept,
             departamento:empleado.departamento })) // Extraemos los cargos y scargo
             .filter((value, index, self) =>
               index === self.findIndex((t) => 
@@ -189,7 +189,7 @@ export class EvaluationPeriodsComponent implements OnInit {
     const uniqueMap = new Map();
     
     puestosArray.forEach(puesto => {
-      const key = `${puesto.secuencial}-${puesto.departmentsecuencial}`;
+      const key = `${puesto.secuencial}-${puesto.departmentSecuencial}`;
       if (!uniqueMap.has(key)) {
         uniqueMap.set(key, puesto);
       }
