@@ -35,7 +35,7 @@ export class Objetivo {
     public inicializamodelo(): IObjetivo {
       return {
         id: 0,
-        grupocompetenciaid: 0,
+        grupoCompetenciaId: 0,
         nombre: "",
         descripcion: "",
         periodoId: 0,
@@ -116,7 +116,7 @@ export class Objetivo {
     }
 
     public getPeriodos(): Observable<IPeriodo[]> {
-      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Periodos').pipe(
+      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Periods').pipe(
         map((response: ModelResponse) => response.data as IPeriodo[])
       );
     }

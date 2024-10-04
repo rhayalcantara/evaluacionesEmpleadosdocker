@@ -3,10 +3,12 @@ import { DatosServiceService } from "../Services/datos-service.service";
 import { ExcelService } from "../Services/excel.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IMeta, IMetaDts } from "../Models/Meta/IMeta";
+import { IMeta, IMetadto, IMetaDts } from "../Models/Meta/IMeta";
 import { Meta } from "@angular/platform-browser";
 import { IPeriodo } from "../Models/Periodos/IPeriodo";
 import { IPuesto } from "../Models/Puesto/IPuesto";
+import { IGrupoCompetencia } from "./GrupoCompetencia";
+import { IObjetivo } from "../Models/Objetivo/IObjetivo";
 
 
 @Injectable({
@@ -77,7 +79,8 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         tipos:{
           id: 0, 
           descripcion: ""
-        }
+        },
+        objetivoid:0
       } 
       
     }
@@ -93,7 +96,8 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         tipos:{
           id: 0,
           descripcion: ""
-        }
+        },
+        objetivoid:0
       } 
       
     }
@@ -121,7 +125,11 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         })
       );
     }
-    
+    public getObjetivos(): Observable<IObjetivo[]> {
+      return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/GrupoCompetencias').pipe(
+        map((response: ModelResponse) => response.data as IObjetivo[])
+      );
+    }
     public filtrar(){
         this.Gets().subscribe(
                         (m:ModelResponse)=>{
@@ -150,9 +158,17 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
         return this.datos.getdatoscount(this.rutaapi+`/count`)
       }
   
-      public insert(obj:IMeta):Observable<IMeta>{  
-
-        return this.datos.insertardatos<IMeta>(this.rutaapi, obj ); 
+      public insert(obj:IMeta):Observable<IMetadto>{  
+        let m:IMetadto ={
+          id: obj.id,
+          name: obj.name,
+          periodId: obj.periodId,
+          weight: obj.weight,
+          positionSecuencial: obj.positionSecuencial,
+          tiposid: obj.tiposid,
+          objetivoid: obj.objetivoid
+        }
+        return this.datos.insertardatos<IMetadto>(this.rutaapi, m ); 
       }
       public Update(obj:IMeta):Observable<IMeta>{
         return this.datos.updatedatos<IMeta>(this.rutaapi+`/${obj.id}`,obj); 
@@ -163,15 +179,16 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
       public exportexcel(){}
               
       public async grabar(): Promise<boolean> {
-        // Envuelve el código en una nueva Promise
-        
+        // Envuelve el código en una nueva Promise        
         return new Promise<boolean>(async (resolve) => {
           if (this.model.id == 0) {
             // inserta el registro
             await firstValueFrom(this.insert(this.model)).then(
-              (rep: IMeta) => {
-   
-                this.model = rep;
+              (rep: IMetadto) => {
+                firstValueFrom(this.Get(rep.id.toString())).then(t=>{
+                  this.model = t
+                })
+                //this.model = rep;
                 this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
                 resolve(true); // Devuelve true si la operación fue exitosa
               },
@@ -181,15 +198,11 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
               }
             );
           } else {
-            // actualiza el registro
-            
+          // actualiza el registro            
             await firstValueFrom(this.Update(this.model)).then(
-              (rep: IMeta) => {
-                
-                this.model = rep;
-            
+              (rep: IMeta) => {                
+                this.model = rep;            
                 this.TRegistros.emit(this.totalregistros)
-
                 resolve(true); // Devuelve true si la operación fue exitosa
               },
               (err: Error) => {
@@ -198,8 +211,6 @@ import { IPuesto } from "../Models/Puesto/IPuesto";
               }
             );
           }
-         
-
         });
       }
   }

@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label for="grupocompetenciaid">Grupo Competencia</label>
-                    <select class="form-control" id="grupocompetenciaid" formControlName="grupocompetenciaid" (change)="onGrupoCompetenciaSelect($event)" required>
+                    <select class="form-control" id="grupocompetenciaid" formControlName="grupoCompetenciaId" (change)="onGrupoCompetenciaSelect($event)" required>
                         <option value="">Seleccione un grupo de competencia</option>
                         <option *ngFor="let grupo of gruposCompetencia" [value]="grupo.id">
                             {{grupo.nombre}}

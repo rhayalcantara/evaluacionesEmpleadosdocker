@@ -3,7 +3,7 @@ import { IPeriodo } from "../Periodos/IPeriodo"
 
 export interface IObjetivo {
     id: number
-    grupocompetenciaid:number
+    grupoCompetenciaId:number
     nombre: string
     descripcion: string
     periodoId: number

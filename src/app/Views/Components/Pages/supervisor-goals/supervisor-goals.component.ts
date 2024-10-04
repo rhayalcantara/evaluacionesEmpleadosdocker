@@ -43,7 +43,8 @@ newGoal: IMeta={
   tipos:{
        id: 0,
       descripcion: ''
-  }
+  },
+  objetivoid:0
 };
 
 subordinatePositions: Position[] = [];

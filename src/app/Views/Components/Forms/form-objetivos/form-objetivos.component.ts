@@ -37,13 +37,14 @@ export class FormObjetivosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('Llego al formulario',this.data.model)
     this.objetivoController = this.data.model;
     this.objetivo = this.objetivoController.model;
     this.initForm();
     this.loadPeriodos();
     this.loadEstados();
     this.loadGruposCompetencia();
-    console.log('Fecha formateada:', this.data.model.fecha, this.formatDateForInput(this.objetivo.fecha));
+
     this.objetivoForm.patchValue({
       fecha: this.formatDateForInput(this.objetivo.fecha)
     });
@@ -57,7 +58,7 @@ export class FormObjetivosComponent implements OnInit {
       descripcion: [this.objetivo ? this.objetivo.descripcion : '', Validators.required],
       periodoId: [this.objetivo ? this.objetivo.periodoId : null, Validators.required],
       estadoId: [this.objetivo ? this.objetivo.estadoId : null, Validators.required],
-      grupocompetenciaid: [this.objetivo ? this.objetivo.grupocompetenciaid : null, Validators.required],
+      grupoCompetenciaId: [this.objetivo ? this.objetivo.grupoCompetenciaId : null, Validators.required],
       fecha: [this.objetivo ? this.objetivo.fecha : '', Validators.required]
     });
   }

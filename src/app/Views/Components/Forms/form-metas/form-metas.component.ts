@@ -14,6 +14,8 @@ import { Puestos } from 'src/app/Controllers/Puestos';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { ITipo } from 'src/app/Models/Tipo/ITipo';
 import { Tipos } from 'src/app/Controllers/Tipos';
+import { IGrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
+import { IObjetivo } from 'src/app/Models/Objetivo/IObjetivo';
 
 @Component({
   selector: 'app-form-metas',
@@ -24,7 +26,7 @@ import { Tipos } from 'src/app/Controllers/Tipos';
 })
 export class FormMetasComponent implements OnInit {
 
-
+  public Objetivos:IObjetivo[]=[]
   public campos: string[] = [];
   public meta: IMeta = this.metasDatos.model;
   public metadts:IMetaDts = {
@@ -48,8 +50,9 @@ export class FormMetasComponent implements OnInit {
       id: 0,
       descripcion: ''
     },
-    tipos:{   id: 0,
-      descripcion: ''}
+    tipos:{   id: 0,     
+      descripcion: ''},
+      objetivoid:0
   } 
   public tipo: ITipo = this.TipoDatos.model;
   public fg: FormGroup = new FormGroup({});
@@ -76,6 +79,7 @@ export class FormMetasComponent implements OnInit {
     this.meta = this.data.model;
     this.metadts=this.data.model;
     this.TipoDatos.getdatos()
+    this.loadObjetivos()
     //this.campos = Object.keys(this.meta);
     this.metasDatos.titulos.map((x:string|any)=>{
       let nx:string = x[Object.keys(x)[0]]
@@ -106,6 +110,12 @@ export class FormMetasComponent implements OnInit {
                       })
     }
 
+  }
+  loadObjetivos(): void {
+    // Assuming there's a method in the controller to get grupos de competencia
+    this.metasDatos.getObjetivos().subscribe((objetivo: IObjetivo[]) => {
+      this.Objetivos = objetivo;
+    });
   }
   onTipoChange(event:any) {
     console.log("cambio el tipo",event)
@@ -158,7 +168,7 @@ export class FormMetasComponent implements OnInit {
     //if (this.selectedPuesto ) {
       this.metasDatos.model = this.fg.value as IMeta  
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0
-      console.log({obj:this.selectedTipo,variable:n})
+      console.log('la meta a grabar',this.metasDatos.model)
       this.metasDatos.model.tiposid = n
       let nn:number = this.selectedPuesto ? this.selectedPuesto.secuencial : 0
       this.metasDatos.model.positionSecuencial = nn
@@ -169,5 +179,10 @@ export class FormMetasComponent implements OnInit {
       // Show an error message or handle the case when no puesto is selected
       console.error('No se ha seleccionado un puesto');
     }
+  }
+
+  onGrupoCompetenciaSelect(event: any): void {
+    const selectedObjetivoId = event.target.value;
+    this.fg.patchValue({ objetivoId: selectedObjetivoId });
   }
 }
