@@ -15,7 +15,7 @@
         <input aria-describedby="basic-addon2" 
               aria-label="Search" class="form-control" placeholder="Search for..."
               type="text"
-              *(ngModel)="term"
+              [(ngModel)]="term"
               (change)="filtro()" >
         <div class="input-group-append">
           <button class="btn btn-primary" type="button" >

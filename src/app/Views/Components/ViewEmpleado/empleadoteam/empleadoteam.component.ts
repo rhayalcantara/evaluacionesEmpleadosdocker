@@ -51,7 +51,7 @@ export class EmpleadoTeamComponent implements OnInit {
     console.log('Agregar metas para subordinados');
     // You may need to inject necessary services and implement the logic
     const dialogRef = this.dialog.open(ObjetivosComponent, {
-      width: '1200px', data: { empl: this.empl,periodo:this.periodo }
+      width: '100%',height:'80%', data: { empl: this.empl,periodo:this.periodo }
     });
     dialogRef.afterClosed().subscribe((rep) => {
       

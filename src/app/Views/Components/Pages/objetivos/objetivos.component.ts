@@ -7,7 +7,7 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { FormObjetivosComponent } from '../../Forms/form-objetivos/form-objetivos.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-objetivos',
@@ -16,15 +16,27 @@ import { ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, TablesComponent, 
           FormObjetivosComponent,MatDialogModule,
-        ReactiveFormsModule]
+        FormsModule]
 })
 export class ObjetivosComponent implements OnInit {
 filtro() {
-throw new Error('Method not implemented.');
+    if (this.term!=""){
+      this.objetivoController.arraymodel = this.objetivoController.arraymodel.filter(x => {
+        return x.descripcion.toLowerCase().includes(this.term.toLowerCase())
+          || x.periodo.toLowerCase().includes(this.term.toLowerCase())
+          || x.nombre.toLowerCase().includes(this.term.toLowerCase())
+          || x.estad.toLowerCase().includes(this.term.toLowerCase())
+          || x.grupoc.toLowerCase().includes(this.term.toLowerCase());
+      });
+    }else{
+      this.objetivoController.getdatos()
+    }                                
 }
   public term:string=""
 agregar() {
-throw new Error('Method not implemented.');
+  this.selectedObjetivo = this.objetivoController.inicializamodelo();
+  this.objetivoController.model = this.objetivoController.inicializamodelo();
+  this.abrirmodalzona(this.toastr, this.objetivoController);
 }
 pdf() {
 throw new Error('Method not implemented.');
@@ -85,9 +97,7 @@ throw new Error('Method not implemented.');
   }
 
   onNew(): void {
-    this.selectedObjetivo = this.objetivoController.inicializamodelo();
-    this.objetivoController.model = this.objetivoController.inicializamodelo();
-    this.abrirmodalzona(this.toastr, this.objetivoController);
+
   }
 
   abrirmodalzona(t: MatDialog, p: Objetivo) {
