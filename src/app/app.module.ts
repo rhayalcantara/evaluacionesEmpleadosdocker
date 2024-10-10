@@ -10,6 +10,8 @@ import { Empleados } from './Controllers/Empleados';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
 import { CommonModule } from '@angular/common';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +23,7 @@ import { CommonModule } from '@angular/common';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule // Add our new FormsModule here
   ],
   providers: [Empleados],
   bootstrap: [AppComponent]
