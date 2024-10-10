@@ -1,27 +1,5 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-.card {
-    margin-top: 30px;
-    display:flex;
-    flex-direction: column; 
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 100%;
-    height: 90%;
-  }
-  
-  .card-header {
-    background-color: #a9c4e2; /* Azul claro */
-    color: #fff;
-    border-radius: 10px 10px 0 0;
-    padding: 10px;
-    text-align: center;
-  }
-  .card-body {
-    padding: 20px; /* Reduce el padding */
-    flex-grow: 1; /* Permite que el contenido se expanda para ocupar el espacio disponible */
-  }
+
   body {
     font-family: Arial, sans-serif;
     margin: 0;

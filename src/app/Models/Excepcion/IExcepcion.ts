@@ -10,4 +10,5 @@ export interface IException {
   }
 export interface IExceptionDts extends IException{
     empleado:IEmpleado
+    nombreempleado:string
 }

@@ -89,6 +89,16 @@ const routes: Routes = [
      canActivate: [AuthGuard]
   },
   { path: 'grupo-competencias', component: GrupoCompetenciasComponent },
+  { path:'Excepciones', 
+    loadComponent:()=> import('./Views/Components/Pages/excepciones/excepciones.component')
+    .then((m)=> m.ExcepcionesComponent),
+     canActivate: [AuthGuard]
+  },
+  { path:'ExcepcionForm', 
+    loadComponent:()=> import('./Views/Components/Pages/excepciones/excepciones.component')
+    .then((m)=> m.ExcepcionesComponent),
+     canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
