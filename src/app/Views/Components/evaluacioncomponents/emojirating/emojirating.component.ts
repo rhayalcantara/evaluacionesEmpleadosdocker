@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
 
@@ -10,10 +10,11 @@ import { IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
   templateUrl: './emojirating.component.html',
   styleUrls: ['./emojirating.component.css']
 })
-export class EmojiratingComponent {
+export class EmojiratingComponent implements OnInit{
   selecion:number=0
   valorSeleccionado: number=0;
   constructor(){}
+
   @Input() supervisor:Boolean=false
   @Input() goalempleadorepuesta:IGoalEmpleadoRespuesta ={
     id: 0,
@@ -23,6 +24,15 @@ export class EmojiratingComponent {
     repuestasupervisor: 0,
     weight: 0,
     observacion: ''
+  }
+
+  ngOnInit(): void {
+    if(this.supervisor){
+      this.valorSeleccionado=this.goalempleadorepuesta.repuestasupervisor
+    }else{
+      this.valorSeleccionado=this.goalempleadorepuesta.repuesta
+    }
+    
   }
   @Output() selecionemoji = new EventEmitter<IGoalEmpleadoRespuesta>();
   getEmoji(value: number): string {

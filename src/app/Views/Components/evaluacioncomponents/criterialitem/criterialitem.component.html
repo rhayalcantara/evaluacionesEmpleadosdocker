@@ -2,23 +2,25 @@
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
     
 <div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals let index= index">
-    
-    <div *ngIf="met.goal.Objetivo.nombre">
-    <h3 >{{met.goal.Objetivo.nombre}}</h3>
+    <!-- {{met | json}}
+    <div *ngIf="met.goal.Objetivo.nombre"> -->
+    <h3 >{{met.goal.objetivo.nombre}}</h3>
     <div class="criteria-item">
         <div class="criteria-info">
             <!-- <span class="criteria-label">{{met.}}:</span> -->
             <p class="criteria-description">{{met.goal.name}}</p>  
             <p class="criteria-weight">Peso: {{met.goal.weight}}%</p>   
-            <div>
+            <p class="criteria-weight">Descripcion: {{met.goal.objetivo.descripcion}}</p>   
+              
+            <!-- <div>
                 <label for="comments">Comentario Adiccional:</label>
                 <textarea id="comments" (change)="onComentarioChange($event,index)" name="comments"></textarea> 
-            </div>
+            </div> -->
         </div>
         <app-emojirating [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
                          [supervisor]="supervisor"
                          (selecionemoji)="onRespuestaChange($event, index)"></app-emojirating>
-    </div>
+    <!-- </div> -->
     </div>
 </div>
 </div>

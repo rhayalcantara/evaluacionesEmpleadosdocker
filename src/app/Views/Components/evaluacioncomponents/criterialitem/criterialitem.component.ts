@@ -23,8 +23,8 @@ export class CriterialitemComponent implements OnInit {
    @Input() empleado:IEmpleado 
    @Input() periodo:IPeriodo
    @Input() supervisor:Boolean=false  
-  @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
-  @Input() evaluacion:IEvaluacion  =this.EvaluacionControler.inicializamodelo()
+   @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
+   @Input() evaluacion:IEvaluacion  =this.EvaluacionControler.inicializamodelo()
   
   public metas:IMetaDts[]=[]
   constructor(private EmpleadoModel:Empleados,

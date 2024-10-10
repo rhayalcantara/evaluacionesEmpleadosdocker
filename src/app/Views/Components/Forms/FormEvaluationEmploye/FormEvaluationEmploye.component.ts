@@ -5,7 +5,7 @@ import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-emp
 import { CriterialitemComponent } from '../../evaluacioncomponents/criterialitem/criterialitem.component';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { IEvaluacion } from 'src/app/Models/Evaluacion/IEvaluacion';
+import { IEvaluacion, IEvaluacionDto } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 
@@ -47,6 +47,7 @@ export class FormEvaluationEmployeComponent {
   @Input() titulo:string="";
   @Input() supervisor:Boolean=false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
+  
   public obervaciones:string=""
   public fecha:Date=new Date()
   public evaluacionempleado:IEvaluacion
@@ -64,7 +65,7 @@ export class FormEvaluationEmployeComponent {
         //console.log('Metas procesadas:', this.metas);
         this.evaluacionempleado = rep;
         //this.cd.detectChanges(); 
-        this.comentarioAdicional = this.comentarioAdicional
+        this.comentarioAdicional = rep.observacion
       },
       error: (err) => console.error('Error al obtener la evaluación:', err)
     });
@@ -72,16 +73,22 @@ export class FormEvaluationEmployeComponent {
 
   onEvaluacionChange(evaluacion:IEvaluacion){
     this.evaluacionempleado = evaluacion
-    console.log("la evaluacion del empleado cambio",this.evaluacionempleado)
+   // console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor)
   }
   onSubmit() {
     // Handle form submission
     // verifica si hay repuesta no contestadas
     let puede:boolean=true
     this.evaluacionempleado.observacion = this.comentarioAdicional; // New property for additional comment
+    //poner la fecha de repuesta
+    const fechaActual = new Date();
+    this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
+    //console.log({supervisor:this.supervisor,repuestas:this.evaluacionempleado.goalEmpleadoRespuestas})
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
-        if(this.supervisor && element.repuestasupervisor==0){
-          puede=false;
+        if(this.supervisor){          
+          if(element.repuestasupervisor==0){              
+            puede=false;
+          }          
         }else{
           if (element.repuesta==0){
             puede=false;
@@ -89,7 +96,7 @@ export class FormEvaluationEmployeComponent {
         }
     });
     if (puede){
-      console.log("se envia a grabar",this.evaluacionempleado)
+      //console.log("se envia a grabar",this.evaluacionempleado)
       this.EvaluacionController.model = this.evaluacionempleado
       this.EvaluacionController.grabar().then((rep)=>{
         if(rep){

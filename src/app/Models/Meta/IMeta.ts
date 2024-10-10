@@ -12,7 +12,7 @@ export interface IMeta{
 }
 export interface IMetaDts extends IMeta{
     position:IPuesto,
-    Objetivo:IObjetivo
+    objetivo:IObjetivo
     puesto: string
     departamento:string
     periodo:string

@@ -26,3 +26,13 @@ export interface IEvaluacion {
     weight: number
     observacion: string
   }
+
+  export interface IEvaluacionDto{
+    id: number
+    periodId: number
+    secuencialempleado: number
+    totalCalculo: number
+    fechaRepuestas: string
+    observacion: string
+    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
+  }

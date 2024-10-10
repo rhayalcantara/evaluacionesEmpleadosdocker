@@ -73,14 +73,14 @@ export class NavmenuComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    console.log('entro al navbar')
+    //console.log('entro al navbar')
       this.mostramenu=false
       this.router.navigate(['/login']);
  
     
   }
   log():void{
-    console.log(this.logg)
+   // console.log(this.logg)
     if (this.logg!='LogOut'){
               
         this.logg= 'LogOut'

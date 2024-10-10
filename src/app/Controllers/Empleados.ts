@@ -136,7 +136,7 @@ export class Empleados implements OnInit{
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
 public Getsub(empleado_secuencial:string):Observable<ModelResponse> {
-  console.log(this.rutaapi+`/equipo/${empleado_secuencial}`)
+  //console.log(this.rutaapi+`/equipo/${empleado_secuencial}`)
   return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/${empleado_secuencial}`)
 }
 public Get(id:string):Observable<IEmpleado>{

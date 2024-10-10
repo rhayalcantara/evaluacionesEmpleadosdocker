@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IEvaluacion, IEvaluacionGoal, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
+import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
 
 @Injectable({
     providedIn: 'root'
@@ -95,8 +95,17 @@ export class Evaluacion implements OnInit {
         return this.datos.insertardatos<IEvaluacion>(this.rutaapi, obj);
     }
 
-    public Update(obj: IEvaluacion): Observable<IEvaluacion> {
-        return this.datos.updatedatos<IEvaluacion>(this.rutaapi + `/${obj.id}`, obj);
+    public Update(obj: IEvaluacion): Observable<IEvaluacionDto> {
+        let evaluaciondto:IEvaluacionDto={
+            id: obj.id,
+            periodId: obj.periodId,
+            secuencialempleado: obj.secuencialempleado,
+            totalCalculo: obj.totalCalculo,
+            fechaRepuestas: obj.fechaRepuestas,
+            observacion: obj.observacion,
+            goalEmpleadoRespuestas: obj.goalEmpleadoRespuestas
+          }
+        return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
     public async grabar(): Promise<boolean> {
@@ -117,8 +126,8 @@ export class Evaluacion implements OnInit {
             } else {
                 // actualiza el registro
                 await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IEvaluacion) => {
-                        this.model = rep;
+                    (rep: IEvaluacionDto) => {
+                        //this.model = rep;
                         this.TRegistros.emit(this.totalregistros);
                         resolve(true);
                     },

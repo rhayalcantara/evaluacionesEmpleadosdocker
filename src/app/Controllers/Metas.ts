@@ -72,7 +72,7 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
         },
         objetivoid:0,
         objj:"",
-        Objetivo:{
+        objetivo:{
           id: 0,
           grupoCompetenciaId: 0,
           nombre: "",

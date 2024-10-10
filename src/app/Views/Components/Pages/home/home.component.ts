@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
               private peri:Periodos) {
     this.usuario = JSON.parse(localStorage.getItem('usuario') ?? "")
     this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
-      console.log('el periodo activo',rep)
+      //console.log('el periodo activo',rep)
       this.periodo=rep;
       localStorage.setItem("periodo", JSON.stringify(this.periodo))
     }
@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
       this.empl.getsubordinados()
       this.empleado = rep
       localStorage.setItem("empleado", JSON.stringify(this.empleado))
-      console.log('puetos sub',this.empl.arraypuestossub)
+      //console.log('puetos sub',this.empl.arraypuestossub)
     })
   }
 

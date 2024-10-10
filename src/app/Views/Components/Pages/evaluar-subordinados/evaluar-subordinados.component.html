@@ -5,8 +5,10 @@
 <app-card-empleado [empleado]="empleado"></app-card-empleado>
 <!-- Seleciona al subordinado para evaluar -->
 <div class="Equipo">
-  <app-card-empleado [empleado]="emple" [llamarevaluacion]="true"
-  [periodo]="periodo"
+  <app-card-empleado 
+    [empleado]="emple" 
+    [llamarevaluacion]="true"
+    [periodo]="periodo"
     *ngFor="let emple of empl.arraymodelsubordinados">
   </app-card-empleado>
 </div>
