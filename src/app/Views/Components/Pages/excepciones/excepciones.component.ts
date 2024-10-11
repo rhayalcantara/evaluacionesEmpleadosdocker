@@ -20,31 +20,7 @@ import { ExcepcionFormComponent } from '../../Forms/form-exception/excepcion-for
   styleUrls: ['./excepciones.component.css']
 })
 export class ExcepcionesComponent implements OnInit {
-filtro() {
-throw new Error('Method not implemented.');
-}
-agregar() {
-    this.abrirmodalzona(this.dialog, this.excepcioncontrolador);
-}
-abrirmodalzona(t: MatDialog, p: Excepcion) {
-    p.model = p.inicializamodelo();
 
-    const dialogRef = t.open(ExcepcionFormComponent, {
-      width: '800px', data: { model: p.model }
-    });
-    dialogRef.afterClosed().subscribe((rep: IExceptionDts) => {
-      if (rep) {
-        this.excepcioncontrolador.arraymodel.push(rep);
-        this.datos.showMessage("Registro Insertado Correctamente", this.excepcioncontrolador.titulomensage, "success");
-      }
-    });
-  }
-pdf() {
-throw new Error('Method not implemented.');
-}
-excel() {
-throw new Error('Method not implemented.');
-}
 campos: string[]=[];
 tituloslocal: string[]=[];
 term: string='';
@@ -114,7 +90,31 @@ opcion($event: TableResponse) {
     { id: 1,  detalles: 'Cambio de Supervisor', tipo: 'Cambio Supervisor',empleadoSecuencial:525,fecha:'2024-10-01',activa:true }    
   ];
 
-
+  filtro() {
+    throw new Error('Method not implemented.');
+    }
+    agregar() {
+        this.abrirmodalzona(this.dialog, this.excepcioncontrolador);
+    }
+    abrirmodalzona(t: MatDialog, p: Excepcion) {
+        p.model = p.inicializamodelo();
+    
+        const dialogRef = t.open(ExcepcionFormComponent, {
+          width: '800px', data: { model: p.model }
+        });
+        dialogRef.afterClosed().subscribe((rep: IExceptionDts) => {
+          if (rep) {
+            this.excepcioncontrolador.arraymodel.push(rep);
+            this.datos.showMessage("Registro Insertado Correctamente", this.excepcioncontrolador.titulomensage, "success");
+          }
+        });
+      }
+    pdf() {
+    throw new Error('Method not implemented.');
+    }
+    excel() {
+    throw new Error('Method not implemented.');
+    }
 
  
 }

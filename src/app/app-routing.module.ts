@@ -99,6 +99,11 @@ const routes: Routes = [
     .then((m)=> m.ExcepcionesComponent),
      canActivate: [AuthGuard]
   },
+  { path:'ExcepcionSupervisorInmediato', 
+    loadComponent:()=> import('./Views/Components/Pages/excepcion-supervisor-inmediato/excepcion-supervisor-inmediato.component')
+    .then((m)=> m.ExcepcionSupervisorInmediatoComponent),
+     canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

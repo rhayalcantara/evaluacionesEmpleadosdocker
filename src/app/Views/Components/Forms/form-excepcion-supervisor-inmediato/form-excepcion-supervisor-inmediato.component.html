@@ -1,97 +1,57 @@
 <div class="container">
-  <h2>{{titulo}}</h2>
-  
-  <form class="edit-form" id="editExcepcionSupervisorInmediatoForm" [formGroup]="fg">
-    <div class="form-group">
-      <label for="id">ID</label>
-      <input type="text" id="id" name="id" formControlName="id" readonly>
-    </div>
-    
-    <div class="form-group">
-      <label for="excepcionId">Excepción ID</label>
-      <input type="number" id="excepcionId" name="excepcionId" formControlName="excepcionId" required>
-      <div *ngIf="fg.get('excepcionId')?.invalid && (fg.get('excepcionId')?.dirty || fg.get('excepcionId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('excepcionId')?.errors?.['required']">
-          El ID de excepción es requerido.
+  <div class="card">
+      <div class="card-header">
+          <h2>Excepcion Supervisor Inmediato</h2>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="fg" (ngSubmit)="grabar()">        
+
+          <div class="form-group">
+            <label for="empleado">Empleado:</label>   
+            <span *ngIf="empleadoNombre">{{ empleadoNombre }}</span>
+            <button type="button" class="btn btn-outline-success" (click)="Buscar('Empleado','Empleado')">Buscar Empleado</button>
+          </div>
+
+          <div class="form-group">
+            <label for="departamentoOriginal">Departamento Original:</label>    
+            <span *ngIf="departamentoOriginalNombre">{{ departamentoOriginalNombre }}</span>
+            <button type="button" class="btn btn-outline-success" (click)="Buscar('Departamento','departamentoOriginalId')">Buscar Departamento</button>
+          </div>
+
+          <div class="form-group">
+            <label for="jefeOriginal">Jefe Original:</label>    
+            <span *ngIf="jefeOriginalNombre">{{ jefeOriginalNombre }}</span>
+            <button type="button" class="btn btn-outline-success" (click)="Buscar('Empleado','jefeOriginalId')">Buscar Empleado</button>
+          </div>
+
+          <div class="form-group">
+            <label for="nuevoDepartamento">Nuevo Departamento:</label>    
+            <span *ngIf="nuevoDepartamentoNombre">{{ nuevoDepartamentoNombre }}</span>
+            <button type="button" class="btn btn-outline-success" (click)="Buscar('Departamento','nuevoDepartamentoId')">Buscar Departamento</button>
+          </div>
+
+          <div class="form-group">
+            <label for="nuevoJefe">Nuevo Jefe:</label>  
+            <span *ngIf="nuevoJefeNombre">{{ nuevoJefeNombre }}</span>
+            <button type="button" class="btn btn-outline-success" (click)="Buscar('Empleado','nuevoJefeId')">Buscar Departamento</button>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="date" formControlName="fechaInicio" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaFin">Fecha de Fin:</label>
+            <input type="date" formControlName="fechaFin" required>
+          </div>
+
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="!!fg.valid">Guardar</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
         </div>
+        </form>
       </div>
     </div>
-    
-    <div class="form-group">
-      <label for="empleadoId">Empleado ID</label>
-      <input type="number" id="empleadoId" name="empleadoId" formControlName="empleadoId" required>
-      <div *ngIf="fg.get('empleadoId')?.invalid && (fg.get('empleadoId')?.dirty || fg.get('empleadoId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('empleadoId')?.errors?.['required']">
-          El ID de empleado es requerido.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="departamentoOriginalId">Departamento Original ID</label>
-      <input type="number" id="departamentoOriginalId" name="departamentoOriginalId" formControlName="departamentoOriginalId" required>
-      <div *ngIf="fg.get('departamentoOriginalId')?.invalid && (fg.get('departamentoOriginalId')?.dirty || fg.get('departamentoOriginalId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('departamentoOriginalId')?.errors?.['required']">
-          El ID del departamento original es requerido.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="jefeOriginalId">Jefe Original ID</label>
-      <input type="number" id="jefeOriginalId" name="jefeOriginalId" formControlName="jefeOriginalId" required>
-      <div *ngIf="fg.get('jefeOriginalId')?.invalid && (fg.get('jefeOriginalId')?.dirty || fg.get('jefeOriginalId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('jefeOriginalId')?.errors?.['required']">
-          El ID del jefe original es requerido.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="nuevoDepartamentoId">Nuevo Departamento ID</label>
-      <input type="number" id="nuevoDepartamentoId" name="nuevoDepartamentoId" formControlName="nuevoDepartamentoId" required>
-      <div *ngIf="fg.get('nuevoDepartamentoId')?.invalid && (fg.get('nuevoDepartamentoId')?.dirty || fg.get('nuevoDepartamentoId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('nuevoDepartamentoId')?.errors?.['required']">
-          El ID del nuevo departamento es requerido.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="nuevoJefeId">Nuevo Jefe ID</label>
-      <input type="number" id="nuevoJefeId" name="nuevoJefeId" formControlName="nuevoJefeId" required>
-      <div *ngIf="fg.get('nuevoJefeId')?.invalid && (fg.get('nuevoJefeId')?.dirty || fg.get('nuevoJefeId')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('nuevoJefeId')?.errors?.['required']">
-          El ID del nuevo jefe es requerido.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="fechaInicio">Fecha de Inicio</label>
-      <input type="date" id="fechaInicio" name="fechaInicio" formControlName="fechaInicio" required>
-      <div *ngIf="fg.get('fechaInicio')?.invalid && (fg.get('fechaInicio')?.dirty || fg.get('fechaInicio')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('fechaInicio')?.errors?.['required']">
-          La fecha de inicio es requerida.
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="fechaFin">Fecha de Fin</label>
-      <input type="date" id="fechaFin" name="fechaFin" formControlName="fechaFin" required>
-      <div *ngIf="fg.get('fechaFin')?.invalid && (fg.get('fechaFin')?.dirty || fg.get('fechaFin')?.touched)" class="alert alert-danger">
-        <div *ngIf="fg.get('fechaFin')?.errors?.['required']">
-          La fecha de fin es requerida.
-        </div>
-      </div>
-    </div>
-    
-    <div class="text-center pt-1 mb-5 pb-1">
-      <div class="d-grid gap-2">
-        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="button" [disabled]="fg.invalid">Grabar</button>
-        <button class="btn btn-secondary btn-block" type="button" (click)="cancelar()">Cancelar</button>
-      </div>
-    </div>
-  </form>
 </div>

@@ -39,7 +39,8 @@ export class TablesComponent implements OnInit {
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(private cd: ChangeDetectorRef, private ServiceComunicacion:ComunicacionService,) { 
+  constructor(private cd: ChangeDetectorRef, 
+    private ServiceComunicacion:ComunicacionService,) { 
     this.id =UtilsService.generaNss()
     this.config= {
       id:this.id,
@@ -64,6 +65,7 @@ export class TablesComponent implements OnInit {
     if(tt.id==this.id){
       this.config.totalItems=tt.totalItems
       this.config.itemsPerPage=tt.itemsPerPage
+      console.log('itemsPerPage',this.config.itemsPerPage)
       this.cd.detectChanges();
     }
   }

@@ -18,7 +18,7 @@ export class Departamento implements OnInit{
   
   public model:IDepartamento=this.inicializamodelo()
  titulos=[
-    {secuencial:'Codigo'},
+    
     {nombre:'Nombre'}
  ]
  public estado:string='`'

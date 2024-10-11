@@ -1,18 +1,21 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { Departamento } from 'src/app/Controllers/Departamento';
 import { IDepartamento } from 'src/app/Models/Departamento/IDepartamento';
 import { TablesComponent } from '../../tables/tables.component';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
+import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-seleccion-empleado',
   standalone: true,
-  imports: [CommonModule, FormsModule, TablesComponent],
+  imports: [CommonModule, FormsModule, TablesComponent,MatDialogModule],
   templateUrl: './seleccion-empleado.component.html',
   styleUrls: ['./seleccion-empleado.component.css']
 })
@@ -28,26 +31,41 @@ export class SeleccionEmpleadoComponent implements OnInit {
   public tituloslocal: string[] = [];
   public term: string = '';
 
-  pageSize = 5;
-  currentPage = 1;
-  totalPages = 1;
 
   constructor(
     public empleadosService: Empleados,
     public departamentoService: Departamento,
+    private ServiceComunicacion:ComunicacionService,
     public dialogRef: MatDialogRef<SeleccionEmpleadoComponent>,
+    private toastr: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
-    this.cargarDepartamentos();
-    this.cargarEmpleados();
+    
     this.config = {
       id: '',
-      itemsPerPage: 10,
+      itemsPerPage: 5,
       currentPage: 1,
       totalItems: this.empleadosService.totalregistros
     };
+    this.cargarDepartamentos();
+    this.cargarEmpleados();
+    const dialogRef = this.toastr.open(LoadingComponent, {
+      width: '340px',
+      height: '180px', 
+    }); 
+    this.empleadosService.TRegistros.subscribe({
+      next:(rep:number)=>{
+       console.log("evento#:",rep)
+        this.config.totalItems=rep
+        this.ServiceComunicacion.enviarMensaje(this.config)
+        dialogRef.close()
+      }
+     
+    })
+
+
   }
 
   cargarDepartamentos() {
@@ -57,7 +75,7 @@ export class SeleccionEmpleadoComponent implements OnInit {
 
   cargarEmpleados() {
     this.empleadosService.getdatos();
-    this.empleados = this.empleadosService.arraymodel;
+    this.empleados = this.empleadosService.arraymodel
     this.filtrarEmpleados();
 
     this.empleadosService.titulos.map((x: string | any) => {
@@ -70,8 +88,10 @@ export class SeleccionEmpleadoComponent implements OnInit {
   filtrarEmpleados() {
     if (this.selectedDepartamento) {
       this.empleadosService.arraymodel = this.empleadosService.arraymodel.filter(
-        empleado => empleado.departmentsecuencial === this.selectedDepartamento
+        empleado => empleado.sdept === this.selectedDepartamento
       );
+      this.config.totalItems=this.empleadosService.arraymodel.length
+      this.ServiceComunicacion.enviarMensaje(this.config)
     } else {
       this.empleadosService.getdatos();
     }
@@ -80,8 +100,10 @@ export class SeleccionEmpleadoComponent implements OnInit {
   filtro() {
     if (this.term !== '') {
       this.empleadosService.arraymodel = this.empleadosService.arraymodel.filter(
-        x => x.nombre.toUpperCase().includes(this.term.toUpperCase())
+        x => x.nombreunido.toUpperCase().includes(this.term.toUpperCase())
       );
+      this.config.totalItems=this.empleadosService.arraymodel.length
+      this.ServiceComunicacion.enviarMensaje(this.config)
     } else {
       this.empleadosService.getdatos();
       this.filtrarEmpleados();

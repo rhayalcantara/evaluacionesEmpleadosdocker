@@ -16,6 +16,7 @@
     <div id="div1">
         <table class='table table-striped' aria-labelledby="tableLabel">
             <tbody>
+                
                 <tr *ngFor="let datos of arraydatos | paginate: { id:id, itemsPerPage: config.itemsPerPage, currentPage: config.currentPage, totalItems: config.totalItems }">
                      <ng-container *ngIf="tipocampo.length==0"> 
                         <td *ngFor="let campo of campos" class="centrado" [width]="ancho">{{datos[campo]}}</td>   

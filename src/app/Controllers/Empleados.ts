@@ -31,7 +31,7 @@ export class Empleados implements OnInit{
  public estado:string='`'
  public totalregistros:number=0
  public actualpage:number=1
- public pagesize:number=600
+ public pagesize:number=5
  public filtro:string=''
  public arraymodel:IEmpleado[]=[]
  public arraymodelsubordinados:IEmpleado[]=[]
@@ -49,7 +49,7 @@ export class Empleados implements OnInit{
       this.filtro=""
       this.estado=""
       this.actualpage=1
-      this.pagesize=600
+      this.pagesize=5
       this.getdatos()
       
   }
@@ -81,10 +81,10 @@ export class Empleados implements OnInit{
      this.arraymodel=[]
      this.arraymodelsubordinados=[]
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-        console.log('llegaron los datos datos',rep.count)
+        //console.log('llegaron los datos datos',rep.count)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
-        this.pagesize=rep.count
+        //this.pagesize=rep.count
         this.arraymodel=[]
         this.arraytotal=[];
         this.arraymodel=rep.data //.filter((x:IEmpleado) => x.codigoestado === "A");

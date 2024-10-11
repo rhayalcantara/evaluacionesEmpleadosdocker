@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>Seleccionar Departamento</h2>
+    
+  
+    <div class="form-group">
+      <label for="busqueda">Buscar:</label>
+      <input type="text" id="busqueda" class="form-control" [(ngModel)]="term" (input)="filtro()">
+    </div>
+  
+  
+    <app-tables 
+      [arraydatos]="departamentoService.arraymodel"
+      campokey="id"
+      [selected]="sele"       
+      (accion)="opcion($event)"
+      (paginacambio)="paginacambio($event)"
+      (idtable)="actualizaelidtable($event)" 
+      [campos]="campos"
+      [titulos]="tituloslocal"
+      [term]="term"
+      [totalregistros]="departamentoService.totalregistros"
+      [currentPage]="departamentoService.actualpage"
+      [config]="config">
+  </app-tables> 
+  
+    <div class="text-center mt-3">
+      <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
