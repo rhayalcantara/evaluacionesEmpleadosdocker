@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
-import { IExcepcionSupervisorInmediato } from '../Models/Excepcion/IExcepcionSupervisorInmediato';
+import { IExcepcionSupervisorInmediato, IExcepcionSupervisorInmediatoDts } from '../Models/Excepcion/IExcepcionSupervisorInmediato';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 
@@ -9,10 +9,12 @@ import { ModelResponse } from '../Models/Usuario/modelResponse';
   providedIn: 'root'
 })
 export class ExcepcionSupervisorInmediato {
-    rutaapi: string = this.datos.URL + '/api/ExcepcionesSupervisorInmediato'
+    rutaapi: string = this.datos.URL + '/api/ExcepcionSupervisorInmediatoes'
     titulomensage: string = 'Excepciones de Supervisor Inmediato'
   
-    public model: IExcepcionSupervisorInmediato = this.inicializamodelo()
+    public model: IExcepcionSupervisorInmediato = this.inicializamodelo();
+    public modeldts:IExcepcionSupervisorInmediatoDts = this.inicializamodeloDts();
+
     titulos = [      
       { nombreEmpleado: 'Empleado' },
       { nombreDepartmentoriginal: 'Departamento Original' },
@@ -27,7 +29,7 @@ export class ExcepcionSupervisorInmediato {
     public actualpage: number = 1
     public pagesize: number = 10
     public filtro: string = ''
-    public arraymodel: IExcepcionSupervisorInmediato[] = []
+    public arraymodel: IExcepcionSupervisorInmediatoDts[] = []
     public arraytotal: IExcepcionSupervisorInmediato[] = []
     public operationSuccessful: boolean = false;
     @Output() TRegistros = new EventEmitter<number>();
@@ -46,7 +48,7 @@ export class ExcepcionSupervisorInmediato {
 
     public inicializamodelo(): IExcepcionSupervisorInmediato {
       return {
-        id: '',
+        id: 0,
         excepcionId: 0,
         empleadoId: 0,
         departamentoOriginalId: 0,
@@ -56,6 +58,26 @@ export class ExcepcionSupervisorInmediato {
         fechaInicio: new Date(),
         fechaFin: new Date()
       }
+    }
+
+    public inicializamodeloDts():IExcepcionSupervisorInmediatoDts{
+      let cd:IExcepcionSupervisorInmediatoDts={
+        nombreEmpleado: '',
+        nombreDepartmentoriginal: '',
+        nombrejefeoriginal: '',
+        nombrenuevojefe: '',
+        nombrenuevodepartamento: '',
+        id: 0,
+        excepcionId: 0,
+        empleadoId: 0,
+        departamentoOriginalId: 0,
+        jefeOriginalId: 0,
+        nuevoDepartamentoId: 0,
+        nuevoJefeId: 0,
+        fechaInicio: new Date(),
+        fechaFin:  new Date()
+      }
+      return cd;
     }
 
     public async getdatos(): Promise<void> {
@@ -82,17 +104,18 @@ export class ExcepcionSupervisorInmediato {
       return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
   
-    public Get(id: string): Observable<IExcepcionSupervisorInmediato> {
-      return this.datos.getbyid<IExcepcionSupervisorInmediato>(this.rutaapi + `/${id}`)
+    public Get(id: string): Observable<IExcepcionSupervisorInmediatoDts> {
+      return this.datos.getbyid<IExcepcionSupervisorInmediatoDts>(this.rutaapi + `/${id}`)
     }
 
     public GetCount(): Observable<number> {
       return this.datos.getdatoscount(this.rutaapi + `/count`)
     }
   
-    public insert(obj: IExcepcionSupervisorInmediato): Observable<IExcepcionSupervisorInmediato> {  
-      console.log('llego a insert en excepción supervisor inmediato', obj)
-      return this.datos.insertardatos<IExcepcionSupervisorInmediato>(this.rutaapi, obj)
+    public insert(obj: IExcepcionSupervisorInmediatoDts): Observable<IExcepcionSupervisorInmediatoDts> {  
+     // console.log('llego a insert en excepción supervisor inmediato', obj)
+       return this.datos.insertardatos<IExcepcionSupervisorInmediatoDts>(this.rutaapi, obj)
+       
     }
   
     public Update(obj: IExcepcionSupervisorInmediato): Observable<IExcepcionSupervisorInmediato> {
@@ -102,9 +125,10 @@ export class ExcepcionSupervisorInmediato {
     public async grabar(): Promise<boolean> {
       return new Promise<boolean>(async (resolve) => {
         try {
-          if (this.model.id === '') {
+          if (this.modeldts.id === 0) {
             // inserta el registro
-            const rep: IExcepcionSupervisorInmediato = await firstValueFrom(this.insert(this.model));
+            
+            const rep: IExcepcionSupervisorInmediatoDts = await firstValueFrom(this.insert(this.modeldts));
             console.log(rep)
             this.model = rep
             this.arraymodel.push(rep);
@@ -137,7 +161,7 @@ export class ExcepcionSupervisorInmediato {
       this.model = this.inicializamodelo();
     }
 
-    public async delete(id: string): Promise<boolean> {
+    public async delete(id: number): Promise<boolean> {
       try {
         await firstValueFrom(this.datos.delbyid(this.rutaapi + `/${id}`));
         this.arraymodel = this.arraymodel.filter(x => x.id !== id);

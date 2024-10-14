@@ -1,5 +1,5 @@
 export interface IExcepcionSupervisorInmediato {
-  id: string;
+  id: number;
   excepcionId: number;
   empleadoId: number;
   departamentoOriginalId: number;

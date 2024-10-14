@@ -6,6 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { UtilsService } from 'src/app/Helpers/utils.service';
 
 @Component({
   selector: 'app-form-periodos',
@@ -49,19 +50,12 @@ cancelar() {
     })
     this.fg = this.datService.llenarFormGrup(this.model);
 
-    this.fg.controls['fechaInicio'].setValue(this.formatDateForInput(this.data.model.fechaInicio))
-    this.fg.controls['fechaFin'].setValue(this.formatDateForInput(this.data.model.fechaFin))
+    this.fg.controls['fechaInicio'].setValue(UtilsService.formatDateForInput(this.data.model.fechaInicio))
+    this.fg.controls['fechaFin'].setValue(UtilsService.formatDateForInput(this.data.model.fechaFin))
     
   }
 // Función para formatear la fecha en el formato YYYY-MM-DD
-private formatDateForInput(d: string): string {
-  let date = new Date(d)
-  
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0-11
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+
   grabar(): void {
     
   }

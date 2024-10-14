@@ -18,11 +18,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   styleUrls: ['./excepcion-supervisor-inmediato.component.css']
 })
 export class ExcepcionSupervisorInmediatoComponent implements OnInit {
-campos: string[]=[];
-tituloslocal: string[]=[];
-actualpage: number=1;
-config: any;
-
+  campos: string[]=[];
+  tituloslocal: string[]=[];
+  actualpage: number=1;
+  config: any;
+  term: string="";
 
   currentExcepcion: IExcepcionSupervisorInmediato;
   excepciones: IExcepcionSupervisorInmediato[] = [];
@@ -39,27 +39,29 @@ config: any;
   }
 
   async ngOnInit() {
-    await this.loadExcepciones();
+    this.excepcionController.titulos.map((x: string | any) => {
+      let nx: string = x[Object.keys(x)[0]];
+      this.campos.push(...Object.keys(x));
+      this.tituloslocal.push(nx);
+    });
     this.excepcionController.TRegistros.subscribe({
-        next: (rep: number) => {
-          console.log("evento#:", rep);
-          this.config.totalItems = rep;
-          this.ServiceComunicacion.enviarMensaje(this.config);
-        }
-      });
+      next: (rep: number) => {
+        console.log("evento#:", rep);
+        this.config.totalItems = rep;
+        this.ServiceComunicacion.enviarMensaje(this.config);
+      }
+    });
+
+    this.config = {
+      id: '',
+      itemsPerPage: 5,
+      currentPage: 1,
+      totalItems: this.excepcionController.totalregistros
+    };
+    await this.loadExcepciones();
+
   
-      this.config = {
-        id: '',
-        itemsPerPage: 5,
-        currentPage: 1,
-        totalItems: this.excepcionController.totalregistros
-      };
-  
-      this.excepcionController.titulos.map((x: string | any) => {
-        let nx: string = x[Object.keys(x)[0]];
-        this.campos.push(...Object.keys(x));
-        this.tituloslocal.push(nx);
-      });
+
   }
 
   async loadExcepciones() {
@@ -75,65 +77,18 @@ config: any;
     }
   }
 
-  async onFormSubmit(excepcion: IExcepcionSupervisorInmediato | undefined) {
-    if (excepcion) {
-      this.isLoading = true;
-      this.excepcionController.model = excepcion;
-      try {
-        const success = await this.excepcionController.grabar();
-        if (success) {
-          await this.loadExcepciones();
-          this.resetForm();
-        }
-      } catch (error) {
-        console.error('Error saving exception', error);
-        this.excepcionController.showMessage('Error al guardar la excepción', 'Error', 'error');
-      } finally {
-        this.isLoading = false;
-      }
-    } else {
-      this.resetForm();
-    }
-  }
+
 
   resetForm() {
     this.currentExcepcion = this.excepcionController.inicializamodelo();
   }
 
-  editExcepcion(excepcion: IExcepcionSupervisorInmediato) {
-    this.currentExcepcion = { ...excepcion };
-  }
+ 
 
-  cancelEdit() {
-    this.excepcionController.cancelar();
-    this.resetForm();
-  }
 
-  async confirmDelete(excepcion: IExcepcionSupervisorInmediato) {
-    if (confirm(`¿Está seguro que desea eliminar la excepción para el empleado ${excepcion.empleadoId}?`)) {
-      this.isLoading = true;
-      try {
-        const success = await this.excepcionController.delete(excepcion.id);
-        if (success) {
-          await this.loadExcepciones();
-        }
-      } catch (error) {
-        console.error('Error deleting exception', error);
-        this.excepcionController.showMessage('Error al eliminar la excepción', 'Error', 'error');
-      } finally {
-        this.isLoading = false;
-      }
-    }
-  }
 
-  get paginatedExcepciones(): IExcepcionSupervisorInmediato[] {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return this.excepciones.slice(startIndex, startIndex + this.pageSize);
-  }
 
-  get totalPages(): number {
-    return Math.ceil(this.excepciones.length / this.pageSize);
-  }
+
 
   prevPage() {
     if (this.currentPage > 1) {
@@ -141,15 +96,13 @@ config: any;
     }
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
-  }
+
   filtro() {
-    throw new Error('Method not implemented.');
+       if (this.term.length > 0) {
+        this.excepcionController.arraymodel = this.excepcionController.arraymodel.filter(x=> x.empleadoId)
+       }
     }
-    term: any;
+    
     agregar() {
         this.excepcionController.model = this.excepcionController.inicializamodelo()
         this.abrirmodalzona();
@@ -161,13 +114,45 @@ config: any;
     throw new Error('Method not implemented.');
     }
     actualizaelidtable($event: string) {
-        throw new Error('Method not implemented.');
+      this.config.id = $event;
     }
     paginacambio($event: number) {
-    throw new Error('Method not implemented.');
+      this.excepcionController.actualpage = $event;
     }
-    opcion($event: TableResponse) {
-    throw new Error('Method not implemented.');
+    opcion(event: TableResponse) {
+      console.log(event);
+  
+      const acct: any = {
+        edit: this.edita,
+        del: this.delete
+      };
+  
+      const handler = acct[event.option](event.key, this.excepcionController, this.dialog);
+      handler.then((rep: IExcepcionSupervisorInmediato) => {
+        this.excepcionController.getdatos();
+      }, (err: Error) => {
+        this.datos.showMessage("Error: " + err.message, "Error", "error");
+      });
+    }
+    delete(estado: IExcepcionSupervisorInmediato, p: ExcepcionSupervisorInmediato, t: MatDialog): Promise<any> {
+      return new Promise((resolve, reject) => { resolve(estado); });
+    }
+    edita(estado: IExcepcionSupervisorInmediatoDts, p: ExcepcionSupervisorInmediato, t: MatDialog): Promise<any> {
+      return new Promise((resolve: any, reject: any) => {
+        p.model = estado;
+        console.log('estadoService edit', p.model);
+  
+        const dialogRef = t.open(FormExcepcionSupervisorInmediatoComponent, {
+          width: '800px', data: { model: p.model }
+        });
+        dialogRef.afterClosed().subscribe((result: IExcepcionSupervisorInmediato) => {
+          if (result) {
+            resolve(result);
+          } else {
+            resolve(null);
+          }
+        });
+      });
     }
     abrirmodalzona() {
         const dialogRef = this.dialog.open(FormExcepcionSupervisorInmediatoComponent, {

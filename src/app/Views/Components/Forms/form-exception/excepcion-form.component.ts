@@ -42,7 +42,7 @@ excepcionForm: any;
 
   BuscarEmpleado() {
     let model:IExcepcionSupervisorInmediato={
-      id: '',
+      id: 0,
       excepcionId: 0,
       empleadoId: 0,
       departamentoOriginalId: 0,

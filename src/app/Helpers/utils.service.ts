@@ -15,6 +15,16 @@ export class UtilsService {
 
   constructor(private tool:DatosServiceService){}
 
+  static  formatDateForInput(d: string): string {
+    let date = new Date(d)
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0-11
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
   static automappesimple<T>(obj_source:any,obj_destiny:any){
     
     let campos:string[]=Object.keys(obj_destiny)
