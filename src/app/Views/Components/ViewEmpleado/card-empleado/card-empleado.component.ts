@@ -6,8 +6,7 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component';
-import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
-import { EmpleadoTeamComponent2 } from '../empleadoteam2/empleadoteam2.component';
+
 
 @Component({
   selector: 'app-card-empleado',
@@ -39,6 +38,7 @@ export class CardEmpleadoComponent implements OnInit {
     jefeinmediatO_SECUENCIAL: 0,
     jefeinmediato: ''
   }
+  @Input() mostrarboton:boolean =false
   @Input() periodo!:IPeriodo
   @Input() llamarevaluacion: boolean = false;
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
@@ -54,13 +54,24 @@ export class CardEmpleadoComponent implements OnInit {
 
   subdelsub() {
     //throw new Error('Method not implemented.');
-    const dialogRef = this.toastr.open(EmpleadoTeamComponent2 ,
-      {width:'1200px',height:'950px',disableClose:false,data:{empleado:this.empleado,periodo:this.periodo}}
-    );
-    dialogRef.afterClosed().subscribe((rep)=>{
+  //   const dialogRef = this.toastr.open(EmpleadoTeamComponent2 ,
+  //     {width:'1200px',height:'950px',disableClose:false,data:{empleado:this.empleado,periodo:this.periodo}}
+  //   );
+  //   dialogRef.afterClosed().subscribe((rep)=>{
       
-    }); 
-  }
+  //   }); 
+  import('../empleadoteam2/empleadoteam2.component').then(({ EmpleadoTeamComponent2 }) => {
+    const dialogRef = this.toastr.open(EmpleadoTeamComponent2, {
+      width: '1200px',
+      height: '950px',
+      disableClose: false,
+      data: { empleado: this.empleado, periodo: this.periodo }
+    });
+    dialogRef.afterClosed().subscribe((rep) => {
+      // Manejar el cierre del diálogo si es necesario
+    });
+  });
+   }
 
   openEvaluationForm(): void {
     //this.evaluateEmployee.emit(this.empleado);

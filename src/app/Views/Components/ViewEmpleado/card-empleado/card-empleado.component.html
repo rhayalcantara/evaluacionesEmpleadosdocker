@@ -1,8 +1,9 @@
 <div class="card">
     <div *ngIf="empleado.esjefatura==1">
         <h3>Supervisor</h3>
-        <button (click)="subdelsub()" [ngStyle]="getButtonStyle()">Mostrar Subordinados del Empleado</button>
-    </div>
+
+        <button *ngIf="mostrarboton" (click)="subdelsub()" [ngStyle]="getButtonStyle()">Mostrar Subordinados del Empleado</button>
+    </div>  
     <div *ngIf="empleado.esjefatura!=1">
         <h3>Colaborador</h3>
     </div>

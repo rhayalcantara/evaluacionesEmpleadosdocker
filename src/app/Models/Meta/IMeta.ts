@@ -27,3 +27,8 @@ export interface IMetadto{
     positionSecuencial:number
     objetivoid:number
 }
+
+export interface IPuestoConMetas {
+    periodId: number;
+    cantidadPuestos: number;
+  }

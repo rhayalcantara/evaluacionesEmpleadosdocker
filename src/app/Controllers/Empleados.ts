@@ -4,6 +4,8 @@ import { IEmpleado } from '../Models/Empleado/IEmpleado';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { Observable } from 'rxjs';
 import { IPuesto } from '../Models/Puesto/IPuesto';
+import { UtilsService } from '../Helpers/utils.service';
+import { IPeriodo } from '../Models/Periodos/IPeriodo';
 
 @Injectable({
   providedIn: 'root'
@@ -109,13 +111,15 @@ export class Empleados implements OnInit{
     }
     ) 
   }
-  public  getsubordinados(){
+  public  getsubordinados(periodo:IPeriodo){
     this.arraymodelsubordinados=[]
     if (this.model.secuencial==0){
       return
     }
     this.arraypuestossub=[];
-   this.Getsub(this.model.secuencial.toString()).subscribe({next:(rep:ModelResponse)=>{
+    let fecha:Date =new Date(periodo.fechaFin)
+
+   this.Getsub(this.model.secuencial.toString(),UtilsService.formatDateForInput(fecha.toDateString())).subscribe({next:(rep:ModelResponse)=>{
       //console.log('llegaron los datos ',rep.count)
       //se obtiene los datos y se ponen en los array
       this.arraymodelsubordinados=rep.data 
@@ -135,9 +139,10 @@ export class Empleados implements OnInit{
     console.log(this.rutaapi)
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
-public Getsub(empleado_secuencial:string):Observable<ModelResponse> {
-  //console.log(this.rutaapi+`/equipo/${empleado_secuencial}`)
-  return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/${empleado_secuencial}`)
+public Getsub(empleado_secuencial:string,fechaconsulta:string):Observable<ModelResponse> {
+  console.log(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
+
+  return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
 }
 public Get(id:string):Observable<IEmpleado>{
   return this.datos.getbyid<IEmpleado>(this.rutaapi+`/${id}`)

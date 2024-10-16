@@ -1,7 +1,7 @@
 <div class="content">
   <div class="entre">
   <div class="dashboard">
-    <app-card-empleado2 [empleado]="empleado"></app-card-empleado2>
+    <app-card-empleado [empleado]="empleado" [periodo]="periodo"></app-card-empleado>
   </div>
   
   <div *ngIf="empleados.arraymodelsubordinados.length">
@@ -10,7 +10,7 @@
     
   
     <div class="Equipo">
-      <app-card-empleado2 [empleado]="emple" *ngFor="let emple of empleados.arraymodelsubordinados"></app-card-empleado2>
+      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of empleados.arraymodelsubordinados"></app-card-empleado>
     </div>
   </div>
 </div>

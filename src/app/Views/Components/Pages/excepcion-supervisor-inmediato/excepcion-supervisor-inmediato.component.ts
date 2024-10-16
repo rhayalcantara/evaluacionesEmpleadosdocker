@@ -9,6 +9,7 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-excepcion-supervisor-inmediato',
@@ -66,6 +67,10 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
 
   async loadExcepciones() {
     this.isLoading = true;
+    const dialogRef = this.dialog.open(LoadingComponent, {
+      width: '340px',
+      height: '180px', 
+    });      
     try {
       await this.excepcionController.getdatos();
       this.excepciones = this.excepcionController.arraymodel;
@@ -74,6 +79,7 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
       this.excepcionController.showMessage('Error al cargar las excepciones', 'Error', 'error');
     } finally {
       this.isLoading = false;
+      dialogRef.close()
     }
   }
 

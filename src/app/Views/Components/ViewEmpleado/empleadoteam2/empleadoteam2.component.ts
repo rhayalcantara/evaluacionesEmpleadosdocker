@@ -17,6 +17,7 @@ import { EmpleadosFactory } from 'src/app/Controllers/EmpleadosFactory';
   standalone:true,
   imports:[FormsModule, CommonModule, 
     EmpleadoTeamComponent,
+    CardEmpleadoComponent,
     CardEmpleadoComponent2],
   templateUrl: './empleadoteam2.component.html',
   styleUrls: ['./empleadoteam2.component.css']
@@ -52,10 +53,10 @@ export class EmpleadoTeamComponent2 implements OnInit {
 
       this.empleado=this.data.empleado
       this.periodo=this.data.periodo
-      
+      console.log('data EmpleadoTeamComponent2',this.data)
       this.empleados = this.emplx.crear() 
       this.empleados.model = this.empleado
-      this.empleados.getsubordinados()
+      this.empleados.getsubordinados(this.data.periodo)
       this.team = this.empleados.arraymodelsubordinados
       this.cdr.detectChanges()
     

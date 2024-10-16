@@ -10,7 +10,7 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { LoadingComponent } from '../../loading/loading.component';
 import { IPuesto } from 'src/app/Models/Puesto/IPuesto';
 import { Empleados } from 'src/app/Controllers/Empleados';
-import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
+import { IMeta, IMetaDts, IPuestoConMetas } from 'src/app/Models/Meta/IMeta';
 import { Metas } from 'src/app/Controllers/Metas';
 import { ChangeStateFormComponent } from '../../Forms/change-state-form/change-state-form.component';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
@@ -27,6 +27,9 @@ import { FormMetasComponent } from '../../Forms/form-metas/form-metas.component'
   styleUrls: ['./evaluation-periods.component.css']
 })
 export class EvaluationPeriodsComponent implements OnInit {
+  public filteredPuestosActivos: IPuesto[] = [];
+  public filterText: string = '';
+
   // ... (existing properties)
   selectedPosition: IPuesto={
     secuencial: 0,
@@ -47,6 +50,7 @@ export class EvaluationPeriodsComponent implements OnInit {
   public puestosactivos:IPuesto[]=[]
   public metas:IMeta[]=[]
   isChangeStateFormVisible: boolean = false;
+
 
   constructor(
     public Periodo: Periodos,
@@ -81,6 +85,7 @@ export class EvaluationPeriodsComponent implements OnInit {
               ) // Filtramos duplicados por secuencial y descripcion
         );
         this.puestosactivos=puestosUnicos
+        this.filteredPuestosActivos = [...this.puestosactivos];
       }
       
      })
@@ -107,6 +112,17 @@ export class EvaluationPeriodsComponent implements OnInit {
       }
     })
   }
+  filterPuestos() {
+    this.filteredPuestosActivos=[]
+    if (this.filterText != ''){
+      this.filteredPuestosActivos = this.puestosactivos.filter(puesto =>
+        puesto.descripcion.toLowerCase().includes(this.filterText.toLowerCase())
+      );     
+    }else{
+      this.filteredPuestosActivos = [...this.puestosactivos];
+    }
+
+  }
   mostrarpantalla(rep:IPeriodo_Dts){
     console.log(rep)
     this.period=rep
@@ -121,7 +137,16 @@ export class EvaluationPeriodsComponent implements OnInit {
     console.log('Metas del periodo',this.period.goals)
     const puestosUnicos = this.getUniquePositions(this.period.goals)
     console.log('Puestos',puestosUnicos)
-    this.cntgoal=puestosUnicos.length
+    // obtenar las metas
+    this.metascontroller.getmetasperiodo(this.period.id).subscribe({
+      next:((rep)=>{
+        // obtener los puestos sin duplicados de las metas del periodo que esta en la variable rep
+        const uniquePositions = this.getUniquePositions(rep);
+          this.cntgoal = uniquePositions.length;        
+
+      })
+    })
+    
   }
 
   // ... (existing methods)
@@ -252,4 +277,31 @@ export class EvaluationPeriodsComponent implements OnInit {
     return validTransitions[currentState]?.includes(newState) || false;
   }
   // ... (rest of the existing code)
+
+  contarPuestosConMetasPorPeriodo(metas: IMeta[]): IPuestoConMetas[] {
+    // Paso 1: Agrupar metas por periodo y puesto
+    const metasPorPeriodoYPuesto = metas.reduce((acc, meta) => {
+      const key = `${meta.periodId}-${meta.positionSecuencial}`;
+      if (!acc[key]) {
+        acc[key] = { periodId: meta.periodId, positionSecuencial: meta.positionSecuencial };
+      }
+      return acc;
+    }, {} as Record<string, { periodId: number; positionSecuencial: number }>);
+  
+    // Paso 2: Contar puestos únicos por periodo
+    const puestosPorPeriodo = Object.values(metasPorPeriodoYPuesto).reduce((acc, item) => {
+      if (!acc[item.periodId]) {
+        acc[item.periodId] = 0;
+      }
+      acc[item.periodId]++;
+      return acc;
+    }, {} as Record<number, number>);
+  
+    // Paso 3: Formatear el resultado
+    return Object.entries(puestosPorPeriodo).map(([periodId, cantidadPuestos]) => ({
+      periodId: Number(periodId),
+      cantidadPuestos
+    }));
+  }
+
 }

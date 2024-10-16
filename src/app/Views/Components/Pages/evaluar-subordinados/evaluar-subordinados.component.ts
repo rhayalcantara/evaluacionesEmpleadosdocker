@@ -72,9 +72,9 @@ throw new Error('Method not implemented.');
     
    this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep:IEmpleado)=>{
       this.empl.model=rep
-      this.empl.getsubordinados()
+      this.empl.getsubordinados(this.periodo)
       this.empleado=rep
-      
+          
    })
   }
 }

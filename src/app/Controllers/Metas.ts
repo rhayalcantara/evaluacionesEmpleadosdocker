@@ -111,6 +111,19 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
         }
         ) 
     }
+    public getmetasperiodo(periodoid:number):Observable<IMetaDts[]>{
+      
+      return this.datos.getdatos<ModelResponse>( this.rutaapi+`/periodo/?periodoid=${periodoid}`)
+      .pipe(
+        map((response: ModelResponse) => {
+          if (response.exito === 200 && Array.isArray(response.data)) {
+            return response.data as IMetaDts[];
+          } else {
+            throw new Error(response.mensaje || 'Error retrieving data');
+          }
+        })
+      );
+    }
     public GetMetasPorPeriodoYPuesto(periodoid:number,puestosecuencial:number):Observable<IMetaDts[]>{
       //obtiene todas las metas
       return this.Gets().pipe(

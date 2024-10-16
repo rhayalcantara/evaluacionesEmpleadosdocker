@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
     
     this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
       this.empl.model = rep
-      this.empl.getsubordinados()
+      this.empl.getsubordinados(this.periodo)
       this.empleado = rep
       localStorage.setItem("empleado", JSON.stringify(this.empleado))
       //console.log('puetos sub',this.empl.arraypuestossub)
