@@ -5,7 +5,7 @@
 
   <div *ngIf="empl.arraymodelsubordinados.length > 0">
     <h2>Equipo</h2>
-    <p>Total Integrantes en el Equipo {{filteredSubordinados.length}}</p>
+    <p>Total Integrantes en el Equipo {{this.empl.arraymodelsubordinados.length}}</p>
     
     <!-- Add search input -->
     <div class="search-container">
@@ -19,7 +19,7 @@
       <button>Plan de Desarrollo</button>
     </div>
     <div class="Equipo">
-      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of filteredSubordinados"></app-card-empleado>
+      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of this.empl.arraymodelsubordinados"></app-card-empleado>
     </div>
   </div>
 </div>

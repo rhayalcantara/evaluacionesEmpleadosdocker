@@ -31,17 +31,25 @@ export class EmpleadoTeamComponent implements OnInit {
     public empl: Empleados,
     private dialog: MatDialog,
     private peri: Periodos,
+    //detectar cambios
+    private changeDetectorRef:ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.filteredSubordinados = this.empl.arraymodelsubordinados;
+    this.filteredSubordinados = this.empl.arraymodelsubordinados; 
+    this.empl.model = this.empleado
+    //this.empl.getsubordinados(this.periodo);
+    console.log(this.empl.arraymodelsubordinados);
+       
+    this.changeDetectorRef.detectChanges();
   }
 
   searchSubordinados(): void {
     if (!this.searchTerm.trim()) {
-      this.filteredSubordinados = this.empl.arraymodelsubordinados;
+      this.empl.getsubordinados(this.periodo)
+      //this.empl.arraymodelsubordinados;
     } else {
-      this.filteredSubordinados = this.empl.arraymodelsubordinados.filter(subordinado =>
+      this.empl.arraymodelsubordinados = this.empl.arraymodelsubordinados.filter(subordinado =>
         subordinado.nombreunido.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         subordinado.departamento.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         subordinado.cargo.toLowerCase().includes(this.searchTerm.toLowerCase())

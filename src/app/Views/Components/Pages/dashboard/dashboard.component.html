@@ -1,0 +1,51 @@
+<div class="dashboard-container">
+  <h2>Dashboard de Evaluaciones</h2>
+  <p>Período actual: {{periodoActual?.descripcion}} - Estado: {{periodoActual?.estado?.descripcion}}</p>
+
+  <div [ngSwitch]="estadoPeriodo">
+    <div *ngSwitchCase="'Configuracion'">
+      <h3>Configuración de Metas</h3>
+      <div class="metric-card">
+        <h4>Puestos con Metas Asignadas</h4>
+        <p>{{metricas.porcentajePuestosConMetas | percent:'1.0-0'}} de puestos tienen metas asignadas</p>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'Evaluando'">
+      <h3>Progreso de Evaluaciones</h3>
+      <div class="metric-card">
+        <h4>Autoevaluaciones Completadas</h4>
+        <p>{{metricas.empleadosAutoevaluados}} de {{metricas.totalEmpleados}} empleados</p>
+      </div>
+      <div class="metric-card">
+        <h4>Evaluaciones por Supervisor Completadas</h4>
+        <p>{{metricas.empleadosEvaluadosPorSupervisor}} de {{metricas.totalEmpleados}} empleados</p>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'Calculando'">
+      <h3>Resultados Preliminares</h3>
+      <div class="metric-card">
+        <h4>Promedio por Departamento</h4>
+        <ul>
+          <li *ngFor="let dept of metricas.promediosPorDepartamento | keyvalue">
+            {{dept.key}}: {{dept.value | number:'1.2-2'}}
+          </li>
+        </ul>
+      </div>
+      <div class="metric-card">
+        <h4>Promedio por Puesto</h4>
+        <ul>
+          <li *ngFor="let puesto of metricas.promediosPorPuesto | keyvalue">
+            {{puesto.key}}: {{puesto.value | number:'1.2-2'}}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'Cerrada'">
+      <h3>Resultados Finales</h3>
+      <!-- Similar to 'Cálculo' case, but you might want to add more details or different visualizations -->
+    </div>
+  </div>
+</div>

@@ -1,31 +1,30 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { Empleados } from './Controllers/Empleados';
+import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
-import { CommonModule } from '@angular/common';
 
-
+// Import other components as needed
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavmenuComponent
+    DashboardComponent,
+    NavmenuComponent,
+    // Declare other components here
   ],
   imports: [
     BrowserModule,
-    CommonModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule // Add our new FormsModule here
+    CommonModule,
+    // Add other necessary modules here
   ],
-  providers: [Empleados],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

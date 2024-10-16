@@ -40,6 +40,7 @@ export class EmpleadoTeamComponent2 implements OnInit {
     jefeinmediatO_SECUENCIAL: 0,
     jefeinmediato: ''
   };
+  searchTerm: string = '';
   public periodo:IPeriodo=this.peri.inicializamodelo();
   public team:IEmpleado[]=[];
   public empleados!:Empleados
@@ -61,7 +62,18 @@ export class EmpleadoTeamComponent2 implements OnInit {
       this.cdr.detectChanges()
     
   }
-
+  searchSubordinados(): void {
+    if (!this.searchTerm.trim()) {
+      this.empleados.getsubordinados(this.periodo)
+      //this.empl.arraymodelsubordinados;
+    } else {
+      this.empleados.arraymodelsubordinados = this.empleados.arraymodelsubordinados.filter(subordinado =>
+        subordinado.nombreunido.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        subordinado.departamento.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        subordinado.cargo.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+  }
   agregametasub() {
     // Implement the agregametasub functionality here
     console.log('Agregar metas para subordinados');

@@ -1,25 +1,39 @@
-
 .custom-bg {
-    /* Aquí puedes poner el color que desees */
     background-color: #3498db;
     color: white;
     padding: 15px 0;
 }
-nav ul li a {
+
+.navbar-nav .nav-link {
     color: white;
     text-decoration: none;
-  }
-  .logo-div {
-    
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ecf0f1;
+}
+
+.dropdown-menu {
+    background-color: #2980b9;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+.dropdown-item:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.logo-div {
     border-radius: 113px;
     background: url("../../../../assets/LOGO-COOPASPIRE.png");
     background-color: rgba(255, 255, 255, 0.959);
     background-repeat: no-repeat;
     background-size: 70px;
     background-position: right;
-    box-shadow:  20px 20px 40px #b6b3b3,
-    -20px -20px 40px #ffffff;
+    box-shadow: 20px 20px 40px #b6b3b3, -20px -20px 40px #ffffff;
     width: 70px;
     height: 70px;
-   
-    }
+}

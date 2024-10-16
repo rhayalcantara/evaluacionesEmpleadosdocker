@@ -143,3 +143,15 @@
 .Equipo::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+  /* New styles for search container */
+  .search-container {
+    margin-bottom: 20px;
+  }
+  .search-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }

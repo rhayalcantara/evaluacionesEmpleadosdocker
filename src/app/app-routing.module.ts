@@ -8,6 +8,7 @@ import { EmpleadosComponent } from './Views/Components/Pages/empleados/empleados
 import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-evaluacion/periodos-evaluacion.component';
 import { EvaluationPeriodsComponent } from './Views/Components/Pages/evaluation-periods/evaluation-periods.component';
 import { GrupoCompetenciasComponent } from './Views/Components/Pages/grupo-competencias/grupo-competencias.component';
+import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -104,6 +105,10 @@ const routes: Routes = [
     .then((m)=> m.ExcepcionSupervisorInmediatoComponent),
      canActivate: [AuthGuard]
   },
+  { path: 'dashboard', component: DashboardComponent },
+  // Add other routes as needed
+  
+
 ];
 
 @NgModule({
