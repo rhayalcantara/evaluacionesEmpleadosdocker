@@ -1,19 +1,25 @@
 <div class="content">
-<div class="dashboard">
-  <app-card-empleado [empleado]="empleado" [periodo]="periodo"></app-card-empleado>
-</div>
+  <div class="dashboard">
+    <app-card-empleado [empleado]="empleado" [periodo]="periodo"></app-card-empleado>
+  </div>
 
-<div *ngIf="empl.arraymodelsubordinados.length > 0">
-  <h2>Equipo</h2>
-  <p>Total Integrantes en el Equipo {{empl.arraymodelsubordinados.length}}</p>
-  <div class="action-buttons">
-    <button (click)="agregametasub()">Agregar Metas para Puestos Subordinados</button>
-    <button (click)="objetivoscall()">Objetivos/Metricas</button>
-    <button>Competencias</button>
-    <button>Plan de Desarrollo</button>
+  <div *ngIf="empl.arraymodelsubordinados.length > 0">
+    <h2>Equipo</h2>
+    <p>Total Integrantes en el Equipo {{filteredSubordinados.length}}</p>
+    
+    <!-- Add search input -->
+    <div class="search-container">
+      <input type="text" [(ngModel)]="searchTerm" (input)="searchSubordinados()" placeholder="Buscar por nombre, departamento o cargo">
+    </div>
+    
+    <div class="action-buttons">
+      <button (click)="agregametasub()">Agregar Metas para Puestos Subordinados</button>
+      <button (click)="objetivoscall()">Objetivos/Metricas</button>
+      <button>Competencias</button>
+      <button>Plan de Desarrollo</button>
+    </div>
+    <div class="Equipo">
+      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of filteredSubordinados"></app-card-empleado>
+    </div>
   </div>
-  <div class="Equipo">
-    <app-card-empleado [empleado]="emple"[periodo]="periodo" [mostrarboton]="true"  *ngFor="let emple of empl.arraymodelsubordinados"></app-card-empleado>
-  </div>
-</div>
 </div>
