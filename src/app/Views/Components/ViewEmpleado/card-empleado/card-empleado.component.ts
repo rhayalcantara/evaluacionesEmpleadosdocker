@@ -17,6 +17,8 @@ import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-s
 })
 export class CardEmpleadoComponent implements OnInit {
 
+
+ 
  
   constructor(private cdr: ChangeDetectorRef,
     private toastr: MatDialog,) {}
@@ -38,11 +40,15 @@ export class CardEmpleadoComponent implements OnInit {
     jefeinmediatO_SECUENCIAL: 0,
     jefeinmediato: ''
   }
+  @Input() mostrarEstadoEvaluacion: boolean = false;
   @Input() mostrarboton:boolean =false
   @Input() periodo!:IPeriodo
   @Input() llamarevaluacion: boolean = false;
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
+
+  public estadoAutoevaluacion: string = 'Pendiente';
+  public estadoEvaluacionSupervisor: string = 'Pendiente';
   public nfoto: number = 0;
   public foto: string = "";
 
@@ -51,7 +57,16 @@ export class CardEmpleadoComponent implements OnInit {
     this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
   }
-
+  cargarEstadoEvaluacion(): void {
+/*     this.evaluacionService.obtenerEstadoEvaluacion(this.empleado.secuencial, this.periodo.id).subscribe(
+      estado => {
+        this.estadoAutoevaluacion = estado.autoevaluado ? 'Completada' : 'Pendiente';
+        this.estadoEvaluacionSupervisor = estado.evaluadoPorSupervisor ? 'Completada' : 'Pendiente';
+        this.cdr.detectChanges();
+      },
+      error => console.error('Error al obtener estado de evaluación', error)
+    ); */
+  }
   subdelsub() {
     //throw new Error('Method not implemented.');
   //   const dialogRef = this.toastr.open(EmpleadoTeamComponent2 ,

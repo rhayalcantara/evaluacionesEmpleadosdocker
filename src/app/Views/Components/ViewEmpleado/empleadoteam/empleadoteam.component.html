@@ -15,11 +15,16 @@
     <div class="action-buttons">
       <button (click)="agregametasub()">Agregar Metas para Puestos Subordinados</button>
       <button (click)="objetivoscall()">Objetivos/Metricas</button>
-      <button>Competencias</button>
+      <button (click)="competenciascall()">Competencias</button>
       <button>Plan de Desarrollo</button>
     </div>
     <div class="Equipo">
-      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of this.empl.arraymodelsubordinados"></app-card-empleado>
+      <app-card-empleado 
+          [empleado]="emple" 
+          [periodo]="periodo" 
+          [mostrarboton]="true" 
+          [mostrarEstadoEvaluacion]="mostrarevaluacion"
+          *ngFor="let emple of this.empl.arraymodelsubordinados"></app-card-empleado>
     </div>
   </div>
 </div>

@@ -14,7 +14,12 @@
         
   
     <div class="Equipo">
-      <app-card-empleado [empleado]="emple" [periodo]="periodo" [mostrarboton]="true" *ngFor="let emple of empleados.arraymodelsubordinados"></app-card-empleado>
+      <app-card-empleado 
+        [empleado]="emple" 
+        [periodo]="periodo" 
+        [mostrarboton]="true" 
+        *ngFor="let emple of empleados.arraymodelsubordinados">
+      </app-card-empleado>
     </div>
   </div>
 </div>

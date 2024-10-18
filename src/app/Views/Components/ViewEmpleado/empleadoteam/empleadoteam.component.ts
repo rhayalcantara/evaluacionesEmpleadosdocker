@@ -10,6 +10,7 @@ import { SupervisorGoalsComponent } from '../../Pages/supervisor-goals/superviso
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { CardEmpleadoComponent2 } from '../card-empleado2/card-empleado.component';
 import { ObjetivosComponent } from '../../Pages/objetivos/objetivos.component';
+import { GrupoCompetenciasComponent } from '../../Pages/grupo-competencias/grupo-competencias.component';
 
 @Component({
   selector: 'app-empleadoteam',
@@ -23,7 +24,8 @@ export class EmpleadoTeamComponent implements OnInit {
   
   @Input() empleado: IEmpleado = this.empl.inicializamodelo();
   @Input() periodo: IPeriodo = this.peri.inicializamodelo();
-
+  @Input() mostrarevaluacion:boolean= false;
+  
   searchTerm: string = '';
   filteredSubordinados: IEmpleado[] = [];
 
@@ -76,4 +78,13 @@ export class EmpleadoTeamComponent implements OnInit {
       
     });
   }
+  competenciascall() {
+    console.log('Agregar competencias para subordinados');
+    const dialogRef = this.dialog.open(GrupoCompetenciasComponent, {
+      width: '600px', data: { empl: this.empl, periodo: this.periodo }
+    });
+    dialogRef.afterClosed().subscribe((rep) => {
+      
+    });
+}
 }

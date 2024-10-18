@@ -4,11 +4,20 @@
   <!-- Supervisor Card --> 
 <app-card-empleado [empleado]="empleado"></app-card-empleado>
 <!-- Seleciona al subordinado para evaluar -->
+<h2>Equipo</h2>
+<p>Total Integrantes en el Equipo {{this.empl.arraymodelsubordinados.length}}</p>
+
+<!-- Add search input -->
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchTerm" (input)="searchSubordinados()" placeholder="Buscar por nombre, departamento o cargo">
+</div>
+
 <div class="Equipo">
   <app-card-empleado 
     [empleado]="emple" 
     [llamarevaluacion]="true"
     [periodo]="periodo"
+    [mostrarEstadoEvaluacion]="true"
     *ngFor="let emple of empl.arraymodelsubordinados">
   </app-card-empleado>
 </div>

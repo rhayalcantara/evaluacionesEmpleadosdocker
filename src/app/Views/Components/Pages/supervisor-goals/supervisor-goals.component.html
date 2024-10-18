@@ -10,16 +10,20 @@
           <div class="card-header ">
             <h3 class="h5 mb-0">Puestos Subordinados</h3>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item" *ngFor="let position of empl.arraypuestossub" 
-                (click)="selectPosition(position)"
-                [class.active]="position === selectedPosition">
-              {{ position.descripcion }}
-            </li>
-          </ul>
+          <div class="card-body">
+            <input type="text" class="form-control mb-3" placeholder="Buscar puestos..." 
+            [(ngModel)]="searchTerm" (input)="searchPositions()">
+
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" *ngFor="let position of filteredPositions" 
+                  (click)="selectPosition(position)"
+                  [class.active]="position.secuencial === selectedPosition.secuencial">
+                {{ position.descripcion }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      
       <div class="col-md-8" *ngIf="selectedPosition">
         <div class="card shadow">
           <div class="card-header bg-primary text-white">

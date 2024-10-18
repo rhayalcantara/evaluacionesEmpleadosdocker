@@ -19,7 +19,7 @@ import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 })
 export class EvaluarSubordinadosComponent implements OnInit {
 onDepartamentoChange() {
-throw new Error('Method not implemented.');
+  throw new Error('Method not implemented.');
 }
   periodo:IPeriodo={
     id: 1,
@@ -29,6 +29,8 @@ throw new Error('Method not implemented.');
     activa: true,
     estadoid: 0
   }
+  public searchTerm: string = '';
+
   public empleado:IEmpleado={
     secuencial: 0,
     codigousuario: '',
@@ -76,5 +78,17 @@ throw new Error('Method not implemented.');
       this.empleado=rep
           
    })
+  }
+  searchSubordinados(): void {
+    if (!this.searchTerm.trim()) {
+      this.empl.getsubordinados(this.periodo)
+      //this.empl.arraymodelsubordinados;
+    } else {
+      this.empl.arraymodelsubordinados = this.empl.arraymodelsubordinados.filter(subordinado =>
+        subordinado.nombreunido.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        subordinado.departamento.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        subordinado.cargo.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
   }
 }

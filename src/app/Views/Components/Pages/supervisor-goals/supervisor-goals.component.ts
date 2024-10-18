@@ -33,6 +33,9 @@ interface Goal {
 })
 export class SupervisorGoalsComponent implements OnInit {
 
+  searchTerm: string = '';
+  filteredPositions: IPuesto[] = [];
+
 newGoal: IMeta=this.metascontroller.inicializamodelo()
 
 subordinatePositions: Position[] = [];
@@ -87,6 +90,8 @@ config: any;
        totalItems: this.metas.length
      };
      this.ServiceComunicacion.enviarMensaje(this.config)
+
+     this.filteredPositions = this.empl.arraypuestossub;
   }
   addGoal() {
     //llamar el formulario de metas
@@ -103,6 +108,16 @@ config: any;
     this.fetchGoalsForPosition(this.selectedPosition.secuencial)
   }
 
+
+  searchPositions() {
+    if (!this.searchTerm) {
+      this.filteredPositions = this.empl.arraypuestossub;
+    } else {
+      this.filteredPositions = this.empl.arraypuestossub.filter(position => 
+        position.descripcion.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+  }
 
  
   actualizaelidtable($event: string) {
