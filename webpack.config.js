@@ -4,7 +4,7 @@ const moduleFederationConfig = withModuleFederationPlugin({
 
   remotes: {
     //"loginapp": "/loginapp/remoteEntry.js", 
-    //"loginapp": "http://192.168.7.222/loginapp/remoteEntry.js", 
+    //"loginapp": "http://192.168.7.222/loginapp/remoteEntry.js",  // produccion
     "loginapp": "http:localhost:4300/remoteEntry.js",       
   },
 
@@ -16,6 +16,6 @@ const moduleFederationConfig = withModuleFederationPlugin({
 
 moduleFederationConfig.output.pathinfo = false
 moduleFederationConfig.output.clean = true
- moduleFederationConfig.output.publicPath = '/'
-// moduleFederationConfig.output.publicPath = '/expedientes/'
+moduleFederationConfig.output.publicPath = '/'
+//moduleFederationConfig.output.publicPath = '/evaluacionempleado/' // produccion
 module.exports =moduleFederationConfig

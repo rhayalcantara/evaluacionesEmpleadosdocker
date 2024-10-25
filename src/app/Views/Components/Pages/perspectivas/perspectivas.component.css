@@ -1,0 +1,62 @@
+.card {
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #f8f9fa important;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-title {
+    margin-bottom: 0;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+}
+
+.btn {
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.text-right {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .text-right {
+        text-align: left;
+        margin-top: 10px;
+    }
+}

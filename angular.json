@@ -3,7 +3,7 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
-		"expedientes": {
+		"evaluacionempleado": {
 			"projectType": "application",
 			"schematics": {},
 			"root": "",
@@ -13,7 +13,7 @@
 				"build": {
 					"builder": "ngx-build-plus:browser",
 					"options": {
-						"outputPath": "dist/expedientes",
+						"outputPath": "dist/evaluacionempleado",
 						"index": "src/index.html",
 						"main": "src/main.ts",
 						"polyfills": [
@@ -63,24 +63,25 @@
 					"builder": "ngx-build-plus:dev-server",
 					"configurations": {
 						"production": {
-							"browserTarget": "expedientes:build:production",
+							"browserTarget": "evaluacionempleado:build:production",
 							"extraWebpackConfig": "webpack.prod.config.js"
 						},
 						"development": {
-							"browserTarget": "expedientes:build:development"
+							"browserTarget": "evaluacionempleado:build:development"
 						}
 					},
 					"defaultConfiguration": "development",
 					"options": {
 						"port": 4200,
 						"publicHost": "http://localhost:4200",
-						"extraWebpackConfig": "webpack.config.js"
+						"extraWebpackConfig": "webpack.config.js",
+						"proxyConfig": "src/proxy.conf.json"
 					}
 				},
 				"extract-i18n": {
 					"builder": "ngx-build-plus:extract-i18n",
 					"options": {
-						"browserTarget": "expedientes:build",
+						"browserTarget": "evaluacionempleado:build",
 						"extraWebpackConfig": "webpack.config.js"
 					}
 				},

@@ -79,6 +79,11 @@ const routes: Routes = [
     .then((m)=> m.EstadoComponent),
      canActivate: [AuthGuard]
   },
+  { path:'Perspectiva', 
+    loadComponent:()=> import('./Views/Components/Pages/perspectivas/perspectivas.component')
+    .then((m)=> m.PerspectivasComponent),
+     canActivate: [AuthGuard]
+  },
   { path:'supervisor-goals', 
     loadComponent:()=> import('./Views/Components/Pages/supervisor-goals/supervisor-goals.component')
     .then((m)=> m.SupervisorGoalsComponent),
@@ -107,8 +112,6 @@ const routes: Routes = [
   },
   { path: 'dashboard', component: DashboardComponent },
   // Add other routes as needed
-  
-
 ];
 
 @NgModule({

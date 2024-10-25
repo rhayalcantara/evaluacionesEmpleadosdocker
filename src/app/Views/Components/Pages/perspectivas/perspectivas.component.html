@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Perspectivas</h5>
+            <div class=" col-md-8 col-lg-8 col-xl-8 my-3 ">                      
+      
+                <!-- <button class="btn  float-end" (click)="filtrar()" ><i class="fa fa-filter"></i></button> -->
+                <button class="btn  float-end" (click)="excel()"><i class="fa fa-file-excel-o"></i></button>
+                <button class="btn  float-end" (click)="pdf()"><i class="fa fa-print"></i></button>
+             
+              </div>  
+              <div class=" col-md-4 col-lg-4 col-xl-4" style="display:inline;">
+                <div class="d-grid gap-2 ">
+                  <button class="btn btn-outline-success" data-toggle="modal" 
+                          data-bs-target="#exampleModal" (click)="agregar()">
+                    Agregar
+                  </button>
+                </div>
+          
+          
+                <div _ngcontent-fha-c7="" class="input-group mb-3">
+                  <input _ngcontent-fha-c7="" aria-describedby="basic-addon2" 
+                        aria-label="Search" class="form-control" placeholder="Search for..."
+                        type="text"
+                        [(ngModel)]="term"
+                        (change)="filtro()" >
+                  <div _ngcontent-fha-c7="" class="input-group-append">
+                    <button _ngcontent-fha-c7="" class="btn btn-primary" type="button" >
+                    <svg role="img" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" width="24" height="24" viewBox="0 0 24 24"
+                      class="svg-inline--fa fa-search fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+          
+                </div>  
+            
+              
+              </div>
+        </div>
+        <div class="card-body">
+            <app-tables 
+            [arraydatos]="perspectivaService.arraymodel"
+            campokey="Id"
+            (accion)="opcion($event)"
+            (paginacambio)="paginacambio($event)"
+            (idtable)="actualizaelidtable($event)" 
+            [campos]="campos"
+            [titulos]="tituloslocal"
+            [term]="term"
+            [totalregistros]="perspectivaService.totalregistros"
+            [currentPage]="perspectivaService.actualpage"
+            [config]="config"
+            
+          ></app-tables>  
+        </div>
+    </div>
+</div>
