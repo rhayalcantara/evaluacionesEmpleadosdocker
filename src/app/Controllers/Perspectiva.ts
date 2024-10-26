@@ -43,7 +43,8 @@ export class Perspectiva {
     public inicializamodelo():IPerspectiva{
       return {
         id: 0,
-        name: "",
+        Nombre: "",
+        planextrategicoid:0,
         peso: 0
       }
     }
@@ -116,7 +117,7 @@ export class Perspectiva {
               let m = this.arraymodel.find(x=>x.id==this.model.id)
               if (m!=undefined){
                 m.id = this.model.id
-                m.name = this.model.name
+                m.Nombre = this.model.Nombre
                 m.peso = this.model.peso
               }
               this.TRegistros.emit(this.totalregistros)
