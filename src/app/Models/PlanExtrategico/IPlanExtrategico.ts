@@ -16,13 +16,13 @@ export interface IPlanExtrategicoCreate{
 }
 export interface IPlan_Anos{
     id: number;
-    PlanExtrategicoId: number;
+    planExtrategicoId: number;
     ano:string
 }
 
 export interface IAspiracion{
     id: number; 
-    planextrategicoid: number;
+    planExtrategicoModelId: number;
     descripcion: string; 
     porcientovalor: string;
     valor:number

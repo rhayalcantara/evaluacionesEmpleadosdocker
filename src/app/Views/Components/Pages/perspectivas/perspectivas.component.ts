@@ -124,7 +124,7 @@ export class PerspectivasComponent implements OnInit {
 
   filtro() {
     if (this.term != '') {
-      this.perspectivaService.arraymodel = this.perspectivaService.arraymodel.filter(x => x.Nombre.includes((this.term.toUpperCase())));
+      this.perspectivaService.arraymodel = this.perspectivaService.arraymodel.filter(x => x.nombre.includes((this.term.toUpperCase())));
     } else {
       this.perspectivaService.getdatos();
     }

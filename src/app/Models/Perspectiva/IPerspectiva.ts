@@ -1,6 +1,6 @@
 export interface IPerspectiva{
     id: number; 
-    planextrategicoid: number;
-    Nombre: string; 
+    planExtrategicoModelId: number;
+    nombre: string; 
     peso: number;
 }

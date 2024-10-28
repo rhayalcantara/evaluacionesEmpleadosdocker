@@ -129,15 +129,15 @@ export class PlanExtrategico implements OnInit {
                         {
                             this.model.id = t.id
                             this.model.planAnos.forEach(element => {
-                                element.PlanExtrategicoId= this.model.id;
+                                element.planExtrategicoId= this.model.id;
                                 this.insertanos(this.model.planAnos) 
                             });
                             this.model.perspectiva.forEach(p => {
-                                p.planextrategicoid = this.model.id
+                                p.planExtrategicoModelId = this.model.id
                                 this.insertperperspectiva(this.model.perspectiva)
                             })
                             this.model.aspiraciones.forEach(p => {
-                                p.planextrategicoid = this.model.id
+                                p.planExtrategicoModelId = this.model.id
                                 this.insertperperspectiva(this.model.perspectiva)
                             })
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");

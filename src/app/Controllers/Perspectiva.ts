@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { IPerspectiva } from '../Models/Perspectiva/IPerspectiva';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
@@ -43,8 +43,8 @@ export class Perspectiva {
     public inicializamodelo():IPerspectiva{
       return {
         id: 0,
-        Nombre: "",
-        planextrategicoid:0,
+        nombre: "",
+        planExtrategicoModelId:0,
         peso: 0
       }
     }
@@ -69,6 +69,18 @@ export class Perspectiva {
         }
       }) 
     }
+
+    public GetsPlan(Planid:number):Observable<IPerspectiva[]> {
+        
+      return  this.Gets().pipe(
+           map((resp: ModelResponse) => {
+               console.log({'las perspertivas':resp})
+               let apiraciones:IPerspectiva[] = resp.data; // Store the fetched aspirations in the local array
+               return apiraciones.filter(a => a.planExtrategicoModelId === Planid);
+           })
+       )
+   }
+
 
     public Gets():Observable<ModelResponse> {
       console.log(this.rutaapi)
@@ -117,7 +129,7 @@ export class Perspectiva {
               let m = this.arraymodel.find(x=>x.id==this.model.id)
               if (m!=undefined){
                 m.id = this.model.id
-                m.Nombre = this.model.Nombre
+                m.nombre = this.model.nombre
                 m.peso = this.model.peso
               }
               this.TRegistros.emit(this.totalregistros)

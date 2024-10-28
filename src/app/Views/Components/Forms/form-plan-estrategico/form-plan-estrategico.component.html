@@ -81,7 +81,7 @@
             <tbody>
               <tr *ngFor="let perspectiva of perspectivas; let i = index">
                 <td>
-                  <input type="text" class="form-control" [(ngModel)]="perspectiva.Nombre" [name]="'perspectivaName' + i">
+                  <input type="text" class="form-control" [(ngModel)]="perspectiva.nombre" [name]="'perspectivaName' + i">
                 </td>
                 <td>
                   <input type="number" class="form-control" [(ngModel)]="perspectiva.peso" [name]="'perspectivaPeso' + i">
@@ -99,7 +99,7 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2">
-      <button type="submit" class="btn btn-primary">Agregar</button>
+      <button type="submit" class="btn btn-primary">Grabar</button>
       <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
     </div>
   </form>
