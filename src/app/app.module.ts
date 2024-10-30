@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
+import { FromObjetivoExtrategicoComponent } from './Views/Components/Forms/from-objetivo-extrategico/from-objetivo-extrategico.component';
 
 // Import other components as needed
 
@@ -14,7 +15,7 @@ import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
   declarations: [
     AppComponent,
     DashboardComponent,
-    NavmenuComponent,
+    NavmenuComponent
     // Declare other components here
   ],
   imports: [

@@ -72,6 +72,7 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
              
              let apiraciones:IPlan_Anos[] = resp.data; // Store the fetched aspirations in the local array
              console.log({'los anos del plan':resp,id:Planid,aspiracion:apiraciones})
+             this.TRegistros.emit(this.totalregistros);
              return apiraciones.filter(a => a.planExtrategicoId === Planid);
          })
      )

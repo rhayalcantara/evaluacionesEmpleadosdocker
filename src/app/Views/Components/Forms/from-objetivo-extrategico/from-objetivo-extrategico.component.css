@@ -1,0 +1,217 @@
+/* objetivo-estrategico.component.css */
+.container {
+  max-width: 90%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ... (previous styles remain the same) ... */
+
+.table-section {
+  margin-bottom: 2rem;
+}
+
+.table-container {
+  /* Enable both horizontal and vertical scrolling */
+  overflow: auto;
+  max-height: 200px; /* Set maximum height for vertical scroll */
+  
+  /* Scrollbar styling for Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #4a90e2 #f0f0f0;
+  
+  /* Add smooth shadow indicators for scroll */
+  background:
+      linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Webkit scrollbar styling - horizontal */
+.table-container::-webkit-scrollbar {
+  height: 8px;
+  width: 8px; /* Width for vertical scrollbar */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #4a90e2;
+  border-radius: 4px;
+}
+
+/* Webkit scrollbar styling - vertical */
+.table-container::-webkit-scrollbar-thumb:vertical {
+  min-height: 30px; /* Minimum height for vertical scroll thumb */
+}
+
+/* Webkit scrollbar corner */
+.table-container::-webkit-scrollbar-corner {
+  background: #f0f0f0;
+}
+
+.table {
+  width: 100%;
+  min-width: 800px; /* Ensure minimum width to prevent content squishing */
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+/* Keep table header visible during scroll */
+.table thead {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 1;
+}
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+  }
+  
+  .form-container {
+    width: 100%;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #4a4a4a;
+  }
+  
+  .form-textarea, .form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+  
+  .form-textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .form-textarea:focus, .form-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  
+  .table-section {
+    margin-bottom: 2rem;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  .table th, .table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+  
+  .table-select, .table-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+  
+  .checkbox-cell {
+    text-align: center;
+  }
+  
+  .table-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+  }
+  
+  .btn-primary {
+    background-color: #4a90e2;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #357abd;
+  }
+  
+  .btn-secondary {
+    background-color: #e2e2e2;
+    color: #4a4a4a;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #d1d1d1;
+  }
+  
+ /* Responsive adjustments */
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+      margin: 1rem;
+      padding: 1rem;
+  }
+
+  .table-container {
+      margin: 0 -1rem;
+      padding: 0 1rem;
+      max-height: 350px; /* Slightly smaller height on mobile */
+  }
+}
+  

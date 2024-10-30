@@ -27,7 +27,11 @@ const routes: Routes = [
     .then((m)=> m.PlanEstrategicoComponent),
     canActivate: [AuthGuard]
   },
-  // ... rest of the routes remain unchanged
+  { path:'ObjetivoEstrategico', 
+    loadComponent:()=> import('./Views/Components/Pages/objetivo-estrategico/objetivo-estrategico.component')
+    .then((m)=> m.ObjetivoEstrategicoComponent),
+    canActivate: [AuthGuard]
+  },
   { path:'Departamento', 
     loadComponent:()=> import('./Views/Components/Pages/departamentos/departamentos.component')
     .then((m)=> m.DepartamentosComponent),

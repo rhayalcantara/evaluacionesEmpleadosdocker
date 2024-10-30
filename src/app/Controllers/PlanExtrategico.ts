@@ -56,9 +56,10 @@ export class PlanExtrategico implements OnInit {
     }
 
     public getdatos() {
-        this.Gets()
+         this.Gets()
             .subscribe({
                 next: (rep: ModelResponse) => {
+                    console.log('los planes',rep)
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
