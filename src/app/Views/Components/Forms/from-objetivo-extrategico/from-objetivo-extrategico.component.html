@@ -41,19 +41,40 @@
       </div>
 
       <!-- Objetivo por Años -->
-      <div class="table-section">
+
+     <!-- <div class="table-section">
         <div class="d-flex justify-content-between align-items-center">
           <h2 class="subtitle">KRIs por Años</h2>
           <button type="button" class="btn btn-primary" (click)="agregarFila()">
             <i class="fas fa-plus"></i> Agregar
           </button>
-        </div>
+        </div> -->
+        <div class="table-section">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="subtitle">KRIs por Años</h2>
+          
+          <!-- Campos de encabezado -->
+          <div class="form-header-fields" formGroupName="nuevoKRI">
+            <div class="form-group">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" formControlName="descripcion">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Ponderación</label>
+              <input type="number" class="form-control" formControlName="ponderacion">
+            </div>
+          </div>
 
+          <button type="button" class="btn btn-primary" (click)="agregarFila()">
+            Agregar
+          </button>
+        </div>
+      
         <div class="table-container">
           <table class="table">
             <thead>
-              <tr>
-                <th>Descripcion</th>
+              <tr>                
                 <th>Año</th>
                 <th>Porciento/Valor</th>
                 <th>Valor</th>
@@ -63,10 +84,10 @@
               </tr>
             </thead>
             <tbody formArrayName="objetivosPorAnos">
-              <tr *ngFor="let objetivo of objetivosFormArray.controls; let i = index" [formGroupName]="i">
-                <td>
+              <tr *ngFor="let objetivo of KriFormArray.controls; let i = index" [formGroupName]="i">
+              <!--  <td>
                   <input type="text" class="table-input" formControlName="descripcion">
-                </td>
+                </td> -->
                 <td>
                   <select class="table-select" formControlName="plan_anosid">
                     <option selected value="">Selecione un año</option>
@@ -96,9 +117,10 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-  
+        </div> 
+      </div> 
+
+
       <!-- Botones -->
       <div class="button-container">
         <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>

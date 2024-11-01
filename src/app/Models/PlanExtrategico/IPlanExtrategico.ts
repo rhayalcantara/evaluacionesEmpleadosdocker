@@ -48,3 +48,13 @@ export interface IObjetivoExtrategicoAno {
     objetivoEstrategico: IObjetivoEstrategico 
     planano: IPlan_Anos
 }
+
+export interface IKriAno {
+    id: number
+    kriId: number
+    plan_AnosId: number
+    porcientoValor: string
+    valor: number
+    inverso: boolean
+    logro: number
+  }

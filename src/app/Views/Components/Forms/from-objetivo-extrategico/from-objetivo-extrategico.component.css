@@ -199,7 +199,37 @@
   .btn-secondary:hover {
     background-color: #d1d1d1;
   }
-  
+  /* Add new styles for the header fields */
+.form-header-fields {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.form-header-fields .form-group {
+  flex: 1;
+}
+
+.form-header-fields input {
+  width: 90%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-header-fields input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+/* Update table styles to remove description column */
+.table {
+  width: 100%;
+  min-width: 700px; /* Reduced from 800px since we removed one column */
+}
  /* Responsive adjustments */
 /* Responsive adjustments */
 @media (max-width: 768px) {

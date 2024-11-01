@@ -1,16 +1,18 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ObjetivoEstrategico } from 'src/app/Controllers/ObjetivoEstrategico';
 import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
-import { IObjetivoEstrategico, IObjetivoExtrategicoAno, IPlan_Anos, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
+import { IKriAno, IObjetivoEstrategico, IObjetivoExtrategicoAno, IPlan_Anos, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 import { Perspectiva } from 'src/app/Controllers/Perspectiva';
 import { IPerspectiva } from 'src/app/Models/Perspectiva/IPerspectiva';
 import { PlanAnos } from 'src/app/Controllers/PlanAnos';
 import { ObjetivoExtrategicoAno } from 'src/app/Controllers/ObjetivoExtrategicoAno';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { KriAno } from 'src/app/Controllers/KriAno';
+import { FormKriAnoComponent } from '../form-kri-ano/form-kri-ano.component';
 
 @Component({
   selector: 'app-from-objetivo-extrategico',
@@ -20,7 +22,7 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
   imports: [CommonModule, FormsModule, MatDialogModule,ReactiveFormsModule]
 })
 export class FromObjetivoExtrategicoComponent implements OnInit {
-objetivosPorAnos:IObjetivoExtrategicoAno[]=[] ;
+  KriPorAnos:IKriAno[]=[] ;
 
 
   public planesEstrategicos: IPlanExtrategico[] = [];
@@ -37,10 +39,11 @@ objetivosPorAnos:IObjetivoExtrategicoAno[]=[] ;
     private planestrategicocontroller:PlanExtrategico,
     private PrespectivasController:Perspectiva,
     private plananosController:PlanAnos,
-    private objetivoestragicoAno: ObjetivoExtrategicoAno,
+    private kriAno: KriAno,
     public dialogRef: MatDialogRef<FromObjetivoExtrategicoComponent>,
     private cd: ChangeDetectorRef, 
     private ServiceComunicacion: ComunicacionService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { model: IObjetivoEstrategico }
   ) {
     this.objetivoEstrategicoService.model=this.objetivoEstrategicoService.inicializamodelo()
@@ -48,7 +51,7 @@ objetivosPorAnos:IObjetivoExtrategicoAno[]=[] ;
       descripcion:[this.objetivoEstrategicoService.model.descripcion, Validators.required],
       planExtrategicoModelId: [this.planExtrategicoModelId, Validators.required],
       perspectivaId: [this.perspectivaId, Validators.required],
-      objetivosPorAnos: this.fb.array([])
+      KriPorAnos: this.fb.array([])
     })
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
@@ -108,67 +111,56 @@ objetivosPorAnos:IObjetivoExtrategicoAno[]=[] ;
     }
     //this.Formgrup.patchValue(this.objetivoEstrategicoService.model);
   }
-  get objetivosFormArray() {
-    return this.Formgrup.get('objetivosPorAnos') as FormArray;
+  get KriFormArray() {
+    return this.Formgrup.get('KriPorAnos') as FormArray;
   }
   crearObjetivoFormGroup() {
     return this.fb.group({
       id:[0],
-      descripcion: [''],
       plan_anosid: [0],
-      porcientovalor: ['Porciento'],
+      porcientoValor: ['Porciento'],
       valor: [0],
       inverso: [false],
       logro: [0]
     });
   }
-  crearObjetivoFormGroupwithdatos (datos: IObjetivoExtrategicoAno) {
+  crearObjetivoFormGroupwithdatos (datos: IKriAno) {
     console.log('kri',datos)
     return this.fb.group({
-      id:datos.id,
-      descripcion: datos.descripcion,
+      id:datos.id,     
       plan_anosid:datos.plan_AnosId,
-      porcientovalor: datos.porcientovalor,
+      porcientovalor: datos.porcientoValor,
       valor: datos.valor,
       inverso: datos.inverso,
       logro: datos.logro
     });
   }
   eliminarFila(arg0: any) {
-    this.objetivosPorAnos.splice(arg0, 1);
-    this.objetivosFormArray.removeAt(arg0);
+    this.KriPorAnos.splice(arg0, 1);
+    this.KriFormArray.removeAt(arg0);
 }
 
 agregarFila() {
-  let obano:IObjetivoExtrategicoAno={
+  let obano:IKriAno={
     id: 0,
-    objetivoExtrategicoId: 0,
+    kriId: 0,
     plan_AnosId: 0,
-    porcientovalor: '',
+    porcientoValor: '',
     valor: 0,
     inverso: false,
-    logro: 0,
-    objetivoEstrategico: {
-      id: 0,
-      perspectivaId: 0,
-      descripcion: '',
-      perspectiva: {
-        id: 0,
-        planExtrategicoModelId: 0,
-        nombre: '',
-        peso: 0
-      }
-    },
-    planano: {
-      id: 0,
-      planExtrategicoId: 0,
-      ano: ''
-    },
-    descripcion: ''
+    logro: 0
   }
   
-  this.objetivosPorAnos.push(obano);
-  this.objetivosFormArray.push(this.crearObjetivoFormGroup());
+  this.KriPorAnos.push(obano);
+  this.KriFormArray.push(this.crearObjetivoFormGroup());
+  const dialogRef = this.dialog.open(FormKriAnoComponent, {
+    width: '800px', data: {  }
+  });
+  dialogRef.afterClosed().subscribe((rep) => {
+    
+  });
+
+
 }
   onplanSelect(event: Event) {
     // cuando el plan cambia, se buscan las perspectivas de ese plan
@@ -194,12 +186,12 @@ agregarFila() {
         console.log('consiguio los anos',this.plananos)
         if(this.objetivoEstrategicoService.model.id !== 0) {
           console.log('anos activos',this.plananos)
-            // buscar los objetivosPorAnos 
-            this.objetivoestragicoAno.GetByObjivo(this.objetivoEstrategicoService.model.id).subscribe({
+            // buscar los kriPorAnos 
+            this.kriAno.getKriAnosPorPlanAno(this.objetivoEstrategicoService.model.id).subscribe({
               next: (objetivos) => {
-                this.objetivosPorAnos = objetivos;
-                this.objetivosPorAnos.forEach(obj => {
-                  this.objetivosFormArray.push(this.crearObjetivoFormGroupwithdatos(obj));                  
+                this.KriPorAnos = objetivos;
+                this.KriPorAnos.forEach(obj => {
+                  this.KriFormArray.push(this.crearObjetivoFormGroupwithdatos(obj));                  
                 });
                 this.cd.detectChanges();
               },
@@ -227,18 +219,18 @@ agregarFila() {
     this.objetivoEstrategicoService.model.descripcion=this.Formgrup.get('descripcion')?.value
     this.objetivoEstrategicoService.model.perspectivaId =this.Formgrup.get('perspectivaId')?.value
 
-    this.objetivosPorAnos = this.objetivosFormArray.value
+    this.KriPorAnos = this.KriFormArray.value
     
     // actualiza el objetivoExtrategicoId con this.objetivoEstrategicoService.model.id
     if (await this.objetivoEstrategicoService.grabar()) {
-      this.objetivosPorAnos.map(obj => {
-        obj.objetivoExtrategicoId=this.objetivoEstrategicoService.model.id;
+      this.KriPorAnos.map(obj => {
+        obj.kriId=this.objetivoEstrategicoService.model.id;
       })
       // manda a grabar el array 
-      console.log('objetivoestragicoAno a grabar',this.objetivosPorAnos )
-      this.objetivoestragicoAno.insertarray(this.objetivosPorAnos).subscribe({
-        next: (response:IObjetivoExtrategicoAno[]) => {
-        this.objetivosPorAnos = response
+      console.log('objetivoestragicoAno a grabar',this.KriPorAnos )
+      this.kriAno.insertarray(this.KriPorAnos).subscribe({
+        next: (response:IKriAno[]) => {
+        this.KriPorAnos = response
       }
       })
       this.dialogRef.close(this.objetivoEstrategicoService.model);
