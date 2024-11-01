@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ObjetivoEstrategico } from 'src/app/Controllers/ObjetivoEstrategico';
 import { FromObjetivoExtrategicoComponent } from '../../Forms/from-objetivo-extrategico/from-objetivo-extrategico.component';
+import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
 
 @Component({
   selector: 'app-objetivo-estrategico',
@@ -98,7 +99,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   abrirmodalzona(t: MatDialog, p: ObjetivoEstrategico) {
     p.model = p.inicializamodelo();
 
-    const dialogRef = t.open(FromObjetivoExtrategicoComponent, {
+    const dialogRef = t.open(FormKriComponent, {
       width: '90%', data: { model: p.model }
     });
     dialogRef.afterClosed().subscribe((rep: IObjetivoEstrategico) => {
