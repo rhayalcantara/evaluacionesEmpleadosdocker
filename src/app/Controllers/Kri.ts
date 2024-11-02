@@ -8,7 +8,7 @@ import { IKri } from "../Models/Kri/IKri";
     providedIn: 'root'
 })
 export class Kri implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/Kri'
+    rutaapi: string = this.datos.URL + '/api/Kris'
     titulomensage: string = 'KRI'
     public model: IKri = this.inicializamodelo()
     public titulos = [
@@ -81,6 +81,7 @@ export class Kri implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
+        console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 

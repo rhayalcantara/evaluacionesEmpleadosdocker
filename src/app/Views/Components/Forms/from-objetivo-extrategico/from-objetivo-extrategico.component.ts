@@ -13,13 +13,16 @@ import { ObjetivoExtrategicoAno } from 'src/app/Controllers/ObjetivoExtrategicoA
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { KriAno } from 'src/app/Controllers/KriAno';
 import { FormKriAnoComponent } from '../form-kri-ano/form-kri-ano.component';
+import { KrisComponent } from "../../Pages/kris/kris.component";
+
 
 @Component({
   selector: 'app-from-objetivo-extrategico',
   templateUrl: './from-objetivo-extrategico.component.html',
   styleUrls: ['./from-objetivo-extrategico.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule,ReactiveFormsModule]
+  imports: [CommonModule, FormsModule,
+    MatDialogModule, ReactiveFormsModule, KrisComponent]
 })
 export class FromObjetivoExtrategicoComponent implements OnInit {
   KriPorAnos:IKriAno[]=[] ;

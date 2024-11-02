@@ -9,6 +9,7 @@ import { PeriodosEvaluacionComponent } from './Views/Components/Pages/periodos-e
 import { EvaluationPeriodsComponent } from './Views/Components/Pages/evaluation-periods/evaluation-periods.component';
 import { GrupoCompetenciasComponent } from './Views/Components/Pages/grupo-competencias/grupo-competencias.component';
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
+import { KrisComponent } from './Views/Components/Pages/kris/kris.component';
 
 const routes: Routes = [
   {
@@ -107,7 +108,8 @@ const routes: Routes = [
     .then((m)=> m.ExcepcionSupervisorInmediatoComponent),
     canActivate: [AuthGuard]
   },
-  { path: 'dashboard', component: DashboardComponent }
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'kri', component: KrisComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

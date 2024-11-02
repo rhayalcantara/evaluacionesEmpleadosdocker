@@ -1,0 +1,39 @@
+<div class="container">
+  <h2 class="title">KRIS</h2>
+  
+  <div class="actions-top">
+    <button class="btn-add" (click)="onAdd()">
+      <i class="fas fa-plus"></i> Nuevo KRI
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Descripcion</th>
+          <th>Ponderacion</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let kri of kris">
+          <td>{{kri.descripcion}}</td>
+          <td>{{kri.ponderacion}}</td>
+          <td class="actions">
+            <button class="btn-delete" (click)="onDelete(kri)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
+            <button class="btn-edit" (click)="onEdit(kri)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-years" (click)="onViewYears(kri)">
+              Ver los Años
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

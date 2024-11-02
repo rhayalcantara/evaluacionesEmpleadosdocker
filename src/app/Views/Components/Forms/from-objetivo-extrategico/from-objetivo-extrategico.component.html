@@ -49,76 +49,8 @@
             <i class="fas fa-plus"></i> Agregar
           </button>
         </div> -->
-        <div class="table-section">
-        <div class="d-flex justify-content-between align-items-center">
-          <h2 class="subtitle">KRIs por Años</h2>
-          
-          <!-- Campos de encabezado -->
-          <div class="form-header-fields" formGroupName="nuevoKRI">
-            <div class="form-group">
-              <label class="form-label">Descripción</label>
-              <input type="text" class="form-control" formControlName="descripcion">
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Ponderación</label>
-              <input type="number" class="form-control" formControlName="ponderacion">
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary" (click)="agregarFila()">
-            Agregar
-          </button>
-        </div>
-      
-        <div class="table-container">
-          <table class="table">
-            <thead>
-              <tr>                
-                <th>Año</th>
-                <th>Porciento/Valor</th>
-                <th>Valor</th>
-                <th>Inverso?</th>
-                <th>Logro</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody formArrayName="objetivosPorAnos">
-              <tr *ngFor="let objetivo of KriFormArray.controls; let i = index" [formGroupName]="i">
-              <!--  <td>
-                  <input type="text" class="table-input" formControlName="descripcion">
-                </td> -->
-                <td>
-                  <select class="table-select" formControlName="plan_anosid">
-                    <option selected value="">Selecione un año</option>
-                    <option *ngFor="let p of plananos" [value]="p.id">{{ p.ano }}</option>                       
-                  </select>
-                </td>
-                <td>
-                  <select class="table-select" formControlName="porcientovalor">
-                    <option>Porciento</option>
-                    <option>Valor</option>
-                  </select>
-                </td>
-                <td>
-                  <input type="number" class="table-input" formControlName="valor">
-                </td>
-                <td class="checkbox-cell">
-                  <input type="checkbox" class="table-checkbox" formControlName="inverso">
-                </td>
-                <td>
-                  <input type="text" class="table-input" formControlName="logro">
-                </td>
-                <td>
-                  <button type="button" class="btn btn-danger" (click)="eliminarFila(i)">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div> 
-      </div> 
+        <app-kris></app-kris>
+     
 
 
       <!-- Botones -->
