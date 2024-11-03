@@ -37,7 +37,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Changed from 20px to 0 to remove gap before paginator */
   background-color: white;
 }
 
@@ -90,6 +90,13 @@ button:hover {
 
 button i {
   margin-right: 5px;
+}
+
+/* Paginator styles */
+mat-paginator {
+  background-color: white;
+  border-top: none;
+  margin-top: 0;
 }
 
 /* Responsive adjustments */

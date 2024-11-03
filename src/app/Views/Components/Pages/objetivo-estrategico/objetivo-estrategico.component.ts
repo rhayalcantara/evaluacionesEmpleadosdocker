@@ -99,7 +99,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   abrirmodalzona(t: MatDialog, p: ObjetivoEstrategico) {
     p.model = p.inicializamodelo();
 
-    const dialogRef = t.open(FormKriComponent, {
+    const dialogRef = t.open(FromObjetivoExtrategicoComponent, {
       width: '90%', data: { model: p.model }
     });
     dialogRef.afterClosed().subscribe((rep: IObjetivoEstrategico) => {

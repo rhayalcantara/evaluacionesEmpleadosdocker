@@ -1,26 +1,38 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Kri } from 'src/app/Controllers/Kri';
 import { IKri } from 'src/app/Models/Kri/IKri';
 import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-kris',
-  standalone:true,
-  imports:[CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule],
   templateUrl: './kris.component.html',
   styleUrls: ['./kris.component.css']
 })
 export class KrisComponent implements OnInit, OnDestroy {
+  @Input() ObjectivoEstrategicoId: number = 0;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
   kris: IKri[] = [];
+  displayedKris: IKri[] = [];
   showForm = false;
   private subscription: Subscription;
 
-  constructor(private kriService: Kri,
-              private dialogmat:MatDialog
+  // Pagination settings
+  pageSize = 10;
+  pageSizeOptions = [5, 10, 25, 50];
+  pageIndex = 0;
+  totalItems = 0;
+
+  constructor(
+    private kriService: Kri,
+    private dialogmat: MatDialog
   ) {
     this.subscription = this.kriService.TRegistros.subscribe(() => {
       this.loadKris();
@@ -41,9 +53,15 @@ export class KrisComponent implements OnInit, OnDestroy {
   loadKris() {
     this.kriService.Gets().subscribe({
       next: (response) => {
-        console.log('los kris',response);
-        
+        console.log('los kris', response);
         this.kris = response.data;
+        
+        if (this.ObjectivoEstrategicoId != 0) {
+          this.kris = this.kris.filter(kri => kri.objetivoExtrategicoId === this.ObjectivoEstrategicoId);
+        }
+        
+        this.totalItems = this.kris.length;
+        this.updateDisplayedKris();
       },
       error: (error) => {
         console.error('Error loading KRIs:', error);
@@ -51,10 +69,24 @@ export class KrisComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateDisplayedKris() {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.displayedKris = this.kris.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updateDisplayedKris();
+  }
+
   onAdd() {
     this.kriService.model = this.kriService.inicializamodelo();
     this.showForm = true;
-    this.dialogmat.open(FormKriComponent);
+    this.kriService.model.objetivoExtrategicoId = this.ObjectivoEstrategicoId;
+    // abrir el formulario con el modelo inicializado
+    this.abrirformulario(this.kriService.model);
   }
 
   onDelete(kri: IKri) {
@@ -65,9 +97,23 @@ export class KrisComponent implements OnInit, OnDestroy {
     }
   }
 
+  abrirformulario(kri: IKri) {
+    const dialogRef = this.dialogmat.open(FormKriComponent, {
+      width: '800px',
+      data: { model: kri }
+    });
+    dialogRef.afterClosed().subscribe((result: IKri) => {
+      if (result) {
+        this.loadKris();
+      }
+    });
+  }
+
   onEdit(kri: IKri) {
     this.kriService.model = { ...kri };
     this.showForm = true;
+    // abril el formulario con el kri recibido
+    this.abrirformulario(kri);
   }
 
   onViewYears(kri: IKri) {

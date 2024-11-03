@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { IKri } from 'src/app/Models/Kri/IKri';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { CommonModule } from '@angular/common';
+import { Kri } from 'src/app/Controllers/Kri';
+
 
 @Component({
   selector: 'app-form-kri',
@@ -19,28 +21,41 @@ export class FormKriComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormKriComponent>,
+    public kriservice:Kri,
     @Inject(MAT_DIALOG_DATA) public data: { model: IKri },
     private datosService: DatosServiceService
   ) {
     this.fg = this.fb.group({
-      id: [''],
-      objetivoExtrategicoId: ['', Validators.required],
+      id: [0],
+      objetivoExtrategicoId: [0],
       descripcion: ['', Validators.required],
       ponderacion: ['', [Validators.required, Validators.min(0), Validators.max(100)]]
     });
   }
 
   ngOnInit(): void {
+    
     if (this.data.model.id) {
-      this.titulo = 'Editar KRI';
-      this.fg.patchValue(this.data.model);
+      this.titulo = 'Editar KRI';            
     }
+    this.fg.patchValue(this.data.model);
+    console.log(this.fg.value)
   }
 
   grabar(): void {
     if (this.fg.valid) {
-      const kri: IKri = this.fg.value;
-      this.dialogRef.close(kri);
+      const kri: IKri = this.fg.value;      
+      console.log(kri,this.fg.value);
+      this.kriservice.model = kri;
+      this.kriservice.grabar().then(() => {
+               this.datosService.showMessage('KRI guardado exitosamente', 'Éxito', 'success');
+      }).catch((error) => {
+               this.datosService.showMessage('Error al guardar el KRI', 'Error', 'error');
+      }).finally(() => {
+               // Optional: Add any cleanup or final actions here
+               this.dialogRef.close(kri);
+      })
+      //this.dialogRef.close(kri);
     } else {
       this.datosService.showMessage('Por favor, complete todos los campos requeridos.', 'Error', 'error');
     }
