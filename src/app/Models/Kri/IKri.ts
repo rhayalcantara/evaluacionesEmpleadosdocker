@@ -6,3 +6,13 @@ export interface IKri {
     ponderacion: number;
 
 }
+
+export interface IKriAno {
+    id: number
+    kriId: number
+    plan_AnosId: number
+    porcientoValor: string
+    valor: number
+    inverso: boolean
+    logro: number
+  }

@@ -11,6 +11,14 @@
         </div> -->
 
         <div class="mb-4">
+          <label for="Ano" class="block text-gray-700 text-sm font-bold mb-2">Año</label>         
+          <select class="form-control" id="porcientoValor" formControlName="plan_AnosId">
+            <option selected value="0">Selecione un año</option>
+            <option *ngFor="let ano of Anos" [value]="ano.id">{{ano.ano}}</option>            
+          </select>
+        </div>
+
+        <div class="mb-4">
           <label for="porcientoValor" class="block text-gray-700 text-sm font-bold mb-2">Porciento Valor</label>
          <!--  <input type="text" class="form-control" id="porcientoValor" formControlName="porcientoValor" placeholder="Ingrese la ponderación"> -->
           <select class="form-control" id="porcientoValor" formControlName="porcientovalor">

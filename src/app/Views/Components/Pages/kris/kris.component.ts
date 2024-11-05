@@ -3,10 +3,12 @@ import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Kri } from 'src/app/Controllers/Kri';
-import { IKri } from 'src/app/Models/Kri/IKri';
+import { IKri, IKriAno } from 'src/app/Models/Kri/IKri';
 import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
+import { KrisanosComponent } from '../krisanos/krisanos.component';
+import { IPlan_Anos } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 
 @Component({
   selector: 'app-kris',
@@ -17,6 +19,7 @@ import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/p
 })
 export class KrisComponent implements OnInit, OnDestroy {
   @Input() ObjectivoEstrategicoId: number = 0;
+  @Input() anos:IPlan_Anos[]=[]
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   
   kris: IKri[] = [];
@@ -119,5 +122,15 @@ export class KrisComponent implements OnInit, OnDestroy {
   onViewYears(kri: IKri) {
     // This functionality will be implemented later
     console.log('View years for KRI:', kri);
+    const dialogRef = this.dialogmat.open(KrisanosComponent, {
+      width: '800px',
+      data: { model: kri,anos:this.anos}
+    });
+    dialogRef.afterClosed().subscribe((result: IKriAno) => {
+      if (result) {
+        //this.loadKris();
+      }
+    });
+    //KrisanosComponent
   }
 }

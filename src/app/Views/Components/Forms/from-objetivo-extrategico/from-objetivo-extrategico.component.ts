@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angu
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ObjetivoEstrategico } from 'src/app/Controllers/ObjetivoEstrategico';
 import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
-import { IKriAno, IObjetivoEstrategico, IObjetivoExtrategicoAno, IPlan_Anos, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
+import { IObjetivoEstrategico, IObjetivoExtrategicoAno, IPlan_Anos, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 import { Perspectiva } from 'src/app/Controllers/Perspectiva';
 import { IPerspectiva } from 'src/app/Models/Perspectiva/IPerspectiva';
 import { PlanAnos } from 'src/app/Controllers/PlanAnos';
@@ -14,6 +14,7 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { KriAno } from 'src/app/Controllers/KriAno';
 import { FormKriAnoComponent } from '../form-kri-ano/form-kri-ano.component';
 import { KrisComponent } from "../../Pages/kris/kris.component";
+import { IKriAno } from 'src/app/Models/Kri/IKri';
 
 
 @Component({

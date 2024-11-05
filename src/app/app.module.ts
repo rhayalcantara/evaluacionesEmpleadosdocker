@@ -10,9 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
-import { FromObjetivoExtrategicoComponent } from './Views/Components/Forms/from-objetivo-extrategico/from-objetivo-extrategico.component';
-import { KrisComponent } from './Views/Components/Pages/kris/kris.component';
-import { FormKriComponent } from './Views/Components/Forms/form-kri/form-kri.component';
+
 
 @NgModule({
   declarations: [
@@ -28,8 +26,7 @@ import { FormKriComponent } from './Views/Components/Forms/form-kri/form-kri.com
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatPaginatorModule,
-    FormKriComponent
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,32 +2,27 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IKriAno } from "../Models/Kri/IKri";
-
+import { IKpi } from "../Models/Kpi/IKpi";
 
 @Injectable({
     providedIn: 'root'
 })
-export class KriAno implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/KriAnos'
-    titulomensage: string = 'KRI Año'
-    
-    public model: IKriAno = this.inicializamodelo()
+export class Kpi implements OnInit {
+    rutaapi: string = this.datos.URL + '/api/Kpis'
+    titulomensage: string = 'KPI'
+    public model: IKpi = this.inicializamodelo()
     public titulos = [
         { kriId: 'KRI ID' },
-        { planAno: 'Plan Año' },
-        { porcientoValor: 'Porcentaje Valor' },
-        { valor: 'Valor' },
-        { inverso: 'Inverso' },
-        { logro: 'Logro' }
+        { descripcion: 'Descripción' },
+        { valor: 'Valor' }
     ]
 
-    public estado: string = ''
+    public estado: string = '`'
     public totalregistros: number = 0
     public actualpage: number = 1
     public pagesize: number = 10
     public filtro: string = ''
-    public arraymodel: IKriAno[] = []
+    public arraymodel: IKpi[] = []
 
     public operationSuccessful: boolean = false;
     @Output() TRegistros = new EventEmitter<number>();
@@ -44,15 +39,12 @@ export class KriAno implements OnInit {
         this.getdatos()
     }
 
-    public inicializamodelo(): IKriAno {
+    public inicializamodelo(): IKpi {
         return {
             id: 0,
             kriId: 0,
-            plan_AnosId: 0,
-            porcientoValor: '',
-            valor: 0,
-            inverso: false,
-            logro: 0
+            descripcion: '',
+            valor: 0
         }
     }
 
@@ -68,14 +60,11 @@ export class KriAno implements OnInit {
             })
     }
 
-    public insertarray(objeAnos:IKriAno[]):Observable<IKriAno[]>{
-        return this.datos.insertardatos<IKriAno[]>(this.rutaapi+`/bulk`,objeAnos)
-      }
-    public getKriAnosPorPlanAno(planAnoId: number): Observable<IKriAno[]> {
+    public getKpiPorKri(kriId: number): Observable<IKpi[]> {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
-                let kriAnos: IKriAno[] = rep.data;
-                return kriAnos.filter(x => x.plan_AnosId == planAnoId);
+                let kpis: IKpi[] = rep.data;
+                return kpis.filter(x => x.kriId == kriId);
             })
         );
     }
@@ -92,23 +81,24 @@ export class KriAno implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
+        console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
-    public Get(id: string): Observable<IKriAno> {
-        return this.datos.getbyid<IKriAno>(this.rutaapi + `/${id}`)
+    public Get(id: string): Observable<IKpi> {
+        return this.datos.getbyid<IKpi>(this.rutaapi + `/${id}`)
     }
 
     public GetCount(): Observable<number> {
         return this.datos.getdatoscount(this.rutaapi + `/count`)
     }
 
-    public insert(obj: IKriAno): Observable<IKriAno> {
-        return this.datos.insertardatos<IKriAno>(this.rutaapi, obj);
+    public insert(obj: IKpi): Observable<IKpi> {
+        return this.datos.insertardatos<IKpi>(this.rutaapi, obj);
     }
 
-    public Update(obj: IKriAno): Observable<IKriAno> {
-        return this.datos.updatedatos<IKriAno>(this.rutaapi + `/${obj.id}`, obj);
+    public Update(obj: IKpi): Observable<IKpi> {
+        return this.datos.updatedatos<IKpi>(this.rutaapi + `/${obj.id}`, obj);
     }
 
     public async grabar(): Promise<boolean> {
@@ -116,7 +106,7 @@ export class KriAno implements OnInit {
             if (this.model.id == 0) {
                 // inserta el registro
                 await firstValueFrom(this.insert(this.model)).then(
-                    (rep: IKriAno) => {
+                    (rep: IKpi) => {
                         firstValueFrom(this.Get(rep.id.toString())).then(t => {
                             this.model = t
                         })
@@ -129,9 +119,9 @@ export class KriAno implements OnInit {
                     }
                 );
             } else {
-                // actualiza el registro
+                // actualiza el registro            
                 await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IKriAno) => {
+                    (rep: IKpi) => {
                         this.model = rep;
                         this.TRegistros.emit(this.totalregistros)
                         resolve(true);

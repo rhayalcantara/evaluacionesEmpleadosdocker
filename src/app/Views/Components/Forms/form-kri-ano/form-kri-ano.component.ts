@@ -4,8 +4,11 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { KriAno } from 'src/app/Controllers/KriAno';
-import { IKriAno } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
+
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { IKriAno } from 'src/app/Models/Kri/IKri';
+import { PlanAnos } from 'src/app/Controllers/PlanAnos';
+import { IPlan_Anos } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 
 @Component({
   selector: 'app-form-kri-ano',
@@ -15,9 +18,7 @@ import { DatosServiceService } from 'src/app/Services/datos-service.service';
   styleUrls: ['./form-kri-ano.component.css']
 })
 export class FormKriAnoComponent implements OnInit {
-  cancelar() {
-    this.dialogRef.close();
-  }
+
 
   model: IKriAno = {
     id: 0,
@@ -28,7 +29,7 @@ export class FormKriAnoComponent implements OnInit {
     inverso: false,
     logro: 0
   };
-
+  Anos:IPlan_Anos[]=[]
   public fg: FormGroup = new FormGroup({});
   public campos: string[] = [];
 
@@ -40,6 +41,7 @@ export class FormKriAnoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.Anos = this.data.anos
     this.model = this.data.model;
     console.log({model: this.model});
     this.kriAnoController.titulos.map((x: string|any) => {
@@ -50,7 +52,7 @@ export class FormKriAnoComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.model.kriId = this.fg.controls["kriId"].value;
+    //this.model.kriId = this.fg.controls["kriId"].value;
     this.model.plan_AnosId = this.fg.controls["plan_AnosId"].value;
     this.model.porcientoValor = this.fg.controls["porcientoValor"].value;
     this.model.valor = this.fg.controls["valor"].value;
@@ -58,25 +60,18 @@ export class FormKriAnoComponent implements OnInit {
     this.model.logro = this.fg.controls["logro"].value;
 
     console.log({modelo: this.model});
-    
-    if (this.model.id === 0) {
-      this.kriAnoController.insert(this.model).subscribe({
-        next: (result) => {
-          this.dialogRef.close(result);
-        },
-        error: (err) => {
-          console.error('Error inserting KRI Año:', err.message);
-        }
-      });
-    } else {
-      this.kriAnoController.Update(this.model).subscribe({
-        next: (result) => {
-          this.dialogRef.close(result);
-        },
-        error: (err) => {
-          console.error('Error updating KRI Año:', err);
-        }
-      });
-    }
+    this.kriAnoController.model = this.model
+    this.kriAnoController.grabar().then((result) => {
+      if(result){
+        this.datService.showMessage('Datos guardados correctamente',this.kriAnoController.titulomensage, 'success');
+        this.dialogRef.close(result);
+      }
+    })
+    .catch((error) => {
+           this.datService.showMessage('Error al guardar los datos', this.kriAnoController.titulomensage, 'error'); 
+    })
+  }
+  cancelar() {
+    this.dialogRef.close();
   }
 }
