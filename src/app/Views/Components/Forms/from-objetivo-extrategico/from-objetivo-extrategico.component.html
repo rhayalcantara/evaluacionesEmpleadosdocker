@@ -49,20 +49,43 @@
             <i class="fas fa-plus"></i> Agregar
           </button>
         </div> -->
+        <div class="grid-container">
+          <!-- KRIs Column -->
+          <div class="column">
+            <h3 class="column-header">KRIS</h3>
+            <div class="column-content">
         <app-kris 
           [ObjectivoEstrategicoId]="objetivoEstrategicoService.model.id"
           [anos]="plananos"
         >
       </app-kris>
-     
-
-
+    </div>
+  </div>
+  <div class="column">
+    <h3 class="column-header">Objetivos</h3>
+    <div class="column-content">
+      <app-objetivos-proyecto-perspectiva 
+      [PerspervaId]="objetivoEstrategicoService.model.perspectivaId"
+      [Tipo]="'Objetivos'">
+      </app-objetivos-proyecto-perspectiva>
+    </div>
+  </div>
+  <div class="column">
+    <h3 class="column-header">Proyecto</h3>
+    <div class="column-content">
+      <app-objetivos-proyecto-perspectiva 
+      [PerspervaId]="objetivoEstrategicoService.model.perspectivaId"
+      [Tipo]="'Proyecto'">
+      </app-objetivos-proyecto-perspectiva>
+    </div>
+  </div>
+</div>
       <!-- Botones -->
       <div class="button-container">
         <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
         <button type="submit" class="btn btn-primary" (click)="guardar()">Guardar</button>
       </div>
+
     </form>
   </div>
 </div>
-  

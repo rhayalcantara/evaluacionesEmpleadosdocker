@@ -15,6 +15,8 @@ import { KriAno } from 'src/app/Controllers/KriAno';
 import { FormKriAnoComponent } from '../form-kri-ano/form-kri-ano.component';
 import { KrisComponent } from "../../Pages/kris/kris.component";
 import { IKriAno } from 'src/app/Models/Kri/IKri';
+import { ObjetivoProyectoPerspectiva } from 'src/app/Controllers/ObjetivoProyectoPerspectiva';
+import { ObjetivosProyectoPerspectivaComponent } from '../../Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component';
 
 
 @Component({
@@ -23,7 +25,8 @@ import { IKriAno } from 'src/app/Models/Kri/IKri';
   styleUrls: ['./from-objetivo-extrategico.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule,
-    MatDialogModule, ReactiveFormsModule, KrisComponent]
+    MatDialogModule, ReactiveFormsModule,
+     KrisComponent,ObjetivosProyectoPerspectivaComponent]
 })
 export class FromObjetivoExtrategicoComponent implements OnInit {
   KriPorAnos:IKriAno[]=[] ;
