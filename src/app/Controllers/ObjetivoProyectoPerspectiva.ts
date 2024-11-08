@@ -43,7 +43,7 @@ export class ObjetivoProyectoPerspectiva implements OnInit {
         return {
             id: 0,
             tipo: 'Objetivos',
-            perspervaId: 0,
+            objetivoEstrategicoId: 0,
             descripcion: '',
             valor: 0
         }
@@ -61,11 +61,11 @@ export class ObjetivoProyectoPerspectiva implements OnInit {
             })
     }
 
-    public getObjetivosPorPerspectiva(perspervaId: number): Observable<IObjetivoProyectoPerspectiva[]> {
+    public getObjetivosPorPerspectiva(objetivoestrategicoId: number): Observable<IObjetivoProyectoPerspectiva[]> {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let objetivos: IObjetivoProyectoPerspectiva[] = rep.data;
-                return objetivos.filter(x => x.perspervaId == perspervaId);
+                return objetivos.filter(x => x.objetivoEstrategicoId == objetivoestrategicoId);
             })
         );
     }

@@ -10,6 +10,7 @@ import { EvaluationPeriodsComponent } from './Views/Components/Pages/evaluation-
 import { GrupoCompetenciasComponent } from './Views/Components/Pages/grupo-competencias/grupo-competencias.component';
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { KrisComponent } from './Views/Components/Pages/kris/kris.component';
+import { KpisComponent } from './Views/Components/Pages/kpis/kpis.component';
 
 const routes: Routes = [
   {
@@ -109,7 +110,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'kri', component: KrisComponent, canActivate: [AuthGuard] }
+  { path: 'kri', component: KrisComponent, canActivate: [AuthGuard] },
+   { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

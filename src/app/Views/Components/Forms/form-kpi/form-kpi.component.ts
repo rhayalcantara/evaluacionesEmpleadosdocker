@@ -5,10 +5,12 @@ import { IKpi } from 'src/app/Models/Kpi/IKpi';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { CommonModule } from '@angular/common';
 import { Kpi } from 'src/app/Controllers/Kpi';
+import { IKri } from 'src/app/Models/Kri/IKri';
+import { Kri } from 'src/app/Controllers/Kri';
 
 @Component({
   selector: 'app-form-kpi',
-  templateUrl: './form-kpi.component.html',
+  templateUrl: './form-kpi.component.html', 
   styleUrls: ['./form-kpi.component.css'],
   standalone: true,
   imports: [ReactiveFormsModule, MatDialogModule, CommonModule]
@@ -16,11 +18,13 @@ import { Kpi } from 'src/app/Controllers/Kpi';
 export class FormKpiComponent implements OnInit {
   fg: FormGroup;
   titulo: string = 'Nuevo KPI';
+  kris:IKri[] = [];
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormKpiComponent>,
     public kpiservice: Kpi,
+    public kriservice: Kri,
     @Inject(MAT_DIALOG_DATA) public data: { model: IKpi },
     private datosService: DatosServiceService
   ) {
@@ -30,6 +34,11 @@ export class FormKpiComponent implements OnInit {
       descripcion: ['', Validators.required],
       valor: [0, [Validators.required, Validators.min(0)]]
     });
+    this.kriservice.TRegistros.subscribe(() => {
+      // al momento de terminar de recibir los kri en el servicio se actualiza aqui el array
+      console.log(this.kpiservice.arraymodel)
+      this.kris = this.kriservice.arraymodel;
+    })
   }
 
   ngOnInit(): void {
@@ -38,6 +47,7 @@ export class FormKpiComponent implements OnInit {
     }
     this.fg.patchValue(this.data.model);
     console.log(this.fg.value)
+    this.kriservice.getdatos()
   }
 
   grabar(): void {

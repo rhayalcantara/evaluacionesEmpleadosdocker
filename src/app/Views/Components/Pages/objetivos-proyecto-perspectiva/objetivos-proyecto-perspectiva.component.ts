@@ -17,7 +17,7 @@ import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
   styleUrls: ['./objetivos-proyecto-perspectiva.component.css']
 })
 export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy {
-  @Input() PerspervaId: number = 0;
+  @Input() objetivoestrategicoId: number = 0;
   @Input() Tipo:'Objetivos' | 'Proyecto'= 'Objetivos';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   
@@ -55,12 +55,12 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
   loadObjetivos() {
     this.objetivoService.Gets().subscribe({
       next: (response:ModelResponse) => {
-        console.log('los objetivos', response.data,'el tipo',this.Tipo);
+        console.log('los objetivos', response.data,'el tipo',this.Tipo,'el objetivoestrategicoid',this.objetivoestrategicoId);
         this.objetivos = response.data;
 
-        //fitra por PerspervaId si el PerspervaId is not 0
-        if (this.PerspervaId != 0) {
-          this.objetivos = this.objetivos.filter(obj => obj.perspervaId === this.PerspervaId);
+        
+        if (this.objetivoestrategicoId != 0) {
+          this.objetivos = this.objetivos.filter(obj => obj.objetivoEstrategicoId === this.objetivoestrategicoId);
         }
         
         //filtra por tipo de objetivo
@@ -91,7 +91,7 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
     this.objetivoService.model = this.objetivoService.inicializamodelo();
     this.objetivoService.model.tipo=this.Tipo;
     this.showForm = true;
-    this.objetivoService.model.perspervaId = this.PerspervaId;
+    this.objetivoService.model.objetivoEstrategicoId = this.objetivoestrategicoId;
     this.abrirformulario(this.objetivoService.model);
   }
 

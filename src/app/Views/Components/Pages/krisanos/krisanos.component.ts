@@ -50,7 +50,7 @@ export class KrisanosComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.kriService.getdatos();
+        this.kriService.getdatos(this.data.model.id);
     }
 
     updateDisplayedData() {
@@ -71,7 +71,7 @@ export class KrisanosComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: IKriAno) => {
             if (result) {
-                this.kriService.getdatos();
+                this.kriService.getdatos(result.kriId);
             }
         });
     }

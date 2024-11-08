@@ -28,7 +28,7 @@ export class FormObjetivoProyectoPerspectivaComponent implements OnInit {
     this.fg = this.fb.group({
       id: [0],
       tipo: ['Objetivos', Validators.required],
-      perspervaId: [0],
+      objetivoEstrategicoId: [0],
       descripcion: [''],
       valor: [0, [Validators.required, Validators.min(0), Validators.max(100)]]
     });

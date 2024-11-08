@@ -5,13 +5,13 @@ import { Subscription } from 'rxjs';
 import { Kpi } from 'src/app/Controllers/Kpi';
 import { IKpi } from 'src/app/Models/Kpi/IKpi';
 import { FormKpiComponent } from '../../Forms/form-kpi/form-kpi.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-kpis',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule],
+  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule,MatDialogModule],
   templateUrl: './kpis.component.html',
   styleUrls: ['./kpis.component.css']
 })

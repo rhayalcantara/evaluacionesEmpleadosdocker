@@ -41,7 +41,7 @@ export class KriAno implements OnInit {
         this.estado = ""
         this.actualpage = 1
         this.pagesize = 10
-        this.getdatos()
+        this.getdatos(0)
     }
 
     public inicializamodelo(): IKriAno {
@@ -56,13 +56,16 @@ export class KriAno implements OnInit {
         }
     }
 
-    public getdatos() {
+    public getdatos(kriId:number) {
         this.Gets()
             .subscribe({
                 next: (rep: ModelResponse) => {
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
+                    if(kriId!=0){
+                        this.arraymodel = this.arraymodel.filter(x => x.kriId === kriId);
+                    }
                     this.TRegistros.emit(this.totalregistros)
                 }
             })
