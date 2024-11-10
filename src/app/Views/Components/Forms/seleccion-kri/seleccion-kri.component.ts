@@ -1,5 +1,5 @@
 // seleccion-kri.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Kri } from 'src/app/Controllers/Kri';
 import { IKri } from 'src/app/Models/Kri/IKri';
+// ultimos cambios
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-seleccion-kri',
@@ -27,23 +31,31 @@ import { IKri } from 'src/app/Models/Kri/IKri';
   styleUrls: ['./seleccion-kri.component.css']
 })
 export class SeleccionKriComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'nombre', 'descripcion'];
-  searchControl = new FormControl('');
-  dataSource: any;
+  displayedColumns: string[] = [ 'descripcion'];
+  searchControl = new FormControl('');  
   selectedRow: IKri | null = null;
+  dataSource: MatTableDataSource<IKri>= new MatTableDataSource<IKri>([]);
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
   constructor(
     public dialogRef: MatDialogRef<SeleccionKriComponent>,
     private kriService: Kri
   ) {
       this.kriService.TRegistros.subscribe(() => {
-        this.dataSource = this.kriService.arraymodel;
+        
+        this.dataSource = new MatTableDataSource(this.kriService.arraymodel);
+        this.dataSource.paginator = this.paginator;
+        console.log(this.dataSource);
       })
   }
 
   ngOnInit(): void {
     this.loadKris();
     this.setupSearch();
+  }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   private loadKris() {
@@ -60,6 +72,9 @@ export class SeleccionKriComponent implements OnInit {
     filterValue = filterValue.trim().toLowerCase();
     if (this.dataSource) {
       this.dataSource.filter = filterValue;
+    }
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 

@@ -10,13 +10,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
-
+import { FileUploadComponent } from './archivoextras/file-upload-component';
+import { FileUploadPageComponent } from './Views/Components/Pages/file-upload-page/file-upload-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    NavmenuComponent
+    NavmenuComponent,
+    FileUploadComponent,
+    FileUploadPageComponent
   ],
   imports: [
     BrowserModule,

@@ -3,4 +3,5 @@ export interface IKpi {
     kriId: number;
     descripcion?: string;
     valor: number;
+    inverso: boolean;
 }

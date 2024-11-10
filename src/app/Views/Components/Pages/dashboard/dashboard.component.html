@@ -9,6 +9,12 @@
         <h4>Puestos con Metas Asignadas</h4>
         <p>{{metricas.porcentajePuestosConMetas | percent:'1.0-0'}} de puestos tienen metas asignadas</p>
       </div>
+      
+      <!-- Agregado: Componente de carga de archivos -->
+      <div class="metric-card">
+        <h4>Carga de Archivos KPIs</h4>
+        <app-file-upload></app-file-upload>
+      </div>
     </div>
 
     <div *ngSwitchCase="'Evaluando'">

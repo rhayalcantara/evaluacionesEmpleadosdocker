@@ -8,10 +8,10 @@
 
 
     <div class="form-group">
-      <label for="grupocompetenciaid">Objetivo</label>
+      <label for="grupocompetenciaid">Competencia</label>
       <select class="form-control" id="grupocompetenciaid" 
       formControlName="objetivoId" (change)="onGrupoCompetenciaSelect($event)" required>
-          <option value="">Seleccione un Objetivo</option>
+          <option value="">Seleccione un Grupo de Competencia</option>
           <option *ngFor="let grupo of Objetivos" [value]="grupo.id">
               {{grupo.nombre}}
           </option>

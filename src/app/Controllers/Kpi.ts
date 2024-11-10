@@ -44,7 +44,8 @@ export class Kpi implements OnInit {
             id: 0,
             kriId: 0,
             descripcion: '',
-            valor: 0
+            valor: 0,
+            inverso: false
         }
     }
 

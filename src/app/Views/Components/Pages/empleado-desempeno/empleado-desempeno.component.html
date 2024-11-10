@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="header">
+    <h2>Desempeño del Empleado</h2>
+    <button class="btn-add" (click)="onAdd()" title="Agregar">
+      <i class="fas fa-plus"></i> Agregar
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Secuencial</th>
+          <th>KRI</th>
+          <th>KPI</th>
+          <th>Objetivo del Proyecto</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="empleadoDesempenos.length === 0">
+          <td colspan="5" class="no-data">
+            No hay registros disponibles
+          </td>
+        </tr>
+        <tr *ngFor="let empleadoDesempeno of displayedEmpleadoDesempenos">
+          <td>{{empleadoDesempeno.secuencialId}}</td>
+          <td>{{empleadoDesempeno.kriId}}</td>
+          <td>{{empleadoDesempeno.kpiId}}</td>
+          <td>{{empleadoDesempeno.objetivoProyectoId}}</td>
+          <td class="actions">
+            <button class="btn-edit" (click)="onEdit(empleadoDesempeno)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-delete" (click)="onDelete(empleadoDesempeno)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+    aria-label="Select page">
+  </mat-paginator>
+</div>
+
+<!-- <style>
+.container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-add {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-edit {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    min-width: 600px;
+  }
+}
+</style> -->

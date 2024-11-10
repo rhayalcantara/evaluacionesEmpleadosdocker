@@ -1,0 +1,59 @@
+<div class="upload-container">
+  <div class="upload-card">
+    <h2>Carga de Archivo KPIs</h2>
+    
+    <!-- Área de drop -->
+    <div
+      class="drop-zone"
+      [class.dragging]="isDragging"
+      [class.upload-success]="uploadStatus === 'success'"
+      [class.upload-error]="uploadStatus === 'error'"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      
+      <!-- Icono y mensaje inicial -->
+      <div *ngIf="uploadStatus === 'initial'" class="upload-message">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Arrastra tu archivo CSV aquí o</p>
+        <label class="upload-button">
+          Seleccionar archivo
+          <input
+            type="file"
+            accept=".csv"
+            (change)="onFileSelected($event)"
+            [disabled]="isUploading">
+        </label>
+      </div>
+
+      <!-- Estado de carga -->
+      <div *ngIf="uploadStatus === 'uploading'" class="upload-progress">
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="uploadProgress"></div>
+        </div>
+        <p>Subiendo {{fileName}}...</p>
+        <p>{{uploadProgress}}%</p>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div *ngIf="uploadStatus === 'success'" class="success-message">
+        <i class="fas fa-check-circle"></i>
+        <p>¡Archivo cargado exitosamente!</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="uploadStatus === 'error'" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{errorMessage}}</p>
+        <button class="retry-button" (click)="resetForm()">
+          Intentar nuevamente
+        </button>
+      </div>
+    </div>
+
+    <!-- Restricciones -->
+    <div class="upload-restrictions">
+      <p><i class="fas fa-info-circle"></i> Solo se permiten archivos CSV</p>
+    </div>
+  </div>
+</div>

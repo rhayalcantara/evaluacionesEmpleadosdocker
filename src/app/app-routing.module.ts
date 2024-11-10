@@ -11,6 +11,7 @@ import { GrupoCompetenciasComponent } from './Views/Components/Pages/grupo-compe
 import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard.component';
 import { KrisComponent } from './Views/Components/Pages/kris/kris.component';
 import { KpisComponent } from './Views/Components/Pages/kpis/kpis.component';
+import { FileUploadPageComponent } from './Views/Components/Pages/file-upload-page/file-upload-page.component';
 
 const routes: Routes = [
   {
@@ -111,7 +112,13 @@ const routes: Routes = [
   },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'kri', component: KrisComponent, canActivate: [AuthGuard] },
-   { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard] },
+  { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard] },
+  { path: 'uploadfile', component: FileUploadPageComponent },
+  { path: 'empleado-desempeno',
+    loadComponent:()=> import('./Views/Components/Pages/empleado-desempeno/empleado-desempeno.component')
+    .then((m)=> m.EmpleadoDesempenoComponent),
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

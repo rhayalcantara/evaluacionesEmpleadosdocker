@@ -9,10 +9,10 @@
 
     <div class="form-group">
       <label for="kriId">KRI</label>
-      <select class="form-control" id="kriId" name="kriId" formControlName="kriId" required>
-        <option selected value="0">Selecione un KRI</option>
-        <option *ngFor="let kri of kris" [value]="kri.id">{{kri.descripcion}}</option>
-      </select>
+      
+       <!-- desplegar el nombre del kri -->
+      <label>{{kri.descripcion}}</label>
+      <button class="btn btn-secondary btn-block" type="button" (click)="selecionkri()">Buscar KRi</button>
     </div>
 
     <div class="form-group">
@@ -23,6 +23,11 @@
           La descripción es requerida.
         </div>
       </div>
+    </div>
+    
+    <div class="mb-4">
+      <label for="inverso" class="block text-gray-700 text-sm font-bold mb-2">Inverso</label>
+      <input type="checkbox" class="form-check-input" id="inverso" formControlName="inverso">
     </div>
 
     <div class="form-group">

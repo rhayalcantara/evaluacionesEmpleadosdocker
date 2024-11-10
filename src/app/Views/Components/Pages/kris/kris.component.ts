@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { Kri } from 'src/app/Controllers/Kri';
 import { IKri, IKriAno } from 'src/app/Models/Kri/IKri';
 import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { KrisanosComponent } from '../krisanos/krisanos.component';
 import { IPlan_Anos } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
@@ -13,7 +13,7 @@ import { IPlan_Anos } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 @Component({
   selector: 'app-kris',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule],
+  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule,MatDialogModule],
   templateUrl: './kris.component.html',
   styleUrls: ['./kris.component.css']
 })

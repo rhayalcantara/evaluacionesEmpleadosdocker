@@ -11,16 +11,18 @@
     <table>
       <thead>
         <tr>
-          <th>KRI ID</th>
+          <th>KRI </th>
           <th>Descripción</th>
+          <th>Inverso</th>
           <th>Valor</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let kpi of displayedKpis">
-          <td>{{kpi.kriId}}</td>
+          <td>{{getKriDescripcion(kpi.kriId)}}</td>
           <td>{{kpi.descripcion}}</td>
+          <td>{{kpi.inverso}}</td>
           <td>{{kpi.valor}}</td>
           <td class="actions">
             <button class="btn-delete" (click)="onDelete(kpi)" title="Eliminar">

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Kpi } from 'src/app/Controllers/Kpi';
@@ -7,6 +7,8 @@ import { IKpi } from 'src/app/Models/Kpi/IKpi';
 import { FormKpiComponent } from '../../Forms/form-kpi/form-kpi.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
+import { Kri } from 'src/app/Controllers/Kri';
+import { IKri } from 'src/app/Models/Kri/IKri';
 
 @Component({
   selector: 'app-kpis',
@@ -18,7 +20,13 @@ import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/p
 export class KpisComponent implements OnInit, OnDestroy {
   @Input() kriId: number = 0;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+  krises: IKri[] = [];
+  kri: IKri = {
+    id: 0,
+    objetivoExtrategicoId: 0,
+    descripcion: '',
+    ponderacion: 0
+  }
   kpis: IKpi[] = [];
   displayedKpis: IKpi[] = [];
   showForm = false;
@@ -32,18 +40,31 @@ export class KpisComponent implements OnInit, OnDestroy {
 
   constructor(
     private kpiService: Kpi,
-    private dialogmat: MatDialog
+    private kriService: Kri,
+    private dialogmat: MatDialog,
+    private cd: ChangeDetectorRef,
   ) {
     this.subscription = this.kpiService.TRegistros.subscribe(() => {
-      this.loadKpis();
-      this.showForm = false;
+      console.log('KPIs updated', this.kpiService.arraymodel);
+      this.kpis = this.kpiService.arraymodel;
+      this.totalItems = this.displayedKpis.length;
+        this.updateDisplayedKpis();
+    });
+    this.kriService.TRegistros.subscribe(() => {
+      console.log('KRIs updated', this.kriService.arraymodel);
+      this.krises = this.kriService.arraymodel;
+      this.cd.detectChanges();
     });
   }
 
   ngOnInit() {
-    this.loadKpis();
+    this.kriService.getdatos();
+    this.kpiService.getdatos();
   }
-
+  getKriDescripcion(kriId: number): string {
+    const kri = this.krises.find(kri => kri.id === kriId);
+    return kri ? kri.descripcion : '';
+  }
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
