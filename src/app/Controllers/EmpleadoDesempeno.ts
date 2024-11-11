@@ -50,7 +50,8 @@ export class EmpleadoDesempeno implements OnInit {
             secuencialId: 0,
             kriId: 0,
             kpiId: 0,
-            objetivoProyectoId: 0
+            objetivoProyectoId: 0,
+            periodoId: 0
         }
     }
 

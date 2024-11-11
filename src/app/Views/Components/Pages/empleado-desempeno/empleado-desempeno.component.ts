@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { DatosServiceService } from '../../../../Services/datos-service.service'
 @Component({
   selector: 'app-empleado-desempeno',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatPaginatorModule, MatDialogModule],
   templateUrl: './empleado-desempeno.component.html',
   styleUrls: ['./empleado-desempeno.component.css']
 })
@@ -27,6 +27,7 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
   currentPage = 0;
   totalItems = 0;
   pageSizeOptions = [5, 10, 25, 100];
+  filterText: string = '';
 
   constructor(
     private empleadoDesempenoService: EmpleadoDesempeno,
@@ -35,7 +36,7 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.empleadoDesempenoService.TRegistros.subscribe(() => {
       console.log('EmpleadoDesempenos updated', this.empleadoDesempenoService.arraymodel);
-      this.empleadoDesempenos = this.empleadoDesempenoService.arraymodel;
+      this.empleadoDesempenos = this.empleadoDesempenoService.arraymodel.sort((a, b) => a.secuencialId - b.secuencialId);
       this.totalItems = this.empleadoDesempenos.length;
       this.updateDisplayedEmpleadoDesempenos();
     });
@@ -66,10 +67,33 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
   }
 
   updateDisplayedEmpleadoDesempenos() {
+    let filteredData = this.empleadoDesempenos;
+    
+    if (this.filterText) {
+      const searchTerm = this.filterText.toLowerCase();
+      filteredData = this.empleadoDesempenos.filter(item => 
+        (item.empleado?.nombreunido?.toLowerCase().includes(searchTerm) ||
+        item.kri?.descripcion?.toLowerCase().includes(searchTerm) ||
+        item.kpi?.descripcion?.toLowerCase().includes(searchTerm) ||
+        item.objetivoProyecto?.descripcion?.toLowerCase().includes(searchTerm)) ?? false
+      );
+    }
+
+    this.totalItems = filteredData.length;
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    this.displayedEmpleadoDesempenos = this.empleadoDesempenos.slice(startIndex, endIndex);
-    console.log('Displayed EmpleadoDesempenos:', this.displayedEmpleadoDesempenos); 
+    this.displayedEmpleadoDesempenos = filteredData.slice(startIndex, endIndex);
+    console.log('Displayed EmpleadoDesempenos:', this.displayedEmpleadoDesempenos);
+  }
+
+  onFilter(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.filterText = input.value;
+    this.currentPage = 0;
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
+    this.updateDisplayedEmpleadoDesempenos();
   }
 
   onPageChange(event: PageEvent) {

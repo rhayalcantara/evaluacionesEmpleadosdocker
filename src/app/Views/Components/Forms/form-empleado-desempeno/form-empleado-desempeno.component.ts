@@ -14,6 +14,11 @@ import { SeleccionEmpleadoComponent } from '../seleccion-empleado/seleccion-empl
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { ObjetivoProyectoPerspectiva } from 'src/app/Controllers/ObjetivoProyectoPerspectiva';
+import { SeleccionKpiComponent } from '../seleccion-kpi/seleccion-kpi.component';
+import { SeleccionObjetivoProyectoComponent } from '../seleccion-objetivo-proyecto/seleccion-objetivo-proyecto.component';
+import { IObjetivoProyectoPerspectiva } from 'src/app/Models/ObjetivoProyectoPerspectiva/IObjetivoProyectoPerspectiva';
+import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { Periodos } from 'src/app/Controllers/Periodos';
 
 @Component({
   selector: 'app-form-empleado-desempeno',
@@ -28,6 +33,8 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
   titulo: string = 'Nuevo Desempeño de Empleado';
   kris: IKri[] = [];
   kpis: IKpi[] = [];
+  periodos: IPeriodo[] = [];
+
   selectedKri: IKri = {
     id: 0,
     descripcion: 'Seleccione un KRI',
@@ -58,6 +65,14 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     jefeinmediatO_SECUENCIAL: 0,
     jefeinmediato: ''
   };
+  selectedObjetivo: IObjetivoProyectoPerspectiva | undefined  = {
+    id: 0,
+    tipo: 'Objetivos',
+    objetivoEstrategicoId: 0,
+    descripcion: 'Seleccione un ',
+    valor: 0
+  };
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormEmpleadoDesempenoComponent>,
@@ -67,11 +82,13 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     public kpiService: Kpi,
     public empleadocontroller: Empleados,
     public objetivoProyectoService: ObjetivoProyectoPerspectiva,
+    public periodocontroller: Periodos,
     @Inject(MAT_DIALOG_DATA) public data: { model: IEmpleadoDesempeno },
     private datosService: DatosServiceService,
     private cd: ChangeDetectorRef,
   ) {
     console.log('data', data);
+    //seccion de reccion de datos
     if (data.model.id) {
       
       this.titulo = 'Editar Desempeño de Empleado';
@@ -81,6 +98,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
         kriId: [data.model.kriId, Validators.required],
         kpiId: [data.model.kpiId, Validators.required],
         objetivoProyectoId: [data.model.objetivoProyectoId, Validators.required],
+        periodoId: [data.model.periodoId, Validators.required],
         tipoSeleccion: ['']
       });
       // basado en los campos kriid,kpiid,objetivoproyectoid se debe poner en fg.controls.tipoSeleccion el valor correspondiente 
@@ -107,10 +125,12 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
         KriId: [0, Validators.required],
         KpiId: [0, Validators.required],
         ObjetivoProyectoId: [0, Validators.required],
+        periodoId: [0, Validators.required],
         tipoSeleccion: ['']
       });
     }
-
+    
+    //seccion de busqueda de datos
     this.kriService.TRegistros.subscribe(() => {
       this.kris = this.kriService.arraymodel;
       const foundKri = this.kris.find((kri) => kri.id === data.model.kriId);
@@ -119,7 +139,6 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       }
       this.cd.detectChanges();
     });
-
     this.kpiService.TRegistros.subscribe(() => {
       this.kpis = this.kpiService.arraymodel;
       const foundKpi = this.kpis.find((kpi) => kpi.id === data.model.kpiId);
@@ -135,12 +154,18 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
         this.selectedEmpleado = this.getempleado(data.model.secuencialId);
       }      
       this.cd.detectChanges();
-    });
+    });    
     this.objetivoProyectoService.TRegistros.subscribe(() => {
       console.log('data.model.objetivoProyectoId', data.model.objetivoProyectoId);
       if (data.model.objetivoProyectoId!=0) {
+        this.selectedObjetivo = this.objetivoProyectoService.arraymodel.find((objetivo) => objetivo.id === data.model.objetivoProyectoId);
+
         this.fg.patchValue({ ObjetivoProyectoId: data.model.objetivoProyectoId });
       }
+      this.cd.detectChanges();
+    });
+    this.periodocontroller.TRegistros.subscribe(() => {
+      this.periodos = this.periodocontroller.arraymodel;
       this.cd.detectChanges();
     });
   }
@@ -152,6 +177,8 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     this.fg.patchValue(this.data.model);
 
     this.empleadocontroller.getdatos();
+    this.periodocontroller.getdatos();
+
   }
   getempleado(id: number): IEmpleado | undefined {
     console.log('id', id);
@@ -197,10 +224,17 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
   }
   seleccionarKpi() {
     // Similar to seleccionarKri but for KPIs
-    const dialogRef = this.dialogmat.open(SeleccionKriComponent, {
+    const dialogRef = this.dialogmat.open(SeleccionKpiComponent, {
       width: '800px',
       data: { tipo: 'kpi' }
     });
+    dialogRef.afterClosed().subscribe((result: IKpi) => {
+      if (result) {
+        this.selectedKpi = result;
+        this.fg.patchValue({ KpiId: result.id });
+      }
+      });
+
     }
   seleccionarKri() {
     const dialogRef = this.dialogmat.open(SeleccionKriComponent, {
@@ -218,12 +252,13 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
 
   seleccionarObjetivo() {
     // Similar to seleccionarKri but for objectives
-    const dialogRef = this.dialogmat.open(SeleccionKriComponent, {
+    const dialogRef = this.dialogmat.open(SeleccionObjetivoProyectoComponent, {
       width: '800px',
       data: { tipo: 'objetivo' }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.seleccionarObjetivo
         this.fg.patchValue({ ObjetivoProyectoId: result.id });
       }
     });

@@ -103,7 +103,23 @@ mat-paginator {
   background-color: transparent;
   margin-top: 16px;
 }
+.filter-container {
+  margin-bottom: 20px;
+}
 
+.filter-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
 @media screen and (max-width: 768px) {
   .container {
     padding: 16px;

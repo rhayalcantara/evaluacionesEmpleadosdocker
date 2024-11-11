@@ -8,6 +8,8 @@ import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { IEvaluacion, IEvaluacionDto } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { Empleados } from 'src/app/Controllers/Empleados';
+import { Periodos } from 'src/app/Controllers/Periodos';
 
 
 @Component({
@@ -19,31 +21,8 @@ import { DatosServiceService } from 'src/app/Services/datos-service.service';
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
 export class FormEvaluationEmployeComponent {
-  @Input() empleado: IEmpleado={
-    secuencial: 0,
-    codigousuario: '',
-    nombreunido: '',
-    identificacion: '',
-    sdept: 0,
-    departamento: '',
-    codigoestado: '',
-    scargo: 0,
-    cargo: '',
-    esjefatura: 0,
-    tienejefe: 0,
-    nivel: 0,
-    fechapostulacion: '',
-    jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
-  };
-  @Input() periodo: IPeriodo={
-    id: 0,
-    descripcion: '',
-    fechaInicio: new Date(),
-    fechaFin: new Date(),
-    activa: false,
-    estadoid:0
-  }; // You might want to create a proper interface for this
+  @Input() empleado: IEmpleado=this.empleadocontroller.inicializamodelo(); // You might want to create a proper interface for this
+  @Input() periodo: IPeriodo=this.periodocontroller.inicializamodelo(); // You might want to create a proper interface for this
   @Input() titulo:string="";
   @Input() supervisor:Boolean=false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
@@ -53,7 +32,9 @@ export class FormEvaluationEmployeComponent {
   public evaluacionempleado:IEvaluacion
   public comentarioAdicional: string = ''; // New property for additional comment
   constructor(private EvaluacionController:Evaluacion,
-              private datos:DatosServiceService
+              private datos:DatosServiceService,
+              private empleadocontroller:Empleados,
+              private periodocontroller:Periodos
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
   }

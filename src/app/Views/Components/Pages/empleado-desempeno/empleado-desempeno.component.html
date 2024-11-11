@@ -6,6 +6,16 @@
     </button>
   </div>
 
+  <div class="filter-container">
+    <input 
+      type="text" 
+      [(ngModel)]="filterText" 
+      (input)="onFilter($event)" 
+      placeholder="Filtrar..."
+      class="filter-input"
+    >
+  </div>
+
   <div class="table-container">
     <table>
       <thead>
@@ -24,10 +34,10 @@
           </td>
         </tr>
         <tr *ngFor="let empleadoDesempeno of displayedEmpleadoDesempenos">
-          <td>{{empleadoDesempeno.secuencialId}}</td>
-          <td>{{empleadoDesempeno.kriId}}</td>
-          <td>{{empleadoDesempeno.kpiId}}</td>
-          <td>{{empleadoDesempeno.objetivoProyectoId}}</td>
+          <td>{{empleadoDesempeno.empleado?.nombreunido}}</td>
+          <td>{{empleadoDesempeno.kri?.descripcion}}</td>
+          <td>{{empleadoDesempeno.kpi?.descripcion}}</td>
+          <td>{{empleadoDesempeno.objetivoProyecto?.descripcion}}</td>
           <td class="actions">
             <button class="btn-edit" (click)="onEdit(empleadoDesempeno)" title="Editar">
               <i class="fas fa-edit"></i>
@@ -49,92 +59,3 @@
     aria-label="Select page">
   </mat-paginator>
 </div>
-
-<!-- <style>
-.container {
-  padding: 20px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.table-container {
-  overflow-x: auto;
-  margin-bottom: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f8f9fa;
-  font-weight: bold;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn-add {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-edit {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-delete {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.no-data {
-  text-align: center;
-  padding: 20px;
-  color: #6c757d;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-@media (max-width: 768px) {
-  .table-container {
-    overflow-x: auto;
-  }
-  
-  table {
-    min-width: 600px;
-  }
-}
-</style> -->

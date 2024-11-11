@@ -33,6 +33,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
+        console.table(mensaje);
         console.log('objetivoEstrategicoService Constructor: ' + mensaje);
       }
     });
@@ -43,6 +44,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     this.objetivoEstrategicoService.TRegistros.subscribe({
       next: (rep: number) => {
         console.log("evento#:", rep);
+        console.table(this.objetivoEstrategicoService.arraymodel);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }

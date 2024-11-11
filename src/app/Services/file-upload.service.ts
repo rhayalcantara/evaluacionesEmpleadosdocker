@@ -13,7 +13,11 @@ export class FileUploadService {
     private http: HttpClient
   ) {}
 
-  uploadRawFile(file: File): Observable<any> {
+  uploadKrikpiobjetivo(file: File): Observable<any> {
+    return this.uploadRawFile(file,'/api/EmpleadoDesempenoes/upload');
+  }
+
+  uploadRawFile(file: File,controlarurl:string): Observable<any> {
     // Simular una carga de archivo con un delay
    /* return of({ success: true }).pipe(
       delay(2000) // Simular 2 segundos de carga
@@ -23,7 +27,7 @@ export class FileUploadService {
     
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(this.dataService.URL+'/api/EmpleadoDesempenoes/upload', formData);
+    return this.http.post(this.dataService.URL+controlarurl, formData);
     
   }
 }

@@ -74,7 +74,7 @@ export class FileUploadComponent implements OnDestroy {
       }
     }, 200);
 
-    this.fileUploadService.uploadRawFile(file)
+    this.fileUploadService.uploadRawFile(file,'/api/EmpleadoDesempenoes/upload')
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
