@@ -116,6 +116,9 @@ export class EmpleadoDesempeno implements OnInit {
     }
 
     public async grabar(): Promise<boolean> {
+       
+        console.log('grabar', this.model);
+        console.table(this.model);
         return new Promise<boolean>(async (resolve) => {
             try {
                 if (this.model.id == 0) {

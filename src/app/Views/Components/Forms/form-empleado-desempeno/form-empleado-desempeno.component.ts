@@ -93,7 +93,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       
       this.titulo = 'Editar Desempeño de Empleado';
       this.fg = this.fb.group({
-        Id: data.model.id,
+        id: data.model.id,
         secuencialId: [data.model.secuencialId, Validators.required],
         kriId: [data.model.kriId, Validators.required],
         kpiId: [data.model.kpiId, Validators.required],
@@ -120,11 +120,11 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       
       this.titulo = 'Agregar Desempeño de Empleado';
       this.fg = this.fb.group({
-        Id: [0],
-        SecuencialId: [0, Validators.required],
-        KriId: [0, Validators.required],
-        KpiId: [0, Validators.required],
-        ObjetivoProyectoId: [0, Validators.required],
+        id: [0],
+        secuencialId: [0, Validators.required],
+        kriId: [0, Validators.required],
+        kpiId: [0, Validators.required],
+        objetivoProyectoId: [0, Validators.required],
         periodoId: [0, Validators.required],
         tipoSeleccion: ['']
       });
@@ -191,8 +191,10 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.fg.patchValue({ SecuencialId: result.secuencialId });
+        this.fg.patchValue({ SecuencialId: result.secuencial });
         this.selectedEmpleado = result;
+        console.table(result);
+        console.table(this.fg.value);
       }
     });
   }
@@ -232,6 +234,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       if (result) {
         this.selectedKpi = result;
         this.fg.patchValue({ KpiId: result.id });
+        console.table(this.fg.value);
       }
       });
 
@@ -246,6 +249,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
         this.selectedKri = result;
         this.fg.patchValue({ KriId: result.id });
         this.kpiService.getdatos();
+        console.table(this.fg.value);
       }
     });
   }
@@ -260,13 +264,16 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       if (result) {
         this.seleccionarObjetivo
         this.fg.patchValue({ ObjetivoProyectoId: result.id });
+        console.table(this.fg.value);
       }
     });
   }
 
   grabar(): void {
+    console.table(this.fg.value);
     if (this.fg.valid) {
-      const empleadoDesempeno: IEmpleadoDesempeno = this.fg.value;
+      
+      const empleadoDesempeno:IEmpleadoDesempeno = this.fg.value;
       this.empleadoDesempenoService.model = empleadoDesempeno;
       this.empleadoDesempenoService.grabar().then(() => {
         this.datosService.showMessage('Desempeño guardado exitosamente', 'Éxito', 'success');

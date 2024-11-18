@@ -118,6 +118,11 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/empleado-desempeno/empleado-desempeno.component')
     .then((m)=> m.EmpleadoDesempenoComponent),
     canActivate: [AuthGuard]
+  },// 
+  { path: 'empleado-desempeno-meta',
+    loadComponent:()=> import('./Views/Components/Pages/evaluacion-desempeno-meta/evaluacion-desempeno-meta.component')
+    .then((m)=> m.EvaluacionDesempenoMetaComponent),
+    canActivate: [AuthGuard]
   },
 ];
 

@@ -60,7 +60,7 @@
       <label for="periodoId">Periodo</label>
       <select id="periodoId" formControlName="periodoId" class="form-control" required>
         <option [value]="0">Seleccione un periodo</option>
-        <option *ngFor="let periodo of periodos" [value]="periodo.id">{{periodo.descripcion}}</option>
+        <option *ngFor="let periodo of periodos" [value]="+periodo.id">{{periodo.descripcion}}</option>
       </select>
       <div *ngIf="fg.get('PeriodoId')?.invalid && (fg.get('PeriodoId')?.dirty || fg.get('PeriodoId')?.touched)" class="alert alert-danger">
         <div *ngIf="fg.get('PeriodoId')?.errors?.['required']">

@@ -1,3 +1,4 @@
+import { IEmpleado } from "../Empleado/IEmpleado"
 import { IMeta, IMetaDts } from "../Meta/IMeta"
 
 export interface IEvaluacion {
@@ -8,7 +9,8 @@ export interface IEvaluacion {
     fechaRepuestas: string
     observacion: string
     evaluacionGoals: IEvaluacionGoal[]
-    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
+    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[],
+    empleado?: IEmpleado
   }
   export interface IEvaluacionGoal {
     id: number

@@ -1,0 +1,43 @@
+<div class="container">
+  <h2>{{titulo}}</h2>
+  <form [formGroup]="fg" (ngSubmit)="grabar()">
+    <div class="form-group">
+      <label for="Tipo">Tipo</label>
+      <input type="text" class="form-control" id="Tipo" formControlName="Tipo" required>
+      <div class="invalid-feedback" *ngIf="fg.get('Tipo')?.errors?.['required'] && fg.get('Tipo')?.touched">
+        El tipo es requerido
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción</label>
+      <textarea class="form-control" id="descripcion" formControlName="descripcion" required rows="3"></textarea>
+      <div class="invalid-feedback" *ngIf="fg.get('descripcion')?.errors?.['required'] && fg.get('descripcion')?.touched">
+        La descripción es requerida
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="meta">Meta (%)</label>
+      <input type="number" class="form-control" id="meta" formControlName="meta" required min="0" max="100">
+      <div class="invalid-feedback" *ngIf="fg.get('meta')?.errors?.['required'] && fg.get('meta')?.touched">
+        La meta es requerida
+      </div>
+      <div class="invalid-feedback" *ngIf="(fg.get('meta')?.errors?.['min'] || fg.get('meta')?.errors?.['max']) && fg.get('meta')?.touched">
+        La meta debe estar entre 0 y 100
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="inverso" formControlName="inverso">
+        <label class="form-check-label" for="inverso">Inverso</label>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary" [disabled]="!fg.valid">Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>
