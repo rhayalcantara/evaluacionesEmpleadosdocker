@@ -1,4 +1,23 @@
+
 <div class="emoji-rating">
+  <div class="emoji-option" *ngFor="let i of [1, 2, 3, 4, 5]">
+    <div class="rating-column">
+      <div class="rating-label">{{getLabel(i)}}</div>
+      <label [for]="'jobKnowledgeCheck' + i" class="emoji-label">
+        {{ getEmoji(i) }}
+      </label>
+      <div class="checkbox-container">
+        <input
+          [id]="'jobKnowledgeCheck' + i"
+          type="checkbox"
+          [checked]="valorSeleccionado === i"
+          (click)="cambiovalor(i)"
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="emoji-rating">
   <div class="emoji-option" *ngFor="let i of [1, 2, 3, 4, 5]">
     <input type="radio" [id]="'jk' + i" name="jobKnowledge" [value]="i" 
            [checked]="valorSeleccionado === i">
@@ -10,7 +29,7 @@
              [checked]="valorSeleccionado === i">
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- <div class="emoji-rating">
   <div class="emoji-option"> <input type="radio" id="jk1" name="jobKnowledge" value="1"><label for="jk1">😔</label>

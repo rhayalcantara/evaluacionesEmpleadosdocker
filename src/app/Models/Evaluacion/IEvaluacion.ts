@@ -1,4 +1,6 @@
 import { IEmpleado } from "../Empleado/IEmpleado"
+import { IEmpleadoDesempeno } from "../EmpleadoDesempeno/IEmpleadoDesempeno"
+import { IEvaluacionDesempenoMeta } from "../EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta"
 import { IMeta, IMetaDts } from "../Meta/IMeta"
 
 export interface IEvaluacion {
@@ -9,7 +11,8 @@ export interface IEvaluacion {
     fechaRepuestas: string
     observacion: string
     evaluacionGoals: IEvaluacionGoal[]
-    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[],
+    evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
+    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]    
     empleado?: IEmpleado
   }
   export interface IEvaluacionGoal {
@@ -28,6 +31,7 @@ export interface IEvaluacion {
     weight: number
     observacion: string
   }
+
 
   export interface IEvaluacionDto{
     id: number

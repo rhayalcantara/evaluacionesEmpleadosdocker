@@ -1,26 +1,35 @@
 
+
+<!-- criterialitem.component.html -->
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
-    
-<div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals let index= index">
-    <!-- {{met | json}}
-    <div *ngIf="met.goal.Objetivo.nombre"> -->
-    <h3 >{{met.goal.objetivo.nombre}}</h3>
+  <h2>Competencias</h2>
+  <div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals; let index=index">
+    <h3>{{met.goal.objetivo.nombre}}</h3>
     <div class="criteria-item">
-        <div class="criteria-info">
-            <!-- <span class="criteria-label">{{met.}}:</span> -->
-            <p class="criteria-description">{{met.goal.name}}</p>  
-            <p class="criteria-weight">Peso: {{met.goal.weight}}%</p>   
-            <p class="criteria-weight">Descripcion: {{met.goal.objetivo.descripcion}}</p>   
-              
-            <!-- <div>
-                <label for="comments">Comentario Adiccional:</label>
-                <textarea id="comments" (change)="onComentarioChange($event,index)" name="comments"></textarea> 
-            </div> -->
+      <div class="criteria-info">
+        <div class="criteria-name">{{met.goal.name}}</div>
+        <div class="criteria-weight">Peso: {{met.goal.weight}}%</div>
+        <div class="criteria-description">
+          <strong>Descripcion:</strong>
+          <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
         </div>
-        <app-emojirating [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
-                         [supervisor]="supervisor"
-                         (selecionemoji)="onRespuestaChange($event, index)"></app-emojirating>
-    <!-- </div> -->
+      </div>
+      <app-emojirating class="emoji-container"></app-emojirating>
     </div>
+  </div>
 </div>
+<div *ngIf="evaluacion.evaluacionDesempenoMetas.length>0">
+  <h2>Desempeño</h2>
+  <div class="criteria-section" *ngFor="let desemp of evaluacion.evaluacionDesempenoMetas; let index=index">    
+    <h3>{{desemp.tipo}}</h3>
+    <div class="criteria-item">
+      <div class="criteria-info">
+        <div class="criteria-description">
+          <div class="description-text">{{desemp.descripcion}}</div>
+        </div>
+        <div class="criteria-weight">Peso: {{desemp.meta}}%</div>
+      </div>
+      <app-emojirating class="emoji-container"></app-emojirating>
+    </div>
+  </div>
 </div>

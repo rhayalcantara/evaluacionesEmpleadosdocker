@@ -59,8 +59,10 @@ export class FormMetasComponent implements OnInit {
     if (this.meta.id == 0){
       //obtener el periodo activo de localstore
       this.selectedPeriodo = JSON.parse(localStorage.getItem('periodo') ?? "")
+      console.table(this.selectedPeriodo)
       if (this.selectedPeriodo!=undefined){
-        this.meta.periodId==this.selectedPeriodo.id
+        this.meta.periodId=this.selectedPeriodo.id
+        console.table(this.meta)
       }
     }
     //this.TipoDatos.getdatos()
@@ -134,12 +136,14 @@ export class FormMetasComponent implements OnInit {
       // Si selectedPuesto y selectedPeriodo puede grabar
     if (this.selectedPeriodo || this.selectedPuesto || (this.selectedTipo?.id!=0)){
     //if (this.selectedPuesto ) {
+      this.meta = this.fg.value as IMeta;
       this.metasDatos.model = this.fg.value as IMeta  
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0
       console.log('la meta a grabar',this.metasDatos.model)
       //this.metasDatos.model.tiposid = n
       let nn:number = this.selectedPuesto ? this.selectedPuesto.secuencial : 0
       this.metasDatos.model.positionSecuencial = nn
+      this.meta.positionSecuencial = nn
       console.log({meta:this.metasDatos.model},{fg:this.fg.value as IMeta}) 
       this.metasDatos.grabar();
       this.dialogRef.close(this.metasDatos.model);

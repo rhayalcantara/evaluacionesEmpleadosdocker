@@ -7,6 +7,7 @@ import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploy
 import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
+import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
 
 @Component({
   selector: 'app-evaluacion',
@@ -23,13 +24,17 @@ export class EvaluacionComponent implements OnInit {
   
   constructor(
     private empleadocontroller:Empleados,
-    private periodocontroller:Periodos
+    private periodocontroller:Periodos,
+    
   ){}
+
   ngOnInit() {
     // busca el empleado en localstore
     const storedEmpleado = localStorage.getItem("empleado");
     if (storedEmpleado) {
+      console.table(JSON.parse(storedEmpleado));
       this.empleado = JSON.parse(storedEmpleado);
+      console.table(this.empleado);
     }
     // busca el periodo en localstore
     const storedPeriodo = localStorage.getItem("periodo");

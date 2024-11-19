@@ -51,6 +51,7 @@ export class Evaluacion implements OnInit {
             fechaRepuestas: '',
             observacion: '',
             evaluacionGoals: [],
+            evaluacionDesempenoMetas: [],
             goalEmpleadoRespuestas: []
         };
     }

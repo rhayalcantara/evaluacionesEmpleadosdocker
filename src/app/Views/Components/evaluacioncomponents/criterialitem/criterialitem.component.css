@@ -1,7 +1,10 @@
 h3 {
-    color:azure;
-    background-color: #3498db;
-  }
+  color: azure;
+  background-color: #3498db;
+  padding: 8px;
+  margin: 0;
+  border-radius: 4px;
+}
   .criteria-section {
     background-color: white;
     border-radius: 8px;
@@ -9,26 +12,34 @@ h3 {
     margin-bottom: 20px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
+  
   .criteria-item {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #eee;
+    gap: 20px;
   }
+  
   .criteria-item:last-child {
     border-bottom: none;
   }
+
   .criteria-info {
-    flex-grow: 1;
+    flex: 1;
   }
+  
   .criteria-label {
     font-weight: bold;
   }
-  .criteria-description {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 5px;
+  .criteria-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .description-text {
+    word-wrap: break-word;
+    white-space: pre-line;
   }
   .criteria-weight {
     font-size: 0.8em;
@@ -47,4 +58,7 @@ h3 {
     margin-top: 5px;
     padding: 5px;
   }
-  
+  .emoji-container {
+    flex-shrink: 0;
+    min-width: 300px;
+  }

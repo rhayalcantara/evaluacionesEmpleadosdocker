@@ -44,7 +44,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
         return {
             Id: 0,
             EvaluacionId: 0,
-            Tipo: '',
+            tipo: '',
             descripcion: '',
             meta: 0,
             inverso: false

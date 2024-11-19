@@ -11,6 +11,7 @@ import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion, IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { map, tap } from 'rxjs';
+import { IDesempenoRespuesta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 
 @Component({
   selector: 'app-criterialitem',
@@ -24,7 +25,7 @@ export class CriterialitemComponent implements OnInit {
    @Input() periodo:IPeriodo
    @Input() supervisor:Boolean=false  
    @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
-   @Input() evaluacion:IEvaluacion  =this.EvaluacionControler.inicializamodelo()
+   @Input() evaluacion:IEvaluacion  
   
   public metas:IMetaDts[]=[]
   constructor(private EmpleadoModel:Empleados,
@@ -36,9 +37,10 @@ export class CriterialitemComponent implements OnInit {
   ){
     this.empleado = this.EmpleadoModel.inicializamodelo()
     this.periodo = this.PeriodoModel.inicializamodelo()
-    
+    this.evaluacion=this.EvaluacionControler.inicializamodelo()
   }
   ngOnInit(): void {
+    console.log('CriterialitemComponent',this.evaluacion)
     /*
     this.MetaModel.GetMetasPorPeriodoYPuesto(this.periodo.id,this.empleado.scargo).subscribe(
       {next:(rep:IMetaDts[])=>{
@@ -47,13 +49,19 @@ export class CriterialitemComponent implements OnInit {
       }
     }
     );*/
-    
+    // buscar 
   }
 
-  onRespuestaChange(respuesta: IGoalEmpleadoRespuesta, index: number) {
+  onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
-    
-    this.evaluacion.goalEmpleadoRespuestas[index] = respuesta;
+    // verificar de que tipo es la respuesta
+    if (respuesta.hasOwnProperty('goalId')) 
+        this.evaluacion.goalEmpleadoRespuestas[index] = respuesta as IGoalEmpleadoRespuesta;
+    else{
+      this.evaluacion.evaluacionDesempenoMetas[index].evaluacionDesempenoRespuestas = respuesta as IDesempenoRespuesta
+    }
+
+    //this.evaluacion.goalEmpleadoRespuestas[index] = respuesta;
         
     this.onEvaluacionChange.emit(this.evaluacion)
     // Aquí puedes agregar cualquier lógica adicional que necesites

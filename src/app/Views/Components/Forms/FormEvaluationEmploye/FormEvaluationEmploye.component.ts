@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
@@ -10,13 +10,13 @@ import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
+import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
 
 
 @Component({
   selector: 'app-form-evaluation-employe',
   standalone: true,
-  imports: [CommonModule, FormsModule, 
-    CardEmpleadoComponent, CriterialitemComponent],
+  imports: [CommonModule, FormsModule,CardEmpleadoComponent, CriterialitemComponent],
   templateUrl: './FormEvaluationEmploye.component.html',
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
@@ -34,23 +34,28 @@ export class FormEvaluationEmployeComponent {
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
               private empleadocontroller:Empleados,
-              private periodocontroller:Periodos
+              private periodocontroller:Periodos,
+              private cd: ChangeDetectorRef
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
   }
 
   ngOnInit(): void {
+    
     this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
     .subscribe({
       next: (rep: IEvaluacion) => {
         //console.log('Metas procesadas:', this.metas);
         this.evaluacionempleado = rep;
-        //this.cd.detectChanges(); 
+        console.log('FormEvaluationEmployeComponent',this.evaluacionempleado)
+        this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion
       },
       error: (err) => console.error('Error al obtener la evaluación:', err)
     });
   }
+
+
 
   onEvaluacionChange(evaluacion:IEvaluacion){
     this.evaluacionempleado = evaluacion
