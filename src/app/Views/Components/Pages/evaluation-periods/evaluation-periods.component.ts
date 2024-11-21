@@ -35,7 +35,8 @@ export class EvaluationPeriodsComponent implements OnInit {
     secuencial: 0,
     descripcion: '',
     departmentSecuencial: 0,
-    departamento: ''
+    departamento: '',
+    categoriaPuestoId: 0
   };
   fg!:FormGroup;
   campos: string[]=["name"];
@@ -78,7 +79,8 @@ export class EvaluationPeriodsComponent implements OnInit {
           { secuencial: empleado.scargo, 
             descripcion: empleado.cargo,
             departmentSecuencial:empleado.sdept,
-            departamento:empleado.departamento })) // Extraemos los cargos y scargo
+            departamento:empleado.departamento,            
+            categoriaPuestoId: 0 })) // Extraemos los cargos y scargo
             .filter((value, index, self) =>
               index === self.findIndex((t) => 
                 t.secuencial === value.secuencial 

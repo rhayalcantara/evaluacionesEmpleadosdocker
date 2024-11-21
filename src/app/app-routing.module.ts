@@ -122,6 +122,11 @@ const routes: Routes = [
   { path: 'empleado-desempeno-meta',
     loadComponent:()=> import('./Views/Components/Pages/evaluacion-desempeno-meta/evaluacion-desempeno-meta.component')
     .then((m)=> m.EvaluacionDesempenoMetaComponent),
+    canActivate: [AuthGuard] 
+  },
+  { path: 'CategoriasPuestoa',
+    loadComponent:()=> import('./Views/Components/Pages/categorias-puesto/categorias-puesto.component')
+    .then((m)=> m.CategoriasPuestoComponent),
     canActivate: [AuthGuard]
   },
 ];

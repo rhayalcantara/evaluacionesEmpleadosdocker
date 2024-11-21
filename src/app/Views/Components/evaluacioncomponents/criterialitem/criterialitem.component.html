@@ -7,7 +7,7 @@
     <h3>{{met.goal.objetivo.nombre}}</h3>
     <div class="criteria-item">
       <div class="criteria-info">
-        <div class="criteria-name">{{met.goal.name}}</div>
+        
         <div class="criteria-weight">Peso: {{met.goal.weight}}%</div>
         <div class="criteria-description">
           <strong>Descripcion:</strong>
@@ -27,9 +27,13 @@
         <div class="criteria-description">
           <div class="description-text">{{desemp.descripcion}}</div>
         </div>
-        <div class="criteria-weight">Peso: {{desemp.meta}}%</div>
+        <div class="criteria-weight">Meta: {{desemp.meta}}%</div>
       </div>
-      <app-emojirating class="emoji-container"></app-emojirating>
+      <label for="evaluacion">Logro:</label>
+      <!--impide que pueda poner mas del 100 o menos de 1-->
+      <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">  
+
+
     </div>
   </div>
 </div>

@@ -32,6 +32,7 @@ export class NavmenuComponent implements OnInit {
          //console.log(localStorage.getItem('usuario'))
          this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
          //console.log('elsusuario',this.usuarioservicio.usuario)
+         
           this.mostramenu=true
           this.router.navigate(['/Home'])
           this.logg='LogOut'

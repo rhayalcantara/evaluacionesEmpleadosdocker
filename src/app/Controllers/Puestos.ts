@@ -50,7 +50,8 @@ export class Puestos implements OnInit{
       secuencial:0,
       descripcion:'',
       departmentSecuencial:0,
-      departamento:""
+      departamento:"",
+      categoriaPuestoId:0
    }
   }
   public  getdatos(){

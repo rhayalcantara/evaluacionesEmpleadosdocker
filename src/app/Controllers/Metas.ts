@@ -68,7 +68,8 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
           secuencial: 0,
           descripcion: "",
           departmentSecuencial: 0,
-          departamento: ""
+          departamento: "",
+          categoriaPuestoId: 0
         },
         objetivoid:0,
         objj:"",

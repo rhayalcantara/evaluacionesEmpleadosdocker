@@ -43,7 +43,8 @@ selectedPosition: IPuesto  ={
   secuencial: 0,
   descripcion: '',
   departmentSecuencial: 0,
-  departamento: ''
+  departamento: '',
+  categoriaPuestoId: 0
 };
 periodo:IPeriodo={
   id: 0,

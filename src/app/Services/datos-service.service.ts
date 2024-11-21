@@ -15,7 +15,7 @@ export class DatosServiceService {
   //public URL:string='http://192.168.137.234:9090'
   public URL:string='https://localhost:7067'
   //public URL:string='http://192.168.7.222:9292'
-  //public URL:string='http://192.168.7.222:7070'
+ // public URL:string='http://192.168.7.222:7070'
   constructor(private http: HttpClient,) { }
    headers:HttpHeaders = new HttpHeaders({    
     'Content-Type': 'application/json; charset=utf-8' 

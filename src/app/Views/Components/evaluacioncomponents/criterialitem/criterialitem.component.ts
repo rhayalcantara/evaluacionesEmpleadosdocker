@@ -26,7 +26,7 @@ export class CriterialitemComponent implements OnInit {
    @Input() supervisor:Boolean=false  
    @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
    @Input() evaluacion:IEvaluacion  
-  
+  public logro:number[]=[]
   public metas:IMetaDts[]=[]
   constructor(private EmpleadoModel:Empleados,
               private PeriodoModel:Periodos,
@@ -41,6 +41,7 @@ export class CriterialitemComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log('CriterialitemComponent',this.evaluacion)
+    this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     /*
     this.MetaModel.GetMetasPorPeriodoYPuesto(this.periodo.id,this.empleado.scargo).subscribe(
       {next:(rep:IMetaDts[])=>{
