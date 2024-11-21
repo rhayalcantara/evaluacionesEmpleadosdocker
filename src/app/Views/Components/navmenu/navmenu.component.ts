@@ -6,6 +6,13 @@ import { Usuario } from 'src/app/Models/Usuario/usuario';
 
 import { MatSidenav } from '@angular/material/sidenav';
 import { SegurityService } from 'src/app/Services/segurity.service';
+import { EmpleadoRol } from 'src/app/Controllers/EmpleadoRol';
+import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { IEmpleadoRol } from 'src/app/Models/Rol/IRol';
+import { Empleados } from 'src/app/Controllers/Empleados';
+import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
+import { Periodos } from 'src/app/Controllers/Periodos';
+import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 
 @Component({
   selector: 'app-navmenu',
@@ -15,10 +22,14 @@ import { SegurityService } from 'src/app/Services/segurity.service';
 export class NavmenuComponent implements OnInit {
   public logg:string = 'Login'
   mostramenu:Boolean=false
-
+  public periodo:IPeriodo = this.peri.inicializamodelo()
+  public empleado:IEmpleado=this.empl.inicializamodelo()
  public imagen:any ="assets/user.png"
   usuarioSegurity: any;
   constructor(private router: Router,
+              private empl:Empleados,
+              private peri:Periodos,
+              public empleadoRolController:EmpleadoRol,
               @Inject(CommonsLibService) private commons: CommonsLibService,
               @Inject(SegurityService)  private usuarioservicio:SegurityService
               ) 
@@ -31,8 +42,27 @@ export class NavmenuComponent implements OnInit {
           
          //console.log(localStorage.getItem('usuario'))
          this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
-         //console.log('elsusuario',this.usuarioservicio.usuario)
          
+         //busca el periodo activo
+         this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
+          
+          this.periodo=rep;
+          //actualiza el periodo activo en memoria
+          localStorage.setItem("periodo", JSON.stringify(this.periodo))
+          // busca el empleado
+          this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
+            this.empl.model = rep
+            this.empl.getsubordinados(this.periodo)
+            this.empleado = rep
+            //actualiza el empleado en memoria
+            localStorage.setItem("empleado", JSON.stringify(this.empleado))
+            //busca el rol del empleado
+            this.buscarEmpleadoRol()
+          })
+        }
+          
+        );
+
           this.mostramenu=true
           this.router.navigate(['/Home'])
           this.logg='LogOut'
@@ -51,6 +81,22 @@ export class NavmenuComponent implements OnInit {
         }
       })
   }
+
+  buscarEmpleadoRol() {
+    //buscar empleadorol en el controlador
+    this.empleadoRolController.Gets().subscribe(
+        {
+            next:(rep:ModelResponse) => {
+                console.table(rep.data)
+                let empleadorol: IEmpleadoRol[] = rep.data;
+                let elemprol: IEmpleadoRol | undefined = empleadorol.find(x => x.empleadoSecuencial == this.empleado.secuencial);
+                if (elemprol) {
+                    this.empleadoRolController.model = elemprol;
+                    localStorage.setItem("rol", JSON.stringify(this.empleadoRolController.model))
+                }
+            }
+        })
+}
 
   precionado(){
     //this.isExpanded = false;

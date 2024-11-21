@@ -11,6 +11,7 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { Departamento } from 'src/app/Controllers/Departamento';
 import { IDepartamento } from 'src/app/Models/Departamento/IDepartamento';
 import { LoadingComponent } from '../../loading/loading.component';
+import { FormEmpleadoRolComponent } from '../../Forms/form-empleado-rol/form-empleado-rol.component';
 
 @Component({
   selector: 'app-empleados',
@@ -30,7 +31,6 @@ export class EmpleadosComponent implements OnInit {
 
   constructor(public empleadosController: Empleados,
               private ServiceComunicacion:ComunicacionService,
-              private datos:DatosServiceService,
               private toastr: MatDialog,
               public departamentoService: Departamento,
   ) { }
@@ -102,71 +102,23 @@ export class EmpleadosComponent implements OnInit {
     this.ServiceComunicacion.enviarMensaje(this.config)
   }
   opcion(event:TableResponse){
-    console.log(event)
-    
-    const acct:any ={
-      edit:this.edita,
-      del:this.delete
-   }   
    
-   const handler =  acct[event.option](event.key,this.empleadosController,this.toastr)
-   handler.then((rep:IEmpleado)=>{
-
-    if(rep!=null){
-      let m:IEmpleado = this.empleadosController.arraymodel.find(x=>x.secuencial==rep.secuencial) as IEmpleado
-      let m2:IEmpleado =this.empleadosController.arraymodel[this.empleadosController.arraymodel.indexOf(m)]
-      m2 = rep
-      
-      this.datos.showMessage("Registro Actualizado Correctamente",this.empleadosController.titulomensage,"sucess")
-      //this.empleadosController.filtrar()
-
-    }
-
-      
-   },(err:Error)=>{
-     this.datos.showMessage("Error: "+err.message,"Error","error")
-   })
+    this.abrirmodalzona(event.key as IEmpleado,this.toastr)
+  
    }
   
-   edita(prod:IEmpleado,p:Empleados,t:MatDialog):Promise<any> {
+  
+  abrirmodalzona(p:IEmpleado,t:MatDialog){
     
-    const rep =  new Promise ((resolve:any,reject:any)=>{
-      // p.getdatos()
-      
-      p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IEmpleado
-      console.log('empleadosController edit',p.model)
-      /*
-        const  dialogRef = t.open(FormempleadosControllerComponent,{
-          width: '900px',data:{model:p.model}})
-          dialogRef.afterClosed().subscribe((result:IEmpleado)=>{
-            //console.log('llego del formulario de empleadosController',result)
-            if (result){
-              resolve(result);
-            }else{
-              resolve(null)
-            }
-            
-          });  */
-
-    })
-    
-    return rep
-
-  }
-  abrirmodalzona(t:MatDialog,p:Empleados){
-    p.model=p.inicializamodelo()
-    /*
-    const  dialogRef = t.open(FormempleadosControllerComponent,{
-      width: '900px',data:{model:p.model}})
+    const  dialogRef = t.open(FormEmpleadoRolComponent,{
+      width: '900px',data:{model:p}})
       dialogRef.afterClosed().subscribe((rep:IEmpleado)=>{
-        //console.log('llego del formulario de empleadosController',result)
-        this.empleadosController.arraymodel.push(rep)
-        this.datos.showMessage("Registro Insertado Correctamente",this.empleadosController.titulomensage,"sucess")
-      }); */
+        // console.log('llego del formulario de empleadosController',result)
+        // this.empleadosController.arraymodel.push(rep)
+        // this.datos.showMessage("Registro Insertado Correctamente",this.empleadosController.titulomensage,"sucess")
+      }); 
   }
-  delete(prod:IEmpleado,p:Empleados,t:MatDialog):Promise<any>{
-   return new Promise((resolve,reject)=>{ resolve(prod)}) 
-  }
+
 
   paginacambio(event:number){
     this.empleadosController.actualpage = event
@@ -190,7 +142,7 @@ export class EmpleadosComponent implements OnInit {
 
   }
   agregar(){
-    this.abrirmodalzona(this.toastr,this.empleadosController)
+   
   }
   
 }

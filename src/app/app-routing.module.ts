@@ -129,6 +129,13 @@ const routes: Routes = [
     .then((m)=> m.CategoriasPuestoComponent),
     canActivate: [AuthGuard]
   },
+  { path: 'Roles',
+    loadComponent:()=> import('./Views/Components/Pages/roles/roles.component')
+    .then((m)=> m.RolesComponent),
+    canActivate: [AuthGuard]
+  },
+  
+
 ];
 
 @NgModule({

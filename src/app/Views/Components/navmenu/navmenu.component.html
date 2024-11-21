@@ -13,7 +13,7 @@
         </li>
         
         <!-- Empleados -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Empleados
           </a>
@@ -33,14 +33,14 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/Evaluacion">AutoEvaluación</a></li>
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/EvaluarSubordinados">Evaluar Equipo</a></li>
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/PoliticaEvaluacion">Política de Evaluación</a></li>
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/evaluation-periods">Períodos de Evaluación</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/EvaluarSubordinados" *ngIf="empleadoRolController.model.rolId<=2" >Evaluar Equipo</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/PoliticaEvaluacion" *ngIf="empleadoRolController.model.rolId==1" >Política de Evaluación</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/evaluation-periods" *ngIf="empleadoRolController.model.rolId==1" >Períodos de Evaluación</a></li>
           </ul>
         </li>
         
         <!-- Configuración -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Configuración
           </a>
@@ -57,8 +57,18 @@
             
           </ul>
         </li>
+        <!-- Usuarios -->
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Usuarios
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Usuario">Usuarios</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Roles">Roles</a></li>            
+          </ul>
+        </li>         
         <!-- Plan Extrategico -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Plan Estratégico
           </a>

@@ -62,28 +62,18 @@ export class HomeComponent implements OnInit {
 
   constructor(public empl: Empleados,
               private dialog: MatDialog,
-              private peri:Periodos) {
+              private peri:Periodos) 
+  {
     this.usuario = JSON.parse(localStorage.getItem('usuario') ?? "")
-    this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
-      //console.log('el periodo activo',rep)
-      this.periodo=rep;
-      localStorage.setItem("periodo", JSON.stringify(this.periodo))
-    }
-      
-    );
+    this.empleado = JSON.parse(localStorage.getItem('empleado') ?? "") 
+    this.periodo = JSON.parse(localStorage.getItem('periodo') ?? "")           
   }
 
   public usuario: Usuario
  
   ngOnInit(): void {
     
-    this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
-      this.empl.model = rep
-      this.empl.getsubordinados(this.periodo)
-      this.empleado = rep
-      localStorage.setItem("empleado", JSON.stringify(this.empleado))
-      //console.log('puetos sub',this.empl.arraypuestossub)
-    })
+
   }
 
   onPageChange(event: any) {}

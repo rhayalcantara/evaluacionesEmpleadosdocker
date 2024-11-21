@@ -2,18 +2,18 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IRol, IEmpleadoRol } from "../Models/Rol/IRol";
+import { IEmpleadoRol, IEmpleadoRolDTs } from "../Models/Rol/IRol";
 
 @Injectable({
     providedIn: 'root'
 })
-export class Roles implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/Rols'
-    titulomensage: string = 'Roles'
-    public model: IRol = this.inicializamodelo()
+export class EmpleadoRol implements OnInit {
+    rutaapi: string = this.datos.URL + '/api/EmpleadoRols'
+    titulomensage: string = 'Roles de Empleado'
+    public model: IEmpleadoRol = this.inicializamodelo()
     public titulos = [
-        { name: 'Nombre' },
-        { nivel: 'Nivel' }
+        { empleado: 'Empleado' },
+        { rol: 'Rol' }
     ]
 
     public estado: string = '`'
@@ -21,7 +21,7 @@ export class Roles implements OnInit {
     public actualpage: number = 1
     public pagesize: number = 10
     public filtro: string = ''
-    public arraymodel: IRol[] = []
+    public arraymodel: IEmpleadoRol[] = []
 
     public operationSuccessful: boolean = false;
     @Output() TRegistros = new EventEmitter<number>();
@@ -38,11 +38,33 @@ export class Roles implements OnInit {
         this.getdatos()
     }
 
-    public inicializamodelo(): IRol {
+    public inicializamodelo(): IEmpleadoRol {
         return {
             id: 0,
-            name: '',
-            nivel: 0
+            empleadoSecuencial: 0,
+            rolId: 0,
+            rol: {
+                id: 0,
+                name: '',
+                nivel: 0
+            },
+            empleado: {
+                secuencial: 0,
+                codigousuario: '',
+                nombreunido: '',
+                identificacion: '',
+                sdept: 0,
+                departamento: '',
+                codigoestado: '',
+                scargo: 0,
+                cargo: '',
+                esjefatura: 0,
+                tienejefe: 0,
+                nivel: 0,
+                fechapostulacion: '',
+                jefeinmediatO_SECUENCIAL: 0,
+                jefeinmediato: ''
+            }
         }
     }
 
@@ -58,13 +80,20 @@ export class Roles implements OnInit {
             })
     }
 
-    public getRolesPorEmpleado(empleadoId: number): Observable<IRol[]> {
+    public getEmpleadoRolesPorEmpleado(empleadoId: number): Observable<IEmpleadoRol[]> {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let empleadoRoles: IEmpleadoRol[] = rep.data;
-                return empleadoRoles
-                    .filter(x => x.empleadoSecuencial === empleadoId)
-                    .map(x => x.rol);
+                return empleadoRoles.filter(x => x.empleadoSecuencial === empleadoId);
+            })
+        );
+    }
+
+    public getEmpleadoRolesPorRol(rolId: number): Observable<IEmpleadoRol[]> {
+        return this.Gets().pipe(
+            map((rep: ModelResponse) => {
+                let empleadoRoles: IEmpleadoRol[] = rep.data;
+                return empleadoRoles.filter(x => x.rolId === rolId);
             })
         );
     }
@@ -85,20 +114,25 @@ export class Roles implements OnInit {
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
-    public Get(id: string): Observable<IRol> {
-        return this.datos.getbyid<IRol>(this.rutaapi + `/${id}`)
+    public Get(id: string): Observable<IEmpleadoRol> {
+        return this.datos.getbyid<IEmpleadoRol>(this.rutaapi + `/${id}`)
     }
 
     public GetCount(): Observable<number> {
         return this.datos.getdatoscount(this.rutaapi + `/count`)
     }
 
-    public insert(obj: IRol): Observable<IRol> {
-        return this.datos.insertardatos<IRol>(this.rutaapi, obj);
+    public insert(obj: IEmpleadoRol): Observable<IEmpleadoRol> {
+        return this.datos.insertardatos<IEmpleadoRol>(this.rutaapi, obj);
     }
 
-    public Update(obj: IRol): Observable<IRol> {
-        return this.datos.updatedatos<IRol>(this.rutaapi + `/${obj.id}`, obj);
+    public Update(obj: IEmpleadoRol): Observable<IEmpleadoRolDTs> {
+        let objdts:IEmpleadoRolDTs ={
+            id: obj.id,
+            empleadoSecuencial: obj.empleadoSecuencial,
+            rolId: obj.rolId
+        }
+        return this.datos.updatedatos<IEmpleadoRolDTs>(this.rutaapi + `/${objdts.id}`, objdts);
     }
 
     public async grabar(): Promise<boolean> {
@@ -106,7 +140,7 @@ export class Roles implements OnInit {
             if (this.model.id == 0) {
                 // inserta el registro
                 await firstValueFrom(this.insert(this.model)).then(
-                    (rep: IRol) => {
+                    (rep: IEmpleadoRol) => {
                         firstValueFrom(this.Get(rep.id.toString())).then(t => {
                             this.model = t
                         })
@@ -121,8 +155,8 @@ export class Roles implements OnInit {
             } else {
                 // actualiza el registro            
                 await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IRol) => {
-                        this.model = rep;
+                    (rep: IEmpleadoRolDTs) => {
+                        //this.model = rep;
                         this.TRegistros.emit(this.totalregistros)
                         resolve(true);
                     },
