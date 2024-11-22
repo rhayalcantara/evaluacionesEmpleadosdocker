@@ -26,7 +26,7 @@ export class FormCategoriaPuestoComponent implements OnInit {
   ) {
     this.fg = this.fb.group({
       id: [0],
-      nombre: ['', Validators.required]
+      descripcion: ['', Validators.required]
     });
   }
 

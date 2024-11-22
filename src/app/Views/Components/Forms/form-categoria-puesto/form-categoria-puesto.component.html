@@ -9,8 +9,8 @@
 
     <div class="form-group">
       <label for="nombre">Nombre</label>
-      <input type="text" id="nombre" name="nombre" formControlName="nombre" required>
-      <div *ngIf="fg.get('nombre')?.invalid && (fg.get('nombre')?.dirty || fg.get('nombre')?.touched)" class="alert alert-danger">
+      <input type="text" id="nombre" name="nombre" formControlName="descripcion" required>
+      <div *ngIf="fg.get('descripcion')?.invalid && (fg.get('descripcion')?.dirty || fg.get('descripcion')?.touched)" class="alert alert-danger">
         <div *ngIf="fg.get('nombre')?.errors?.['required']">
           El nombre es requerido.
         </div>
