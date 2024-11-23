@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
+import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
 
 @Injectable({
     providedIn: 'root'
@@ -79,7 +79,9 @@ export class Evaluacion implements OnInit {
             }
         );
     }
-
+    public GetsEvaluacionResultado(id:number): Observable<ModelResponse>{
+        return this.datos.getdatos<ModelResponse>(this.rutaapi+ `/results?evaluationId=${id}`)
+    }
     public Gets(): Observable<ModelResponse> {
         return this.datos.getdatos<ModelResponse>(this.rutaapi);
     }

@@ -87,7 +87,6 @@ export class NavmenuComponent implements OnInit {
     this.empleadoRolController.Gets().subscribe(
         {
             next:(rep:ModelResponse) => {
-                console.table(rep.data)
                 let empleadorol: IEmpleadoRol[] = rep.data;
                 let elemprol: IEmpleadoRol | undefined = empleadorol.find(x => x.empleadoSecuencial == this.empleado.secuencial);
                 if (elemprol) {

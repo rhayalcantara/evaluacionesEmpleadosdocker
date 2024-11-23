@@ -42,3 +42,16 @@ export interface IEvaluacion {
     observacion: string
     goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
   }
+
+  export interface IEvalucionResultDto{
+    evaluacionId:number
+    perspectiva:string
+    objetivo:string
+    tipo:string
+    meta:number
+  }
+
+  export interface IEvaluacionResultMostrarDto extends IEvalucionResultDto{
+    logrado:number
+    porciento:number
+  }

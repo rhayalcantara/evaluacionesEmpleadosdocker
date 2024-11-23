@@ -9,9 +9,11 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { Metas } from 'src/app/Controllers/Metas';
 import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
-import { IEvaluacion, IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
+import { IEvaluacion, IEvalucionResultDto, IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { map, tap } from 'rxjs';
 import { IDesempenoRespuesta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+
 
 @Component({
   selector: 'app-criterialitem',
@@ -25,15 +27,15 @@ export class CriterialitemComponent implements OnInit {
    @Input() periodo:IPeriodo
    @Input() supervisor:Boolean=false  
    @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
-   @Input() evaluacion:IEvaluacion  
+   @Input() evaluacion:IEvaluacion 
+  public desempeno:IEvalucionResultDto[]=[] 
   public logro:number[]=[]
   public metas:IMetaDts[]=[]
   constructor(private EmpleadoModel:Empleados,
               private PeriodoModel:Periodos,
               private MetaModel:Metas,
               private EvaluacionControler:Evaluacion,
-              private cd: ChangeDetectorRef
-              
+              private cd: ChangeDetectorRef              
   ){
     this.empleado = this.EmpleadoModel.inicializamodelo()
     this.periodo = this.PeriodoModel.inicializamodelo()
@@ -42,15 +44,12 @@ export class CriterialitemComponent implements OnInit {
   ngOnInit(): void {
     console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
-    /*
-    this.MetaModel.GetMetasPorPeriodoYPuesto(this.periodo.id,this.empleado.scargo).subscribe(
-      {next:(rep:IMetaDts[])=>{
-        console.log('las metas:',rep)
-        this.metas=rep;
+    this.EvaluacionControler.GetsEvaluacionResultado(this.evaluacion.id).subscribe({
+      next:(rep:ModelResponse)=>{
+            this.desempeno = rep.data
+            console.table(this.desempeno)
       }
-    }
-    );*/
-    // buscar 
+    })
   }
 
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {

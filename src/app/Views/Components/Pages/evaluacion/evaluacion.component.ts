@@ -32,9 +32,9 @@ export class EvaluacionComponent implements OnInit {
     // busca el empleado en localstore
     const storedEmpleado = localStorage.getItem("empleado");
     if (storedEmpleado) {
-      console.table(JSON.parse(storedEmpleado));
+     
       this.empleado = JSON.parse(storedEmpleado);
-      console.table(this.empleado);
+
     }
     // busca el periodo en localstore
     const storedPeriodo = localStorage.getItem("periodo");

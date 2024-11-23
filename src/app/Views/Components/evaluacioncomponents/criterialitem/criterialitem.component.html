@@ -1,5 +1,43 @@
 
+<div *ngIf="evaluacion.evaluacionDesempenoMetas.length>0">
+  <h2>Desempeño</h2>
+  <!-- <div class="criteria-section" *ngFor="let desemp of evaluacion.evaluacionDesempenoMetas; let index=index">    
+    <h3>{{desemp.tipo}}</h3>
+    <div class="criteria-item">
+      <div class="criteria-info">
+        <div class="criteria-description">
+          <div class="description-text">{{desemp.descripcion}}</div>
+        </div>
+        <div class="criteria-weight">Meta: {{desemp.meta}}%</div>
+      </div>
+      <label for="evaluacion">Logro:</label>
+      
+      <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">  
 
+
+    </div>
+  </div> -->
+  <div *ngIf="desempeno.length > 0" class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="bg-light">
+        <tr>
+          <th>Perspectiva</th>
+          <th>Objetivo</th>
+          <th>Tipo</th>
+          <th class="text-end">Meta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of desempeno">
+          <td>{{row.perspectiva}}</td>
+          <td>{{row.objetivo}}</td>
+          <td>{{row.tipo}}</td>
+          <td class="text-end">{{row.meta}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 <!-- criterialitem.component.html -->
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
   <h2>Competencias</h2>
@@ -15,25 +53,6 @@
         </div>
       </div>
       <app-emojirating class="emoji-container"></app-emojirating>
-    </div>
-  </div>
-</div>
-<div *ngIf="evaluacion.evaluacionDesempenoMetas.length>0">
-  <h2>Desempeño</h2>
-  <div class="criteria-section" *ngFor="let desemp of evaluacion.evaluacionDesempenoMetas; let index=index">    
-    <h3>{{desemp.tipo}}</h3>
-    <div class="criteria-item">
-      <div class="criteria-info">
-        <div class="criteria-description">
-          <div class="description-text">{{desemp.descripcion}}</div>
-        </div>
-        <div class="criteria-weight">Meta: {{desemp.meta}}%</div>
-      </div>
-      <label for="evaluacion">Logro:</label>
-      <!--impide que pueda poner mas del 100 o menos de 1-->
-      <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">  
-
-
     </div>
   </div>
 </div>
