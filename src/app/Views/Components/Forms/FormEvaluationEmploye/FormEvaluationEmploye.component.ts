@@ -65,7 +65,7 @@ export class FormEvaluationEmployeComponent {
 
   onEvaluacionChange(evaluacion:IEvaluacion){
     this.evaluacionempleado = evaluacion
-   // console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor)
+    console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor)
   }
   onSubmit() {
     // Handle form submission

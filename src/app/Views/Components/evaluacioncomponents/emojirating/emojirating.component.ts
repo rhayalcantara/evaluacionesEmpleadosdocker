@@ -66,6 +66,7 @@ getLabel(value: number): string {
   }
   
   cambiovalor(valor: number) {
+    console.log('cambiovalor',valor,this.goalempleadorepuesta)
     if (this.valorSeleccionado === valor) {
       // Si el valor ya estaba seleccionado, lo deseleccionamos
       this.valorSeleccionado = 0;
@@ -73,25 +74,16 @@ getLabel(value: number): string {
       // Si es un nuevo valor, lo seleccionamos
       this.valorSeleccionado = valor;
     }
-    if (this.supervisor){
-      if (this.goalempleadorepuesta){        
-        if(this.goalempleadorepuesta.repuestasupervisor){
-          this.goalempleadorepuesta.repuestasupervisor = this.valorSeleccionado
-        }else {
-          this.goalempleadorepuesta.repuesta = this.valorSeleccionado
-        }
-        this.selecionemoji.emit(this.goalempleadorepuesta)
+    if (this.supervisor ){     
+      if(this.goalempleadorepuesta){
+        this.goalempleadorepuesta.repuestasupervisor = this.valorSeleccionado
+      }        
     }else{
-      if (this.desempenorepuesta){
-        if(this.desempenorepuesta.repuestasupervisor){
-          this.desempenorepuesta.repuestasupervisor = this.valorSeleccionado
-        }else{
-          this.desempenorepuesta.repuesta = this.valorSeleccionado
-        }
-        this.selecionemoji.emit(this.desempenorepuesta)        
+      if(this.goalempleadorepuesta){
+        this.goalempleadorepuesta.repuesta = this.valorSeleccionado 
+      }
     }
-  }
-
+    this.selecionemoji.emit(this.goalempleadorepuesta)
   
     // Actualizar todos los checkboxes
     for (let i = 1; i <= 5; i++) {
@@ -102,6 +94,6 @@ getLabel(value: number): string {
     }
 
     //console.log('Valor seleccionado:', this.valorSeleccionado);
-  }
+  
 }
 }

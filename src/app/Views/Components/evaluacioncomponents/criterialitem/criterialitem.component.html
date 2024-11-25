@@ -24,6 +24,7 @@
           <th>Perspectiva</th>
           <th>Objetivo</th>
           <th>Tipo</th>
+          <th>Inverso</th>
           <th class="text-end">Meta</th>
           <th class="text-end">Logro</th>
           <th class="text-end">%</th>
@@ -34,11 +35,19 @@
           <td>{{row.perspectiva}}</td>
           <td>{{row.objetivo}}</td>
           <td>{{row.tipo}}</td>
+          <td>
+            <input type="checkbox" [(ngModel)]="row.inverso" name="inverso" readonly>
+          </td>
           <td class="text-end">{{row.meta}}</td>
           <td class="text-end">
-            <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">
+            <input type="number" (change)="onLogroChange($event, index)" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">
           </td>
-          <td class="text-end">{{(logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
+          <div *ngIf="!row.inverso">
+            <td class="text-end" > {{ (logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
+          </div>
+          <div *ngIf="row.inverso">
+            <td class="text-end"  > {{ (row.meta/logro[index])*100 | number:'1.2-2'}}</td>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -58,7 +67,9 @@
           <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
         </div>
       </div>
-      <app-emojirating class="emoji-container"></app-emojirating>
+      <app-emojirating class="emoji-container"
+      [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
+      (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
     </div>
   </div>
 </div>

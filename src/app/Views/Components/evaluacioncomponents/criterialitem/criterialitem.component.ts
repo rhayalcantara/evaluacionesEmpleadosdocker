@@ -11,7 +11,7 @@ import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion, IEvalucionResultDto, IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { map, tap } from 'rxjs';
-import { IDesempenoRespuesta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { IDesempenoRespuesta, IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 
@@ -30,6 +30,7 @@ export class CriterialitemComponent implements OnInit {
    @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
    @Input() evaluacion:IEvaluacion =this.EvaluacionControler.inicializamodelo()  
   public desempeno:IEvalucionResultDto[]=[] 
+  p:IEvaluacionDesempenoMeta[]=[]
   public logro:number[]=[]
   public metas:IMetaDts[]=[]
   constructor(private EmpleadoModel:Empleados,
@@ -46,10 +47,9 @@ export class CriterialitemComponent implements OnInit {
       if ( data.mensaje === 'buscar'){
         this.EvaluacionControler.GetsEvaluacionResultado(data.id)
         .subscribe({
-          next: (rep ) => {
-            
+          next: (rep ) => {            
             this.desempeno = rep.data;
-            console.log('actualizar',this.desempeno,rep.data,data.id)
+            console.log('actualizar',this.desempeno,rep.data,data.id,this.evaluacion)
             this.cd.detectChanges(); 
           }
         })
@@ -57,17 +57,33 @@ export class CriterialitemComponent implements OnInit {
    })
 
   }
-
+ 
   ngOnInit(): void {
     console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
     this.logro = this.logro.map((x)=>0)
   }
+  
+  onLogroChange(event:any,index:number){
+    let logro:number = event.target.value
+    this.logro[index] = logro
+    console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
 
+      if(this.supervisor){
+        this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.logro = logro;
+      }else{
+        this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.logro = logro;
+      }
+    
+    this.onEvaluacionChange.emit(this.evaluacion)
+
+    //console.log("cambio el logro",this.evaluacion.evaluacionDesempenoMetas[index])
+  }
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
     // verificar de que tipo es la respuesta
+    console.log('respuesta',respuesta)
     if (respuesta.hasOwnProperty('goalId')) 
         this.evaluacion.goalEmpleadoRespuestas[index] = respuesta as IGoalEmpleadoRespuesta;
     else{

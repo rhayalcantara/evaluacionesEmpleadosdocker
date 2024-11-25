@@ -45,6 +45,8 @@ export interface IEvaluacion {
 
   export interface IEvalucionResultDto{
     evaluacionId:number
+    id:number
+    inverso:boolean
     perspectiva:string
     objetivo:string
     tipo:string
