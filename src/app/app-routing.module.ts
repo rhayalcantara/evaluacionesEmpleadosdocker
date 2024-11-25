@@ -138,7 +138,13 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/valores-evaluacion/valores-evaluacion.component')
     .then((m)=> m.ValoresEvaluacionComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'porciento-desempeno-competencia',
+    loadComponent:()=> import('./Views/Components/Pages/porciento-desempeno-competencia/porciento-desempeno-competencia.component')
+    .then((m)=> m.PorcientoDesempenoCompetenciaComponent),
+    canActivate: [AuthGuard]
   }
+  //PorcientoDesempenoCompetenciaComponent
 ];
 
 @NgModule({
