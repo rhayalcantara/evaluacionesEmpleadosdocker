@@ -1,5 +1,5 @@
 
-<div *ngIf="evaluacion.evaluacionDesempenoMetas.length>0">
+<div >
   <h2>Desempeño</h2>
   <!-- <div class="criteria-section" *ngFor="let desemp of evaluacion.evaluacionDesempenoMetas; let index=index">    
     <h3>{{desemp.tipo}}</h3>
@@ -15,9 +15,9 @@
       <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">  
 
 
-    </div>
+    </div>*ngIf="desempeno.length > 0"
   </div> -->
-  <div *ngIf="desempeno.length > 0" class="table-responsive">
+  <div  class="table-responsive">
     <table class="table table-bordered">
       <thead class="bg-light">
         <tr>
@@ -25,14 +25,20 @@
           <th>Objetivo</th>
           <th>Tipo</th>
           <th class="text-end">Meta</th>
+          <th class="text-end">Logro</th>
+          <th class="text-end">%</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of desempeno">
+        <tr *ngFor="let row of desempeno; let index=index">
           <td>{{row.perspectiva}}</td>
           <td>{{row.objetivo}}</td>
           <td>{{row.tipo}}</td>
           <td class="text-end">{{row.meta}}</td>
+          <td class="text-end">
+            <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">
+          </td>
+          <td class="text-end">{{(logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
         </tr>
       </tbody>
     </table>

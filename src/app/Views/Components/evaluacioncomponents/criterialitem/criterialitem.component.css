@@ -62,3 +62,24 @@ h3 {
     flex-shrink: 0;
     min-width: 300px;
   }
+  /* Nuevos estilos para el encabezado de la tabla */
+.table-responsive th {
+  color: azure;
+  background-color: #3498db;
+  padding: 8px;
+  margin: 0;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 10px 0;
+}
+
+.table-responsive td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}

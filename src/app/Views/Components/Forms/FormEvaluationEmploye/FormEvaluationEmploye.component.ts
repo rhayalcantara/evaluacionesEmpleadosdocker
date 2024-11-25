@@ -5,18 +5,20 @@ import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-emp
 import { CriterialitemComponent } from '../../evaluacioncomponents/criterialitem/criterialitem.component';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { IEvaluacion, IEvaluacionDto } from 'src/app/Models/Evaluacion/IEvaluacion';
+import { IEvaluacion, IEvaluacionDto, IEvalucionResultDto } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
+import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 
 
 @Component({
   selector: 'app-form-evaluation-employe',
   standalone: true,
-  imports: [CommonModule, FormsModule,CardEmpleadoComponent, CriterialitemComponent],
+  imports: [CommonModule, FormsModule, CriterialitemComponent],
   templateUrl: './FormEvaluationEmploye.component.html',
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
@@ -31,10 +33,12 @@ export class FormEvaluationEmployeComponent {
   public fecha:Date=new Date()
   public evaluacionempleado:IEvaluacion
   public comentarioAdicional: string = ''; // New property for additional comment
+  public desempeno:IEvalucionResultDto[]=[]
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
               private empleadocontroller:Empleados,
               private periodocontroller:Periodos,
+              private ServiceComunicacion:ComunicacionService, 
               private cd: ChangeDetectorRef
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
@@ -48,11 +52,13 @@ export class FormEvaluationEmployeComponent {
         //console.log('Metas procesadas:', this.metas);
         this.evaluacionempleado = rep;
         console.log('FormEvaluationEmployeComponent',this.evaluacionempleado)
+        this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id})
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion
       },
       error: (err) => console.error('Error al obtener la evaluación:', err)
     });
+
   }
 
 

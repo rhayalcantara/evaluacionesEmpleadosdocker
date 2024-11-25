@@ -13,6 +13,7 @@ import { IEvaluacion, IEvalucionResultDto, IGoalEmpleadoRespuesta } from 'src/ap
 import { map, tap } from 'rxjs';
 import { IDesempenoRespuesta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class CriterialitemComponent implements OnInit {
    @Input() periodo:IPeriodo
    @Input() supervisor:Boolean=false  
    @Output() onEvaluacionChange = new EventEmitter<IEvaluacion>()
-   @Input() evaluacion:IEvaluacion 
+   @Input() evaluacion:IEvaluacion =this.EvaluacionControler.inicializamodelo()  
   public desempeno:IEvalucionResultDto[]=[] 
   public logro:number[]=[]
   public metas:IMetaDts[]=[]
@@ -35,21 +36,33 @@ export class CriterialitemComponent implements OnInit {
               private PeriodoModel:Periodos,
               private MetaModel:Metas,
               private EvaluacionControler:Evaluacion,
-              private cd: ChangeDetectorRef              
+              private cd: ChangeDetectorRef,  
+              private ServiceComunicacion:ComunicacionService,          
   ){
     this.empleado = this.EmpleadoModel.inicializamodelo()
     this.periodo = this.PeriodoModel.inicializamodelo()
-    this.evaluacion=this.EvaluacionControler.inicializamodelo()
+
+    this.ServiceComunicacion.enviarMensajeObservable.subscribe((data:any)=>{
+      if ( data.mensaje === 'buscar'){
+        this.EvaluacionControler.GetsEvaluacionResultado(data.id)
+        .subscribe({
+          next: (rep ) => {
+            
+            this.desempeno = rep.data;
+            console.log('actualizar',this.desempeno,rep.data,data.id)
+            this.cd.detectChanges(); 
+          }
+        })
+      }
+   })
+
   }
+
   ngOnInit(): void {
     console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
-    this.EvaluacionControler.GetsEvaluacionResultado(this.evaluacion.id).subscribe({
-      next:(rep:ModelResponse)=>{
-            this.desempeno = rep.data
-            console.table(this.desempeno)
-      }
-    })
+    //inicialiar el array de logros a cero
+    this.logro = this.logro.map((x)=>0)
   }
 
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {

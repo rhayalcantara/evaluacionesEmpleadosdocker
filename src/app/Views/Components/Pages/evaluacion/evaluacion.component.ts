@@ -34,6 +34,7 @@ export class EvaluacionComponent implements OnInit {
     if (storedEmpleado) {
      
       this.empleado = JSON.parse(storedEmpleado);
+      
 
     }
     // busca el periodo en localstore
