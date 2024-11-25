@@ -1,0 +1,66 @@
+<div class="container">
+  <h2>{{titulo}}</h2>
+
+  <form class="edit-form" id="editValoresEvaluacionForm" [formGroup]="fg">
+    <div class="form-group">
+      <label for="id">ID</label>
+      <input type="text" id="id" name="id" formControlName="id" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="Titulo">Título</label>
+      <input type="text" id="Titulo" name="Titulo" formControlName="Titulo" required>
+      <div *ngIf="fg.get('Titulo')?.invalid && (fg.get('Titulo')?.dirty || fg.get('Titulo')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('Titulo')?.errors?.['required']">
+          El título es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="RangoDesde">Rango Desde</label>
+      <input type="number" id="RangoDesde" name="RangoDesde" formControlName="RangoDesde" required min="0" max="100">
+      <div *ngIf="fg.get('RangoDesde')?.invalid && (fg.get('RangoDesde')?.dirty || fg.get('RangoDesde')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('RangoDesde')?.errors?.['required']">
+          El rango desde es requerido.
+        </div>
+        <div *ngIf="fg.get('RangoDesde')?.errors?.['min'] || fg.get('RangoDesde')?.errors?.['max']">
+          El rango debe estar entre 0 y 100.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="RangoHasta">Rango Hasta</label>
+      <input type="number" id="RangoHasta" name="RangoHasta" formControlName="RangoHasta" required min="0" max="100">
+      <div *ngIf="fg.get('RangoHasta')?.invalid && (fg.get('RangoHasta')?.dirty || fg.get('RangoHasta')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('RangoHasta')?.errors?.['required']">
+          El rango hasta es requerido.
+        </div>
+        <div *ngIf="fg.get('RangoHasta')?.errors?.['min'] || fg.get('RangoHasta')?.errors?.['max']">
+          El rango debe estar entre 0 y 100.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="valor">Valor</label>
+      <input type="number" id="valor" name="valor" formControlName="valor" required min="0" max="100">
+      <div *ngIf="fg.get('valor')?.invalid && (fg.get('valor')?.dirty || fg.get('valor')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('valor')?.errors?.['required']">
+          El valor es requerido.
+        </div>
+        <div *ngIf="fg.get('valor')?.errors?.['min'] || fg.get('valor')?.errors?.['max']">
+          El valor debe estar entre 0 y 100.
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center pt-1 mb-5 pb-1">
+      <div class="d-grid gap-2">
+        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="button" [disabled]="fg.invalid">Grabar</button>
+        <button class="btn btn-secondary btn-block" type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</div>

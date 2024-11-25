@@ -1,7 +1,7 @@
 export interface IPorcientoDesempenoCompetencia {
     id: number;
     PeriodId: number;
-    descripcion: string;
+    descripcion: string; // aqui solo va Desempeno o Competencia
     valor: number;
 }
 

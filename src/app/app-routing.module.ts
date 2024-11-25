@@ -118,7 +118,7 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/empleado-desempeno/empleado-desempeno.component')
     .then((m)=> m.EmpleadoDesempenoComponent),
     canActivate: [AuthGuard]
-  },// 
+  },
   { path: 'empleado-desempeno-meta',
     loadComponent:()=> import('./Views/Components/Pages/evaluacion-desempeno-meta/evaluacion-desempeno-meta.component')
     .then((m)=> m.EvaluacionDesempenoMetaComponent),
@@ -134,8 +134,11 @@ const routes: Routes = [
     .then((m)=> m.RolesComponent),
     canActivate: [AuthGuard]
   },
-  
-
+  { path: 'valores-evaluacion',
+    loadComponent:()=> import('./Views/Components/Pages/valores-evaluacion/valores-evaluacion.component')
+    .then((m)=> m.ValoresEvaluacionComponent),
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

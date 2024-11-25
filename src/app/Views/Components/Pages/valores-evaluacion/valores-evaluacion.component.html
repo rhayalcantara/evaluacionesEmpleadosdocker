@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="header">
+    <h2>Valores de Evaluación</h2>
+    <button class="btn btn-primary" (click)="onAdd()">
+      <i class="fas fa-plus"></i> Agregar Nuevo
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Rango Desde</th>
+          <th>Rango Hasta</th>
+          <th>Valor</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of displayedItems">
+          <td>{{ item.id }}</td>
+          <td>{{ item.Titulo }}</td>
+          <td>{{ item.RangoDesde }}%</td>
+          <td>{{ item.RangoHasta }}%</td>
+          <td>{{ item.valor }}%</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-info me-2" (click)="onEdit(item)" title="Editar">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="onDelete(item)" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="displayedItems.length === 0">
+          <td colspan="6" class="text-center">No hay registros disponibles</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="pageIndex"
+    (page)="onPageChange($event)"
+    aria-label="Select page">
+  </mat-paginator>
+</div>
