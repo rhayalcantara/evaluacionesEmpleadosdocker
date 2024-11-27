@@ -90,6 +90,11 @@ export class FormEvaluationEmployeComponent {
     if (puede){
       //console.log("se envia a grabar",this.evaluacionempleado)
       this.EvaluacionController.model = this.evaluacionempleado
+
+      //calcular el desempeño y la competencia
+      //calculo de desempeño
+     //this.desempeno = this.EvaluacionController.CalculoDesempeno(this.evaluacionempleado)
+
       this.EvaluacionController.grabar().then((rep)=>{
         if(rep){
           this.datos.showMessage("Grabado",this.titulo,"sucess")

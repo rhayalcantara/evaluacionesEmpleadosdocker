@@ -83,7 +83,7 @@ export class CriterialitemComponent implements OnInit {
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
     // verificar de que tipo es la respuesta
-    console.log('respuesta',respuesta)
+    console.log('respuesta',respuesta,index)
     if (respuesta.hasOwnProperty('goalId')) 
         this.evaluacion.goalEmpleadoRespuestas[index] = respuesta as IGoalEmpleadoRespuesta;
     else{

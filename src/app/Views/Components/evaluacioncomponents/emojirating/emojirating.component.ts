@@ -35,6 +35,7 @@ export class EmojiratingComponent implements OnInit{
    weight: 0,
    observacion: ''
  }
+ @Input() namex:number=0
  @Output() selecionemoji = new EventEmitter<IGoalEmpleadoRespuesta | IDesempenoRespuesta  >();
 // Add to emojirating.component.ts
 getLabel(value: number): string {

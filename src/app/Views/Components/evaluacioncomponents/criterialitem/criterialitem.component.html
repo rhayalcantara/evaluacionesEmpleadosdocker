@@ -57,17 +57,16 @@
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
   <h2>Competencias</h2>
   <div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals; let index=index">
-    <h3>{{met.goal.objetivo.nombre}}</h3>
+    <h3>{{met.goal.objetivo.nombre}} {{index}} </h3>
     <div class="criteria-item">
-      <div class="criteria-info">
-        
+      <div class="criteria-info">        
         <div class="criteria-weight">Peso: {{met.goal.weight}}%</div>
         <div class="criteria-description">
           <strong>Descripcion:</strong>
           <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
         </div>
       </div>
-      <app-emojirating class="emoji-container"
+      <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
     </div>

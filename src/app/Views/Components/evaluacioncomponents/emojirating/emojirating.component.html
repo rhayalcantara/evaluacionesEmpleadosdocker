@@ -8,8 +8,9 @@
       </label>
       <div class="checkbox-container">
         <input
-          [id]="'jobKnowledgeCheck' + i"
+          [id]="namex+'jobKnowledgeCheck' + i"
           type="checkbox"
+          [name]="namex+'rating-' + i"
           [checked]="valorSeleccionado === i"
           (click)="cambiovalor(i)"
         >
@@ -17,39 +18,5 @@
     </div>
   </div>
 </div>
-<!-- <div class="emoji-rating">
-  <div class="emoji-option" *ngFor="let i of [1, 2, 3, 4, 5]">
-    <input type="radio" [id]="'jk' + i" name="jobKnowledge" [value]="i" 
-           [checked]="valorSeleccionado === i">
-    <label [for]="'jk' + i">{{ getEmoji(i) }}</label>
-    <div class="checkbox-container">
-      <input type="checkbox" [id]="'jobKnowledgeCheck' + i" 
-             (click)="cambiovalor(i)"
-             name="criteriaChecked" [value]="'jobKnowledge' + i"
-             [checked]="valorSeleccionado === i">
-    </div>
-  </div>
-</div> -->
 
-<!-- <div class="emoji-rating">
-  <div class="emoji-option"> <input type="radio" id="jk1" name="jobKnowledge" value="1"><label for="jk1">😔</label>
-    <div class="checkbox-container"> <input type="checkbox" id="jobKnowledgeCheck1" (click)="cambiovalor(1)"
-        name="criteriaChecked" value="jobKnowledge1"> </div>
-  </div>
-  <div class="emoji-option"> <input type="radio" id="jk2" name="jobKnowledge" value="2"><label for="jk2">😐</label>
-    <div class="checkbox-container"> <input type="checkbox" id="jobKnowledgeCheck2" (click)="cambiovalor(2)"
-        name="criteriaChecked" value="jobKnowledge2"> </div>
-  </div>
-  <div class="emoji-option"> <input type="radio" id="jk3" name="jobKnowledge" value="3"><label for="jk3">🙂</label>
-    <div class="checkbox-container"> <input type="checkbox" id="jobKnowledgeCheck3" (click)="cambiovalor(3)"
-        name="criteriaChecked" value="jobKnowledge3"> </div>
-  </div>
-  <div class="emoji-option"> <input type="radio" id="jk4" name="jobKnowledge" value="4"><label for="jk4">😄</label>
-    <div class="checkbox-container"> <input type="checkbox" id="jobKnowledgeCheck4" (click)="cambiovalor(4)"
-        name="criteriaChecked" value="jobKnowledge4"> </div>
-  </div>
-  <div class="emoji-option"> <input type="radio" id="jk5" name="jobKnowledge" value="5"><label for="jk5">😁</label>
-    <div class="checkbox-container"> <input type="checkbox" id="jobKnowledgeCheck5" (click)="cambiovalor(5)"
-        name="criteriaChecked" value="jobKnowledge5"> </div>
-  </div>
-</div> -->
+

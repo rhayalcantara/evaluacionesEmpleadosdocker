@@ -55,6 +55,14 @@ export class Evaluacion implements OnInit {
             goalEmpleadoRespuestas: []
         };
     }
+    // public CalculoDesempeno(supervisor:boolean): void {
+    //     this.model.totalCalculo = 0;
+    //     let desempeno:number=0;
+    //     for (let item of this.model.evaluacionDesempenoMetas) {
+
+    //     }
+
+    // }
 
     public getdatos() {
         this.Gets()
