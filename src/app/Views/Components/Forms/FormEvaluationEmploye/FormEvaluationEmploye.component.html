@@ -19,6 +19,6 @@
     <label for="comments">Comentario Adiccional:</label>
     <textarea id="comments" [(ngModel)]="comentarioAdicional" name="comments"></textarea>
 
-    <button type="submit">Grabar</button>
-    <button type="cancelar" (click)="cancelar()">Cancelar</button>
+    <button *ngIf="mostargrabar" type="submit">Grabar</button>
+    <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
   </form>

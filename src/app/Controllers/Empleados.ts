@@ -123,7 +123,7 @@ export class Empleados implements OnInit{
       //console.log('llegaron los datos ',rep.count)
       //se obtiene los datos y se ponen en los array
       this.arraymodelsubordinados=rep.data 
-      console.log('Subordinates data received:', rep.data);
+      //console.log('Subordinates data received:', rep.data);
       //llena los puestos
       this.arraymodelsubordinados.map((x:IEmpleado)=>{
          this.datos.getbyid<IPuesto>(this.datos.URL+`/api/Positions/${x.scargo}`).subscribe((puesto:IPuesto)=>{
@@ -141,7 +141,7 @@ export class Empleados implements OnInit{
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
 public Getsub(empleado_secuencial:string,fechaconsulta:string):Observable<ModelResponse> {
-  console.log(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
+ //console.log(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
 
   return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
 }

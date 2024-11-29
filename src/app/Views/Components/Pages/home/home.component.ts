@@ -15,8 +15,7 @@ import { EmpleadoTeamComponent } from '../../ViewEmpleado/empleadoteam/empleadot
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule, 
-    CardEmpleadoComponent, RouterModule,
+  imports: [FormsModule, CommonModule, RouterModule,
     EmpleadoTeamComponent], // Add RouterModule here
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']

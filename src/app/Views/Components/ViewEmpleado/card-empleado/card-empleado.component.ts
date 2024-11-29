@@ -91,7 +91,7 @@ export class CardEmpleadoComponent implements OnInit {
   openEvaluationForm(): void {
     //this.evaluateEmployee.emit(this.empleado);
     const dialogRef = this.toastr.open(FormEvaluacionSupervisorComponent,
-      {width:'1200px',height:'90%',disableClose:true,data:{empleado:this.empleado,periodo:this.periodo,titutlo:"Evaluacion Equipo"}}
+      {width:'100%',height:'90%',disableClose:true,data:{empleado:this.empleado,periodo:this.periodo,titutlo:"Evaluacion Equipo"}}
     );
     dialogRef.afterClosed().subscribe((rep)=>{
       

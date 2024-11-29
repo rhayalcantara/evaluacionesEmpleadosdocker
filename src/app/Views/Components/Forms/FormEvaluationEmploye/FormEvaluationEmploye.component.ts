@@ -27,6 +27,7 @@ export class FormEvaluationEmployeComponent {
   @Input() periodo: IPeriodo=this.periodocontroller.inicializamodelo(); // You might want to create a proper interface for this
   @Input() titulo:string="";
   @Input() supervisor:Boolean=false
+  @Input() mostargrabar:Boolean=true
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
   
   public obervaciones:string=""
@@ -51,7 +52,7 @@ export class FormEvaluationEmployeComponent {
       next: (rep: IEvaluacion) => {
         //console.log('Metas procesadas:', this.metas);
         this.evaluacionempleado = rep;
-        console.log('FormEvaluationEmployeComponent',this.evaluacionempleado)
+        //console.log('FormEvaluationEmployeComponent',this.evaluacionempleado)
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id})
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion
@@ -61,21 +62,22 @@ export class FormEvaluationEmployeComponent {
 
   }
 
-
-
   onEvaluacionChange(evaluacion:IEvaluacion){
     this.evaluacionempleado = evaluacion
     console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor)
   }
+
   onSubmit() {
     // Handle form submission
     // verifica si hay repuesta no contestadas
     let puede:boolean=true
     this.evaluacionempleado.observacion = this.comentarioAdicional; // New property for additional comment
+  
     //poner la fecha de repuesta
     const fechaActual = new Date();
     this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
-    //console.log({supervisor:this.supervisor,repuestas:this.evaluacionempleado.goalEmpleadoRespuestas})
+    
+    // verifica si hay competencias sin responder
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
         if(this.supervisor){          
           if(element.repuestasupervisor==0){              
@@ -83,18 +85,31 @@ export class FormEvaluationEmployeComponent {
           }          
         }else{
           if (element.repuesta==0){
+            console.log('Falta este competencia',element)
             puede=false;
           }
         }
     });
+    
+    // verifica si hay desempeños sin responder
+    this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
+      item.evaluacion=undefined
+      if(this.supervisor){
+        if((item.evaluacioneDesempenoMetaRespuestas?.supervisado_logro ??0)==0){          
+          puede=false;
+        }
+      }else{
+        if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
+          console.log('falta este item',item)
+          puede=false
+        }
+      }      
+    })
+
+    console.log('puede',puede)
     if (puede){
       //console.log("se envia a grabar",this.evaluacionempleado)
       this.EvaluacionController.model = this.evaluacionempleado
-
-      //calcular el desempeño y la competencia
-      //calculo de desempeño
-     //this.desempeno = this.EvaluacionController.CalculoDesempeno(this.evaluacionempleado)
-
       this.EvaluacionController.grabar().then((rep)=>{
         if(rep){
           this.datos.showMessage("Grabado",this.titulo,"sucess")

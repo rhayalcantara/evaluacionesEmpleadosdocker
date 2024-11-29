@@ -47,6 +47,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
             tipo: '',
             descripcion: '',
             meta: 0,
+            peso:0,
             inverso: false
         }
     }

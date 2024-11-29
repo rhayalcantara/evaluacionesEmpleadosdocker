@@ -3,6 +3,11 @@ import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
+import { ValoresEvaluacion } from "./ValoresEvaluacion";
+import { IValoresEvaluacion } from "../Models/ValoresEvaluacion/IValoresEvaluacion";
+import { IEvaluacionDesempenoMeta } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+import { PorcientoDesempenoCompetencia } from "./PorcientoDesempenoCompetencia";
+import { IPorcientoDesempenoCompetencia } from "../Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia";
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +36,9 @@ export class Evaluacion implements OnInit {
     @Output() TRegistros = new EventEmitter<number>();
 
     constructor(
-        private datos: DatosServiceService
+        private datos: DatosServiceService,
+        private valorevalucioncontroller: ValoresEvaluacion,
+        private porcientoDesempenoCompetencia:PorcientoDesempenoCompetencia
     ) { }
 
     ngOnInit(): void {
@@ -55,14 +62,96 @@ export class Evaluacion implements OnInit {
             goalEmpleadoRespuestas: []
         };
     }
-    // public CalculoDesempeno(supervisor:boolean): void {
-    //     this.model.totalCalculo = 0;
-    //     let desempeno:number=0;
-    //     for (let item of this.model.evaluacionDesempenoMetas) {
 
-    //     }
+    public async CalculoDesempeno(): Promise<number> {
+        
+        let desempeno:number=0;
+        for (let item of this.model.evaluacionDesempenoMetas) {            
 
-    // }
+            desempeno+= await this.porcientologrado((item.evaluacioneDesempenoMetaRespuestas?.supervisado_logro??0),item.inverso,item.meta,item.peso)
+            desempeno+=await this.porcientologrado((item.evaluacioneDesempenoMetaRespuestas?.logro??0),item.inverso,item.meta,item.peso) ;
+
+        }
+        
+        return await this.GetvalorEvaluacion((desempeno/this.model.evaluacionDesempenoMetas.length),'porciento');
+    }
+
+    public async porcientologrado(logosupervisor:number,
+                                  inverso:boolean,meta:number,
+                                  peso:number
+                                ):Promise<number>{
+        let n:number=0
+        let valorretorno:number=0
+        
+        if(inverso){
+            n=(logosupervisor*1.00/meta*1.00)*100
+        }else{
+            if (logosupervisor>0){
+                n=((meta*1.00)/(logosupervisor*1.00))*100
+            }else{
+                n=0
+            }                   
+        }
+        let correcionpeso:number = (peso*n)/100.00
+        valorretorno=await this.GetvalorEvaluacion(correcionpeso,'porciento');
+        return valorretorno
+    }
+
+    public async CalculoCompetencias(): Promise<number> {
+        this.model.totalCalculo = 0;
+        let competencias:number=0;
+        console.log('competencias',this.model.goalEmpleadoRespuestas)
+        for (let item of this.model.goalEmpleadoRespuestas) {
+            
+                // hay que buscar en la tabla de ValoresEvaluacion  
+                competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
+                competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
+            
+        }
+        
+        return competencias;
+    }
+
+
+    public async GetvalorEvaluacion(id: number, retornar: string): Promise<number> {
+        let valor: number = 0;
+    
+        switch (retornar) {
+            case 'id':
+                if (id !== 0) {
+                    valor = await firstValueFrom(
+                        this.valorevalucioncontroller.Get(id.toString()).pipe(
+                            map((rep: IValoresEvaluacion) => rep.valor)
+                        )
+                    );
+                }
+                break;
+    
+            case 'porciento':
+                valor = await firstValueFrom(
+                    this.valorevalucioncontroller.Gets().pipe(
+                        map((rep: ModelResponse) => {
+                            let ve: IValoresEvaluacion[] = rep.data;
+                            let ve1: IValoresEvaluacion | undefined = ve.find((val) => 
+                                this.estaEnRango({ 
+                                    RangoDesde: val.RangoDesde, 
+                                    RangoHasta: val.RangoHasta 
+                                }, valor)
+                            );
+                            return ve1?.valor || 0;
+                        })
+                    )
+                );
+                break;
+        }
+    
+        console.log(retornar, id, valor);
+        return valor;
+    }
+
+    public estaEnRango(rango: { RangoDesde: number; RangoHasta: number }, valor: number): boolean {
+        return rango.RangoDesde <= valor && valor <= rango.RangoHasta;
+    }
 
     public getdatos() {
         this.Gets()
@@ -114,14 +203,55 @@ export class Evaluacion implements OnInit {
             totalCalculo: obj.totalCalculo,
             fechaRepuestas: obj.fechaRepuestas,
             observacion: obj.observacion,
-            goalEmpleadoRespuestas: obj.goalEmpleadoRespuestas
-          }
+            goalEmpleadoRespuestas: obj.goalEmpleadoRespuestas,
+            evaluacionDesempenoMetas: obj.evaluacionDesempenoMetas
+        }
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
     public async grabar(): Promise<boolean> {
+        //console.log('evalucion a grabar',this.model)
         return new Promise<boolean>(async (resolve) => {
+            // calcular competencia
+            
+            let competencia:number = await this.CalculoCompetencias()
+            //console.log(competencia)
+            // calcular desempeño
+            let desempeno:number=0
+            if (this.model.evaluacionDesempenoMetas.length>0){
+                desempeno= await this.CalculoDesempeno()  
+            }
+                          
+            // buscar distribucion valordesempenocompetencia
+            //periodId
+            let dc={
+                competencia:0,
+                desempeno:0,
+                valorcompetencia:0,
+                valordesempeno:0,
+                total:0
+            }
+            this.porcientoDesempenoCompetencia.Gets().pipe(
+                map((rep:ModelResponse)=>{
+                    let pdc:IPorcientoDesempenoCompetencia[]=rep.data
+                    pdc.forEach((item)=>{
+                        if(item.PeriodId == this.model.periodId){
+                            if(item.descripcion==='Desempeño'){
+                                dc.desempeno=item.valor
+                            }else{
+                                dc.competencia=item.valor
+                            }
+                        }
+                    })
+                })                    
+            )
+            dc.valorcompetencia=(dc.competencia*competencia)/100
+            dc.valordesempeno=(dc.desempeno*desempeno)/100
+            dc.total=dc.valorcompetencia+dc.valordesempeno
+            console.table(dc)
+            this.model.totalCalculo=dc.total            
             if (this.model.id == 0) {
+                
                 // inserta el registro
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IEvaluacion) => {
@@ -182,11 +312,5 @@ export class Evaluacion implements OnInit {
         this.model.goalEmpleadoRespuestas.push(goalEmpleadoRespuesta);
     }
 
-    public CalculateTotalCalculo(): void {
-        let total = 0;
-        for (let respuesta of this.model.goalEmpleadoRespuestas) {
-            total += respuesta.repuesta * respuesta.weight;
-        }
-        this.model.totalCalculo = total;
-    }
+  
 }

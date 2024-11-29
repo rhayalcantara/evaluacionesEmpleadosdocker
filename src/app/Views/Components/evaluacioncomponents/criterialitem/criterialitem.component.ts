@@ -45,24 +45,49 @@ export class CriterialitemComponent implements OnInit {
 
     this.ServiceComunicacion.enviarMensajeObservable.subscribe((data:any)=>{
       if ( data.mensaje === 'buscar'){
+        // busca los desempeños
         this.EvaluacionControler.GetsEvaluacionResultado(data.id)
         .subscribe({
-          next: (rep ) => {            
+          next: (rep ) => {      
+
             this.desempeno = rep.data;
-            console.log('actualizar',this.desempeno,rep.data,data.id,this.evaluacion)
+            console.log('actualizar',this.desempeno)
             this.cd.detectChanges(); 
           }
-        })
+        })       
+        // obtener la evaluacion 
+        this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
+        .subscribe({
+          next: (rep: IEvaluacion) => {
+            //console.log('Metas procesadas:', this.metas);
+            this.evaluacion = rep;
+            // obtiene los logros de las repuestas
+            console.log('evaluacion desde criteriaitem',this.evaluacion)
+            let n:number=0
+            this.evaluacion.evaluacionDesempenoMetas.forEach((item)=>{   
+              if(this.supervisor){
+                this.logro[n]=item.evaluacioneDesempenoMetaRespuestas?.supervisado_logro??0
+              } else{          
+                this.logro[n]=item.evaluacioneDesempenoMetaRespuestas?.logro??0
+              }
+              n=n+1
+            })
+          },
+          error: (err) => console.error('Error al obtener la evaluación:', err)
+        });
+        
       }
    })
 
   }
  
   ngOnInit(): void {
-    console.log('CriterialitemComponent',this.evaluacion)
+    //console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
     this.logro = this.logro.map((x)=>0)
+
+
   }
   
   onLogroChange(event:any,index:number){
@@ -71,7 +96,7 @@ export class CriterialitemComponent implements OnInit {
     console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
 
       if(this.supervisor){
-        this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.logro = logro;
+        this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.supervisado_logro = logro;
       }else{
         this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.logro = logro;
       }

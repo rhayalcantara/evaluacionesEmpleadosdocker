@@ -16,7 +16,7 @@ import { GrupoCompetenciasComponent } from '../../Pages/grupo-competencias/grupo
   selector: 'app-empleadoteam',
   standalone: true,
   imports: [FormsModule, CommonModule, 
-    CardEmpleadoComponent, CardEmpleadoComponent2],
+    CardEmpleadoComponent],
   templateUrl: './empleadoteam.component.html',
   styleUrls: ['./empleadoteam.component.css']
 })
@@ -41,7 +41,7 @@ export class EmpleadoTeamComponent implements OnInit {
     this.filteredSubordinados = this.empl.arraymodelsubordinados; 
     this.empl.model = this.empleado
     //this.empl.getsubordinados(this.periodo);
-    console.log(this.empl.arraymodelsubordinados);
+    //console.log(this.empl.arraymodelsubordinados);
        
     this.changeDetectorRef.detectChanges();
   }

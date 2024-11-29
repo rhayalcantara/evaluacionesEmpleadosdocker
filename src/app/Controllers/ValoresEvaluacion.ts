@@ -8,7 +8,7 @@ import { IValoresEvaluacion } from "../Models/PorcientoDesempenoCompetencia/IPor
     providedIn: 'root'
 })
 export class ValoresEvaluacion implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/ValoresEvaluacion'
+    rutaapi: string = this.datos.URL + '/api/ValoresEvaluacions'
     titulomensage: string = 'Valores de Evaluación'
     public model: IValoresEvaluacion = this.inicializamodelo()
     public titulos = [

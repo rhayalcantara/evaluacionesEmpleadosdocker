@@ -41,6 +41,7 @@ export interface IEvaluacion {
     fechaRepuestas: string
     observacion: string
     goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
+    evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
   }
 
   export interface IEvalucionResultDto{
@@ -51,6 +52,7 @@ export interface IEvaluacion {
     objetivo:string
     tipo:string
     meta:number
+    peso:number
   }
 
   export interface IEvaluacionResultMostrarDto extends IEvalucionResultDto{

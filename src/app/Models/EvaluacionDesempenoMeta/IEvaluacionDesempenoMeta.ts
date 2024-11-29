@@ -6,6 +6,7 @@ export interface IEvaluacionDesempenoMeta {
     tipo: string;
     descripcion: string;
     meta: number;
+    peso:number;
     inverso: boolean;
     evaluacion?: IEvaluacion;
     evaluacionDesempenoRespuestas?: IDesempenoRespuesta;
@@ -15,6 +16,7 @@ export interface IEvaluacionDesempenoMetaRespuesta {
     id: number;
     evaluacionDesempenoMetaId: number;
     logro: number;
+    supervisado_logro: number;
 }
 export interface IDesempenoRespuesta {
     id: number
