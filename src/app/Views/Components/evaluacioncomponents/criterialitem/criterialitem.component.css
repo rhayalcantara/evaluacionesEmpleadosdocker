@@ -83,3 +83,7 @@ h3 {
   padding: 8px;
   border-bottom: 1px solid #eee;
 }
+.table tfoot tr td {
+  font-weight: bold;
+  background-color: #f8f9fa;
+}

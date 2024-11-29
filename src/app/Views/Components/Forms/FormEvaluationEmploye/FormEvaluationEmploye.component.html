@@ -18,7 +18,19 @@
     
     <label for="comments">Comentario Adiccional:</label>
     <textarea id="comments" [(ngModel)]="comentarioAdicional" name="comments"></textarea>
-
+    <!-- Sección de Firmas -->
+    <div *ngIf="supervisor" class="seccion-firmas">
+      <div class="firma">
+          <div class="linea-firma"></div>
+          <p>Firma del Empleado</p>
+          <p>Fecha: _______________</p>
+      </div>
+      <div class="firma">
+          <div class="linea-firma"></div>
+          <p>Firma del Supervisor</p>
+          <p>Fecha: _______________</p>
+      </div>
+    </div>
     <button *ngIf="mostargrabar" type="submit">Grabar</button>
     <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
   </form>

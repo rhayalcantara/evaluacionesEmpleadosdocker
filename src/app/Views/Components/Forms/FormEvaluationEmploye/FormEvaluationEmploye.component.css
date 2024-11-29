@@ -59,3 +59,20 @@ button[type="cancelar"] {
 button[type="cancelar"]:hover {
   background-color: #cf7a0b;
 }
+.seccion-firmas {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+  padding: 20px;
+}
+
+.firma {
+  text-align: center;
+  width: 300px;
+}
+
+.linea-firma {
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px;
+  width: 100%;
+}

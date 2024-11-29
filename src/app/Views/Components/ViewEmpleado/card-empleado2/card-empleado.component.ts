@@ -16,6 +16,7 @@ import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
   styleUrls: ['./card-empleado.component.css']
 })
 export class CardEmpleadoComponent2 implements OnInit {
+puntuacionFinal: string|number =0;
  
   constructor(private cdr: ChangeDetectorRef,
     private toastr: MatDialog,) {}
@@ -39,6 +40,7 @@ export class CardEmpleadoComponent2 implements OnInit {
   }
   @Input() periodo!:IPeriodo
   @Input() llamarevaluacion: boolean = false;
+  @Input() puntacionFinal:boolean =false;
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
   public nfoto: number = 0;

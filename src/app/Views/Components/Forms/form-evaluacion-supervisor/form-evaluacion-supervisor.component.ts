@@ -20,6 +20,7 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
   public empleado!:IEmpleado;
   public periodo!:IPeriodo;
   public subordinado!:IEmpleado;
+puntuacionFinal: string|number=0;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any, 
     private dialogre:MatDialogRef<FormEvaluacionSupervisorComponent>,  

@@ -1,22 +1,6 @@
 
 <div >
   <h2>Desempeño</h2>
-  <!-- <div class="criteria-section" *ngFor="let desemp of evaluacion.evaluacionDesempenoMetas; let index=index">    
-    <h3>{{desemp.tipo}}</h3>
-    <div class="criteria-item">
-      <div class="criteria-info">
-        <div class="criteria-description">
-          <div class="description-text">{{desemp.descripcion}}</div>
-        </div>
-        <div class="criteria-weight">Meta: {{desemp.meta}}%</div>
-      </div>
-      <label for="evaluacion">Logro:</label>
-      
-      <input type="number" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">  
-
-
-    </div>*ngIf="desempeno.length > 0"
-  </div> -->
   <div  class="table-responsive">
     <table class="table table-bordered">
       <thead class="bg-light">
@@ -37,7 +21,6 @@
           <td>{{row.objetivo}}</td>
           <td>{{row.tipo}}</td>
           <td>
-            <!-- <input type="checkbox" [(ngModel)]="row.inverso" name="inverso" readonly> -->
             {{row.peso}}
           </td>
           <td class="text-end">{{row.meta}}</td>
@@ -55,26 +38,81 @@
 
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+            <td colspan="4" class="text-end"><strong>Promedio Competencias:</strong></td>
+            <td>{{promedioCompetencias | number:'1.2-2'}}%</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="text-end"><strong>Competencias Final ({{porcentajeCompetencias}}%):</strong></td>
+            <td>{{competenciasFinal | number:'1.2-2'}}%</td>
+        </tr>
+    </tfoot>
     </table>
+
   </div>
 </div>
 <!-- criterialitem.component.html -->
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
   <h2>Competencias</h2>
   <div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals; let index=index">
-    <h3>{{met.goal.objetivo.nombre}} </h3>
+   
+    
     <div class="criteria-item">
-      <div class="criteria-info">        
-        
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <h3>{{met.goal.objetivo.nombre}} </h3>
+            </th>
+            <th>
+              <h3>Empleado</h3>
+            </th>
+            <th *ngIf="supervisor">
+              <h3>Lider</h3>
+            </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+      <div class="criteria-info">                
         <div class="criteria-description">
           <strong>Descripcion:</strong>
           <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
         </div>
       </div>
+    </td>
+    <td>
+      <app-emojirating class="emoji-container"  [namex]="index"
+      [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
+      [supervisor]="false"
+      (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
+    </td>
+    <td *ngIf="supervisor">
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
       [supervisor]="supervisor"
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
+    </td>
+    </tr>
+    </tbody>
+
+    </table>
+
     </div>
   </div>
+  <table class="table table-bordered">
+    <tfoot>
+    <tr>
+        <td colspan="7" class="text-end"><strong>Promedio Competencia:</strong></td>
+        <td>{{promedioCompetencias | number:'1.2-2'}}%</td>
+    </tr>
+    <tr>
+        <td colspan="7" class="text-end"><strong>Competencia Final ({{porcentajeCompetencia}}%):</strong></td>
+        <td>{{CompetenciaFinal | number:'1.2-2'}}%</td>
+    </tr>
+  </tfoot>
+  </table>
+  
 </div>

@@ -33,6 +33,14 @@ export class CriterialitemComponent implements OnInit {
   p:IEvaluacionDesempenoMeta[]=[]
   public logro:number[]=[]
   public metas:IMetaDts[]=[]
+  promedioDesempeno: string|number = 0;
+  desempenoFinal: string|number = 0;
+  porcentajeDesempeno: any;
+promedioCompetencias: string|number =0;
+porcentajeCompetencias: any;
+competenciasFinal: string|number=0;
+porcentajeCompetencia: any;
+CompetenciaFinal: string|number=0;
   constructor(private EmpleadoModel:Empleados,
               private PeriodoModel:Periodos,
               private MetaModel:Metas,

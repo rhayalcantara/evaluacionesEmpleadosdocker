@@ -1,7 +1,9 @@
 <div class="container">
     <div class="empleadotitulo">
       <app-card-empleado2 [empleado]="empleado"></app-card-empleado2>
+
     </div>
+  
     <div class="forms-container">
           <app-form-evaluation-employe
             [empleado]="empleado"
@@ -9,14 +11,6 @@
             [supervisor]="true"
             titulo="Evaluacion Equipo"
             (dataEmitter)="cancelar()">
-        </app-form-evaluation-employe>
-        <app-form-evaluation-employe
-        [empleado]="empleado"
-        [periodo]="periodo"
-        [supervisor]="false"
-        [mostargrabar]="false"
-        titulo="Auto Evaluacion Subordinado"
-        (dataEmitter)="cancelar()">
-      </app-form-evaluation-employe>
+        </app-form-evaluation-employe>      
     </div>
 </div>

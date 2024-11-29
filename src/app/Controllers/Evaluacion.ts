@@ -104,8 +104,12 @@ export class Evaluacion implements OnInit {
         for (let item of this.model.goalEmpleadoRespuestas) {
             
                 // hay que buscar en la tabla de ValoresEvaluacion  
-                competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
+                if (item.repuestasupervisor!=0){
+                    competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
+                }
+                if(item.repuesta!=0){
                 competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
+                }
             
         }
         
@@ -131,13 +135,15 @@ export class Evaluacion implements OnInit {
                 valor = await firstValueFrom(
                     this.valorevalucioncontroller.Gets().pipe(
                         map((rep: ModelResponse) => {
+                            
                             let ve: IValoresEvaluacion[] = rep.data;
                             let ve1: IValoresEvaluacion | undefined = ve.find((val) => 
                                 this.estaEnRango({ 
                                     RangoDesde: val.RangoDesde, 
                                     RangoHasta: val.RangoHasta 
-                                }, valor)
+                                }, id)
                             );
+                            console.table(ve1)
                             return ve1?.valor || 0;
                         })
                     )

@@ -143,8 +143,12 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/porciento-desempeno-competencia/porciento-desempeno-competencia.component')
     .then((m)=> m.PorcientoDesempenoCompetenciaComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'resultado-evaluacion',
+    loadComponent:()=> import('./Views/Components/Pages/resultado-evaluacion/resultado-evaluacion.component')
+    .then((m)=> m.ResultadoEvaluacionComponent),
+    canActivate: [AuthGuard]
   }
-  //PorcientoDesempenoCompetenciaComponent
 ];
 
 @NgModule({

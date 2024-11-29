@@ -39,7 +39,7 @@ export class EmojiratingComponent implements OnInit{
  @Output() selecionemoji = new EventEmitter<IGoalEmpleadoRespuesta | IDesempenoRespuesta  >();
 // Add to emojirating.component.ts
 getLabel(value: number): string {
-  const labels = ['Deficiente', 'Necesita Mejorar', 'Cumple', 'Muy Bueno', 'Excelente'];
+  const labels = ['Deficiente', 'Mejorar', 'Cumple', 'Bueno', 'Excelente'];
   return labels[value - 1];
 }
   ngOnInit(): void {

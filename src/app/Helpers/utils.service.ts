@@ -7,7 +7,8 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { MatDialog } from '@angular/material/dialog';
 
 
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+//(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
 @Injectable({
   providedIn: 'root'
 })
