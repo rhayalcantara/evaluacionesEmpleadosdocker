@@ -73,11 +73,11 @@ CompetenciaFinal: string|number=0;
             console.log('evaluacion desde criteriaitem',this.evaluacion)
             let n:number=0
             this.evaluacion.evaluacionDesempenoMetas.forEach((item)=>{   
-              if(this.supervisor){
+              /*if(this.supervisor){
                 this.logro[n]=item.evaluacioneDesempenoMetaRespuestas?.supervisado_logro??0
-              } else{          
+              } else{  */        
                 this.logro[n]=item.evaluacioneDesempenoMetaRespuestas?.logro??0
-              }
+              //}
               n=n+1
             })
           },
