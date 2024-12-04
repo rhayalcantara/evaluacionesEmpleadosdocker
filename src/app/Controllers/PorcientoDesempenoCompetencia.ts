@@ -42,7 +42,7 @@ export class PorcientoDesempenoCompetencia implements OnInit {
     public inicializamodelo(): IPorcientoDesempenoCompetencia {
         return {
             id: 0,
-            PeriodId: 0,
+            periodId: 0,
             descripcion: '',
             valor: 0
         }
@@ -64,7 +64,7 @@ export class PorcientoDesempenoCompetencia implements OnInit {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let porcentajes: IPorcientoDesempenoCompetencia[] = rep.data;
-                return porcentajes.filter(x => x.PeriodId == periodId);
+                return porcentajes.filter(x => x.periodId == periodId);
             })
         );
     }

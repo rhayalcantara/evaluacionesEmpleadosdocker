@@ -31,6 +31,7 @@ export class FormEvaluationEmployeComponent {
   @Input() supervisor:Boolean=false
   @Input() mostargrabar:Boolean=true
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
+  @Output() puntuacion: EventEmitter<number> = new EventEmitter();
   
   public obervaciones:string=""
   public fecha:Date=new Date()
@@ -53,14 +54,16 @@ export class FormEvaluationEmployeComponent {
     .subscribe({
       next: (rep: IEvaluacion) => {
         this.evaluacionempleado = rep;
-        this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id})
+        this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion
       },
       error: (err) => console.error('Error al obtener la evaluación:', err)
     });
   }
-
+  onPuntacionChange(event:number){
+    this.puntuacion.emit(event)
+  }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
     console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor);
@@ -237,16 +240,10 @@ export class FormEvaluationEmployeComponent {
     
     this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
       item.evaluacion=undefined;
-      if(this.supervisor){
-        if((item.evaluacioneDesempenoMetaRespuestas?.supervisado_logro ??0)==0){          
-          puede=false;
-        }
-      }else{
         if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
           console.log('falta este item',item)
           puede=false;
-        }
-      }      
+        }           
     });
 
     if (puede){

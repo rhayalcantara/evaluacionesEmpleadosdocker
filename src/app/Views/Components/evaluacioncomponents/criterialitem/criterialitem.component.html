@@ -27,25 +27,26 @@
           <td class="text-end">
             <input type="number" (change)="onLogroChange($event, index)" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">
           </td>
-         
-            <td  *ngIf="!row.inverso"> {{ (logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
+            <td>{{resultadologro[index].porcientologro | number:'1.2-2'}}</td>
+            <td>{{resultadologro[index].resultadologro | number:'1.2-2'}}</td>
+            <!-- <td  *ngIf="!row.inverso"> {{ (logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
             <td  *ngIf="!row.inverso"> {{ (((logro[index]/row.meta)*100)*row.peso)/100 | number:'1.2-2'}}</td>
          
          
             <td  *ngIf="row.inverso"> {{ (row.meta/logro[index])*100 | number:'1.2-2'}}</td>    
             <td  *ngIf="row.inverso"> {{ (((row.meta/logro[index])*100)*row.peso)/100 | number:'1.2-2'}}</td>        
-          
+           -->
 
         </tr>
       </tbody>
       <tfoot>
         <tr>
-            <td colspan="4" class="text-end"><strong>Promedio Competencias:</strong></td>
-            <td>{{promedioCompetencias | number:'1.2-2'}}%</td>
+            <td colspan="4" class="text-end"><strong>Promedio Desempeño:</strong></td>
+            <td>{{promedioDesempeno | number:'1.2-2'}}%</td>
         </tr>
         <tr>
-            <td colspan="4" class="text-end"><strong>Competencias Final ({{porcentajeCompetencias}}%):</strong></td>
-            <td>{{competenciasFinal | number:'1.2-2'}}%</td>
+            <td colspan="4" class="text-end"><strong>Desempeño Final ({{porcentajeDesempeno}}%):</strong></td>
+            <td>{{desempenoFinal | number:'1.2-2'}}</td>
         </tr>
     </tfoot>
     </table>

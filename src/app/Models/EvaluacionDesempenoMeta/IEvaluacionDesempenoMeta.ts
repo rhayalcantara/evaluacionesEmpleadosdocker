@@ -26,3 +26,10 @@ export interface IDesempenoRespuesta {
     weight: number
     observacion: string
   }
+
+  export interface IResultadoLogro{
+    EvaluacionId: number;
+    logro:number
+    porcientologro:number
+    resultadologro:number
+  }

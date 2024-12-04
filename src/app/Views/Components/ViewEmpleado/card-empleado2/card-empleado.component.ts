@@ -16,7 +16,7 @@ import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
   styleUrls: ['./card-empleado.component.css']
 })
 export class CardEmpleadoComponent2 implements OnInit {
-puntuacionFinal: string|number =0;
+
  
   constructor(private cdr: ChangeDetectorRef,
     private toastr: MatDialog,) {}
@@ -40,7 +40,8 @@ puntuacionFinal: string|number =0;
   }
   @Input() periodo!:IPeriodo
   @Input() llamarevaluacion: boolean = false;
-  @Input() puntacionFinal:boolean =false;
+  @Input() mostrarpuntualcionfinal:boolean =false;
+  @Input() puntuacionFinal:number=0
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
   public nfoto: number = 0;
@@ -48,7 +49,7 @@ puntuacionFinal: string|number =0;
 
   ngOnInit(): void {
     this.nfoto = this.empleado.secuencial > 99 ? Math.floor(this.empleado.secuencial/10) : this.empleado.secuencial;
-    this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
+    // this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
   }
   subdelsub() {

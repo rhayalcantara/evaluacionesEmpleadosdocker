@@ -59,11 +59,6 @@ strong{
       border-radius: 8px;
       text-align: center;
       min-width: 200px;
-      margin-left: 20px;
+      margin-top: 20px;
   }
 
-    .puntuacion-final {
-      margin-top: 20px;
-      margin-left: 0;
-      width: 100%;
-  }

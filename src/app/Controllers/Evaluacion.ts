@@ -5,9 +5,10 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
 import { ValoresEvaluacion } from "./ValoresEvaluacion";
 import { IValoresEvaluacion } from "../Models/ValoresEvaluacion/IValoresEvaluacion";
-import { IEvaluacionDesempenoMeta } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+import { IEvaluacionDesempenoMeta, IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
 import { PorcientoDesempenoCompetencia } from "./PorcientoDesempenoCompetencia";
 import { IPorcientoDesempenoCompetencia } from "../Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia";
+import { ComunicacionService } from "../Services/comunicacion.service";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class Evaluacion implements OnInit {
     rutaapi: string = this.datos.URL + '/api/Evaluacions';
     titulomensage: string = 'Evaluaciones';
     public model: IEvaluacion = this.inicializamodelo();
+    public resultadologro:IResultadoLogro[]=[]
     public titulos = [
         { periodo: 'Periodo' },
         { empleado: "Empleado" },
@@ -24,13 +26,21 @@ export class Evaluacion implements OnInit {
         { fechaRepuestas: "Fecha Respuestas" },
         { observacion: "Observación" }
     ];
-
+    public promedioDesempeno: string|number = 0;
+    public desempenoFinal: string|number = 0;
+    public porcentajeDesempeno: any;
+    public promedioCompetencias: string|number =0;
+    public competenciasFinal: string|number=0;
+    public porcentajeCompetencia: any;
+    public CompetenciaFinal: string|number=0;
     public estado: string = '';
     public totalregistros: number = 0;
     public actualpage: number = 1;
     public pagesize: number = 10;
     public filtro: string = '';
     public arraymodel: IEvaluacion[] = [];
+    public pdclocal:IPorcientoDesempenoCompetencia[]=[]
+    public puntuacionFinal:number=0
 
     public operationSuccessful: boolean = false;
     @Output() TRegistros = new EventEmitter<number>();
@@ -38,8 +48,18 @@ export class Evaluacion implements OnInit {
     constructor(
         private datos: DatosServiceService,
         private valorevalucioncontroller: ValoresEvaluacion,
-        private porcientoDesempenoCompetencia:PorcientoDesempenoCompetencia
-    ) { }
+        private porcientoDesempenoCompetencia:PorcientoDesempenoCompetencia, 
+        private PorCientoDC:PorcientoDesempenoCompetencia,
+        private ServicioComunicacion:ComunicacionService
+    ) { 
+        this.PorCientoDC.Gets().subscribe({
+            next:(rep)=>{
+              console.log('porcientodesempenocompetencia',rep)
+              this.pdclocal = rep.data
+      
+            }
+          })
+    } 
 
     ngOnInit(): void {
         this.filtro = "";
@@ -100,7 +120,7 @@ export class Evaluacion implements OnInit {
     public async CalculoCompetencias(): Promise<number> {
         this.model.totalCalculo = 0;
         let competencias:number=0;
-        console.log('competencias',this.model.goalEmpleadoRespuestas)
+        console.log('competencias calculo',this.model.goalEmpleadoRespuestas)
         for (let item of this.model.goalEmpleadoRespuestas) {
             
                 // hay que buscar en la tabla de ValoresEvaluacion  
@@ -108,7 +128,7 @@ export class Evaluacion implements OnInit {
                     competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
                 }
                 if(item.repuesta!=0){
-                competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
+                    competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
                 }
             
         }
@@ -116,6 +136,39 @@ export class Evaluacion implements OnInit {
         return competencias;
     }
 
+    async calculaelpromediodesempeno(supervisor:Boolean,resultadologro:IResultadoLogro[]){
+       
+        this.promedioCompetencias=0
+        let num:number=0
+        resultadologro.forEach((e)=>{
+          
+          num = num + e.porcientologro
+        })
+
+        this.pdclocal=this.pdclocal.filter(x=>x.periodId==this.model.periodId)
+        
+        // desempeño
+        this.promedioDesempeno=num/resultadologro.length
+        let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
+        this.porcentajeDesempeno = px1?.valor??0        
+        this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+
+    
+        //Competencia
+        if(supervisor){
+          this.promedioCompetencias = (await this.CalculoCompetencias()/(this.model.goalEmpleadoRespuestas.length*2))
+        }else{
+          this.promedioCompetencias = (await this.CalculoCompetencias()/this.model.goalEmpleadoRespuestas.length)
+        }
+        console.log('promedioCompetencias',this.promedioCompetencias)
+        
+        let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
+        this.porcentajeCompetencia = px2?.valor 
+        this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
+        this.puntuacionFinal = this.CompetenciaFinal + this.desempenoFinal
+        this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
+    
+      }
 
     public async GetvalorEvaluacion(id: number, retornar: string): Promise<number> {
         let valor: number = 0;
@@ -241,7 +294,7 @@ export class Evaluacion implements OnInit {
                 map((rep:ModelResponse)=>{
                     let pdc:IPorcientoDesempenoCompetencia[]=rep.data
                     pdc.forEach((item)=>{
-                        if(item.PeriodId == this.model.periodId){
+                        if(item.periodId == this.model.periodId){
                             if(item.descripcion==='Desempeño'){
                                 dc.desempeno=item.valor
                             }else{
