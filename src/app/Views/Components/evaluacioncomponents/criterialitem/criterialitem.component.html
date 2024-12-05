@@ -7,37 +7,46 @@
         <tr>
           <th>Perspectiva</th>
           <th>Objetivo</th>
+          <th>Medio Verificación</th>
           <th>Tipo</th>
           <th>Peso</th>
           <th class="text-end">Meta</th>
           <th class="text-end">Logro</th>
           <th class="text-end">%</th>
           <th class="text-end">Resultado</th>
+          <th class="text-end">Comentario</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of desempeno; let index=index">
           <td>{{row.perspectiva}}</td>
           <td>{{row.objetivo}}</td>
+          <td>
+            <input 
+              type="text"  
+              [(ngModel)]="resultadologro[index].medioverificacion"  
+              name="medioverificacion" 
+              (change)="onMedioverificacionChange($event, index)">
+          </td>
           <td>{{row.tipo}}</td>
           <td>
             {{row.peso}}
           </td>
           <td class="text-end">{{row.meta}}</td>
           <td class="text-end">
-            <input type="number" (change)="onLogroChange($event, index)" [(ngModel)]="logro[index]" name="evaluacion" min="1" max="100">
+            <input type="number" (change)="onLogroChange($event, index)" [(ngModel)]="resultadologro[index].logro" name="evaluacion" min="1" max="100">
           </td>
-            <td>{{resultadologro[index].porcientologro | number:'1.2-2'}}</td>
-            <td>{{resultadologro[index].resultadologro | number:'1.2-2'}}</td>
-            <!-- <td  *ngIf="!row.inverso"> {{ (logro[index]/row.meta)*100 | number:'1.2-2'}}</td>
-            <td  *ngIf="!row.inverso"> {{ (((logro[index]/row.meta)*100)*row.peso)/100 | number:'1.2-2'}}</td>
-         
-         
-            <td  *ngIf="row.inverso"> {{ (row.meta/logro[index])*100 | number:'1.2-2'}}</td>    
-            <td  *ngIf="row.inverso"> {{ (((row.meta/logro[index])*100)*row.peso)/100 | number:'1.2-2'}}</td>        
-           -->
-
+          <td class="text-end">{{resultadologro[index].porcientologro | number:'1.2-2'}}</td>
+          <td class="text-end">{{resultadologro[index].resultadologro | number:'1.2-2'}}</td>
+          <td class="text-end">
+            <input
+            type="text"  
+              [(ngModel)]="resultadologro[index].comentario"  
+              name="medioverificacion" 
+              (change)="onComentarDesempenoioChange($event, index)">
+          </td>
         </tr>
+        
       </tbody>
       <tfoot>
         <tr>

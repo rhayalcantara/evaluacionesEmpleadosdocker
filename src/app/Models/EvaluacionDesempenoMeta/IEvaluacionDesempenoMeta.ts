@@ -17,6 +17,8 @@ export interface IEvaluacionDesempenoMetaRespuesta {
     evaluacionDesempenoMetaId: number;
     logro: number;
     supervisado_logro: number;
+    medioverificacion:string;
+    comentario:string;
 }
 export interface IDesempenoRespuesta {
     id: number
@@ -30,6 +32,8 @@ export interface IDesempenoRespuesta {
   export interface IResultadoLogro{
     EvaluacionId: number;
     logro:number
+    medioverificacion:string
+    comentario:string
     porcientologro:number
     resultadologro:number
   }

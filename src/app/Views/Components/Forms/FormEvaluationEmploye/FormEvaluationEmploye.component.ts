@@ -95,6 +95,7 @@ export class FormEvaluationEmployeComponent {
             { text: 'Fecha: ', bold: true }, this.fecha.toLocaleDateString(), '\n\n'
           ]
         },
+        {text: 'Puntuación Final:'+(Number(this.EvaluacionController.desempenoFinal)+Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2)},
         { text: 'Desempeño', style: 'sectionHeader' },
         {
           table: {
@@ -122,8 +123,17 @@ export class FormEvaluationEmployeComponent {
             ]
           }
         },
+        { text: 'Promedio Desempeño:'+ Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', style: 'sectionHeader' },
+        //{ text: Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', margin: [10, 0, 0, 0] },
+        { text: 'Desempeño Final (30%):'+Number(this.EvaluacionController.desempenoFinal).toFixed(2), style: 'sectionHeader' },
+       // { text: Number(this.EvaluacionController.desempenoFinal).toFixed(2), margin: [10, 0, 0, 0] },
+        
         { text: '\nCompetencias', style: 'sectionHeader' },
         ...competenciasContent,
+        { text: 'Promedio Desempeño:'+ Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'sectionHeader' },
+        //{ text: Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', margin: [10, 0, 0, 0] },
+        { text: 'Desempeño Final (70%):'+Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'sectionHeader' },
+       // { text: Number(this.EvaluacionController.desempenoFinal).toFixed(2), margin: [10, 0, 0, 0] },
         { text: 'Comentario Adicional', style: 'sectionHeader' },
         { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
       ];
@@ -202,9 +212,10 @@ export class FormEvaluationEmployeComponent {
     if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
     
     const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
-    const meta = item.meta || 1;
+    const meta = item.peso || 1;
     const inverso = item.inverso || false;
     
+    console.log(item.descripcion,logro,meta,inverso)
     const percentage = inverso ? 
       (meta / logro) * 100 :
       (logro / meta) * 100;
@@ -214,7 +225,7 @@ export class FormEvaluationEmployeComponent {
 
   calculateResult(item: IEvaluacionDesempenoMeta): string {
     const percentage = parseFloat(this.calculatePercentage(item));
-    const peso = item.peso || 0;
+    const peso = item.meta || 0;
     return ((percentage * peso) / 100).toFixed(2);
   }
 

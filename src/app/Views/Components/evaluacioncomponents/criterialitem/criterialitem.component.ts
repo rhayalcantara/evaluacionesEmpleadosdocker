@@ -11,7 +11,7 @@ import { IMeta, IMetaDts } from 'src/app/Models/Meta/IMeta';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion, IEvalucionResultDto, IGoalEmpleadoRespuesta } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { map, tap } from 'rxjs';
-import { IDesempenoRespuesta, IEvaluacionDesempenoMeta, IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { IDesempenoRespuesta, IEvaluacionDesempenoMeta, IEvaluacionDesempenoMetaRespuesta, IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { PorcientoDesempenoCompetencia } from 'src/app/Controllers/PorcientoDesempenoCompetencia';
@@ -98,9 +98,11 @@ export class CriterialitemComponent implements OnInit {
                 n=n+1
                 let rl:IResultadoLogro={
                   EvaluacionId: item.Id,
-                  logro: item.evaluacioneDesempenoMetaRespuestas?.logro??0,
-                  porcientologro: (item.evaluacioneDesempenoMetaRespuestas?.logro??0/item.meta)*100,
-                  resultadologro: 0
+                  logro: item.evaluacioneDesempenoMetaRespuestas?.logro ?? 0,
+                  porcientologro: (item.evaluacioneDesempenoMetaRespuestas?.logro ?? 0 / item.meta) * 100,
+                  resultadologro: 0,
+                  medioverificacion: item.evaluacioneDesempenoMetaRespuestas?.medioverificacion??'',
+                  comentario: item.evaluacioneDesempenoMetaRespuestas?.comentario??''
                 }
                 rl=this.calcularresultadologro(rl,item)                
                 this.resultadologro.push(rl)
@@ -154,6 +156,26 @@ export class CriterialitemComponent implements OnInit {
     rl.resultadologro = (rl.porcientologro*item.meta)/100
     
     return rl
+  }
+
+  onMedioverificacionChange(event:any,index:number){
+    let mediov:string = event.target.value
+    if (!this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas) {
+      
+    } else {
+      this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.medioverificacion = mediov;
+    }
+    this.onEvaluacionChange.emit(this.evaluacion)
+  }
+  
+  onComentarDesempenoioChange(event:any,index:number){
+    let mediov:string = event.target.value
+    if (!this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas) {
+      
+    } else {
+      this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.comentario = mediov;
+    }
+    this.onEvaluacionChange.emit(this.evaluacion)
   }
 
   async calculaelpromediodesempeno(){
