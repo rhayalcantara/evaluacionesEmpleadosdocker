@@ -74,13 +74,16 @@ export class CardEmpleadoComponent implements OnInit {
     this.puestocontroller.Get(this.empleado.scargo.toString()).subscribe({
       next:(rep:IPuesto)=>{
         // al retornar el puesto busca la categoria
+        console.log('puesto',rep)
         this.categoriapuestocontroller.Get(rep.categoriaPuestoId.toString()).subscribe({
           next:(cp:ICategoriaPuesto)=>{
+            console.log('ICategoriaPuesto',cp)
             // al retornar la categoria busco el rolcategoriapuestodet
             this.rolcategoriapuestodet.Gets().subscribe({
               next:(rep:ModelResponse)=>{
                   let t:IRolCategoriaPuestoDet[] = rep.data
-                  let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId)[0]
+                  let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId==cp.id)[0]
+                  console.log('IRolCategoriaPuestoDet',tx)
                   // buscar el rolcategoriapuesto
                   this.rolcategoriapuestocontroller.Get(tx.rolCategoriaId.toString()).subscribe({
                     next:(rep:IRolCategoriaPuesto)=>{
