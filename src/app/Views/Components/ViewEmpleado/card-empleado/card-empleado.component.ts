@@ -6,6 +6,13 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluacionSupervisorComponent } from '../../Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component';
+import { CategoriaPuesto } from 'src/app/Controllers/CategoriaPuesto';
+import { Puestos } from 'src/app/Controllers/Puestos';
+import { ICategoriaPuesto, IPuesto } from 'src/app/Models/Puesto/IPuesto';
+import { RolCategoriaPuesto } from 'src/app/Controllers/RolCategoriaPuesto';
+import { RolCategoriaPuestoDet } from 'src/app/Controllers/RolCategoriaPuestoDet';
+import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { IRolCategoriaPuesto, IRolCategoriaPuestoDet } from 'src/app/Models/RolCategoriaPuesto/IRolCategoriaPuesto';
 
 
 @Component({
@@ -21,7 +28,12 @@ export class CardEmpleadoComponent implements OnInit {
  
  
   constructor(private cdr: ChangeDetectorRef,
-    private toastr: MatDialog,) {}
+              private categoriapuestocontroller:CategoriaPuesto,
+              private puestocontroller:Puestos,
+              private rolcategoriapuestodet:RolCategoriaPuestoDet,
+              private rolcategoriapuestocontroller:RolCategoriaPuesto,
+              
+              private toastr: MatDialog,) {}
 
   @Input() empleado: IEmpleado = {
     secuencial: 0,
@@ -46,7 +58,7 @@ export class CardEmpleadoComponent implements OnInit {
   @Input() llamarevaluacion: boolean = false;
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
-
+  public rolcategoriapuesto:string=''
   public estadoAutoevaluacion: string = 'Pendiente';
   public estadoEvaluacionSupervisor: string = 'Pendiente';
   public nfoto: number = 0;
@@ -56,6 +68,34 @@ export class CardEmpleadoComponent implements OnInit {
     this.nfoto = this.empleado.secuencial > 99 ? Math.floor(this.empleado.secuencial/10) : this.empleado.secuencial;
     this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
+
+    //buscar el rolcategoriapuesto
+    //1) encontrar la categoria puesto con el puestos del empleado
+    this.puestocontroller.Get(this.empleado.scargo.toString()).subscribe({
+      next:(rep:IPuesto)=>{
+        // al retornar el puesto busca la categoria
+        this.categoriapuestocontroller.Get(rep.categoriaPuestoId.toString()).subscribe({
+          next:(cp:ICategoriaPuesto)=>{
+            // al retornar la categoria busco el rolcategoriapuestodet
+            this.rolcategoriapuestodet.Gets().subscribe({
+              next:(rep:ModelResponse)=>{
+                  let t:IRolCategoriaPuestoDet[] = rep.data
+                  let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId)[0]
+                  // buscar el rolcategoriapuesto
+                  this.rolcategoriapuestocontroller.Get(tx.rolCategoriaId.toString()).subscribe({
+                    next:(rep:IRolCategoriaPuesto)=>{
+                      this.rolcategoriapuesto = rep.descripcion
+                      this.cdr.detectChanges();
+                    }
+                  })
+              }
+            })
+          }
+        })
+      }
+    })
+
+
   }
   cargarEstadoEvaluacion(): void {
 /*     this.evaluacionService.obtenerEstadoEvaluacion(this.empleado.secuencial, this.periodo.id).subscribe(

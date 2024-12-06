@@ -6,6 +6,6 @@ export interface IRolCategoriaPuesto{
 }
 export interface IRolCategoriaPuestoDet{
     id:number
-    categoriapuestoId:number
+    categoriaPuestoId:number
     rolCategoriaId:number
 }

@@ -8,7 +8,7 @@ import { IRolCategoriaPuesto } from "../Models/RolCategoriaPuesto/IRolCategoriaP
     providedIn: 'root'
 })
 export class RolCategoriaPuesto implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/RolCategoriaPuestos'
+    rutaapi: string = this.datos.URL + '/api/RolCategoriaPuestoes'
     titulomensage: string = 'Rol Categoria Puesto'
     public model: IRolCategoriaPuesto = this.inicializamodelo()
     public titulos = [

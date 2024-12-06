@@ -148,6 +148,11 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/resultado-evaluacion/resultado-evaluacion.component')
     .then((m)=> m.ResultadoEvaluacionComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'rol-categoria-puesto',
+    loadComponent:()=> import('./Views/Components/Pages/rol-categoria-puesto/rol-categoria-puesto.component')
+    .then((m)=> m.RolCategoriaPuestoComponent),
+    canActivate: [AuthGuard]
   }
 ];
 

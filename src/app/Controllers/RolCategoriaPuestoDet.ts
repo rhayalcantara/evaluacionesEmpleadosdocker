@@ -41,7 +41,7 @@ export class RolCategoriaPuestoDet implements OnInit {
     public inicializamodelo(): IRolCategoriaPuestoDet {
         return {
             id: 0,
-            categoriapuestoId: 0,
+            categoriaPuestoId: 0,
             rolCategoriaId: 0
         }
     }
