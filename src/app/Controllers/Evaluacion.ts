@@ -176,11 +176,11 @@ export class Evaluacion implements OnInit {
         switch (retornar) {
             case 'id':
                 if (id !== 0) {
-                    valor = await firstValueFrom(
+                     await firstValueFrom(
                         this.valorevalucioncontroller.Get(id.toString()).pipe(
-                            map((rep: IValoresEvaluacion) => rep.valor)
+                            map((rep) => rep)
                         )
-                    );
+                    ).then((s)=>valor=s.valor);
                 }
                 break;
     
@@ -192,8 +192,8 @@ export class Evaluacion implements OnInit {
                             let ve: IValoresEvaluacion[] = rep.data;
                             let ve1: IValoresEvaluacion | undefined = ve.find((val) => 
                                 this.estaEnRango({ 
-                                    RangoDesde: val.RangoDesde, 
-                                    RangoHasta: val.RangoHasta 
+                                    RangoDesde: val.rangoDesde, 
+                                    RangoHasta: val.rangoHasta 
                                 }, id)
                             );
                             console.table(ve1)

@@ -26,14 +26,15 @@ export class FormValoresEvaluacionComponent implements OnInit {
   ) {
     this.fg = this.fb.group({
       id: [0],
-      Titulo: ['', Validators.required],
-      RangoDesde: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      RangoHasta: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      titulo: ['', Validators.required],
+      rangoDesde: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      rangoHasta: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       valor: ['', [Validators.required, Validators.min(0), Validators.max(100)]]
     });
   }
 
   ngOnInit(): void {
+    console.log(this.data.model)
     if (this.data.model.id) {
       this.titulo = 'Editar Valor de Evaluación';            
     }

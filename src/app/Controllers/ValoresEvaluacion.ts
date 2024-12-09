@@ -12,9 +12,9 @@ export class ValoresEvaluacion implements OnInit {
     titulomensage: string = 'Valores de Evaluación'
     public model: IValoresEvaluacion = this.inicializamodelo()
     public titulos = [
-        { Titulo: 'Título' },
-        { RangoDesde: 'Rango Desde' },
-        { RangoHasta: 'Rango Hasta' },
+        { titulo: 'Título' },
+        { rangoDesde: 'Rango Desde' },
+        { rangoHasta: 'Rango Hasta' },
         { valor: 'Valor' }
     ]
 
@@ -43,9 +43,9 @@ export class ValoresEvaluacion implements OnInit {
     public inicializamodelo(): IValoresEvaluacion {
         return {
             id: 0,
-            Titulo: '',
-            RangoDesde: 0,
-            RangoHasta: 0,
+            titulo: '',
+            rangoDesde: 0,
+            rangoHasta: 0,
             valor: 0
         }
     }

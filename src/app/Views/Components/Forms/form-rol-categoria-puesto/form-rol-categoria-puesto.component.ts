@@ -117,7 +117,7 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
         categorias: selectedCategorias.map(catId => ({
           id: 0,
           categoriaPuestoId: catId,
-          rolCategoriaId: formValue.id
+          rolCategoriaPuestoId: formValue.id
         }))        
       };
       console.log('a grabar',rolCategoriaPuesto)

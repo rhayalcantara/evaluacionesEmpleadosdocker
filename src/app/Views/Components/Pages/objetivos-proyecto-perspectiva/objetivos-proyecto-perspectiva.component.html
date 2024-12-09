@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="title">{{Tipo}}</h2>
+  <h2 class="title">Objetivo/Proyecto</h2>
   
   <div class="actions-top">
     <button class="btn-add" (click)="onAdd()">
@@ -12,13 +12,15 @@
       <thead>
         <tr>
           <th>Descripción</th>
+          <th>Tipo</th>
           <th>Valor</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let objetivo of displayedObjetivos">
-          <td>{{objetivo.descripcion}}</td>
+          <td>{{objetivo.descripcion}}</td>          
+          <td>{{objetivo.tipo}}</td>
           <td>{{objetivo.valor}}</td>
           <td class="actions">
             <button class="btn-delete" (click)="onDelete(objetivo)" title="Eliminar">

@@ -153,7 +153,13 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/rol-categoria-puesto/rol-categoria-puesto.component')
     .then((m)=> m.RolCategoriaPuestoComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'opp',
+    loadComponent:()=> import('./Views/Components/Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component')
+    .then((m)=> m.ObjetivosProyectoPerspectivaComponent),
+    canActivate: [AuthGuard]
   }
+  
 ];
 
 @NgModule({

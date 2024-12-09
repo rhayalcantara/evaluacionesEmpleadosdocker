@@ -5,14 +5,14 @@ import { Subscription } from 'rxjs';
 import { ObjetivoProyectoPerspectiva } from 'src/app/Controllers/ObjetivoProyectoPerspectiva';
 import { IObjetivoProyectoPerspectiva } from 'src/app/Models/ObjetivoProyectoPerspectiva/IObjetivoProyectoPerspectiva';
 import { FormObjetivoProyectoPerspectivaComponent } from '../../Forms/form-objetivo-proyecto-perspectiva/form-objetivo-proyecto-perspectiva.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 
 @Component({
   selector: 'app-objetivos-proyecto-perspectiva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule],
+  imports: [CommonModule, ReactiveFormsModule, MatPaginatorModule,MatDialogModule],
   templateUrl: './objetivos-proyecto-perspectiva.component.html',
   styleUrls: ['./objetivos-proyecto-perspectiva.component.css']
 })
@@ -64,7 +64,7 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
         }
         
         //filtra por tipo de objetivo
-        this.objetivos = this.objetivos.filter(obj=> obj.tipo == this.Tipo);
+        //this.objetivos = this.objetivos.filter(obj=> obj.tipo == this.Tipo);
         console.log(this.Tipo,this.objetivos)
         this.totalItems = this.objetivos.length;
         this.updateDisplayedObjetivos();

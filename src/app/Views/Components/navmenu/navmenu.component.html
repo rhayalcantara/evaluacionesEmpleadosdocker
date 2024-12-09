@@ -35,7 +35,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/Evaluacion">AutoEvaluación</a></li>
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/EvaluarSubordinados" *ngIf="empleadoRolController.model.rolId<=2" >Evaluar Equipo</a></li>
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/resultado-evaluacion"  >Resultado Evaluacion</a></li>            
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/resultado-evaluacion"  >Resultado Evaluacion</a></li>             -->
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/PoliticaEvaluacion" *ngIf="empleadoRolController.model.rolId==1" >Política de Evaluación</a></li>
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/evaluation-periods" *ngIf="empleadoRolController.model.rolId==1" >Períodos de Evaluación</a></li>            
           </ul>
@@ -68,7 +68,7 @@
             Usuarios
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Usuario">Usuarios</a></li>
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/Usuario">Usuarios</a></li> -->
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/Roles">Roles</a></li>            
           </ul>
         </li>         
@@ -84,8 +84,8 @@
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/ObjetivoEstrategico">Objetivos Estratégico</a></li>            
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/kri">KRIs</a></li> 
             <li><a class="dropdown-item" (click)="precionado()" routerLink="/kpi">KPIs</a></li> 
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/proyecto">Proyectos</a></li> 
-            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Objetivokri">Objetivos</a></li> 
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/opp">Proyectos/Objetivos</a></li> 
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/Objetivokri"></a></li>  -->
           </ul>
         </li>
         <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1">

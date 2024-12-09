@@ -42,7 +42,7 @@ export class RolCategoriaPuestoDet implements OnInit {
         return {
             id: 0,
             categoriaPuestoId: 0,
-            rolCategoriaId: 0
+            rolCategoriaPuestoId: 0
         }
     }
 
@@ -62,7 +62,7 @@ export class RolCategoriaPuestoDet implements OnInit {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let detalles: IRolCategoriaPuestoDet[] = rep.data;
-                return detalles.filter(x => x.rolCategoriaId == rolCategoriaId);
+                return detalles.filter(x => x.rolCategoriaPuestoId == rolCategoriaId);
             })
         );
     }

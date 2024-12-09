@@ -75,7 +75,7 @@ export class CardEmpleadoComponent2 implements OnInit {
                   let t:IRolCategoriaPuestoDet[] = rep.data
                   let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId==cp.id)[0]
                   // buscar el rolcategoriapuesto
-                  this.rolcategoriapuestocontroller.Get(tx.rolCategoriaId.toString()).subscribe({
+                  this.rolcategoriapuestocontroller.Get(tx.rolCategoriaPuestoId.toString()).subscribe({
                     next:(rep:IRolCategoriaPuesto)=>{
                       this.rolcategoriapuesto = rep.descripcion
                       this.cdr.detectChanges();

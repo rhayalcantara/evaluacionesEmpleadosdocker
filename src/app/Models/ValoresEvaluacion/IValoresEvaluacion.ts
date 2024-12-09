@@ -1,7 +1,7 @@
 export interface IValoresEvaluacion{
     id: number;
-    Titulo: string;
-    RangoDesde: number;
-    RangoHasta: number;
+    titulo: string;
+    rangoDesde: number;
+    rangoHasta: number;
     valor: number;  
 }
