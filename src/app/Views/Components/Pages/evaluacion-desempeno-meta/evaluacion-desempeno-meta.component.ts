@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
 import { FormEvaluacionDesempenoMetaComponent } from '../../Forms/form-evaluacion-desempeno-meta/form-evaluacion-desempeno-meta.component';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-evaluacion-desempeno-meta',
@@ -30,27 +31,39 @@ import { FormEvaluacionDesempenoMetaComponent } from '../../Forms/form-evaluacio
   ]
 })
 export class EvaluacionDesempenoMetaComponent implements OnInit {
-  displayedColumns: string[] = ['Empleado','Tipo', 'descripcion', 'meta', 'inverso', 'acciones'];
-  dataSource: IEvaluacionDesempenoMeta[] = [];
+  displayedColumns: string[] = ['Empleado','Tipo', 'descripcion', 'meta','peso', 'inverso', 'acciones'];
+ // dataSource: IEvaluacionDesempenoMeta[] = [];
+  dataSources = new MatTableDataSource<IEvaluacionDesempenoMeta>();
   searchTerm: string = '';
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
   constructor(
     private dialog: MatDialog,
     public metaService: EvaluacionDesempenoMeta
   ) { 
     this.metaService.TRegistros.subscribe(() => {
-      console.table(this.metaService.arraymodel);
-      this.dataSource = this.metaService.arraymodel;
+      console.table(this.metaService.arraymodel[0].evaluacion)
+  //   this.dataSource = this.metaService.arraymodel;
+      this.dataSources.data = this.metaService.arraymodel;
+      this.dataSources.paginator = this.paginator;
+      this.dataSources.sort = this.sort;
     });
+    this.dataSources.filterPredicate = (data: IEvaluacionDesempenoMeta, filter: string) => {
+      const dataStr = `${data.evaluacion!.empleado!.nombreunido} ${data.tipo} ${data.descripcion} ${data.meta} ${data.peso}`;
+      return dataStr.toLowerCase().includes(filter);
+    };
   }
 
   ngOnInit(): void {
     this.cargarDatos();
+
   }
 
   cargarDatos(): void {
+    console.log('se llamao a getdatos')
     this.metaService.getdatos();
-    this.dataSource = this.metaService.arraymodel;
+    //this.dataSource = this.metaService.arraymodel;
   }
 
   abrirFormulario(meta?: IEvaluacionDesempenoMeta): void {
@@ -73,12 +86,9 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   buscar(): void {
-    if (this.searchTerm.trim()) {
-      this.metaService.filtro = this.searchTerm;
-      this.metaService.filtrar();
-    } else {
-      this.cargarDatos();
-    }
+
+    this.dataSources.filter = this.searchTerm.trim().toLowerCase();
+   
   }
 
   limpiarBusqueda(): void {

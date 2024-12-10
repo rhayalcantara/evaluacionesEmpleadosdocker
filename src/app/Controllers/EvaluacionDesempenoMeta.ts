@@ -59,6 +59,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
+                    console.log('llegaron al controlador los datos',this.arraymodel)
                     this.TRegistros.emit(this.totalregistros)
                 }
             })

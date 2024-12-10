@@ -21,7 +21,7 @@
   </div>
 
   <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSources">
       <ng-container matColumnDef="Empleado">
         <th mat-header-cell *matHeaderCellDef>Empleado</th>
         <td mat-cell *matCellDef="let element">{{element.evaluacion.empleado.nombreunido}}</td>
@@ -38,10 +38,13 @@
       </ng-container>
 
       <ng-container matColumnDef="meta">
-        <th mat-header-cell *matHeaderCellDef>Meta</th>
+        <th mat-header-cell *matHeaderCellDef>Peso </th>
         <td mat-cell *matCellDef="let element">{{element.meta}}%</td>
       </ng-container>
-
+      <ng-container matColumnDef="peso">
+        <th mat-header-cell *matHeaderCellDef>Meta</th>
+        <td mat-cell *matCellDef="let element">{{element.peso}}%</td>
+      </ng-container>
       <ng-container matColumnDef="inverso">
         <th mat-header-cell *matHeaderCellDef>Inverso</th>
         <td mat-cell *matCellDef="let element">
