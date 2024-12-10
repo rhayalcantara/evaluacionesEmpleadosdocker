@@ -15,6 +15,40 @@
     border-radius: 0.25rem;
 }
 
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-group .form-control {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
 .form-check {
     padding-left: 1.25rem;
 }
@@ -66,4 +100,10 @@
 label {
     display: inline-block;
     margin-bottom: 0.5rem;
+}
+
+select.form-control {
+    appearance: auto;
+    padding-right: 2rem;
+    background-color: #fff;
 }

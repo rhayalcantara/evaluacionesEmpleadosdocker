@@ -2,10 +2,37 @@
   <h2>{{titulo}}</h2>
   <form [formGroup]="fg" (ngSubmit)="grabar()">
     <div class="form-group">
-      <label for="Tipo">Tipo</label>
-      <input type="text" class="form-control" id="Tipo" formControlName="Tipo" required>
-      <div class="invalid-feedback" *ngIf="fg.get('Tipo')?.errors?.['required'] && fg.get('Tipo')?.touched">
+      <label for="empleado">Empleado</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="empleado" readonly [value]="selectedEmpleado?.nombreunido || 'Seleccione un empleado'" required>
+        <button type="button" class="btn btn-outline-secondary" (click)="buscarEmpleado()">
+          Buscar Empleado
+        </button>
+      </div>
+      <div class="invalid-feedback" *ngIf="fg.get('secuencialId')?.errors?.['required'] && fg.get('secuencialId')?.touched">
+        El empleado es requerido
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="tipo">Tipo</label>
+      <select class="form-control" id="tipo" formControlName="tipo" required>
+        <option value="">Seleccione un tipo</option>
+        <option *ngFor="let tipo of tipoOptions" [value]="tipo">{{tipo}}</option>
+      </select>
+      <div class="invalid-feedback" *ngIf="fg.get('tipo')?.errors?.['required'] && fg.get('tipo')?.touched">
         El tipo es requerido
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="peso">Peso (%)</label>
+      <input type="number" class="form-control" id="peso" formControlName="peso" required min="1" max="100">
+      <div class="invalid-feedback" *ngIf="fg.get('peso')?.errors?.['required'] && fg.get('peso')?.touched">
+        El peso es requerido
+      </div>
+      <div class="invalid-feedback" *ngIf="(fg.get('peso')?.errors?.['min'] || fg.get('peso')?.errors?.['max']) && fg.get('peso')?.touched">
+        El peso debe estar entre 1 y 100
       </div>
     </div>
 
