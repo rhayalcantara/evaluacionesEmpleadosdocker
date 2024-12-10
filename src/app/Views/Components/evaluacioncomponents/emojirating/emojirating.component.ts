@@ -15,7 +15,7 @@ export class EmojiratingComponent implements OnInit{
   selecion:number=0
   valorSeleccionado: number=0;
   constructor(){}
-
+  @Input() sololectura:Boolean=false
   @Input() supervisor:Boolean=false
   @Input() goalempleadorepuesta:IGoalEmpleadoRespuesta | undefined  ={
     id: 0,

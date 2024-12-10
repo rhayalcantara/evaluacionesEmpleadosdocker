@@ -13,7 +13,7 @@
           <th class="text-end">Meta</th>
           <th class="text-end">Logro</th>
           <th class="text-end">%</th>
-          <th class="text-end">Resultado</th>
+          <!-- <th class="text-end">Resultado</th> -->
           <th class="text-end">Comentario</th>
         </tr>
       </thead>
@@ -37,7 +37,7 @@
             <input type="number" (change)="onLogroChange($event, index)" [(ngModel)]="resultadologro[index].logro" name="evaluacion" min="1" max="100">
           </td>
           <td class="text-end">{{resultadologro[index].porcientologro | number:'1.2-2'}}</td>
-          <td class="text-end">{{resultadologro[index].resultadologro | number:'1.2-2'}}</td>
+          <!-- <td class="text-end">{{resultadologro[index].resultadologro | number:'1.2-2'}}</td> -->
           <td class="text-end">
             <input
             type="text"  
@@ -97,12 +97,14 @@
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
       [supervisor]="false"
+      [sololectura]="supervisor"  
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
     </td>
     <td *ngIf="supervisor">
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
-      [supervisor]="supervisor"
+      [supervisor]="supervisor"   
+         
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
     </td>
     </tr>
