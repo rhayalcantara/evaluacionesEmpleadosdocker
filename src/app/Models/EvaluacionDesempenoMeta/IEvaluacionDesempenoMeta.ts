@@ -1,7 +1,7 @@
 import { IEvaluacion } from "../Evaluacion/IEvaluacion";
 
 export interface IEvaluacionDesempenoMeta {
-    Id: number;
+    id: number;
     EvaluacionId: number;
     tipo: string;
     descripcion: string;
@@ -30,6 +30,7 @@ export interface IDesempenoRespuesta {
   }
 
   export interface IResultadoLogro{
+    id:number;
     EvaluacionId: number;
     logro:number
     medioverificacion:string

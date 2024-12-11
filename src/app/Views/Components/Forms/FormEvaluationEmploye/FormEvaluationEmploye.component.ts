@@ -66,6 +66,7 @@ export class FormEvaluationEmployeComponent {
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
+    this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
     console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor);
   }
 

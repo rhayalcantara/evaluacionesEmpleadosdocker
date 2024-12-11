@@ -19,6 +19,12 @@ import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempeno
   styleUrls: ['./evaluacion.component.css']
 })
 export class EvaluacionComponent implements OnInit {
+onPuntuacion($event: number) {
+    //throw new Error('Method not implemented.');
+}
+cancelar() {
+  //throw new Error('Method not implemented.');
+}
   empleado: IEmpleado = this.empleadocontroller.inicializamodelo();
   periodo: IPeriodo =  this.periodocontroller.inicializamodelo();
   

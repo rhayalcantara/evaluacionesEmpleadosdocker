@@ -63,7 +63,7 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.data.model.Id) {
+    if (this.data.model.id) {
       this.titulo = 'Editar Meta de Evaluación';            
     }
     this.fg.patchValue(this.data.model);

@@ -2,12 +2,13 @@
   <div class="empleadotitulo">
     <app-card-empleado [empleado]="empleado"></app-card-empleado>
   </div>
-  <app-form-evaluation-employe
+<app-form-evaluation-employe
   [empleado]="empleado"
   [periodo]="periodo"
   titulo="AutoEvaluacion"
-  
-></app-form-evaluation-employe>
+  (dataEmitter)="cancelar()"
+  (puntuacion)="onPuntuacion($event)">
+</app-form-evaluation-employe> 
 </div>
 
 

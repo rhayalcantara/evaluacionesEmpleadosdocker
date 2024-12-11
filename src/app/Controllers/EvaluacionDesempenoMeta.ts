@@ -42,7 +42,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
 
     public inicializamodelo(): IEvaluacionDesempenoMeta {
         return {
-            Id: 0,
+            id: 0,
             EvaluacionId: 0,
             tipo: '',
             descripcion: '',
@@ -103,16 +103,16 @@ export class EvaluacionDesempenoMeta implements OnInit {
     }
 
     public Update(obj: IEvaluacionDesempenoMeta): Observable<IEvaluacionDesempenoMeta> {
-        return this.datos.updatedatos<IEvaluacionDesempenoMeta>(this.rutaapi + `/${obj.Id}`, obj);
+        return this.datos.updatedatos<IEvaluacionDesempenoMeta>(this.rutaapi + `/${obj.id}`, obj);
     }
 
     public async grabar(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
-            if (this.model.Id == 0) {
+            if (this.model.id == 0) {
                 // inserta el registro
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IEvaluacionDesempenoMeta) => {
-                        firstValueFrom(this.Get(rep.Id.toString())).then(t => {
+                        firstValueFrom(this.Get(rep.id.toString())).then(t => {
                             this.model = t
                         })
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");

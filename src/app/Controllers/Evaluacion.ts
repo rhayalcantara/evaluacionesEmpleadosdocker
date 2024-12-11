@@ -137,7 +137,7 @@ export class Evaluacion implements OnInit {
     }
 
     async calculaelpromediodesempeno(supervisor:Boolean,resultadologro:IResultadoLogro[]){
-       
+       console.log('se llamo a calculaelpromediodesempeno')
         this.promedioCompetencias=0
         let num:number=0
         resultadologro.forEach((e)=>{
