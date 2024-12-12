@@ -95,7 +95,7 @@ export class EmpleadoDesempeno implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
-        console.log('Fetching data from:', this.rutaapi);
+        //console.log('Fetching data from:', this.rutaapi);
         return this.datos.getdatos<ModelResponse>(this.rutaapi);
     }
 
@@ -117,8 +117,8 @@ export class EmpleadoDesempeno implements OnInit {
 
     public async grabar(): Promise<boolean> {
        
-        console.log('grabar', this.model);
-        console.table(this.model);
+        //console.log('grabar', this.model);
+        //console.table(this.model);
         return new Promise<boolean>(async (resolve) => {
             try {
                 if (this.model.id == 0) {

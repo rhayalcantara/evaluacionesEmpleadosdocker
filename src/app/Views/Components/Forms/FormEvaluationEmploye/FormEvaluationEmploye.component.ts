@@ -14,6 +14,7 @@ import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempeno
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { Router } from '@angular/router';
 
 declare const pdfMake: any;
 
@@ -44,7 +45,8 @@ export class FormEvaluationEmployeComponent {
               private empleadocontroller:Empleados,
               private periodocontroller:Periodos,
               private ServiceComunicacion:ComunicacionService, 
-              private cd: ChangeDetectorRef
+              private cd: ChangeDetectorRef,
+              private router: Router
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
   }
@@ -67,7 +69,7 @@ export class FormEvaluationEmployeComponent {
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
     this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
-    console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor);
+    //console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor);
   }
 
   generatePDF(): void {
@@ -131,9 +133,9 @@ export class FormEvaluationEmployeComponent {
         
         { text: '\nCompetencias', style: 'sectionHeader' },
         ...competenciasContent,
-        { text: 'Promedio Desempeño:'+ Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'sectionHeader' },
+        { text: 'Promedio Competencias:'+ Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'sectionHeader' },
         //{ text: Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', margin: [10, 0, 0, 0] },
-        { text: 'Desempeño Final (70%):'+Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'sectionHeader' },
+        { text: 'Competencias Final (70%):'+Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'sectionHeader' },
        // { text: Number(this.EvaluacionController.desempenoFinal).toFixed(2), margin: [10, 0, 0, 0] },
         { text: 'Comentario Adicional', style: 'sectionHeader' },
         { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
@@ -204,7 +206,7 @@ export class FormEvaluationEmployeComponent {
 
       pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado.nombreunido}_${this.periodo.descripcion}.pdf`);
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      //console.error('Error generating PDF:', error);
       this.datos.showMessage("Error al generar el PDF", this.titulo, "error");
     }
   }
@@ -216,7 +218,7 @@ export class FormEvaluationEmployeComponent {
     const meta = item.peso || 1;
     const inverso = item.inverso || false;
     
-    console.log(item.descripcion,logro,meta,inverso)
+    //console.log(item.descripcion,logro,meta,inverso)
     const percentage = inverso ? 
       (meta / logro) * 100 :
       (logro / meta) * 100;
@@ -236,24 +238,26 @@ export class FormEvaluationEmployeComponent {
   
     const fechaActual = new Date();
     this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
-    
+    console.log('Competencia length ',this.evaluacionempleado)
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
         if(this.supervisor){          
           if(element.repuestasupervisor==0){              
             puede=false;
           }          
         }else{
+          console.log('Competencia',element)
           if (element.repuesta==0){
             console.log('Falta este competencia',element)
             puede=false;
           }
         }
+
     });
     
     this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
       item.evaluacion=undefined;
         if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
-          console.log('falta este item',item)
+          //console.log('falta este item',item)
           puede=false;
         }           
     });
@@ -265,10 +269,11 @@ export class FormEvaluationEmployeComponent {
           this.datos.showMessage("Grabado",this.titulo,"sucess");
           // Generate PDF after successful save
           this.generatePDF();
+          this.router.navigate(['/Home'])
         }
       });
     }else{
-      console.log('se retirne el Form submitted',this.evaluacionempleado);
+      //console.log('se retirne el Form submitted',this.evaluacionempleado);
       this.datos.showMessage("Favor Verificar tiene respuestas sin contestar",this.titulo,"error");
     }
   }

@@ -59,7 +59,7 @@ export class CriterialitemComponent implements OnInit {
     this.periodo = this.PeriodoModel.inicializamodelo()
     this.PorCientoDC.Gets().subscribe({
       next:(rep)=>{
-        //console.log('porcientodesempenocompetencia',rep)
+        ////console.log('porcientodesempenocompetencia',rep)
         let pdc:IPorcientoDesempenoCompetencia[]=rep.data
         this.pdclocal = pdc.filter(x=>x.periodId==this.periodo.id)
 
@@ -68,7 +68,7 @@ export class CriterialitemComponent implements OnInit {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe((data:any)=>{
       
       if ( data.mensaje === 'buscar'){
-        //console.log('data mensaje',data)
+        ////console.log('data mensaje',data)
         // busca los desempeños
         this.EvaluacionControler.GetsEvaluacionResultado(data.id)
         .subscribe({
@@ -92,7 +92,7 @@ export class CriterialitemComponent implements OnInit {
            
           })
 
-            console.log('actualizar desempeno',this.resultadologro)
+            //console.log('actualizar desempeno',this.resultadologro)
             
             this.cd.detectChanges(); 
           }
@@ -102,7 +102,7 @@ export class CriterialitemComponent implements OnInit {
         this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
         .subscribe({
           next: (rep: IEvaluacion) => {
-            ////console.log('Metas procesadas:', this.metas);
+            //////console.log('Metas procesadas:', this.metas);
             this.evaluacion = rep;            
             this.EvaluacionControler.model = this.evaluacion
 
@@ -128,7 +128,7 @@ export class CriterialitemComponent implements OnInit {
                 r.medioverificacion = item.evaluacioneDesempenoMetaRespuestas?.medioverificacion ?? ''
                 r=this.calcularresultadologro(r,item)     
                 this.cd.detectChanges()           
-               console.log('repuesta',r,item)
+               //console.log('repuesta',r,item)
              
             })
             
@@ -142,7 +142,7 @@ export class CriterialitemComponent implements OnInit {
         
       }
       if (data.mensaje ==='Actualizar variables'){
-        console.log(data)
+        //console.log(data)
         this.pdclocal = this.EvaluacionControler.pdclocal
         this.promedioDesempeno = this.EvaluacionControler.promedioDesempeno;
         this.desempenoFinal= this.EvaluacionControler.desempenoFinal;
@@ -151,7 +151,7 @@ export class CriterialitemComponent implements OnInit {
         this.competenciasFinal=this.EvaluacionControler.competenciasFinal;
         this.porcentajeCompetencia=this.EvaluacionControler.porcentajeCompetencia;
         this.CompetenciaFinal=this.EvaluacionControler.CompetenciaFinal;   
-        // //console.log('CompetenciaFinal',this.EvaluacionControler.CompetenciaFinal)
+        // ////console.log('CompetenciaFinal',this.EvaluacionControler.CompetenciaFinal)
         let num = Number(this.EvaluacionControler.desempenoFinal) + Number(this.EvaluacionControler.CompetenciaFinal)
         this.onPuntacionChange.emit(num)
       }
@@ -161,7 +161,7 @@ export class CriterialitemComponent implements OnInit {
 
   calcularresultadologro(rl:IResultadoLogro,item:IEvaluacionDesempenoMeta):IResultadoLogro{
     //calculo porcientologro
-    //console.log(item.inverso,item.evaluacioneDesempenoMetaRespuestas?.logro,item.meta,item.descripcion)
+    ////console.log(item.inverso,item.evaluacioneDesempenoMetaRespuestas?.logro,item.meta,item.descripcion)
     if(item.inverso){
       
       if((item.evaluacioneDesempenoMetaRespuestas?.logro??0)!=0){
@@ -229,12 +229,12 @@ export class CriterialitemComponent implements OnInit {
     let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
     this.porcentajeCompetencia = px2?.valor 
     this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
-    //console.log('competencias',this.porcentajeCompetencia)
+    ////console.log('competencias',this.porcentajeCompetencia)
 
   }
 
   ngOnInit(): void {
-    ////console.log('CriterialitemComponent',this.evaluacion)
+    //////console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
     this.logro = this.logro.map((x)=>0)
@@ -245,7 +245,7 @@ export class CriterialitemComponent implements OnInit {
   onLogroChange(event:any,index:number){
     let logro:number = event.target.value
     this.logro[index] = logro
-    //console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
+    ////console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
      
       if(this.supervisor){
         this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.supervisado_logro = logro;
@@ -261,12 +261,12 @@ export class CriterialitemComponent implements OnInit {
 
      this.onEvaluacionChange.emit(this.evaluacion)
     
-    ////console.log("cambio el logro",this.evaluacion.evaluacionDesempenoMetas[index])
+    //////console.log("cambio el logro",this.evaluacion.evaluacionDesempenoMetas[index])
   }
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
     // verificar de que tipo es la respuesta
-    //console.log('respuesta',respuesta,index)
+    ////console.log('respuesta',respuesta,index)
     if (respuesta.hasOwnProperty('goalId')) 
         this.evaluacion.goalEmpleadoRespuestas[index] = respuesta as IGoalEmpleadoRespuesta;
     else{
@@ -278,7 +278,7 @@ export class CriterialitemComponent implements OnInit {
     this.onEvaluacionChange.emit(this.evaluacion)
     
     // Aquí puedes agregar cualquier lógica adicional que necesites
-    ////console.log('Respuesta actualizada:', respuesta);
+    //////console.log('Respuesta actualizada:', respuesta);
     
     // Si necesitas hacer algo más con la respuesta, como enviarla al servidor, puedes hacerlo aquí
   }
@@ -286,6 +286,6 @@ export class CriterialitemComponent implements OnInit {
     let coment:string = event.target.value
     this.evaluacion.goalEmpleadoRespuestas[index].observacion = coment
     this.onEvaluacionChange.emit(this.evaluacion)
-    ////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
+    //////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
   }
 }

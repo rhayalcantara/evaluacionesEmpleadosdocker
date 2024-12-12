@@ -54,7 +54,7 @@ export class Evaluacion implements OnInit {
     ) { 
         this.PorCientoDC.Gets().subscribe({
             next:(rep)=>{
-              console.log('porcientodesempenocompetencia',rep)
+              //console.log('porcientodesempenocompetencia',rep)
               this.pdclocal = rep.data
       
             }
@@ -120,7 +120,7 @@ export class Evaluacion implements OnInit {
     public async CalculoCompetencias(): Promise<number> {
         this.model.totalCalculo = 0;
         let competencias:number=0;
-        console.log('competencias calculo',this.model.goalEmpleadoRespuestas)
+        //console.log('competencias calculo',this.model.goalEmpleadoRespuestas)
         for (let item of this.model.goalEmpleadoRespuestas) {
             
                 // hay que buscar en la tabla de ValoresEvaluacion  
@@ -137,7 +137,7 @@ export class Evaluacion implements OnInit {
     }
 
     async calculaelpromediodesempeno(supervisor:Boolean,resultadologro:IResultadoLogro[]){
-       console.log('se llamo a calculaelpromediodesempeno')
+       //console.log('se llamo a calculaelpromediodesempeno')
         this.promedioCompetencias=0
         let num:number=0
         resultadologro.forEach((e)=>{
@@ -160,7 +160,7 @@ export class Evaluacion implements OnInit {
         }else{
           this.promedioCompetencias = (await this.CalculoCompetencias()/this.model.goalEmpleadoRespuestas.length)
         }
-        console.log('promedioCompetencias',this.promedioCompetencias)
+        //console.log('promedioCompetencias',this.promedioCompetencias)
         
         let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
         this.porcentajeCompetencia = px2?.valor 
@@ -196,7 +196,7 @@ export class Evaluacion implements OnInit {
                                     RangoHasta: val.rangoHasta 
                                 }, id)
                             );
-                            console.table(ve1)
+                            //console.table(ve1)
                             return ve1?.valor || 0;
                         })
                     )
@@ -204,7 +204,7 @@ export class Evaluacion implements OnInit {
                 break;
         }
     
-        console.log(retornar, id, valor);
+        //console.log(retornar, id, valor);
         return valor;
     }
 
@@ -219,7 +219,7 @@ export class Evaluacion implements OnInit {
                     this.totalregistros = rep.count;
                     this.arraymodel = [];
                     this.arraymodel = rep.data;
-                    console.log(rep.data);
+                    //console.log(rep.data);
                     this.TRegistros.emit(this.totalregistros);
                 }
             });
@@ -269,12 +269,12 @@ export class Evaluacion implements OnInit {
     }
 
     public async grabar(): Promise<boolean> {
-        //console.log('evalucion a grabar',this.model)
+        ////console.log('evalucion a grabar',this.model)
         return new Promise<boolean>(async (resolve) => {
             // calcular competencia
             
             let competencia:number = await this.CalculoCompetencias()
-            //console.log(competencia)
+            ////console.log(competencia)
             // calcular desempeño
             let desempeno:number=0
             if (this.model.evaluacionDesempenoMetas.length>0){
@@ -307,7 +307,7 @@ export class Evaluacion implements OnInit {
             dc.valorcompetencia=(dc.competencia*competencia)/100
             dc.valordesempeno=(dc.desempeno*desempeno)/100
             dc.total=dc.valorcompetencia+dc.valordesempeno
-            console.table(dc)
+            //console.table(dc)
             this.model.totalCalculo=dc.total            
             if (this.model.id == 0) {
                 
