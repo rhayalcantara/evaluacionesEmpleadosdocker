@@ -1,11 +1,8 @@
-
-  <form id="evaluationForm">
-    <!-- {{evaluacionempleado | json}} -->
+<form id="evaluationForm">
     <h1>{{titulo}}</h1>
     <h3>Periodo:{{periodo.descripcion}}</h3>
     <p>Fecha:{{fecha | date}}</p>
     
-    <!-- {{evaluacionempleado | json }} -->
     <div class="performance-criteria">
       <app-criterialitem 
         [empleado]="empleado"
@@ -16,9 +13,29 @@
         (onPuntacionChange)="onPuntacionChange($event)"
       ></app-criterialitem>
     </div>
+
+    <!-- Selector de Cursos de Capacitación -->
+    <div class="cursos-capacitacion">
+      <h4>Cursos de Capacitación (Seleccione hasta 3)</h4>
+      <div class="cursos-selector">
+        <select (change)="onCursoSeleccionado(cursos[$any($event.target).value])" [disabled]="cursosSeleccionados.length >= 3">
+          <option value="" disabled selected>Seleccione un curso</option>
+          <option *ngFor="let curso of cursos; let i = index" [value]="i">{{curso.descripcion}}</option>
+        </select>
+      </div>
+      
+      <!-- Lista de cursos seleccionados -->
+      <div class="cursos-seleccionados">
+        <div *ngFor="let curso of cursosSeleccionados" class="curso-item">
+          <span>{{curso.descripcion}}</span>
+          <button type="button" class="remove-curso" (click)="onCursoRemovido(curso)">×</button>
+        </div>
+      </div>
+    </div>
     
     <label for="comments">Comentario Adiccional:</label>
     <textarea id="comments" [(ngModel)]="comentarioAdicional" name="comments"></textarea>
+    
     <!-- Sección de Firmas -->
     <div *ngIf="supervisor" class="seccion-firmas">
       <div class="firma">

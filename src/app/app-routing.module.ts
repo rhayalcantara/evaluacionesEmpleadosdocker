@@ -158,8 +158,12 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component')
     .then((m)=> m.ObjetivosProyectoPerspectivaComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'cursos-capacitacion',
+    loadComponent:()=> import('./Views/Components/Pages/cursos-capacitacion/cursos-capacitacion.component')
+    .then((m)=> m.CursosCapacitacionComponent),
+    canActivate: [AuthGuard]
   }
-  
 ];
 
 @NgModule({

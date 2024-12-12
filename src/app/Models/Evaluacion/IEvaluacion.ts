@@ -2,6 +2,7 @@ import { IEmpleado } from "../Empleado/IEmpleado"
 import { IEmpleadoDesempeno } from "../EmpleadoDesempeno/IEmpleadoDesempeno"
 import { IEvaluacionDesempenoMeta } from "../EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta"
 import { IMeta, IMetaDts } from "../Meta/IMeta"
+import { CursoCapacitacion, EvaluacionCursoCapacitacion } from "../Capacitacion/Cursos"
 
 export interface IEvaluacion {
     id: number
@@ -14,6 +15,8 @@ export interface IEvaluacion {
     evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
     goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]    
     empleado?: IEmpleado
+    cursosCapacitacion?: CursoCapacitacion[]
+    EvaluacionCursoCapacitacion?:EvaluacionCursoCapacitacion[]
   }
   export interface IEvaluacionGoal {
     id: number
@@ -42,6 +45,7 @@ export interface IEvaluacion {
     observacion: string
     goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
     evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
+    cursosCapacitacion?: CursoCapacitacion[]
   }
 
   export interface IEvalucionResultDto{

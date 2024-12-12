@@ -27,9 +27,9 @@ export class FormValoresEvaluacionComponent implements OnInit {
     this.fg = this.fb.group({
       id: [0],
       titulo: ['', Validators.required],
-      rangoDesde: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      rangoHasta: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      valor: ['', [Validators.required, Validators.min(0), Validators.max(100)]]
+      rangoDesde: ['', [Validators.required, Validators.min(0), Validators.max(105)]],
+      rangoHasta: ['', [Validators.required, Validators.min(0), Validators.max(105)]],
+      valor: ['', [Validators.required, Validators.min(1), Validators.max(105)]]
     });
   }
 

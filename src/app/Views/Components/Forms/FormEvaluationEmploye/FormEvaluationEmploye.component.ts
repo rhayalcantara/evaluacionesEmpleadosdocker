@@ -15,6 +15,8 @@ import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { Router } from '@angular/router';
+import { CursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
+import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 
 declare const pdfMake: any;
 
@@ -39,6 +41,8 @@ export class FormEvaluationEmployeComponent {
   public evaluacionempleado:IEvaluacion
   public comentarioAdicional: string = '';
   public desempeno:IEvalucionResultDto[]=[]
+  public cursos: CursoCapacitacion[] = [];
+  public cursosSeleccionados: CursoCapacitacion[] = [];
 
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
@@ -46,30 +50,62 @@ export class FormEvaluationEmployeComponent {
               private periodocontroller:Periodos,
               private ServiceComunicacion:ComunicacionService, 
               private cd: ChangeDetectorRef,
-              private router: Router
+              private router: Router,
+              private cursoCapacitacionController: CursoCapacitacionController
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
   }
 
   ngOnInit(): void {
+    // Cargar evaluación
     this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
     .subscribe({
       next: (rep: IEvaluacion) => {
         this.evaluacionempleado = rep;
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
-        this.comentarioAdicional = rep.observacion
+        this.comentarioAdicional = rep.observacion;
+        if (rep.cursosCapacitacion) {
+          this.cursosSeleccionados = rep.cursosCapacitacion;
+        }else{
+          // busca los cursos actuales si los hay
+          if(rep.EvaluacionCursoCapacitacion){
+            
+          }
+        }
       },
-      error: (err) => console.error('Error al obtener la evaluación:', err)
+      error: (err: Error) => console.error('Error al obtener la evaluación:', err)
+    });
+
+    // Cargar cursos
+    this.cursoCapacitacionController.Gets().subscribe({
+      next: (rep: ModelResponse) => {
+        this.cursos = rep.data as CursoCapacitacion[];
+      },
+      error: (err: Error) => console.error('Error al obtener los cursos:', err)
     });
   }
+
+  onCursoSeleccionado(curso: CursoCapacitacion): void {
+    if (this.cursosSeleccionados.length < 3) {
+      if (!this.cursosSeleccionados.find(c => c.id === curso.id)) {
+        this.cursosSeleccionados.push(curso);
+      }
+    } else {
+      this.datos.showMessage("Solo puede seleccionar hasta 3 cursos", this.titulo, "warning");
+    }
+  }
+
+  onCursoRemovido(curso: CursoCapacitacion): void {
+    this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.id !== curso.id);
+  }
+
   onPuntacionChange(event:number){
     this.puntuacion.emit(event)
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
     this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
-    //console.log("la evaluacion del empleado cambio",this.evaluacionempleado,this.supervisor);
   }
 
   generatePDF(): void {
@@ -86,6 +122,14 @@ export class FormEvaluationEmployeComponent {
           { text: '\n' }
         ];
       }).flat();
+
+      const cursosContent = this.cursosSeleccionados.length > 0 ? [
+        { text: 'Cursos de Capacitación Seleccionados:', style: 'sectionHeader' },
+        {
+          ul: this.cursosSeleccionados.map(curso => curso.descripcion)
+        },
+        { text: '\n' }
+      ] : [];
 
       const content: any[] = [
         { text: this.titulo, style: 'header' },
@@ -127,16 +171,15 @@ export class FormEvaluationEmployeComponent {
           }
         },
         { text: 'Promedio Desempeño:'+ Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', style: 'sectionHeader' },
-        //{ text: Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', margin: [10, 0, 0, 0] },
         { text: 'Desempeño Final (30%):'+Number(this.EvaluacionController.desempenoFinal).toFixed(2), style: 'sectionHeader' },
-       // { text: Number(this.EvaluacionController.desempenoFinal).toFixed(2), margin: [10, 0, 0, 0] },
         
         { text: '\nCompetencias', style: 'sectionHeader' },
         ...competenciasContent,
         { text: 'Promedio Competencias:'+ Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'sectionHeader' },
-        //{ text: Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', margin: [10, 0, 0, 0] },
         { text: 'Competencias Final (70%):'+Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'sectionHeader' },
-       // { text: Number(this.EvaluacionController.desempenoFinal).toFixed(2), margin: [10, 0, 0, 0] },
+        
+        ...cursosContent,
+        
         { text: 'Comentario Adicional', style: 'sectionHeader' },
         { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
       ];
@@ -206,7 +249,6 @@ export class FormEvaluationEmployeComponent {
 
       pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado.nombreunido}_${this.periodo.descripcion}.pdf`);
     } catch (error) {
-      //console.error('Error generating PDF:', error);
       this.datos.showMessage("Error al generar el PDF", this.titulo, "error");
     }
   }
@@ -218,7 +260,6 @@ export class FormEvaluationEmployeComponent {
     const meta = item.peso || 1;
     const inverso = item.inverso || false;
     
-    //console.log(item.descripcion,logro,meta,inverso)
     const percentage = inverso ? 
       (meta / logro) * 100 :
       (logro / meta) * 100;
@@ -238,42 +279,39 @@ export class FormEvaluationEmployeComponent {
   
     const fechaActual = new Date();
     this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
-    console.log('Competencia length ',this.evaluacionempleado)
+    
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
         if(this.supervisor){          
           if(element.repuestasupervisor==0){              
             puede=false;
           }          
         }else{
-          console.log('Competencia',element)
           if (element.repuesta==0){
-            console.log('Falta este competencia',element)
             puede=false;
           }
         }
-
     });
     
     this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
       item.evaluacion=undefined;
         if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
-          //console.log('falta este item',item)
           puede=false;
         }           
     });
 
     if (puede){
+      // Agregar los cursos seleccionados a la evaluación
+      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados;
+      
       this.EvaluacionController.model = this.evaluacionempleado;
       this.EvaluacionController.grabar().then((rep)=>{
         if(rep){
           this.datos.showMessage("Grabado",this.titulo,"sucess");
-          // Generate PDF after successful save
           this.generatePDF();
           this.router.navigate(['/Home'])
         }
       });
     }else{
-      //console.log('se retirne el Form submitted',this.evaluacionempleado);
       this.datos.showMessage("Favor Verificar tiene respuestas sin contestar",this.titulo,"error");
     }
   }
