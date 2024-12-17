@@ -9,6 +9,7 @@ import { IEvaluacionDesempenoMeta, IResultadoLogro } from "../Models/EvaluacionD
 import { PorcientoDesempenoCompetencia } from "./PorcientoDesempenoCompetencia";
 import { IPorcientoDesempenoCompetencia } from "../Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia";
 import { ComunicacionService } from "../Services/comunicacion.service";
+import { ICursoCapacitacion } from "../Models/Capacitacion/Cursos";
 
 @Injectable({
     providedIn: 'root'
@@ -263,8 +264,10 @@ export class Evaluacion implements OnInit {
             fechaRepuestas: obj.fechaRepuestas,
             observacion: obj.observacion,
             goalEmpleadoRespuestas: obj.goalEmpleadoRespuestas,
-            evaluacionDesempenoMetas: obj.evaluacionDesempenoMetas
+            evaluacionDesempenoMetas: obj.evaluacionDesempenoMetas,
+            evaluacionCursoCapacitacions:obj.evaluacionCursoCapacitacions
         }
+        console.log('evaluacionCursoCapacitacion',evaluaciondto.evaluacionCursoCapacitacions)
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
@@ -349,7 +352,9 @@ export class Evaluacion implements OnInit {
             })
         );
     }
-
+    public Getevaluacioncursos(id:string): Observable<ModelResponse>{
+        return this.datos.getdatos<ModelResponse>(this.rutaapi + `/curso/${id}`)        
+    }
     public GetEvaluacionesPorEmpleado(secuencialempleado: number): Observable<IEvaluacion[]> {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {

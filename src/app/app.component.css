@@ -1,0 +1,20 @@
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+/* Main content container */
+:host ::ng-deep router-outlet + * {
+    display: block;
+    padding: 80px 20px 20px;
+    min-height: calc(100vh - 70px);
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure proper spacing with fixed navbar */
+:host ::ng-deep .container-fluid {
+    margin-top: 0;
+    padding-top: 0;
+}

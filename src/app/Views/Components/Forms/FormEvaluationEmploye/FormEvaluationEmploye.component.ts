@@ -15,7 +15,7 @@ import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 import { Router } from '@angular/router';
-import { CursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
+import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 
 declare const pdfMake: any;
@@ -41,8 +41,8 @@ export class FormEvaluationEmployeComponent {
   public evaluacionempleado:IEvaluacion
   public comentarioAdicional: string = '';
   public desempeno:IEvalucionResultDto[]=[]
-  public cursos: CursoCapacitacion[] = [];
-  public cursosSeleccionados: CursoCapacitacion[] = [];
+  public cursos: ICursoCapacitacion[] = [];
+  public cursosSeleccionados: ICursoCapacitacion[] = [];
 
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
@@ -65,14 +65,14 @@ export class FormEvaluationEmployeComponent {
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion;
-        if (rep.cursosCapacitacion) {
-          this.cursosSeleccionados = rep.cursosCapacitacion;
-        }else{
+        this.cursosSeleccionados=[]
           // busca los cursos actuales si los hay
-          if(rep.EvaluacionCursoCapacitacion){
-            
-          }
-        }
+          this.EvaluacionController.Getevaluacioncursos(rep.id.toString()).subscribe({
+            next:(r:ModelResponse)=>{
+              this.cursosSeleccionados = r.data
+            }
+          })
+        
       },
       error: (err: Error) => console.error('Error al obtener la evaluación:', err)
     });
@@ -80,13 +80,13 @@ export class FormEvaluationEmployeComponent {
     // Cargar cursos
     this.cursoCapacitacionController.Gets().subscribe({
       next: (rep: ModelResponse) => {
-        this.cursos = rep.data as CursoCapacitacion[];
+        this.cursos = rep.data as ICursoCapacitacion[];
       },
       error: (err: Error) => console.error('Error al obtener los cursos:', err)
     });
   }
 
-  onCursoSeleccionado(curso: CursoCapacitacion): void {
+  onCursoSeleccionado(curso: ICursoCapacitacion): void {
     if (this.cursosSeleccionados.length < 3) {
       if (!this.cursosSeleccionados.find(c => c.id === curso.id)) {
         this.cursosSeleccionados.push(curso);
@@ -96,7 +96,7 @@ export class FormEvaluationEmployeComponent {
     }
   }
 
-  onCursoRemovido(curso: CursoCapacitacion): void {
+  onCursoRemovido(curso: ICursoCapacitacion): void {
     this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.id !== curso.id);
   }
 
@@ -105,7 +105,7 @@ export class FormEvaluationEmployeComponent {
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
-    this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
+    //this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
   }
 
   generatePDF(): void {
@@ -280,9 +280,10 @@ export class FormEvaluationEmployeComponent {
     const fechaActual = new Date();
     this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
     
+    // verifica si hay repuestas en cero en caso de que encuentre no podra seguir
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
         if(this.supervisor){          
-          if(element.repuestasupervisor==0){              
+          if(element.repuestasupervisor==0 || element.repuesta==0){              
             puede=false;
           }          
         }else{
@@ -301,8 +302,21 @@ export class FormEvaluationEmployeComponent {
 
     if (puede){
       // Agregar los cursos seleccionados a la evaluación
-      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados;
+      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados;      
+      this.evaluacionempleado.evaluacionCursoCapacitacions=[]
       
+      if(this.cursosSeleccionados.length>0){
+        this.cursosSeleccionados.forEach((z)=>{
+          let ecc:IEvaluacionCursoCapacitacion ={
+            id: 0,
+            evaluacionId: this.evaluacionempleado.id,
+            cursoCapacitacionId: z.id,
+            cursoCapacitacion:z
+          }
+          this.evaluacionempleado.evaluacionCursoCapacitacions?.push(ecc)
+        })
+      }
+      console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
       this.EvaluacionController.model = this.evaluacionempleado;
       this.EvaluacionController.grabar().then((rep)=>{
         if(rep){
@@ -317,6 +331,11 @@ export class FormEvaluationEmployeComponent {
   }
 
   cancelar(): void {
+    if (this.supervisor){
     this.dataEmitter.emit("cancelar");
+    }else{
+      this.router.navigate(['/Home'])
+    }
+    
   }
 }

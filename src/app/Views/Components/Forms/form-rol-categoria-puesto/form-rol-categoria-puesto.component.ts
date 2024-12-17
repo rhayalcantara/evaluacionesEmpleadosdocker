@@ -120,7 +120,7 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
           rolCategoriaPuestoId: formValue.id
         }))        
       };
-      console.log('a grabar',rolCategoriaPuesto)
+      //console.log('a grabar',rolCategoriaPuesto)
       this.rolCategoriaService.model = rolCategoriaPuesto;
       this.rolCategoriaService.grabar().then(
         (success) => {

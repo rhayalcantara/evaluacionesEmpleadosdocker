@@ -1,9 +1,10 @@
-export interface CursoCapacitacion{
+export interface ICursoCapacitacion{
     id:number
     descripcion:string
 }
-export interface EvaluacionCursoCapacitacion{
+export interface IEvaluacionCursoCapacitacion{
     id:number
     evaluacionId:number
-    cursoCapcitacionId:number
+    cursoCapacitacionId:number
+    cursoCapacitacion?:ICursoCapacitacion
 }

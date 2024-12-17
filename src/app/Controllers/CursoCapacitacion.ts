@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, Observable } from 'rxjs';
-import { CursoCapacitacion } from "../Models/Capacitacion/Cursos";
+import { ICursoCapacitacion } from "../Models/Capacitacion/Cursos";
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +10,7 @@ import { CursoCapacitacion } from "../Models/Capacitacion/Cursos";
 export class CursoCapacitacionController implements OnInit {
     rutaapi: string = this.datos.URL + '/api/CursoCapacitacions'
     titulomensage: string = 'Curso Capacitación'
-    public model: CursoCapacitacion = this.inicializamodelo()
+    public model: ICursoCapacitacion = this.inicializamodelo()
     public titulos = [
         { descripcion: 'Descripción' }
     ]
@@ -20,7 +20,7 @@ export class CursoCapacitacionController implements OnInit {
     public actualpage: number = 1
     public pagesize: number = 10
     public filtro: string = ''
-    public arraymodel: CursoCapacitacion[] = []
+    public arraymodel: ICursoCapacitacion[] = []
 
     public operationSuccessful: boolean = false;
     @Output() TRegistros = new EventEmitter<number>();
@@ -37,7 +37,7 @@ export class CursoCapacitacionController implements OnInit {
         this.getdatos()
     }
 
-    public inicializamodelo(): CursoCapacitacion {
+    public inicializamodelo(): ICursoCapacitacion {
         return {
             id: 0,
             descripcion: ''
@@ -71,20 +71,20 @@ export class CursoCapacitacionController implements OnInit {
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
-    public Get(id: string): Observable<CursoCapacitacion> {
-        return this.datos.getbyid<CursoCapacitacion>(this.rutaapi + `/${id}`)
+    public Get(id: string): Observable<ICursoCapacitacion> {
+        return this.datos.getbyid<ICursoCapacitacion>(this.rutaapi + `/${id}`)
     }
 
     public GetCount(): Observable<number> {
         return this.datos.getdatoscount(this.rutaapi + `/count`)
     }
 
-    public insert(obj: CursoCapacitacion): Observable<CursoCapacitacion> {
-        return this.datos.insertardatos<CursoCapacitacion>(this.rutaapi, obj);
+    public insert(obj: ICursoCapacitacion): Observable<ICursoCapacitacion> {
+        return this.datos.insertardatos<ICursoCapacitacion>(this.rutaapi, obj);
     }
 
-    public Update(obj: CursoCapacitacion): Observable<CursoCapacitacion> {
-        return this.datos.updatedatos<CursoCapacitacion>(this.rutaapi + `/${obj.id}`, obj);
+    public Update(obj: ICursoCapacitacion): Observable<ICursoCapacitacion> {
+        return this.datos.updatedatos<ICursoCapacitacion>(this.rutaapi + `/${obj.id}`, obj);
     }
 
     public async grabar(): Promise<boolean> {
@@ -92,7 +92,7 @@ export class CursoCapacitacionController implements OnInit {
             if (this.model.id == 0) {
                 // inserta el registro
                 await firstValueFrom(this.insert(this.model)).then(
-                    (rep: CursoCapacitacion) => {
+                    (rep: ICursoCapacitacion) => {
                         firstValueFrom(this.Get(rep.id.toString())).then(t => {
                             this.model = t
                         })
@@ -107,7 +107,7 @@ export class CursoCapacitacionController implements OnInit {
             } else {
                 // actualiza el registro            
                 await firstValueFrom(this.Update(this.model)).then(
-                    (rep: CursoCapacitacion) => {
+                    (rep: ICursoCapacitacion) => {
                         this.model = rep;
                         this.TRegistros.emit(this.totalregistros)
                         resolve(true);

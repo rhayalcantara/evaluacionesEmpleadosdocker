@@ -67,7 +67,7 @@ getLabel(value: number): string {
   }
   
   cambiovalor(valor: number) {
-    console.log('cambiovalor',valor,this.goalempleadorepuesta)
+    //console.log('cambiovalor',valor,this.goalempleadorepuesta)
     if (this.valorSeleccionado === valor) {
       // Si el valor ya estaba seleccionado, lo deseleccionamos
       this.valorSeleccionado = 0;

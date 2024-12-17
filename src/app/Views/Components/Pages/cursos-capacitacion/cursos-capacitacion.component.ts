@@ -5,7 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
-import { CursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
+import { ICursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
 import { FormCursoCapacitacionComponent } from '../../Forms/form-curso-capacitacion/form-curso-capacitacion.component';
 
 @Component({
@@ -18,8 +18,8 @@ import { FormCursoCapacitacionComponent } from '../../Forms/form-curso-capacitac
 export class CursosCapacitacionComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   
-  cursos: CursoCapacitacion[] = [];
-  displayedCursos: CursoCapacitacion[] = [];
+  cursos: ICursoCapacitacion[] = [];
+  displayedCursos: ICursoCapacitacion[] = [];
   subscription: Subscription;
   
   // Pagination
@@ -78,13 +78,13 @@ export class CursosCapacitacionComponent implements OnInit, OnDestroy {
     this.abrirformulario(this.cursoService.model);
   }
 
-  onEdit(curso: CursoCapacitacion) {
+  onEdit(curso: ICursoCapacitacion) {
     this.cursoService.model = { ...curso };
     this.showForm = true;
     this.abrirformulario(curso);
   }
 
-  onDelete(curso: CursoCapacitacion) {
+  onDelete(curso: ICursoCapacitacion) {
     if (confirm('¿Está seguro que desea eliminar este curso?')) {
       // Implement delete functionality when available in the service
       console.log('Delete curso:', curso);
@@ -92,7 +92,7 @@ export class CursosCapacitacionComponent implements OnInit, OnDestroy {
     }
   }
 
-  abrirformulario(curso: CursoCapacitacion) {
+  abrirformulario(curso: ICursoCapacitacion) {
     const dialogRef = this.dialogmat.open(FormCursoCapacitacionComponent, {
       width: '800px',
       data: { model: curso }

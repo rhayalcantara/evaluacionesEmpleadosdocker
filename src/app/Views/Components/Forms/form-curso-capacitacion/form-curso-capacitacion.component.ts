@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { CursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
+import { ICursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { CommonModule } from '@angular/common';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
@@ -21,7 +21,7 @@ export class FormCursoCapacitacionComponent implements OnInit {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormCursoCapacitacionComponent>,
     public cursoService: CursoCapacitacionController,
-    @Inject(MAT_DIALOG_DATA) public data: { model: CursoCapacitacion },
+    @Inject(MAT_DIALOG_DATA) public data: { model: ICursoCapacitacion },
     private datosService: DatosServiceService
   ) {
     this.fg = this.fb.group({
@@ -39,7 +39,7 @@ export class FormCursoCapacitacionComponent implements OnInit {
 
   grabar(): void {
     if (this.fg.valid) {
-      const curso: CursoCapacitacion = this.fg.value;      
+      const curso: ICursoCapacitacion = this.fg.value;      
       this.cursoService.model = curso;
       this.cursoService.grabar().then(() => {
         this.datosService.showMessage('Curso guardado exitosamente', 'Éxito', 'success');

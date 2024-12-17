@@ -1,4 +1,4 @@
-<form id="evaluationForm">
+<form id="evaluationForm" (keydown.enter)="$event.preventDefault()">
     <h1>{{titulo}}</h1>
     <h3>Periodo:{{periodo.descripcion}}</h3>
     <p>Fecha:{{fecha | date}}</p>
