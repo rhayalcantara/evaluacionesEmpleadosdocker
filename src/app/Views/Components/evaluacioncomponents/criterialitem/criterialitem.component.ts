@@ -151,9 +151,23 @@ export class CriterialitemComponent implements OnInit {
         this.competenciasFinal=this.EvaluacionControler.competenciasFinal;
         this.porcentajeCompetencia=this.EvaluacionControler.porcentajeCompetencia;
         this.CompetenciaFinal=this.EvaluacionControler.CompetenciaFinal;   
-        // ////console.log('CompetenciaFinal',this.EvaluacionControler.CompetenciaFinal)
+
+        this.evaluacion.puntuaciondesempenocolaborador = Number(this.desempenoFinal)
+        if (this.supervisor){
+          this.evaluacion.puntuacioncompetenciasupervisor = Number(this.CompetenciaFinal)
+          
+        }else{
+          this.evaluacion.puntuacioncompetenciacolaborador = Number(this.CompetenciaFinal)
+        }
+
+        this.evaluacion.totalCalculo = Number(this.desempenoFinal) + Number(this.CompetenciaFinal)
+
+        
         let num = Number(this.EvaluacionControler.desempenoFinal) + Number(this.EvaluacionControler.CompetenciaFinal)
+        this.evaluacion.totalcolaborador = num
+        console.log('Actualizar variables',this.evaluacion)
         this.onPuntacionChange.emit(num)
+        this.onEvaluacionChange.emit(this.evaluacion)
       }
    })
 
@@ -220,9 +234,9 @@ export class CriterialitemComponent implements OnInit {
     //Competencia
     //busca las respuesta y da un promedio
     if(this.supervisor){
-      this.promedioCompetencias = (await this.EvaluacionControler.CalculoCompetencias()/(this.EvaluacionControler.model.goalEmpleadoRespuestas.length*2))
+      this.promedioCompetencias = (await this.EvaluacionControler.CalculoCompetencias(this.supervisor)/(this.EvaluacionControler.model.goalEmpleadoRespuestas.length*2))
     }else{
-      this.promedioCompetencias = (await this.EvaluacionControler.CalculoCompetencias()/this.EvaluacionControler.model.goalEmpleadoRespuestas.length)
+      this.promedioCompetencias = (await this.EvaluacionControler.CalculoCompetencias(this.supervisor)/this.EvaluacionControler.model.goalEmpleadoRespuestas.length)
     }
     
     //this.promedioCompetencias = this.porcentajeCompetencia/this.EvaluacionControler.model.evaluacionGoals.length

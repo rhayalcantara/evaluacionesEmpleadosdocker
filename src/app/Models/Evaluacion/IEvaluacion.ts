@@ -17,6 +17,12 @@ export interface IEvaluacion {
     empleado?: IEmpleado
     cursosCapacitacion?: ICursoCapacitacion[]
     evaluacionCursoCapacitacions?:IEvaluacionCursoCapacitacion[]
+    puntuaciondesempenocolaborador:number
+    puntuacioncompetenciacolaborador:number
+    totalcolaborador:number
+    puntuaciondesempenosupervidor:number
+    puntuacioncompetenciasupervisor:number
+    totalsupervisor:number
   }
   export interface IEvaluacionGoal {
     id: number
@@ -47,6 +53,12 @@ export interface IEvaluacion {
     evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
     cursosCapacitacion?: ICursoCapacitacion[]
     evaluacionCursoCapacitacions?:IEvaluacionCursoCapacitacion[]
+    puntuaciondesempenocolaborador:number
+    puntuacioncompetenciacolaborador:number
+    totalcolaborador:number
+    puntuaciondesempenosupervidor:number
+    puntuacioncompetenciasupervisor:number
+    totalsupervisor:number
   }
 
   export interface IEvalucionResultDto{

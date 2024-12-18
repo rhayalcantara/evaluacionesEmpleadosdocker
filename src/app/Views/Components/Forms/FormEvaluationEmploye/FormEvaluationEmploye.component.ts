@@ -105,6 +105,7 @@ export class FormEvaluationEmployeComponent {
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;
+    
     //this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
   }
 
@@ -316,9 +317,10 @@ export class FormEvaluationEmployeComponent {
           this.evaluacionempleado.evaluacionCursoCapacitacions?.push(ecc)
         })
       }
-      console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
+      //console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
       this.EvaluacionController.model = this.evaluacionempleado;
-      this.EvaluacionController.grabar().then((rep)=>{
+      
+      this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
         if(rep){
           this.datos.showMessage("Grabado",this.titulo,"sucess");
           this.generatePDF();

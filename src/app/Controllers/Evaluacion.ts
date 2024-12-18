@@ -80,7 +80,14 @@ export class Evaluacion implements OnInit {
             observacion: '',
             evaluacionGoals: [],
             evaluacionDesempenoMetas: [],
-            goalEmpleadoRespuestas: []
+            goalEmpleadoRespuestas: [],
+            puntuaciondesempenocolaborador:0,
+            puntuacioncompetenciacolaborador:0 ,
+            totalcolaborador:0,
+            puntuaciondesempenosupervidor:0,
+            puntuacioncompetenciasupervisor:0,
+            totalsupervisor:0
+                
         };
     }
 
@@ -118,15 +125,17 @@ export class Evaluacion implements OnInit {
         return valorretorno
     }
 
-    public async CalculoCompetencias(): Promise<number> {
+    public async CalculoCompetencias(supervisor:Boolean): Promise<number> {
         this.model.totalCalculo = 0;
         let competencias:number=0;
         //console.log('competencias calculo',this.model.goalEmpleadoRespuestas)
         for (let item of this.model.goalEmpleadoRespuestas) {
             
                 // hay que buscar en la tabla de ValoresEvaluacion  
-                if (item.repuestasupervisor!=0){
-                    competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
+                if (supervisor){
+                    if (item.repuestasupervisor!=0){
+                        competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
+                    }
                 }
                 if(item.repuesta!=0){
                     competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
@@ -157,9 +166,10 @@ export class Evaluacion implements OnInit {
     
         //Competencia
         if(supervisor){
-          this.promedioCompetencias = (await this.CalculoCompetencias()/(this.model.goalEmpleadoRespuestas.length*2))
+          this.promedioCompetencias = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length*2))
         }else{
-          this.promedioCompetencias = (await this.CalculoCompetencias()/this.model.goalEmpleadoRespuestas.length)
+          this.promedioCompetencias = (await this.CalculoCompetencias(supervisor)/this.model.goalEmpleadoRespuestas.length)
+          this.model.totalcolaborador = this.desempenoFinal +((this.porcentajeCompetencia * this.promedioCompetencias)/100)
         }
         //console.log('promedioCompetencias',this.promedioCompetencias)
         
@@ -167,6 +177,11 @@ export class Evaluacion implements OnInit {
         this.porcentajeCompetencia = px2?.valor 
         this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
         this.puntuacionFinal = this.CompetenciaFinal + this.desempenoFinal
+
+        // actualizacion de desempeño del modelo
+        this.model.puntuaciondesempenocolaborador = this.desempenoFinal
+        this.model.puntuacioncompetenciasupervisor = this.CompetenciaFinal
+        this.model.totalCalculo =  this.puntuacionFinal
         this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
     
       }
@@ -265,80 +280,80 @@ export class Evaluacion implements OnInit {
             observacion: obj.observacion,
             goalEmpleadoRespuestas: obj.goalEmpleadoRespuestas,
             evaluacionDesempenoMetas: obj.evaluacionDesempenoMetas,
-            evaluacionCursoCapacitacions:obj.evaluacionCursoCapacitacions
+            evaluacionCursoCapacitacions:obj.evaluacionCursoCapacitacions,
+            puntuaciondesempenocolaborador:obj.puntuaciondesempenocolaborador,
+            puntuacioncompetenciacolaborador:obj.puntuacioncompetenciacolaborador ,
+            totalcolaborador:obj.totalcolaborador,
+            puntuaciondesempenosupervidor:obj.puntuaciondesempenosupervidor,
+            puntuacioncompetenciasupervisor:obj.puntuacioncompetenciasupervisor,
+            totalsupervisor:obj.totalsupervisor
         }
-        console.log('evaluacionCursoCapacitacion',evaluaciondto.evaluacionCursoCapacitacions)
+        console.log('evaluacionCursoCapacitacion',evaluaciondto,obj)
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
-    public async grabar(): Promise<boolean> {
-        ////console.log('evalucion a grabar',this.model)
+    public async grabar(Supervisor:Boolean): Promise<boolean> {
+        
         return new Promise<boolean>(async (resolve) => {
-            // calcular competencia
-            
-            let competencia:number = await this.CalculoCompetencias()
-            ////console.log(competencia)
-            // calcular desempeño
-            let desempeno:number=0
-            if (this.model.evaluacionDesempenoMetas.length>0){
-                desempeno= await this.CalculoDesempeno()  
-            }
-                          
-            // buscar distribucion valordesempenocompetencia
-            //periodId
-            let dc={
-                competencia:0,
-                desempeno:0,
-                valorcompetencia:0,
-                valordesempeno:0,
-                total:0
-            }
-            this.porcientoDesempenoCompetencia.Gets().pipe(
-                map((rep:ModelResponse)=>{
-                    let pdc:IPorcientoDesempenoCompetencia[]=rep.data
-                    pdc.forEach((item)=>{
-                        if(item.periodId == this.model.periodId){
-                            if(item.descripcion==='Desempeño'){
-                                dc.desempeno=item.valor
-                            }else{
-                                dc.competencia=item.valor
-                            }
-                        }
-                    })
-                })                    
-            )
-            dc.valorcompetencia=(dc.competencia*competencia)/100
-            dc.valordesempeno=(dc.desempeno*desempeno)/100
-            dc.total=dc.valorcompetencia+dc.valordesempeno
-            //console.table(dc)
-            this.model.totalCalculo=dc.total            
-            if (this.model.id == 0) {
+            try {
+                // Calcular competencia
+                let competencia:number = await this.CalculoCompetencias(Supervisor);
                 
-                // inserta el registro
-                await firstValueFrom(this.insert(this.model)).then(
-                    (rep: IEvaluacion) => {
-                        this.model = rep;
-                        this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
-                        resolve(true);
-                    },
-                    (err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
-                        resolve(false);
-                    }
+                // Calcular desempeño
+                let desempeno:number = 0;
+                if (this.model.evaluacionDesempenoMetas.length > 0) {
+                    desempeno = await this.CalculoDesempeno();
+                }
+                
+                // Obtener los porcentajes de desempeño y competencia
+                const porcientosResponse = await firstValueFrom(
+                    this.porcientoDesempenoCompetencia.Gets().pipe(
+                        map((rep: ModelResponse) => {
+                            const pdc: IPorcientoDesempenoCompetencia[] = rep.data;
+                            return pdc.filter(item => item.periodId === this.model.periodId);
+                        })
+                    )
                 );
-            } else {
-                // actualiza el registro
-                await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IEvaluacionDto) => {
-                        //this.model = rep;
-                        this.TRegistros.emit(this.totalregistros);
-                        resolve(true);
-                    },
-                    (err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
-                        resolve(false);
+
+                // Inicializar objeto para almacenar los valores
+                let dc = {
+                    competencia: 0,
+                    desempeno: 0,
+                    valorcompetencia: 0,
+                    valordesempeno: 0,
+                    total: 0
+                };
+
+                // Asignar valores según la descripción
+                porcientosResponse.forEach(item => {
+                    if (item.descripcion === 'Desempeño') {
+                        dc.desempeno = item.valor;
+                    } else if (item.descripcion === 'Competencia') {
+                        dc.competencia = item.valor;
                     }
-                );
+                });
+
+                // Calcular valores finales
+                dc.valorcompetencia = (dc.competencia * competencia) / 100;
+                dc.valordesempeno = (dc.desempeno * desempeno) / 100;
+                dc.total = dc.valorcompetencia + dc.valordesempeno;
+                
+                this.model.totalCalculo = dc.total;
+
+                // Insertar o actualizar según corresponda
+                if (this.model.id === 0) {
+                    const response = await firstValueFrom(this.insert(this.model));
+                    this.model = response;
+                    this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
+                    resolve(true);
+                } else {
+                    await firstValueFrom(this.Update(this.model));
+                    this.TRegistros.emit(this.totalregistros);
+                    resolve(true);
+                }
+            } catch (error) {
+                this.datos.showMessage('Error:' + (error as Error).message, this.titulomensage, 'error');
+                resolve(false);
             }
         });
     }
@@ -375,6 +390,4 @@ export class Evaluacion implements OnInit {
     public AddGoalEmpleadoRespuesta(goalEmpleadoRespuesta: IGoalEmpleadoRespuesta): void {
         this.model.goalEmpleadoRespuestas.push(goalEmpleadoRespuesta);
     }
-
-  
 }
