@@ -29,7 +29,11 @@
 						],
 						"scripts": [],
 						"extraWebpackConfig": "webpack.config.js",
-						"commonChunk": false
+						"commonChunk": false,
+						"allowedCommonJsDependencies": [
+							"pdfmake/build/pdfmake",
+							"sweetalert2"
+						]
 					},
 					"configurations": {
 						"production": {

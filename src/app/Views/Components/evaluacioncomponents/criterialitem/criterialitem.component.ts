@@ -143,6 +143,7 @@ export class CriterialitemComponent implements OnInit {
       }
       if (data.mensaje ==='Actualizar variables'){
         //console.log(data)
+        // aqui se actualiza las variables
         this.pdclocal = this.EvaluacionControler.pdclocal
         this.promedioDesempeno = this.EvaluacionControler.promedioDesempeno;
         this.desempenoFinal= this.EvaluacionControler.desempenoFinal;
@@ -151,6 +152,7 @@ export class CriterialitemComponent implements OnInit {
         this.competenciasFinal=this.EvaluacionControler.competenciasFinal;
         this.porcentajeCompetencia=this.EvaluacionControler.porcentajeCompetencia;
         this.CompetenciaFinal=this.EvaluacionControler.CompetenciaFinal;   
+                
 
         this.evaluacion.puntuaciondesempenocolaborador = Number(this.desempenoFinal)
         if (this.supervisor){
@@ -172,7 +174,7 @@ export class CriterialitemComponent implements OnInit {
    })
 
   }
-
+  // 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
   calcularresultadologro(rl:IResultadoLogro,item:IEvaluacionDesempenoMeta):IResultadoLogro{
     //calculo porcientologro
     ////console.log(item.inverso,item.evaluacioneDesempenoMetaRespuestas?.logro,item.meta,item.descripcion)

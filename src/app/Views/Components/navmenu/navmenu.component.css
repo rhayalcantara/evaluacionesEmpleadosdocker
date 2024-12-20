@@ -32,7 +32,7 @@
 .logo-div {
     width: 40px;
     height: 40px;
-    background: url("../../../assets/LOGO-COOPASPIRE.png") no-repeat center;
+    background: url("/assets/LOGO-COOPASPIRE.png") no-repeat center;
     background-size: contain;
     background-color: white;
     border-radius: 50%;
