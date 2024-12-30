@@ -163,6 +163,11 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/Pages/cursos-capacitacion/cursos-capacitacion.component')
     .then((m)=> m.CursosCapacitacionComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'organigrama',
+    loadComponent:()=> import('./Views/Components/organigrama/organigrama.component')
+    .then((m)=> m.OrganigramaComponent),
+    canActivate: [AuthGuard]
   }
 ];
 

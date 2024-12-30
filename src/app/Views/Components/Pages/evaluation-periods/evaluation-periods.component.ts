@@ -64,6 +64,8 @@ export class EvaluationPeriodsComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     // TODO: Fetch actual periods data from a service
+    // Suggestion: Investigate if the component needs to fetch all periods or if fetching only the active one is sufficient.
+    // If all periods are needed, implement a new service method to fetch them and update the component accordingly.
     this.fg= this.Dat.llenarFormGrup(this.period)
     const dialogRef = this.toastr.open(LoadingComponent, {
       width: '340px',
@@ -261,6 +263,8 @@ export class EvaluationPeriodsComponent implements OnInit {
       period.activa = true;
       period.estadoid = 2;
       // TODO: Update the period in the backend
+      // Suggestion: Implement the backend update logic within the `activatePeriod` function.
+      // This would likely involve calling a service method to send the updated period data to the server.
       console.log(`Period ${period.descripcion} activated and set to Configurando state`);
     }
   }

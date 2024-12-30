@@ -216,6 +216,8 @@ agregarFila() {
     // Implementar la carga de planes estratégicos desde el servicio
     // TODO: Implement this method using PlanExtrategico service
    // this.planesEstrategicos = this.planestrategicocontroller.arraymodel
+    // Suggestion: Review the `cargarPlanesEstrategicos` function and ensure that it correctly loads strategic plans using the `PlanExtrategico` service.
+    // If the current implementation is correct, the TODO comment can be removed. If there are specific requirements for loading the data, they should be implemented.
     this.planestrategicocontroller.getdatos()
     
   }
