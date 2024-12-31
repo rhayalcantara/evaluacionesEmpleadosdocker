@@ -48,6 +48,9 @@ export class NavmenuComponent implements OnInit {
           
           this.periodo=rep;
           //actualiza el periodo activo en memoria
+          // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
+          // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
+          // Consider using a dedicated state management library like NgRx or Akita for managing application state.
           localStorage.setItem("periodo", JSON.stringify(this.periodo))
           // busca el empleado
           this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
@@ -55,6 +58,9 @@ export class NavmenuComponent implements OnInit {
             this.empl.getsubordinados(this.periodo)
             this.empleado = rep
             //actualiza el empleado en memoria
+            // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
+            // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
+            // Consider using a dedicated state management library like NgRx or Akita for managing application state.
             localStorage.setItem("empleado", JSON.stringify(this.empleado))
             //busca el rol del empleado
             this.buscarEmpleadoRol()
@@ -91,6 +97,9 @@ export class NavmenuComponent implements OnInit {
                 let elemprol: IEmpleadoRol | undefined = empleadorol.find(x => x.empleadoSecuencial == this.empleado.secuencial);
                 if (elemprol) {
                     this.empleadoRolController.model = elemprol;
+                    // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
+                    // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
+                    // Consider using a dedicated state management library like NgRx or Akita for managing application state.
                     localStorage.setItem("rol", JSON.stringify(this.empleadoRolController.model))
                 }
             }
