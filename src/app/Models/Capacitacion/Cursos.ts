@@ -7,4 +7,5 @@ export interface IEvaluacionCursoCapacitacion{
     evaluacionId:number
     cursoCapacitacionId:number
     cursoCapacitacion?:ICursoCapacitacion
+    porque:string
 }

@@ -27,8 +27,14 @@
       <!-- Lista de cursos seleccionados -->
       <div class="cursos-seleccionados">
         <div *ngFor="let curso of cursosSeleccionados" class="curso-item">
-          <span>{{curso.descripcion}}</span>
-          <button type="button" class="remove-curso" (click)="onCursoRemovido(curso)">×</button>
+          <div class="curso-info">
+            <span>{{curso.cursoCapacitacion?.descripcion}}</span>
+            <button type="button" class="remove-curso" (click)="onCursoRemovido(curso)">×</button>
+          </div>
+          <div class="curso-porque">
+            <label>¿Por qué sugiere esta capacitación para el colaborador?</label>
+            <input type="text" [(ngModel)]="curso.porque" name="porque-{{curso.id}}" placeholder="Indique la razón">
+          </div>
         </div>
       </div>
     </div>

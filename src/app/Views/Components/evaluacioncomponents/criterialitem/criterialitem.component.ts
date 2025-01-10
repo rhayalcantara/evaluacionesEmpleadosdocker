@@ -167,7 +167,7 @@ export class CriterialitemComponent implements OnInit {
         
         let num = Number(this.EvaluacionControler.desempenoFinal) + Number(this.EvaluacionControler.CompetenciaFinal)
         this.evaluacion.totalcolaborador = num
-        console.log('Actualizar variables',this.evaluacion)
+        //console.log('Actualizar variables',this.evaluacion)
         this.onPuntacionChange.emit(num)
         this.onEvaluacionChange.emit(this.evaluacion)
       }

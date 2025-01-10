@@ -13,7 +13,7 @@ import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
   styleUrls: ['./evaluar-subordinados.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule,  
-    CardEmpleadoComponent]
+    CardEmpleadoComponent] 
 })
 export class EvaluarSubordinadosComponent implements OnInit {
 onDepartamentoChange() {
@@ -70,6 +70,12 @@ onDepartamentoChange() {
  
   ngOnInit(): void {
     
+        // busca el periodo en localstore
+        const storedPeriodo = localStorage.getItem("periodo");
+        if (storedPeriodo) {
+          this.periodo = JSON.parse(storedPeriodo);
+        }  
+
    this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep:IEmpleado)=>{
       this.empl.model=rep
       this.empl.getsubordinados(this.periodo)

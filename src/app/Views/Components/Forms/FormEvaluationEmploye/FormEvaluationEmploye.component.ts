@@ -42,7 +42,7 @@ export class FormEvaluationEmployeComponent {
   public comentarioAdicional: string = '';
   public desempeno:IEvalucionResultDto[]=[]
   public cursos: ICursoCapacitacion[] = [];
-  public cursosSeleccionados: ICursoCapacitacion[] = [];
+  public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
 
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
@@ -66,12 +66,8 @@ export class FormEvaluationEmployeComponent {
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion;
         this.cursosSeleccionados=[]
-          // busca los cursos actuales si los hay
-          this.EvaluacionController.Getevaluacioncursos(rep.id.toString()).subscribe({
-            next:(r:ModelResponse)=>{
-              this.cursosSeleccionados = r.data
-            }
-          })
+        this.cursosSeleccionados = rep.evaluacionCursoCapacitacions || [];
+
         
       },
       error: (err: Error) => console.error('Error al obtener la evaluación:', err)
@@ -88,16 +84,23 @@ export class FormEvaluationEmployeComponent {
 
   onCursoSeleccionado(curso: ICursoCapacitacion): void {
     if (this.cursosSeleccionados.length < 3) {
-      if (!this.cursosSeleccionados.find(c => c.id === curso.id)) {
-        this.cursosSeleccionados.push(curso);
+      if (!this.cursosSeleccionados.find(c => c.cursoCapacitacionId === curso.id)) {
+        const evaluacionCurso: IEvaluacionCursoCapacitacion = {
+          id: 0,
+          evaluacionId: this.evaluacionempleado.id,
+          cursoCapacitacionId: curso.id,
+          cursoCapacitacion: curso,
+          porque: ''
+        };
+        this.cursosSeleccionados.push(evaluacionCurso);
       }
     } else {
       this.datos.showMessage("Solo puede seleccionar hasta 3 cursos", this.titulo, "warning");
     }
   }
 
-  onCursoRemovido(curso: ICursoCapacitacion): void {
-    this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.id !== curso.id);
+  onCursoRemovido(curso: IEvaluacionCursoCapacitacion): void {
+    this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.cursoCapacitacionId !== curso.cursoCapacitacionId);
   }
 
   onPuntacionChange(event:number){
@@ -127,7 +130,9 @@ export class FormEvaluationEmployeComponent {
       const cursosContent = this.cursosSeleccionados.length > 0 ? [
         { text: 'Cursos de Capacitación Seleccionados:', style: 'sectionHeader' },
         {
-          ul: this.cursosSeleccionados.map(curso => curso.descripcion)
+          ul: this.cursosSeleccionados.map(curso => 
+            `${curso.cursoCapacitacion?.descripcion} - Porque: ${curso.porque || 'No especificado'}`
+          )
         },
         { text: '\n' }
       ] : [];
@@ -148,7 +153,7 @@ export class FormEvaluationEmployeComponent {
         {
           table: {
             headerRows: 1,
-            widths: ['auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto'],
+            widths: ['auto', '*', 'auto', 'auto', 'auto', 'auto'],
             body: [
               [
                 { text: 'Tipo', style: 'tableHeader' },
@@ -156,8 +161,7 @@ export class FormEvaluationEmployeComponent {
                 { text: 'Meta', style: 'tableHeader' },
                 { text: 'Peso', style: 'tableHeader' },
                 { text: 'Logro', style: 'tableHeader' },
-                { text: '%', style: 'tableHeader' },
-                { text: 'Resultado', style: 'tableHeader' }
+                { text: '%', style: 'tableHeader' }
               ],
               ...this.evaluacionempleado.evaluacionDesempenoMetas.map(item => [
                 item.tipo || '',
@@ -165,8 +169,7 @@ export class FormEvaluationEmployeComponent {
                 item.meta?.toString() || '',
                 item.peso?.toString() || '',
                 item.evaluacioneDesempenoMetaRespuestas?.logro?.toString() || '',
-                this.calculatePercentage(item),
-                this.calculateResult(item)
+                this.calculatePercentage(item)
               ])
             ]
           }
@@ -258,7 +261,7 @@ export class FormEvaluationEmployeComponent {
     if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
     
     const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
-    const meta = item.peso || 1;
+    const meta = item.meta || 1;
     const inverso = item.inverso || false;
     
     const percentage = inverso ? 
@@ -270,7 +273,7 @@ export class FormEvaluationEmployeComponent {
 
   calculateResult(item: IEvaluacionDesempenoMeta): string {
     const percentage = parseFloat(this.calculatePercentage(item));
-    const peso = item.meta || 0;
+    const peso = item.peso || 0;
     return ((percentage * peso) / 100).toFixed(2);
   }
 
@@ -284,49 +287,46 @@ export class FormEvaluationEmployeComponent {
     // verifica si hay repuestas en cero en caso de que encuentre no podra seguir
     this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
         if(this.supervisor){          
-          if(element.repuestasupervisor==0 || element.repuesta==0){              
+          if(element.repuestasupervisor==0 || element.repuesta==0){    
+            this.datos.showMessage(element.repuestasupervisor.toString(),"Error","error")          
             puede=false;
           }          
         }else{
           if (element.repuesta==0){
+            this.datos.showMessage(element.evaluacionId.toString(),"Error","error")
             puede=false;
           }
         }
     });
     
+    console.log(puede,this.evaluacionempleado.goalEmpleadoRespuestas)
+
     this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
       item.evaluacion=undefined;
         if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
+          this.datos.showMessage(item.evaluacioneDesempenoMetaRespuestas?.logro.toString() ,"Error","error")
           puede=false;
         }           
     });
-
+    console.log(puede,this.evaluacionempleado.evaluacionDesempenoMetas)
     if (puede){
       // Agregar los cursos seleccionados a la evaluación
-      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados;      
-      this.evaluacionempleado.evaluacionCursoCapacitacions=[]
-      
-      if(this.cursosSeleccionados.length>0){
-        this.cursosSeleccionados.forEach((z)=>{
-          let ecc:IEvaluacionCursoCapacitacion ={
-            id: 0,
-            evaluacionId: this.evaluacionempleado.id,
-            cursoCapacitacionId: z.id,
-            cursoCapacitacion:z
-          }
-          this.evaluacionempleado.evaluacionCursoCapacitacions?.push(ecc)
-        })
-      }
+      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados.map(c => c.cursoCapacitacion!);      
+      this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados;
       //console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
       this.EvaluacionController.model = this.evaluacionempleado;
       
       this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
-        if(rep){
+        
           this.datos.showMessage("Grabado",this.titulo,"sucess");
-          this.generatePDF();
+          if (this.supervisor){
+            this.dataEmitter.emit("grabado");
+            this.generatePDF();            
+          }          
           this.router.navigate(['/Home'])
-        }
+        
       });
+      
     }else{
       this.datos.showMessage("Favor Verificar tiene respuestas sin contestar",this.titulo,"error");
     }
