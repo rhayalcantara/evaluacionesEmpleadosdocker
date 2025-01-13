@@ -8,6 +8,7 @@ import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-emp
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
+import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 
 @Component({
   selector: 'app-evaluacion',
@@ -31,7 +32,7 @@ cancelar() {
   constructor(
     private empleadocontroller:Empleados,
     private periodocontroller:Periodos,
-    
+    private EvaluacionController:Evaluacion   
   ){}
 
   ngOnInit() {
@@ -47,6 +48,7 @@ cancelar() {
     const storedPeriodo = localStorage.getItem("periodo");
     if (storedPeriodo) {
       this.periodo = JSON.parse(storedPeriodo);
-    }      
+    }
+      
   }
 }

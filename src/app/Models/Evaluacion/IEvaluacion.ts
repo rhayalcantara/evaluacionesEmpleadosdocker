@@ -23,6 +23,7 @@ export interface IEvaluacion {
     puntuaciondesempenosupervidor:number
     puntuacioncompetenciasupervisor:number
     totalsupervisor:number
+    estadoevaluacion:string
   }
   export interface IEvaluacionGoal {
     id: number
@@ -41,6 +42,11 @@ export interface IEvaluacion {
     observacion: string
   }
 
+  export interface IEvaluacionEstadoDts {
+    EvaluacionId: number
+    EmpleadoSecuencial:number
+    estadoEvaluacion:string
+  }
 
   export interface IEvaluacionDto{
     id: number

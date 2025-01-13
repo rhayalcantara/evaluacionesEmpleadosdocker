@@ -13,6 +13,7 @@ import { RolCategoriaPuesto } from 'src/app/Controllers/RolCategoriaPuesto';
 import { RolCategoriaPuestoDet } from 'src/app/Controllers/RolCategoriaPuestoDet';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { IRolCategoriaPuesto, IRolCategoriaPuestoDet } from 'src/app/Models/RolCategoriaPuesto/IRolCategoriaPuesto';
+import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class CardEmpleadoComponent implements OnInit {
               private puestocontroller:Puestos,
               private rolcategoriapuestodet:RolCategoriaPuestoDet,
               private rolcategoriapuestocontroller:RolCategoriaPuesto,
-              
+              private evaluacion:Evaluacion,
               private toastr: MatDialog,) {}
 
   @Input() empleado: IEmpleado = {
@@ -58,6 +59,7 @@ export class CardEmpleadoComponent implements OnInit {
   @Input() llamarevaluacion: boolean = false;
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
+  public mostarenviar:boolean = false
   public rolcategoriapuesto:string=''
   public estadoAutoevaluacion: string = 'Pendiente';
   public estadoEvaluacionSupervisor: string = 'Pendiente';
@@ -98,6 +100,25 @@ export class CardEmpleadoComponent implements OnInit {
       }
     })
 
+    // buscar el estado de la evaluacion
+    this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial,).subscribe({
+      next:(rep:ModelResponse)=>{
+        console.log('estado evaluacion',rep)  
+        this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
+        if (this.estadoAutoevaluacion == 'Pendiente' || this.estadoAutoevaluacion == 'Completado'){
+          this.llamarevaluacion = false
+        }else{
+          this.llamarevaluacion = true
+        }
+        if(this.estadoAutoevaluacion == 'EvaluadoPorSupervisor'){
+          this.mostarenviar=true
+        }else{
+          this.mostarenviar=false
+        }
+        //this.estadoEvaluacionSupervisor = rep.data[1].EstadoEvaluacion
+        this.cdr.detectChanges();
+      }
+    })
 
   }
   cargarEstadoEvaluacion(): void {
@@ -144,6 +165,20 @@ export class CardEmpleadoComponent implements OnInit {
   getButtonStyle(): { [key: string]: string } {
     return {
       'background-color': '#007bff',
+      'color': 'white',
+      'border': 'none',
+      'padding': '10px 20px',
+      'border-radius': '5px',
+      'cursor': 'pointer',
+      'font-weight': 'bold',
+      'transition': 'background-color 0.3s ease'
+    };
+  }
+
+  getButtonStyle2(): { [key: string]: string } {
+    return {
+      // background color verde
+      'background-color': '#28a745',
       'color': 'white',
       'border': 'none',
       'padding': '10px 20px',

@@ -28,11 +28,13 @@ declare const pdfMake: any;
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
 export class FormEvaluationEmployeComponent {
+
   @Input() empleado: IEmpleado=this.empleadocontroller.inicializamodelo();
   @Input() periodo: IPeriodo=this.periodocontroller.inicializamodelo();
   @Input() titulo:string="";
   @Input() supervisor:Boolean=false
   @Input() mostargrabar:Boolean=true
+  @Input() mostarAceptar:Boolean=false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
   @Output() puntuacion: EventEmitter<number> = new EventEmitter();
   
@@ -43,6 +45,7 @@ export class FormEvaluationEmployeComponent {
   public desempeno:IEvalucionResultDto[]=[]
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
+  
 
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
@@ -62,6 +65,15 @@ export class FormEvaluationEmployeComponent {
     .subscribe({
       next: (rep: IEvaluacion) => {
         this.evaluacionempleado = rep;
+
+      // Verificar si la evaluacion esta en estado Enviada
+        console.log(this.evaluacionempleado.estadoevaluacion)
+      if (this.evaluacionempleado.estadoevaluacion == "Enviado") {
+        this.mostarAceptar = true;
+        this.mostargrabar = false;
+      }
+      
+
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
         this.comentarioAdicional = rep.observacion;
@@ -187,7 +199,7 @@ export class FormEvaluationEmployeComponent {
         { text: 'Comentario Adicional', style: 'sectionHeader' },
         { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
       ];
-
+      /*
       if (this.supervisor) {
         content.push(
           { text: '\n\n' },
@@ -213,7 +225,7 @@ export class FormEvaluationEmployeComponent {
           }
         );
       }
-
+      */
       const docDefinition = {
         content,
         styles: {
@@ -314,10 +326,15 @@ export class FormEvaluationEmployeComponent {
       this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados.map(c => c.cursoCapacitacion!);      
       this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados;
       //console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
+      if (this.supervisor){
+        this.evaluacionempleado.estadoevaluacion='EvaluadoPorSupervisor';
+      }else{
+        this.evaluacionempleado.estadoevaluacion='AutoEvaluado';
+      }
       this.EvaluacionController.model = this.evaluacionempleado;
       
       this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
-        
+          
           this.datos.showMessage("Grabado",this.titulo,"sucess");
           if (this.supervisor){
             this.dataEmitter.emit("grabado");
@@ -339,5 +356,18 @@ export class FormEvaluationEmployeComponent {
       this.router.navigate(['/Home'])
     }
     
+  }
+  onAceptarEvaluacion() {
+    this.evaluacionempleado.estadoevaluacion = 'Completado';
+    this.EvaluacionController.model = this.evaluacionempleado;
+      
+    this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
+        
+        this.datos.showMessage("Grabado",this.titulo,"sucess");
+        this.generatePDF();            
+        this.router.navigate(['/Home'])
+      
+    });
+
   }
 }

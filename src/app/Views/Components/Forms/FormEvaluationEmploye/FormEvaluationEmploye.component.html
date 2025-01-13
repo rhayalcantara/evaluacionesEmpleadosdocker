@@ -42,7 +42,7 @@
     <label for="comments">Comentario Adiccional:</label>
     <textarea id="comments" [(ngModel)]="comentarioAdicional" name="comments"></textarea>
     
-    <!-- Sección de Firmas -->
+    <!-- Sección de Firmas 
     <div *ngIf="supervisor" class="seccion-firmas">
       <div class="firma">
           <div class="linea-firma"></div>
@@ -53,8 +53,16 @@
           <div class="linea-firma"></div>
           <p>Firma del Supervisor</p>
           <p>Fecha: _______________</p>
-      </div>
+      </div> 
+    </div> -->
+  
+      <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
+      <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
+    
+    <div *ngIf="mostarAceptar">
+      <!-- Mostrar texto de aceptacion de puntaje final-->
+      <p>El puntaje final de la evaluación es: {{evaluacionempleado.totalcolaborador}}</p>
+      <p>¿Desea aceptar la evaluación?</p>
+      <button  type="submit" (click)="onAceptarEvaluacion()">Aceptar Evaluacion</button>
     </div>
-    <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
-    <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
-  </form>
+    </form>

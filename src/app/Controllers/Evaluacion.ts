@@ -86,8 +86,8 @@ export class Evaluacion implements OnInit {
             totalcolaborador:0,
             puntuaciondesempenosupervidor:0,
             puntuacioncompetenciasupervisor:0,
-            totalsupervisor:0
-                
+            totalsupervisor:0,
+            estadoevaluacion:'Pendiente'    
         };
     }
 
@@ -382,7 +382,10 @@ export class Evaluacion implements OnInit {
         return this.datos.getbyid<IEvaluacion>(`${this.rutaapi}/evaluacion?empleadoid=${secuencialempleado}&periodoid=${periodId}`)
                
     }
-
+    public GetEvaluacionEstadoDts(periodId: number, EmpleadoSecuencial: number): Observable<ModelResponse> {
+        return this.datos.getdatos<ModelResponse>(this.rutaapi + `/EstadoEvaluacionSub?empleadoids=${EmpleadoSecuencial}&periodoid=${periodId}`);
+    }
+        
     public AddEvaluacionGoal(evaluacionGoal: IEvaluacionGoal): void {
         this.model.evaluacionGoals.push(evaluacionGoal);
     }

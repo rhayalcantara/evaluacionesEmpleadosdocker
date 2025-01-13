@@ -16,11 +16,13 @@
         <p><strong>Posicion:     </strong>     {{empleado.cargo}}</p>  
         <p><strong>Fecha Ingreso:</strong>     {{empleado.fechapostulacion | date : 'dd/MM/yyyy'}}</p>
         <div *ngIf="mostrarEstadoEvaluacion">
-            <p><strong>Estado Autoevaluación:</strong> {{estadoAutoevaluacion}}</p>
-            <p><strong>Estado Evaluación Supervisor:</strong> {{estadoEvaluacionSupervisor}}</p>
-          </div>    
-    </div>    
-    <div class="evaluation-button" *ngIf="llamarevaluacion">
-        <button (click)="openEvaluationForm()" [ngStyle]="getButtonStyle()">Evaluar Empleado</button>
-    </div>
+            <p><strong>Estado Autoevaluación:</strong> {{estadoAutoevaluacion}}</p>            
+            <div class="evaluation-button" *ngIf="llamarevaluacion">
+                <button (click)="openEvaluationForm()" [ngStyle]="getButtonStyle()">Evaluar Empleado</button>
+            </div>
+            <div class="evaluation-button" *ngIf="mostarenviar">
+                <button  [ngStyle]="getButtonStyle2()">Enviar al Empleado</button>
+            </div>
+        </div>
+    </div>  
 </div>
