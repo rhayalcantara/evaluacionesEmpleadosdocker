@@ -7,7 +7,7 @@ import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from "../Capacitacio
 export interface IEvaluacion {
     id: number
     periodId: number
-    secuencialempleado: number
+    empleadoSecuencial: number
     totalCalculo: number
     fechaRepuestas: string
     observacion: string
@@ -65,6 +65,7 @@ export interface IEvaluacion {
     puntuaciondesempenosupervidor:number
     puntuacioncompetenciasupervisor:number
     totalsupervisor:number
+    estadoevaluacion:string
   }
 
   export interface IEvalucionResultDto{

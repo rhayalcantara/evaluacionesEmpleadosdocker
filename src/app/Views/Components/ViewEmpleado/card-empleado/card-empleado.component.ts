@@ -14,6 +14,8 @@ import { RolCategoriaPuestoDet } from 'src/app/Controllers/RolCategoriaPuestoDet
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { IRolCategoriaPuesto, IRolCategoriaPuestoDet } from 'src/app/Models/RolCategoriaPuesto/IRolCategoriaPuesto';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
+import { IEvaluacion } from 'src/app/Models/Evaluacion/IEvaluacion';
+import { DatosServiceService } from 'src/app/Services/datos-service.service';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class CardEmpleadoComponent implements OnInit {
  
  
   constructor(private cdr: ChangeDetectorRef,
+              private datos:DatosServiceService,
               private categoriapuestocontroller:CategoriaPuesto,
               private puestocontroller:Puestos,
               private rolcategoriapuestodet:RolCategoriaPuestoDet,
@@ -103,9 +106,10 @@ export class CardEmpleadoComponent implements OnInit {
     // buscar el estado de la evaluacion
     this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial,).subscribe({
       next:(rep:ModelResponse)=>{
-        console.log('estado evaluacion',rep)  
+        //console.log('estado evaluacion',rep)  
         this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
-        if (this.estadoAutoevaluacion == 'Pendiente' || this.estadoAutoevaluacion == 'Completado'){
+        if (this.estadoAutoevaluacion == 'Pendiente' || 
+            this.estadoAutoevaluacion == 'Completado'){
           this.llamarevaluacion = false
         }else{
           this.llamarevaluacion = true
@@ -151,6 +155,25 @@ export class CardEmpleadoComponent implements OnInit {
     });
   });
    }
+   Enviar(emp:number){
+    //buscar la evaluacion para modificar el estado
+    
+    this.evaluacion.GetEvaluacionePorEmpleadoyPeriodo(emp,this.periodo.id).subscribe({
+      next:(rep:IEvaluacion)=>{
+        console.log(rep)
+        let t:IEvaluacion  = rep       
+        t.estadoevaluacion = 'Enviado'        
+        this.evaluacion.Update(t).subscribe({
+          next:(repx)=>{
+            console.log('actualizado',repx)
+            this.datos.showMessage("Enviado","Envio de Evaluacion","success");
+            this.mostarenviar=false
+            this.cdr.detectChanges();   
+          }      
+      })
+    }
+  })
+  }
 
   openEvaluationForm(): void {
     //this.evaluateEmployee.emit(this.empleado);

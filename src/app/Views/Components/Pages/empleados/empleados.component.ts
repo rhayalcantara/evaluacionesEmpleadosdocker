@@ -46,7 +46,7 @@ export class EmpleadosComponent implements OnInit {
     
     this.empleadosController.TRegistros.subscribe({
      next:(rep:number)=>{
-      console.log("evento#:",rep)
+      //console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
        dialogRef.close()

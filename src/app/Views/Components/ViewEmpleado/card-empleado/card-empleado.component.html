@@ -21,7 +21,7 @@
                 <button (click)="openEvaluationForm()" [ngStyle]="getButtonStyle()">Evaluar Empleado</button>
             </div>
             <div class="evaluation-button" *ngIf="mostarenviar">
-                <button  [ngStyle]="getButtonStyle2()">Enviar al Empleado</button>
+                <button  (click)="Enviar(empleado.secuencial)" [ngStyle]="getButtonStyle2()">Enviar al Empleado</button>
             </div>
         </div>
     </div>  

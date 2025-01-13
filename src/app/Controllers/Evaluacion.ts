@@ -74,7 +74,7 @@ export class Evaluacion implements OnInit {
         return {
             id: 0,
             periodId: 0,
-            secuencialempleado: 0,
+            empleadoSecuencial: 0,
             totalCalculo: 0,
             fechaRepuestas: '',
             observacion: '',
@@ -271,10 +271,11 @@ export class Evaluacion implements OnInit {
     }
 
     public Update(obj: IEvaluacion): Observable<IEvaluacionDto> {
+        
         let evaluaciondto:IEvaluacionDto={
             id: obj.id,
             periodId: obj.periodId,
-            secuencialempleado: obj.secuencialempleado,
+            secuencialempleado: obj.empleadoSecuencial,
             totalCalculo: obj.totalCalculo,
             fechaRepuestas: obj.fechaRepuestas,
             observacion: obj.observacion,
@@ -286,7 +287,8 @@ export class Evaluacion implements OnInit {
             totalcolaborador:obj.totalcolaborador,
             puntuaciondesempenosupervidor:obj.puntuaciondesempenosupervidor,
             puntuacioncompetenciasupervisor:obj.puntuacioncompetenciasupervisor,
-            totalsupervisor:obj.totalsupervisor
+            totalsupervisor:obj.totalsupervisor,
+            estadoevaluacion:obj.estadoevaluacion
         }
         console.log('evaluacionCursoCapacitacion',evaluaciondto,obj)
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
@@ -374,7 +376,7 @@ export class Evaluacion implements OnInit {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let evaluaciones: IEvaluacion[] = rep.data;
-                return evaluaciones.filter(x => x.secuencialempleado == secuencialempleado);
+                return evaluaciones.filter(x => x.empleadoSecuencial == secuencialempleado);
             })
         );
     }

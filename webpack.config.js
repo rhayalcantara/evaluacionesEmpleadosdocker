@@ -4,7 +4,7 @@ const moduleFederationConfig = withModuleFederationPlugin({
   remotes: {
     //"loginapp": "/loginapp/remoteEntry.js",
     //"loginapp": "http://localhost/loginapp/remoteEntry.js",
-    //"loginapp": "http://192.168.7.222/loginapp/remoteEntry.js",  //x/ produccion
+    // "loginapp": "http://192.168.7.222/loginapp/remoteEntry.js",  //x/ produccion
     "loginapp": "http:localhost:4300/remoteEntry.js",
   },
 

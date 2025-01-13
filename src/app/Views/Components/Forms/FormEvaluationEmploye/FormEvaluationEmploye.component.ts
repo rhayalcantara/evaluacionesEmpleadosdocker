@@ -17,13 +17,15 @@ import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta
 import { Router } from '@angular/router';
 import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { LoadingComponent } from '../../loading/loading.component';
 
 declare const pdfMake: any;
 
 @Component({
   selector: 'app-form-evaluation-employe',
   standalone: true,
-  imports: [CommonModule, FormsModule, CriterialitemComponent],
+  imports: [CommonModule, FormsModule, CriterialitemComponent,MatDialogModule],
   templateUrl: './FormEvaluationEmploye.component.html',
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
@@ -54,6 +56,7 @@ export class FormEvaluationEmployeComponent {
               private ServiceComunicacion:ComunicacionService, 
               private cd: ChangeDetectorRef,
               private router: Router,
+              private toastr: MatDialog,
               private cursoCapacitacionController: CursoCapacitacionController
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
@@ -61,6 +64,12 @@ export class FormEvaluationEmployeComponent {
 
   ngOnInit(): void {
     // Cargar evaluación
+    // mostrar loading component hasta que lleguen los datos
+    const dialogRef = this.toastr.open(LoadingComponent, {
+      width: '340px',
+      height: '180px', 
+    }); 
+
     this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
     .subscribe({
       next: (rep: IEvaluacion) => {
@@ -76,9 +85,10 @@ export class FormEvaluationEmployeComponent {
 
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
-        this.comentarioAdicional = rep.observacion;
+        dialogRef.close();
+        this.comentarioAdicional = this.evaluacionempleado.observacion;
         this.cursosSeleccionados=[]
-        this.cursosSeleccionados = rep.evaluacionCursoCapacitacions || [];
+        this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
 
         
       },
