@@ -59,10 +59,16 @@
       <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
       <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
     
-    <div *ngIf="mostarAceptar">
-      <!-- Mostrar texto de aceptacion de puntaje final-->
-      <p>El puntaje final de la evaluación es: {{evaluacionempleado.totalcolaborador}}</p>
-      <p>¿Desea aceptar la evaluación?</p>
-      <button  type="submit" (click)="onAceptarEvaluacion()">Aceptar Evaluacion</button>
+    <div *ngIf="mostarAceptar" class="evaluacion-aceptacion">
+      <div class="puntaje-final">
+        <h3>Puntaje Final de la Evaluación</h3>
+        <div class="score">{{evaluacionempleado.totalcolaborador | number:'1.2-2' }}</div>
+      </div>
+      <div class="aceptacion-prompt">
+        <p>¿Desea aceptar la evaluación?</p>
+        <button type="submit" class="btn-aceptar" (click)="onAceptarEvaluacion()">
+          <i class="fas fa-check"></i> Aceptar Evaluación
+        </button>
+      </div>
     </div>
     </form>

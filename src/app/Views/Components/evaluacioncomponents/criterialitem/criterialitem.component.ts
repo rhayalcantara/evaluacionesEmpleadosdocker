@@ -46,6 +46,8 @@ export class CriterialitemComponent implements OnInit {
     competenciasFinal: string|number=0;
     porcentajeCompetencia: any;
     CompetenciaFinal: string|number=0;
+    public sololectura:boolean=false
+
   constructor(private EmpleadoModel:Empleados,
               private PeriodoModel:Periodos,
               private MetaModel:Metas,
@@ -106,6 +108,11 @@ export class CriterialitemComponent implements OnInit {
             this.evaluacion = rep;            
             this.EvaluacionControler.model = this.evaluacion
 
+            if (this.evaluacion.estadoevaluacion == "Enviado") {
+              this.supervisor = true;
+              this.sololectura = true;
+              this.cd.detectChanges(); 
+            }
 
 
             // obtiene los logros de las repuestas
