@@ -20,6 +20,8 @@ import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitaci
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
 
+import { HttpClient } from '@angular/common/http';
+
 declare const pdfMake: any;
 
 @Component({
@@ -39,7 +41,7 @@ export class FormEvaluationEmployeComponent {
   @Input() mostarAceptar:Boolean=false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
   @Output() puntuacion: EventEmitter<number> = new EventEmitter();
-  
+  public logoBase64: string = '';
   public obervaciones:string=""
   public fecha:Date=new Date()
   public evaluacionempleado:IEvaluacion
@@ -57,12 +59,22 @@ export class FormEvaluationEmployeComponent {
               private cd: ChangeDetectorRef,
               private router: Router,
               private toastr: MatDialog,
+              private http: HttpClient,
               private cursoCapacitacionController: CursoCapacitacionController
   ){
     this.evaluacionempleado = EvaluacionController.inicializamodelo()
   }
-
+  private loadLogoAsBase64() {
+    this.http.get('assets/LOGO-COOPASPIRE.png', { responseType: 'blob' }).subscribe(blob => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.logoBase64 = reader.result as string; // Almacena el contenido Base64
+      };
+      reader.readAsDataURL(blob); // Lee el archivo como Base64
+    });
+  }
   ngOnInit(): void {
+    this.loadLogoAsBase64();
     // Cargar evaluación
     // mostrar loading component hasta que lleguen los datos
     const dialogRef = this.toastr.open(LoadingComponent, {
@@ -140,7 +152,7 @@ export class FormEvaluationEmployeComponent {
         const evaluationText = this.supervisor ? 
           `Evaluación Empleado: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuesta} - Evaluación Supervisor: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor}` :
           `Evaluación Empleado: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuesta}`;
-
+  
         return [
           { text: goal.goal.objetivo.nombre, style: 'goalHeader' },
           { text: goal.goal.objetivo.descripcion, style: 'goalDescription' },
@@ -148,7 +160,7 @@ export class FormEvaluationEmployeComponent {
           { text: '\n' }
         ];
       }).flat();
-
+  
       const cursosContent = this.cursosSeleccionados.length > 0 ? [
         { text: 'Cursos de Capacitación Seleccionados:', style: 'sectionHeader' },
         {
@@ -158,10 +170,22 @@ export class FormEvaluationEmployeComponent {
         },
         { text: '\n' }
       ] : [];
-
+  
       const content: any[] = [
-        { text: this.titulo, style: 'header' },
-        { text: 'Evaluación de Desempeño', style: 'subheader' },
+        {
+          columns: [
+            {
+              text: this.periodo.descripcion,
+              style: 'header',
+              width: '*'
+            },
+            {
+              image: this.logoBase64,
+              width: 100,
+              alignment: 'right'
+            }
+          ]
+        },
         {
           text: [
             { text: 'Empleado: ', bold: true }, this.empleado.nombreunido, '\n',
@@ -170,8 +194,32 @@ export class FormEvaluationEmployeComponent {
             { text: 'Fecha: ', bold: true }, this.fecha.toLocaleDateString(), '\n\n'
           ]
         },
-        {text: 'Puntuación Final:'+(Number(this.EvaluacionController.desempenoFinal)+Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2)},
-        { text: 'Desempeño', style: 'sectionHeader' },
+        {
+          table: {
+            widths: ['*'], // Hacer que el título abarque todo el ancho
+            body: [
+              [
+          {text: 'Puntuación Final: ' + (Number(this.EvaluacionController.desempenoFinal) + Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2),
+          style: 'puntuacion',
+          }
+        ]
+      ]
+    }
+        },
+        {
+          table: {
+ 
+            widths: ['*'],
+            
+            body: [
+              [
+                { text: 'DESEMPEÑO', style: 'categoryHeader' }
+              ]
+            ]
+          },
+          layout: 'noBorders',
+          margin: [0, 10, 0, 10]
+        },
         {
           table: {
             headerRows: 1,
@@ -196,88 +244,172 @@ export class FormEvaluationEmployeComponent {
             ]
           }
         },
-        { text: 'Promedio Desempeño:'+ Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%', style: 'sectionHeader' },
-        { text: 'Desempeño Final (30%):'+Number(this.EvaluacionController.desempenoFinal).toFixed(2), style: 'sectionHeader' },
         
-        { text: '\nCompetencias', style: 'sectionHeader' },
+        { 
+          table: {
+            widths: ['*'], // Hacer que el título abarque todo el ancho
+            body: [
+              [              
+              {text: 'Promedio Desempeño:' + Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%'
+            , style: 'puntuacion' ,
+            layout: 'noBorders'}
+        ]
+      ]
+    }
+        },
+        {  table: {
+          widths: ['*'], // Hacer que el título abarque todo el ancho
+          body: [
+            [
+        {text: 'Desempeño Final (30%):' + Number(this.EvaluacionController.desempenoFinal).toFixed(2)
+          , style: 'puntuacion' ,
+          layout: 'noBorders'},
+      ]
+    ]
+  }
+}, 
+        {
+          table: {
+            widths: ['*'],
+            body: [
+              [
+                { text: 'COMPETENCIAS', style: 'categoryHeader' }
+              ]
+            ]
+          },
+          layout: 'noBorders',
+          margin: [0, 20, 0, 10]
+        },
         ...competenciasContent,
-        { text: 'Promedio Competencias:'+ Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'sectionHeader' },
-        { text: 'Competencias Final (70%):'+Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'sectionHeader' },
-        
+        { 
+          
+          table: {
+            widths: ['*'],
+            body: [
+              [{text: 'Promedio Competencias:' + Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'puntuacion'},               
+              ]
+            ]
+          },
+                layout: 'noBorders'
+            }   
+                
+                ,
+        {   table: {
+          widths: ['*'],
+          body: [
+            [ {text: 'Competencias Final (70%):' + Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'puntuacion' },
+            ]
+          ]
+        },
+              layout: 'noBorders'
+          
+          },
+
+            {
+              table: {
+                widths: ['*'], // Hacer que el título abarque todo el ancho
+                body: [
+                  [
+              {text: 'Total Puntuación Final: ' + (Number(this.EvaluacionController.desempenoFinal) + Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2),
+              style: 'puntuacionfinal',
+              margin: [10, 10, 10, 10]
+              }
+            ]
+          ]
+        }
+            },
+
         ...cursosContent,
         
-        { text: 'Comentario Adicional', style: 'sectionHeader' },
+        { text: 'Comentario Final', style: 'sectionHeader' },
         { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
       ];
-      /*
-      if (this.supervisor) {
-        content.push(
-          { text: '\n\n' },
-          {
-            table: {
-              widths: ['*', '*'],
-              body: [
-                [
-                  { text: '_______________________', alignment: 'center' },
-                  { text: '_______________________', alignment: 'center' }
-                ],
-                [
-                  { text: 'Firma del Empleado', alignment: 'center' },
-                  { text: 'Firma del Supervisor', alignment: 'center' }
-                ],
-                [
-                  { text: 'Fecha: _______________', alignment: 'center' },
-                  { text: 'Fecha: _______________', alignment: 'center' }
-                ]
-              ]
-            },
-            layout: 'noBorders'
-          }
-        );
-      }
-      */
+  
       const docDefinition = {
         content,
         styles: {
+          categoryHeader: {
+            fontSize: 14,
+            bold: true,
+            alignment: 'left',
+            color: 'white',
+            fillColor: '#808080',
+            margin: [0, 5, 0, 5]
+          },
+          puntuacion: {
+            fontSize: 14,
+            bold: true,
+            alignment: 'right',
+            color: 'white',
+            fillColor: '#1a237e',
+            margin:[0, 10, 0, 10]
+          },
+          puntuacionfinal: {
+            fontSize: 14,
+            bold: true,
+            alignment: 'center',
+            color: 'white',
+            fillColor: '#1a237e',
+            margin:[0, 10, 0, 10]
+          },
+          promedio: {
+            fontSize: 14,
+            bold: true,
+            alignment: 'right',        
+            fillColor: '#808080',
+            margin:[0, 20, 0, 10]
+          },
           header: {
             fontSize: 22,
             bold: true,
             alignment: 'center',
-            margin: [0, 0, 0, 10]
+            margin: [0, 0, 0, 10],
+            color: '#1a237e'
           },
-          subheader: {
+          scoreBox: {
             fontSize: 18,
             bold: true,
-            alignment: 'center',
-            margin: [0, 0, 0, 20]
+            margin: [0, 10, 0, 20],
+            fillColor: '#1a237e',
+            color: 'white',
+            alignment: 'center'
           },
           sectionHeader: {
             fontSize: 14,
             bold: true,
-            margin: [0, 20, 0, 10]
+            margin: [0, 20, 0, 10],
+            alignment: 'left'
           },
           tableHeader: {
             bold: true,
-            fillColor: '#eeeeee'
+            fillColor: '#1a237e',
+            color: 'white',
+            alignment: 'center'
           },
           goalHeader: {
             fontSize: 12,
             bold: true,
-            margin: [0, 10, 0, 5]
+            margin: [0, 10, 0, 5],
+            alignment: 'left'
           },
           goalDescription: {
             fontSize: 10,
             italics: true,
-            margin: [0, 0, 0, 5]
+            margin: [0, 0, 0, 5],
+            alignment: 'left'
           }
+        },
+        defaultStyle: {
+          alignment: 'justify'
         }
       };
-
+  
       pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado.nombreunido}_${this.periodo.descripcion}.pdf`);
     } catch (error) {
       this.datos.showMessage("Error al generar el PDF", this.titulo, "error");
     }
   }
+  
 
   calculatePercentage(item: IEvaluacionDesempenoMeta): string {
     if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
