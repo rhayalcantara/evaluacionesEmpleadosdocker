@@ -17,6 +17,8 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { PorcientoDesempenoCompetencia } from 'src/app/Controllers/PorcientoDesempenoCompetencia';
 import { IPorcientoDesempenoCompetencia } from 'src/app/Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia';
 import { GrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingComponent } from '../../loading/loading.component';
 
 
 @Component({
@@ -56,7 +58,8 @@ export class CriterialitemComponent implements OnInit {
               private cd: ChangeDetectorRef,  
               private ServiceComunicacion:ComunicacionService, 
               private PorCientoDC:PorcientoDesempenoCompetencia,
-              public grupoCompetencia: GrupoCompetencia     
+              public grupoCompetencia: GrupoCompetencia,
+              private toastr: MatDialog,     
   )
   {
     this.empleado = this.EmpleadoModel.inicializamodelo()
@@ -75,6 +78,10 @@ export class CriterialitemComponent implements OnInit {
       if ( data.mensaje === 'buscar'){
         ////console.log('data mensaje',data)
         // busca los desempeños
+        const dialogRef = this.toastr.open(LoadingComponent, {
+          width: '340px',
+          height: '180px', 
+        });         
         this.EvaluacionControler.GetsEvaluacionResultado(data.id)
         .subscribe({
           next: (rep ) => {      
@@ -111,7 +118,7 @@ export class CriterialitemComponent implements OnInit {
           })
 
             //console.log('actualizar desempeno',this.resultadologro)
-            
+            dialogRef.close();
             this.cd.detectChanges(); 
           }
         })   
@@ -127,6 +134,7 @@ export class CriterialitemComponent implements OnInit {
             if (this.evaluacion.estadoevaluacion == "Enviado") {
               this.supervisor = true;
               this.sololectura = true;
+
               this.cd.detectChanges(); 
             }
 

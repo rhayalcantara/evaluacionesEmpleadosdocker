@@ -37,8 +37,7 @@ interface ICompetenciaResultado {
     CommonModule,
     FormsModule,
     MatDialogModule,
-    CardEmpleadoComponent,
-    EmojiratingComponent
+    CardEmpleadoComponent
   ],
   templateUrl: './resultado-evaluacion.component.html',
   styleUrls: ['./resultado-evaluacion.component.css']

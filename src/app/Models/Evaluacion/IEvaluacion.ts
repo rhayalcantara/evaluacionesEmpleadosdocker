@@ -83,3 +83,22 @@ export interface IEvaluacion {
     logrado:number
     porciento:number
   }
+
+  export interface IReporte01 {
+  identificacion: string;
+  colaborador: string;
+  fechA_INGRESO: string;
+  supersivos: string;
+  departamento: string;
+  sucursal: string;
+  posision: string;
+  evaluadopor: string;
+  tipO_ROL: string;
+  tienE_META: string;
+  estatus_evaluacion: string;
+  puntuaciondesempenocolaborador: number;
+  totalcolaborador: number;
+  puntuaciondesempenosupervidor: number;
+  puntuacioncompetenciasupervisor: number;
+  totalCalculo: number;
+}

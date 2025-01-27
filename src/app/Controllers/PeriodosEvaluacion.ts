@@ -13,7 +13,7 @@ import { firstValueFrom } from "rxjs";
 })
 
 export class PeriodosEvaluacion implements OnInit {
-    rutaapi: string = this.datos.URL + '/api/PPeriodEvaluations'
+    rutaapi: string = this.datos.URL + '/api/PeriodEvaluations'
     titulomensage: string = 'Mantenimiento Evaluaciónes'
 
     public model: IPeriodoEvaluacion = this.inicializamodelo()
@@ -34,7 +34,7 @@ export class PeriodosEvaluacion implements OnInit {
 
     constructor(
         private datos: DatosServiceService,
-        private toastr: MatDialog
+        //private toastr: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -56,11 +56,11 @@ export class PeriodosEvaluacion implements OnInit {
     }
 
     public getdatos() {
-        const dialogRef = this.toastr.open(LoadingComponent, {
+     /*   const dialogRef = this.toastr.open(LoadingComponent, {
             width: '340px',
             height: '180px',
         });
-
+*/
         this.Gets().subscribe({
             next: (rep: ModelResponse) => {
                 console.log('llegaron los datos', rep.count)
@@ -74,7 +74,7 @@ export class PeriodosEvaluacion implements OnInit {
                 console.log('datos', this.arraymodel)
                 this.TRegistros.emit(this.totalregistros)
 
-                dialogRef.close()
+               // dialogRef.close()
             }
         })
     }
@@ -98,13 +98,13 @@ export class PeriodosEvaluacion implements OnInit {
     }
 
     public Update(obj: IPeriodoEvaluacion): Observable<IPeriodoEvaluacion> {
-        console.log(this.rutaapi + `/${obj.secuencial}`, obj)
-        return this.datos.updatedatos<IPeriodoEvaluacion>(this.rutaapi + `/${obj.secuencial}`, obj);
+        //console.log(this.rutaapi + `/${obj.secuencial}`, obj)
+        return this.datos.updatedatos<IPeriodoEvaluacion>(this.rutaapi + `/${obj.id}`, obj);
     }
 
     public async grabar(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
-            if (this.model.secuencial == 0) {
+            if (this.model.id == 0) {
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IPeriodoEvaluacion) => {
                         console.log(rep)
@@ -123,6 +123,7 @@ export class PeriodosEvaluacion implements OnInit {
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IPeriodoEvaluacion) => {
                         console.log('se actualizo el periodo de evaluación:', rep)
+                        /*
                         let m = this.arraymodel.find(x => x.secuencial == this.model.secuencial)
                         if (m != undefined) {
                             m.secuencial = this.model.secuencial
@@ -131,7 +132,7 @@ export class PeriodosEvaluacion implements OnInit {
                             m.fechaFin = this.model.fechaFin
                             m.estado = this.model.estado
                         }
-
+                        */
                         this.TRegistros.emit(this.totalregistros)
 
                         resolve(true);

@@ -1,0 +1,48 @@
+<div class="report-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner">Cargando...</div>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <div class="alert alert-danger">{{ error }}</div>
+  </div>
+
+  <div *ngIf="!loading && !error" class="table-responsive">
+    <table class="table table-striped" *ngIf="reportData.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Colaborador</th>
+          <th>Departamento</th>
+          <th>Posición</th>
+          <th>Supervisor</th>
+          <th>Estatus</th>
+          <th>Desempeño</th>
+          <th>Total Colaborador</th>
+          <th>Desempeño Supervisor</th>
+          <th>Competencia Supervisor</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reportData">
+          <td>{{item.identificacion}}</td>
+          <td>{{item.colaborador}}</td>
+          <td>{{item.departamento}}</td>
+          <td>{{item.posision}}</td>
+          <td>{{item.supersivos}}</td>
+          <td>{{item.estatus_evaluacion}}</td>
+          <td>{{item.puntuaciondesempenocolaborador.toFixed(2)}}%</td>
+          <td>{{item.totalcolaborador.toFixed(2)}}%</td>
+          <td>{{item.puntuaciondesempenosupervidor.toFixed(2)}}%</td>
+          <td>{{item.puntuacioncompetenciasupervisor.toFixed(2)}}%</td>
+          <td>{{item.totalCalculo.toFixed(2)}}%</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div *ngIf="reportData.length === 0" class="no-data">
+      No hay datos disponibles para mostrar.
+    </div>
+  </div>
+</div>

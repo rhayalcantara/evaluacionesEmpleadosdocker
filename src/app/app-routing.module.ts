@@ -154,6 +154,11 @@ const routes: Routes = [
     .then((m)=> m.RolCategoriaPuestoComponent),
     canActivate: [AuthGuard]
   },
+  { path: 'Reportes',
+    loadComponent:()=> import('./Views/Components/evaluacion-reporte/evaluacion-reporte.component')
+    .then((m)=> m.EvaluacionReporteComponent),
+    canActivate: [AuthGuard]
+  },
   { path: 'opp',
     loadComponent:()=> import('./Views/Components/Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component')
     .then((m)=> m.ObjetivosProyectoPerspectivaComponent),
@@ -167,6 +172,11 @@ const routes: Routes = [
   { path: 'organigrama',
     loadComponent:()=> import('./Views/Components/organigrama/organigrama.component')
     .then((m)=> m.OrganigramaComponent),
+    canActivate: [AuthGuard]
+  },
+  { path: 'evaluacion-reporte',
+    loadComponent:()=> import('./Views/Components/evaluacion-reporte/evaluacion-reporte.component')
+    .then((m)=> m.EvaluacionReporteComponent),
     canActivate: [AuthGuard]
   }
 ];

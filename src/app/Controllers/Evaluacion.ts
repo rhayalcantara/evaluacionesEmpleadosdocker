@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta } from "../Models/Evaluacion/IEvaluacion";
+import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta, IReporte01 } from "../Models/Evaluacion/IEvaluacion";
 import { ValoresEvaluacion } from "./ValoresEvaluacion";
 import { IValoresEvaluacion } from "../Models/ValoresEvaluacion/IValoresEvaluacion";
 import { IEvaluacionDesempenoMeta, IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
@@ -197,6 +197,10 @@ export class Evaluacion implements OnInit {
         this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
     
       }
+
+    public GetEvaluacionReporte01(periodId:number): Observable<ModelResponse>{
+        return this.datos.getdatos<ModelResponse>(this.rutaapi+`/reporte1?periodo=${periodId}`); 
+    }
 
     public async GetvalorEvaluacion(id: number, retornar: string): Promise<number> {
         let valor: number = 0;
