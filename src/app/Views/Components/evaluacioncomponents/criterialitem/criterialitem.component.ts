@@ -67,6 +67,7 @@ export class CriterialitemComponent implements OnInit {
 
       }
     })
+
     this.ServiceComunicacion.enviarMensajeObservable.subscribe((data:any)=>{
       
       if ( data.mensaje === 'buscar'){
@@ -77,6 +78,19 @@ export class CriterialitemComponent implements OnInit {
           next: (rep ) => {      
 
             this.desempeno = rep.data;
+            // verificar si tiene desempeño en caso de que no se cambia la proporcion de la pdclocal
+            // poniendo el valor para desepeño en 0 y para competencia en 100
+            if (this.desempeno.length==0){
+              this.pdclocal = this.pdclocal.map((x)=>{
+                if (x.descripcion==='Desempeño'){
+                  x.valor = 0
+                }else{
+                  x.valor = 100
+                }
+                return x
+              })
+            }
+
             this.desempeno.forEach((item)=>{   
                 
                 
@@ -151,14 +165,33 @@ export class CriterialitemComponent implements OnInit {
       if (data.mensaje ==='Actualizar variables'){
         //console.log(data)
         // aqui se actualiza las variables
-        this.pdclocal = this.EvaluacionControler.pdclocal
-        this.promedioDesempeno = this.EvaluacionControler.promedioDesempeno;
-        this.desempenoFinal= this.EvaluacionControler.desempenoFinal;
-        this.porcentajeDesempeno= this.EvaluacionControler.porcentajeDesempeno;
+        if (this.desempeno.length!=0){
+          this.pdclocal = this.EvaluacionControler.pdclocal
+          this.promedioDesempeno = this.EvaluacionControler.promedioDesempeno;
+          this.desempenoFinal= this.EvaluacionControler.desempenoFinal;
+          this.porcentajeDesempeno= this.EvaluacionControler.porcentajeDesempeno;
+          
+          this.porcentajeCompetencia=this.EvaluacionControler.porcentajeCompetencia;
+        }
+        else{
+          this.EvaluacionControler.promedioDesempeno ='0'
+          this.EvaluacionControler.desempenoFinal ='0'
+          this.EvaluacionControler.porcentajeDesempeno = 0
+          this.EvaluacionControler.porcentajeCompetencia=100
+          this.promedioDesempeno ='0'
+          this.desempenoFinal ='0'
+          this.porcentajeDesempeno = 0
+          this.porcentajeCompetencia=100
+          
+        }
+        
+        
+        
+        this.CompetenciaFinal=this.EvaluacionControler.CompetenciaFinal;
         this.promedioCompetencias=this.EvaluacionControler.promedioCompetencias;
         this.competenciasFinal=this.EvaluacionControler.competenciasFinal;
-        this.porcentajeCompetencia=this.EvaluacionControler.porcentajeCompetencia;
-        this.CompetenciaFinal=this.EvaluacionControler.CompetenciaFinal;   
+        
+           
                 
 
         this.evaluacion.puntuaciondesempenocolaborador = Number(this.desempenoFinal)
@@ -234,12 +267,14 @@ export class CriterialitemComponent implements OnInit {
       num = num + e.porcientologro
     })
 
+    if(this.desempeno.length==0){
     // desempeño
     this.promedioDesempeno=num/this.resultadologro.length
     let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
     this.porcentajeDesempeno = px1?.valor??0
     this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
-
+    }
+    
     //Competencia
     //busca las respuesta y da un promedio
     if(this.supervisor){
@@ -297,6 +332,7 @@ export class CriterialitemComponent implements OnInit {
     }
 
     //this.evaluacion.goalEmpleadoRespuestas[index] = respuesta;
+    //this.supervisor,this.resultadologro
     this.EvaluacionControler.calculaelpromediodesempeno(this.supervisor,this.resultadologro)
     this.onEvaluacionChange.emit(this.evaluacion)
     

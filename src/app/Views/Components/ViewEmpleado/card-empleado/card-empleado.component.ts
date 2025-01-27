@@ -104,7 +104,8 @@ export class CardEmpleadoComponent implements OnInit {
     })
 
     // buscar el estado de la evaluacion
-    this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial,).subscribe({
+    if (this.periodo && this.empleado){
+    this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial).subscribe({
       next:(rep:ModelResponse)=>{
         //console.log('estado evaluacion',rep)  
         this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
@@ -123,7 +124,7 @@ export class CardEmpleadoComponent implements OnInit {
         this.cdr.detectChanges();
       }
     })
-
+    }
   }
   cargarEstadoEvaluacion(): void {
 /*     this.evaluacionService.obtenerEstadoEvaluacion(this.empleado.secuencial, this.periodo.id).subscribe(

@@ -156,7 +156,19 @@ export class Evaluacion implements OnInit {
         })
 
         this.pdclocal=this.pdclocal.filter(x=>x.periodId==this.model.periodId)
-        
+           // verificar si tiene desempeño en caso de que no se cambia la proporcion de la pdclocal
+            // poniendo el valor para desepeño en 0 y para competencia en 100
+            if (this.model.evaluacionDesempenoMetas.length==0){
+                this.pdclocal = this.pdclocal.map((x)=>{
+                  if (x.descripcion==='Desempeño'){
+                    x.valor = 0
+                  }else{
+                    x.valor = 100
+                  }
+                  return x
+                })
+              }
+
         // desempeño
         this.promedioDesempeno=num/resultadologro.length
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
@@ -298,6 +310,16 @@ export class Evaluacion implements OnInit {
         
         return new Promise<boolean>(async (resolve) => {
             try {
+                if (this.model.evaluacionDesempenoMetas.length==0){
+                    this.pdclocal = this.pdclocal.map((x)=>{
+                      if (x.descripcion==='Desempeño'){
+                        x.valor = 0
+                      }else{
+                        x.valor = 100
+                      }
+                      return x
+                    })
+                }
                 // Calcular competencia
                 let competencia:number = await this.CalculoCompetencias(Supervisor);
                 
