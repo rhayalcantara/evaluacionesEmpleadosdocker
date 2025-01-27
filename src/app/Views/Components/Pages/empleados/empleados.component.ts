@@ -129,9 +129,10 @@ export class EmpleadosComponent implements OnInit {
     this.config.id = event
   }
   filtro(){
+    
     if (this.term!=''){
-        
-      this.empleadosController.arraymodel = this.empleadosController.arraymodel
+      
+      this.empleadosController.arraymodel = this.empleadosController.arraytotal
       .filter(x=>x.nombreunido.includes((this.term.toUpperCase())))
    }else{
      this.empleadosController.getdatos()
