@@ -1,6 +1,6 @@
 
 <div *ngIf="desempeno.length>0">
-  <h2>Desempeño</h2>
+  <h2>Objetivos</h2>
   <div  class="table-responsive">
     <table class="table table-bordered">
       <thead class="bg-light">
@@ -80,9 +80,12 @@
 <!-- criterialitem.component.html -->
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
   <h2>Competencias</h2>
+  
   <div class="criteria-section" *ngFor="let met of evaluacion.evaluacionGoals; let index=index">
-   
     
+      <h2>{{met.goal.objetivo.grupoCompetencia.nombre}}</h2>
+    
+
     <div class="criteria-item">
       <table class="table table-bordered">
         <thead>
@@ -101,20 +104,36 @@
       <tbody>
         <tr>
           <td>
-      <div class="criteria-info">                
-        <div class="criteria-description">
-          <strong>Descripcion:</strong>
-          <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
-        </div>
-      </div>
-    </td>
-    <td>
+            <div class="criteria-info">                
+              <div class="criteria-description">
+                <strong>Descripcion:</strong>
+                <div class="description-text">{{met.goal.objetivo.descripcion}}</div>
+                <strong>Documentar Resultado:</strong>
+                <div class="description-text">
+                  <textarea 
+                    *ngIf="!supervisor"
+                    type="text"  
+                    [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
+                    name="comentario" 
+                    (change)="onComentarioChange($event, index)"></textarea>
+                    <textarea 
+                    *ngIf="supervisor"
+                    readonly
+                    type="text"  
+                    [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
+                    name="comentario" 
+                    (change)="onComentarioChange($event, index)"></textarea>
+                </div>
+              </div>
+            </div>
+          </td>
+       <td>
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
       [supervisor]="false"
       [sololectura]="supervisor"  
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
-    </td>
+        </td>
     <td *ngIf="supervisor">
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
@@ -123,12 +142,14 @@
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
     </td>
     </tr>
+    
     </tbody>
 
     </table>
-
+  
     </div>
-  </div>
+
+</div>
   <table class="table table-bordered">
     <tfoot>
     <tr>
@@ -143,3 +164,4 @@
   </table>
   
 </div>
+

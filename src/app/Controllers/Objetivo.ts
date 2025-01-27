@@ -40,7 +40,11 @@ export class Objetivo {
         descripcion: "",
         periodoId: 0,
         estadoId: 0,
-        fecha: new Date().toISOString().split('T')[0]
+        fecha: new Date().toISOString().split('T')[0],
+        grupoCompetencia:{
+          id: 0,
+          nombre: ""
+        }
       };
     }
 

@@ -80,7 +80,11 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
           descripcion: "",
           periodoId: 0,
           estadoId: 0,
-          fecha: ""
+          fecha: "",
+          grupoCompetencia:{
+            id: 0,
+            nombre: ""
+          }
         }
       } 
       

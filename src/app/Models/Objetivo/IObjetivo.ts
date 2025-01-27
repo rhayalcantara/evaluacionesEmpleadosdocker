@@ -9,11 +9,12 @@ export interface IObjetivo {
     periodoId: number
     estadoId: number
     fecha: string
+    grupoCompetencia:IGrupoCompetencia
   }
   export interface IObjetivoDts extends IObjetivo {
     period: IPeriodo
     estado: IEstado
-    grupocompetencia:IGrupoCompetencia
+    grupoCompetencia:IGrupoCompetencia
     periodo:string
     estad:string
     grupoc:string

@@ -213,7 +213,7 @@ export class FormEvaluationEmployeComponent {
             
             body: [
               [
-                { text: 'DESEMPEÑO', style: 'categoryHeader' }
+                { text: 'Objetivos', style: 'categoryHeader' }
               ]
             ]
           },
@@ -250,7 +250,7 @@ export class FormEvaluationEmployeComponent {
             widths: ['*'], // Hacer que el título abarque todo el ancho
             body: [
               [              
-              {text: 'Promedio Desempeño:' + Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%'
+              {text: 'Promedio Objetivos:' + Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%'
             , style: 'puntuacion' ,
             layout: 'noBorders'}
         ]

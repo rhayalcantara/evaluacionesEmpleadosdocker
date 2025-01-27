@@ -16,6 +16,7 @@ import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { PorcientoDesempenoCompetencia } from 'src/app/Controllers/PorcientoDesempenoCompetencia';
 import { IPorcientoDesempenoCompetencia } from 'src/app/Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia';
+import { GrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
 
 
 @Component({
@@ -54,7 +55,8 @@ export class CriterialitemComponent implements OnInit {
               private EvaluacionControler:Evaluacion,
               private cd: ChangeDetectorRef,  
               private ServiceComunicacion:ComunicacionService, 
-              private PorCientoDC:PorcientoDesempenoCompetencia         
+              private PorCientoDC:PorcientoDesempenoCompetencia,
+              public grupoCompetencia: GrupoCompetencia     
   )
   {
     this.empleado = this.EmpleadoModel.inicializamodelo()
@@ -118,7 +120,7 @@ export class CriterialitemComponent implements OnInit {
         this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
         .subscribe({
           next: (rep: IEvaluacion) => {
-            //////console.log('Metas procesadas:', this.metas);
+            console.log('Evaluacion Recibida:', rep);
             this.evaluacion = rep;            
             this.EvaluacionControler.model = this.evaluacion
 
@@ -214,6 +216,10 @@ export class CriterialitemComponent implements OnInit {
    })
 
   }
+  getgrupoCompetencia(id:number){
+    return this.grupoCompetencia.arraymodel.find(x=>x.id==id)?.nombre
+  }
+  
   // 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
   calcularresultadologro(rl:IResultadoLogro,item:IEvaluacionDesempenoMeta):IResultadoLogro{
     //calculo porcientologro
@@ -296,6 +302,8 @@ export class CriterialitemComponent implements OnInit {
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
     this.logro = this.logro.map((x)=>0)
+    //carga los grupos de competencias para los titulos
+    this.grupoCompetencia.getdatos()
     
 
   }
