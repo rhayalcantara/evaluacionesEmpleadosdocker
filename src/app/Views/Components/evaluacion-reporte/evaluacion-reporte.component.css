@@ -1,24 +1,8 @@
-.report-container {
-  width: 100vw;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow: auto;
-  position: relative;
-  background: #fff;
-}
-
 .loading-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 1000;
+  min-height: 200px;
 }
 
 .spinner {
@@ -29,74 +13,38 @@
 }
 
 .error-container {
-  margin: 20px;
-}
-
-.alert {
-  padding: 15px;
-  border-radius: 4px;
+  margin: 20px 0;
 }
 
 .alert-danger {
   background-color: #f8d7da;
   border: 1px solid #f5c6cb;
   color: #721c24;
+  padding: 15px;
+  border-radius: 4px;
 }
 
-.no-data {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-  font-style: italic;
+/* Filter styles */
+.form-control {
+  margin-bottom: 10px;
 }
 
-.table-responsive {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0;
-  background: #fff;
+.input-group {
+  margin-bottom: 10px;
 }
 
-th {
-  position: sticky;
-  top: 0;
-  background: #f8f9fa;
-  z-index: 1;
-  padding: 12px;
-  text-align: left;
-  border-bottom: 2px solid #dee2e6;
-  font-weight: 600;
-  color: #495057;
+.input-group .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
-td {
-  padding: 12px;
-  border-bottom: 1px solid #dee2e6;
-  vertical-align: middle;
-}
-
-tr:hover {
-  background-color: rgba(0,0,0,0.03);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0,0,0,0.02);
-}
-
-/* Ensure table cells don't wrap unnecessarily */
-td, th {
-  white-space: nowrap;
-}
-
-/* Add horizontal scroll for narrow screens */
-@media screen and (max-width: 1200px) {
-  .table-responsive {
-    overflow-x: auto;
-  }
+.input-group input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }

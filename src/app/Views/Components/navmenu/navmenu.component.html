@@ -96,8 +96,13 @@
           </ul>
         </li> -->
 
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/Reportes">Reportes</a>
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           Reportes
+          </a>
+          <ul class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/Reportes">Reporte Estado Evaluacion</a>
+        </ul>
         </li>
       </ul>
 

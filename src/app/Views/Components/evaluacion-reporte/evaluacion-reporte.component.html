@@ -1,4 +1,6 @@
-<div class="report-container">
+<div class="shadow p-3 mb-5 bg-body rounded my-4">
+  <h2 class="mb-3">Reporte de Evaluaciones</h2>
+
   <div *ngIf="loading" class="loading-container">
     <div class="spinner">Cargando...</div>
   </div>
@@ -7,42 +9,55 @@
     <div class="alert alert-danger">{{ error }}</div>
   </div>
 
-  <div *ngIf="!loading && !error" class="table-responsive">
-    <table class="table table-striped" *ngIf="reportData.length > 0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Colaborador</th>
-          <th>Departamento</th>
-          <th>Posición</th>
-          <th>Supervisor</th>
-          <th>Estatus</th>
-          <th>Desempeño</th>
-          <th>Total Colaborador</th>
-          <th>Desempeño Supervisor</th>
-          <th>Competencia Supervisor</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of reportData">
-          <td>{{item.identificacion}}</td>
-          <td>{{item.colaborador}}</td>
-          <td>{{item.departamento}}</td>
-          <td>{{item.posision}}</td>
-          <td>{{item.supersivos}}</td>
-          <td>{{item.estatus_evaluacion}}</td>
-          <td>{{item.puntuaciondesempenocolaborador.toFixed(2)}}%</td>
-          <td>{{item.totalcolaborador.toFixed(2)}}%</td>
-          <td>{{item.puntuaciondesempenosupervidor.toFixed(2)}}%</td>
-          <td>{{item.puntuacioncompetenciasupervisor.toFixed(2)}}%</td>
-          <td>{{item.totalCalculo.toFixed(2)}}%</td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <div *ngIf="reportData.length === 0" class="no-data">
-      No hay datos disponibles para mostrar.
+  <div *ngIf="!loading && !error">
+    <!-- Filters -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="departamento">Filtrar por Departamento:</label>
+        <select id="departamento" class="form-control" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()">
+          <option value="">Todos los departamentos</option>
+          <option *ngFor="let dept of departments" [value]="dept">
+            {{ dept }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label for="estado">Filtrar por Estado:</label>
+        <select id="estado" class="form-control" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+          <option value="">Todos</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="PENDIENTE">AutoEvaluado</option>
+          <option value="PENDIENTE">EvaluadoPorSupervisor</option>
+          <option value="COMPLETADO">Completado</option>
+          <option value="EN PROCESO">Enviado</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label>Buscar:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar..." 
+                [(ngModel)]="term" (change)="filtrar()">
+          <button class="btn btn-primary" type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- Table Component -->
+    <app-tables 
+      [arraydatos]="filteredData"
+      [campos]="campos"
+      [titulos]="titulos"
+      [config]="config"
+      [term]="term"
+      [totalregistros]="config.totalItems"
+      [currentPage]="config.currentPage"
+      (paginacambio)="paginaCambio($event)"
+      (idtable)="actualizarIdTable($event)"
+      campokey="identificacion"
+    ></app-tables>
   </div>
 </div>
