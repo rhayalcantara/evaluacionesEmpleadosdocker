@@ -13,9 +13,9 @@ import { FotoPadron } from '../Helpers/Interfaces';
 export class DatosServiceService {
   
   //public URL:string='http://192.168.137.234:9090'
-  //  public URL:string='https://localhost:7067'
+    public URL:string='https://localhost:7067'
   //public URL:string='http://192.168.7.222:9292'
-   public URL:string='http://192.168.7.222:7070' //produccion
+  // public URL:string='http://192.168.7.222:7070' //produccion
   constructor(private http: HttpClient,) { }
    headers:HttpHeaders = new HttpHeaders({    
     'Content-Type': 'application/json; charset=utf-8' 
@@ -136,7 +136,7 @@ export class DatosServiceService {
     return this.http.get<T>(url)
    }
    public delbyid<T>(url:string):Observable<T>{
-    // console.log('en delete llego',url)
+     console.log('en delete llego a eliminar',url)
     return this.http.delete<T>(url)
    }
 }

@@ -74,7 +74,8 @@ export class RolCategoriaPuesto implements OnInit {
     }
 
     public Get(id: string): Observable<IRolCategoriaPuesto> {
-        return this.datos.getbyid<IRolCategoriaPuesto>(this.rutaapi + `/${id}`)
+        const url = this.rutaapi+ `/${id}`;
+        return this.datos.getbyid<IRolCategoriaPuesto>(url)
     }
 
     public GetCount(): Observable<number> {
@@ -86,7 +87,30 @@ export class RolCategoriaPuesto implements OnInit {
     }
 
     public Update(obj: IRolCategoriaPuesto): Observable<IRolCategoriaPuesto> {
-        return this.datos.updatedatos<IRolCategoriaPuesto>(this.rutaapi + `/${obj.id}`, obj);
+        const url = this.rutaapi+ `/${obj.id}`;
+        return this.datos.updatedatos<IRolCategoriaPuesto>(url, obj);
+    }
+
+    public Delete(id: number): Observable<IRolCategoriaPuesto> {
+        const url = this.rutaapi + `/${id}`;
+        console.log('Eliminar',url)
+        return this.datos.delbyid<IRolCategoriaPuesto>(url);
+    }
+
+    public async eliminar(id: number): Promise<boolean> {
+        return new Promise<boolean>(async (resolve) => {
+            await firstValueFrom(this.Delete(id)).then(
+                () => {
+                    this.datos.showMessage('Registro Eliminado Correctamente', this.titulomensage, "success");
+                    this.getdatos(); // Refresh the list after deletion
+                    resolve(true);
+                },
+                (err: Error) => {
+                    this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+                    resolve(false);
+                }
+            );
+        });
     }
 
     public async grabar(): Promise<boolean> {
