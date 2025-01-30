@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { Evaluacion } from '../../../Controllers/Evaluacion';
 import { PeriodosEvaluacion } from '../../../Controllers/PeriodosEvaluacion';
-import { IReporte01 } from '../../../Models/Evaluacion/IEvaluacion';
+import { IEvaluacion, IEvaluacionDto, IReporte01 } from '../../../Models/Evaluacion/IEvaluacion';
 import { ModelResponse } from '../../../Models/Usuario/modelResponse';
 import { IPeriodoEvaluacion } from '../../../Models/PeriodoEvaluacion/IPeriodoEvaluacion';
 import { DatosServiceService } from '../../../Services/datos-service.service';
 import { ComunicacionService } from '../../../Services/comunicacion.service';
 import { TablesComponent } from '../../Components/tables/tables.component';
+import { ExcelService } from '../../../Services/excel.service';
+import { TableResponse } from 'src/app/Helpers/Interfaces';
 
 
 @Component({
@@ -16,10 +19,11 @@ import { TablesComponent } from '../../Components/tables/tables.component';
   templateUrl: './evaluacion-reporte.component.html',
   styleUrls: ['./evaluacion-reporte.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, TablesComponent],
-  providers: [DecimalPipe]
+  imports: [CommonModule, FormsModule, TablesComponent, MatDialogModule],
+  providers: [DecimalPipe, ExcelService]
 })
 export class EvaluacionReporteComponent implements OnInit {
+
   reportData: IReporte01[] = [];
   filteredData: IReporte01[] = [];
   currentPeriodId: number = 0;
@@ -47,7 +51,8 @@ export class EvaluacionReporteComponent implements OnInit {
     private evaluacionService: Evaluacion,
     private periodosService: PeriodosEvaluacion,
     private datosService: DatosServiceService,
-    private comunicacionService: ComunicacionService
+    private comunicacionService: ComunicacionService,
+    private excelService: ExcelService
   ) {}
 
   ngOnInit() {
@@ -100,7 +105,119 @@ export class EvaluacionReporteComponent implements OnInit {
   filtrar() {
     this.applyFilters();
   }
+  opcion($event: TableResponse) {
+    /*
+    const reporte = $event.key as IReporte01;
+    const evaluacionId = reporte.evaluacionid;
+    console.log('llego el dato',reporte,evaluacionId)
+    this.evaluacionService.Get(evaluacionId.toString()).subscribe({
+      next: (evaluacion: IEvaluacion) => {
+        if (evaluacion) {
+          
+          // Initialize goalEmpleadoRespuestas
+          evaluacion.goalEmpleadoRespuestas = evaluacion.goalEmpleadoRespuestas.map(goal => ({
+            ...goal,
+            repuesta: 0,
+            repuestasupervisor: 0,
+            observacion: ""
+          }));
 
+          // Inicializa la puntucion de la evaluacion
+          evaluacion.puntuaciondesempenocolaborador = 0;
+          evaluacion.puntuacioncompetenciacolaborador = 0;
+          evaluacion.totalcolaborador = 0;
+          evaluacion.puntuaciondesempenosupervidor = 0;
+          evaluacion.puntuacioncompetenciasupervisor = 0;
+          evaluacion.totalsupervisor = 0;
+          evaluacion.observacion = "";
+          evaluacion.estadoevaluacion = 'Pendiente';
+
+
+          // Update the evaluation
+          this.evaluacionService.Update(evaluacion).subscribe({
+            next: (updateResponse: IEvaluacionDto) => {
+              if (updateResponse) {
+                this.datosService.showMessage(
+                  'Evaluación inicializada correctamente',
+                  'Evaluaciones',
+                  'success'
+                );
+                //localiza IReporte01 y actualiza el estado de la evaluacion
+                const reporteIndex = this.reportData.findIndex(item => item.evaluacionid === evaluacionId);
+                if (reporteIndex != 0) {
+                  this.reportData[reporteIndex].estatus_evaluacion ='Pendiente'
+                  this.reportData[reporteIndex].puntuaciondesempenocolaborador=0
+                  this.reportData[reporteIndex].totalcolaborador=0
+                  this.reportData[reporteIndex].puntuaciondesempenosupervidor=0
+                  this.reportData[reporteIndex].puntuacioncompetenciasupervisor=0
+                  this.reportData[reporteIndex].totalCalculo=0
+                  //this.loadReportData(); // Refresh the data
+                }
+                // envia mensaje para actualizar la tabla
+                this.comunicacionService.enviarMensaje(this.config);
+              }
+            },
+            error: (error: Error) => {
+              this.datosService.showMessage(
+                'Error al actualizar la evaluación: ' + error.message,
+                'Evaluaciones',
+                'error'
+              );
+            }
+          });
+        }
+      },
+      error: (error: Error) => {
+        this.datosService.showMessage(
+          'Error al cargar la evaluación: ' + error.message,
+          'Evaluaciones',
+          'error'
+        );
+      }
+    });
+    */
+    this.datosService.showMessage(
+      'Favor Informar al Departamento de IT',
+      'Evaluaciones',
+      'error'
+    );
+  }
+  downloadExcel() {
+    const data = this.filteredData.map(item => ({
+      'ID': item.identificacion,
+      'Colaborador': item.colaborador,
+      'Departamento': item.departamento,
+      'Posición': item.posision,
+      'Supervisor': item.supersivos,
+      'Estatus': item.estatus_evaluacion,
+      'Desempeño': item.puntuaciondesempenocolaborador,
+      'Total Colaborador': item.totalcolaborador,
+      'Desempeño Supervisor': item.puntuaciondesempenosupervidor,
+      'Competencia Supervisor': item.puntuacioncompetenciasupervisor,
+      'Total': item.totalCalculo
+    }));
+
+    this.excelService.exportAsExcelFile(data, 'Reporte_Evaluaciones');
+  }
+  downloadExce2() {
+    
+    //obtener los datos de reporte2
+    this.evaluacionService.GetEvaluacionReporte02(this.currentPeriodId).subscribe({
+      next: (response: ModelResponse) => {
+        if (response && response.data) {
+          this.excelService.exportAsExcelFile(response.data, 'Reporte_Evaluaciones_2');
+        }
+      },
+      error: (error: Error) => {
+        this.datosService.showMessage(
+          'Error al cargar los datos: ' + error.message,
+          'Evaluaciones',
+          'error'
+        );
+      }
+    });
+   // this.excelService.exportAsExcelFile(data, 'Reporte_Evaluaciones');
+  }
   loadCurrentPeriod() {
     this.loading = true;
     this.error = null;

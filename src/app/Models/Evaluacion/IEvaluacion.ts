@@ -85,6 +85,7 @@ export interface IEvaluacion {
   }
 
   export interface IReporte01 {
+  evaluacionid: number;
   identificacion: string;
   colaborador: string;
   fechA_INGRESO: string;
@@ -101,4 +102,46 @@ export interface IEvaluacion {
   puntuaciondesempenosupervidor: number;
   puntuacioncompetenciasupervisor: number;
   totalCalculo: number;
+}
+
+export interface IReporte02 {
+  evaluacionId: number;
+  enfoqueAlSocio: number;
+  enfoqueAResultados: number;
+  flexibilidadYAdaptacion: number;
+  trabajoEnEquipoComunicacionInterpersonalInteligenciaEmocional: number;
+  desarrolloPersonalYAutoAprendizaje: number;
+  enfoqueALosSistemasInstitucionalesRegulacionesYCulturales: number;
+  tomaDeDecisionesCorajeGerencialEstiloColaboracion: number;
+  supervisionDesarrolloYMotivacionOtros: number;
+  habilidadesDeComunicacionYPresenciaProfesional: number;
+  tomaDeDecisionesYSolucionCreativaProblemas: number;
+  pensamientoAnaliticoYRigorIntelectual: number;
+  conocimientoDelNegocioEnfoqueEstrategicoVisionYProposito: number;
+  enfoqueAlSocioSupervisor: number;
+  enfoqueAResultadosSupervisor: number;
+  flexibilidadYAdaptacionSupervisor: number;
+  trabajoEnEquipoComunicacionInterpersonalInteligenciaEmocionalSupervisor: number;
+  desarrolloPersonalYAutoAprendizajeSupervisor: number;
+  enfoqueALosSistemasInstitucionalesRegulacionesYCulturalesSupervisor: number;
+  tomaDeDecisionesCorajeGerencialEstiloColaboracionSupervisor: number;
+  supervisionDesarrolloYMotivacionOtrosSupervisor: number;
+  habilidadesDeComunicacionYPresenciaProfesionalSupervisor: number;
+  tomaDeDecisionesYSolucionCreativaProblemasSupervisor: number;
+  pensamientoAnaliticoYRigorIntelectualSupervisor: number;
+  conocimientoDelNegocioEnfoqueEstrategicoVisionYPropositoSupervisor: number;
+  id: number;
+  periodId: number;
+  empleadoSecuencial: number;
+  totalCalculo: number;
+  fechaRepuestas: string;
+  observacion: string;
+  secuenciaSupervisor: number;
+  puntuacionCompetenciaColaborador: number;
+  puntuacionCompetenciaSupervisor: number;
+  puntuacionDesempenoColaborador: number;
+  puntuacionDesempenoSupervisor: number;
+  totalColaborador: number;
+  totalSupervisor: number;
+  estadoEvaluacion: string;
 }

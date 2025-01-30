@@ -5,11 +5,11 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta, IReporte01 } from "../Models/Evaluacion/IEvaluacion";
 import { ValoresEvaluacion } from "./ValoresEvaluacion";
 import { IValoresEvaluacion } from "../Models/ValoresEvaluacion/IValoresEvaluacion";
-import { IEvaluacionDesempenoMeta, IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+import { IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
 import { PorcientoDesempenoCompetencia } from "./PorcientoDesempenoCompetencia";
 import { IPorcientoDesempenoCompetencia } from "../Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia";
 import { ComunicacionService } from "../Services/comunicacion.service";
-import { ICursoCapacitacion } from "../Models/Capacitacion/Cursos";
+
 
 @Injectable({
     providedIn: 'root'
@@ -174,6 +174,7 @@ export class Evaluacion implements OnInit {
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
         this.porcentajeDesempeno = px1?.valor??0        
         this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+        
 
     
         //Competencia
@@ -200,6 +201,9 @@ export class Evaluacion implements OnInit {
 
     public GetEvaluacionReporte01(periodId:number): Observable<ModelResponse>{
         return this.datos.getdatos<ModelResponse>(this.rutaapi+`/reporte1?periodo=${periodId}`); 
+    }
+    public GetEvaluacionReporte02(periodId:number): Observable<ModelResponse>{
+        return this.datos.getdatos<ModelResponse>(this.rutaapi+`/reporte2?periodo=${periodId}`); 
     }
 
     public async GetvalorEvaluacion(id: number, retornar: string): Promise<number> {

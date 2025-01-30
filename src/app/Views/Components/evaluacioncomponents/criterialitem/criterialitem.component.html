@@ -25,18 +25,18 @@
           <td>{{row.objetivo}}</td>
           <td>
             <input 
-              *ngIf="!supervisor"
+              
               type="text"  
               [(ngModel)]="resultadologro[index].medioverificacion"  
               name="medioverificacion" 
               (change)="onMedioverificacionChange($event, index)">
-              <input 
+              <!-- <input 
               *ngIf="supervisor"
               readonly
               type="text"  
               [(ngModel)]="resultadologro[index].medioverificacion"  
               name="medioverificacion" 
-              (change)="onMedioverificacionChange($event, index)">              
+              (change)="onMedioverificacionChange($event, index)">               -->
           </td>
           <td>{{row.tipo}}</td>
           <td>
@@ -45,10 +45,11 @@
           <td class="text-end">{{row.meta}}</td>
           <td class="text-end">
             
-            <input type="number" (change)="onLogroChange($event, index)" *ngIf="!supervisor"
+            <input type="number" (change)="onLogroChange($event, index)" 
              [(ngModel)]="resultadologro[index].logro" name="evaluacion" min="1" max="100">
-             <input type="number" (change)="onLogroChange($event, index)" *ngIf="supervisor"
-             [(ngModel)]="resultadologro[index].logro" name="evaluacion" readonly>
+
+             <!-- <input type="number" (change)="onLogroChange($event, index)" *ngIf="supervisor"
+             [(ngModel)]="resultadologro[index].logro" name="evaluacion" readonly> -->
             
           </td>
           <td class="text-end">{{resultadologro[index].porcientologro | number:'1.2-2'}}</td>
@@ -64,6 +65,10 @@
         
       </tbody>
       <tfoot>
+        <tr>
+            <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
+            <td>{{totalPeso | number:'1.0-0'}}</td>
+        </tr>
         <tr>
             <td colspan="4" class="text-end"><strong>Promedio Desempeño:</strong></td>
             <td>{{promedioDesempeno | number:'1.2-2'}}%</td>
@@ -111,18 +116,18 @@
                 <strong>Documentar Resultado:</strong>
                 <div class="description-text">
                   <textarea 
-                    *ngIf="!supervisor"
+                    
                     type="text"  
                     [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
                     name="comentario" 
                     (change)="onComentarioChange($event, index)"></textarea>
-                    <textarea 
+                    <!-- <textarea 
                     *ngIf="supervisor"
                     readonly
                     type="text"  
                     [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
                     name="comentario" 
-                    (change)="onComentarioChange($event, index)"></textarea>
+                    (change)="onComentarioChange($event, index)"></textarea> -->
                 </div>
               </div>
             </div>
@@ -164,4 +169,3 @@
   </table>
   
 </div>
-

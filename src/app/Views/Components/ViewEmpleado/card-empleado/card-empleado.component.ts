@@ -169,6 +169,7 @@ export class CardEmpleadoComponent implements OnInit {
             console.log('actualizado',repx)
             this.datos.showMessage("Enviado","Envio de Evaluacion","success");
             this.mostarenviar=false
+            this.llamarevaluacion=false
             this.cdr.detectChanges();   
           }      
       })

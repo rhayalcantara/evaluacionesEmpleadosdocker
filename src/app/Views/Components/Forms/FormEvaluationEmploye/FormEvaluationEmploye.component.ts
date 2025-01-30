@@ -39,6 +39,7 @@ export class FormEvaluationEmployeComponent {
   @Input() supervisor:Boolean=false
   @Input() mostargrabar:Boolean=true
   @Input() mostarAceptar:Boolean=false
+  @Input() mostarAceptarBoton:Boolean=false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
   @Output() puntuacion: EventEmitter<number> = new EventEmitter();
   public logoBase64: string = '';
@@ -90,6 +91,11 @@ export class FormEvaluationEmployeComponent {
       // Verificar si la evaluacion esta en estado Enviada
         console.log(this.evaluacionempleado.estadoevaluacion)
       if (this.evaluacionempleado.estadoevaluacion == "Enviado") {
+        this.mostarAceptar = true;
+        this.mostarAceptarBoton=true;
+        this.mostargrabar = false;
+      }
+      if (this.evaluacionempleado.estadoevaluacion == "Completado") {
         this.mostarAceptar = true;
         this.mostargrabar = false;
       }
@@ -261,7 +267,7 @@ export class FormEvaluationEmployeComponent {
           widths: ['*'], // Hacer que el título abarque todo el ancho
           body: [
             [
-        {text: 'Desempeño Final (30%):' + Number(this.EvaluacionController.desempenoFinal).toFixed(2)
+        {text: 'Desempeño Final :' + Number(this.EvaluacionController.desempenoFinal).toFixed(2)
           , style: 'puntuacion' ,
           layout: 'noBorders'},
       ]
@@ -297,7 +303,7 @@ export class FormEvaluationEmployeComponent {
         {   table: {
           widths: ['*'],
           body: [
-            [ {text: 'Competencias Final (70%):' + Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'puntuacion' },
+            [ {text: 'Competencias Final :' + Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'puntuacion' },
             ]
           ]
         },

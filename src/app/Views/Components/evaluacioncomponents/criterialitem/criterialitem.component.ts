@@ -50,6 +50,7 @@ export class CriterialitemComponent implements OnInit {
     porcentajeCompetencia: any;
     CompetenciaFinal: string|number=0;
     public sololectura:boolean=false
+    public totalPeso: number = 0
 
   constructor(private EmpleadoModel:Empleados,
               private PeriodoModel:Periodos,
@@ -87,8 +88,11 @@ export class CriterialitemComponent implements OnInit {
           next: (rep ) => {      
 
             this.desempeno = rep.data;
+            // Calcular el total de los pesos
+            this.totalPeso = this.desempeno.reduce((sum, item) => sum + Number(item.peso), 0);
             // verificar si tiene desempeño en caso de que no se cambia la proporcion de la pdclocal
             // poniendo el valor para desepeño en 0 y para competencia en 100
+            
             if (this.desempeno.length==0){
               this.pdclocal = this.pdclocal.map((x)=>{
                 if (x.descripcion==='Desempeño'){
@@ -281,13 +285,13 @@ export class CriterialitemComponent implements OnInit {
       num = num + e.porcientologro
     })
 
-    if(this.desempeno.length==0){
-    // desempeño
-    this.promedioDesempeno=num/this.resultadologro.length
-    let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
-    this.porcentajeDesempeno = px1?.valor??0
-    this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
-    }
+    //if(this.desempeno.length==0){
+      // desempeño
+      this.promedioDesempeno=num/this.resultadologro.length
+      let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
+      this.porcentajeDesempeno = px1?.valor??0
+      this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+    //}
     
     //Competencia
     //busca las respuesta y da un promedio
@@ -321,11 +325,11 @@ export class CriterialitemComponent implements OnInit {
     this.logro[index] = logro
     ////console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
      
-      if(this.supervisor){
-        this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.supervisado_logro = logro;
-      }else{
+      // if(this.supervisor){
+      //   this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.supervisado_logro = logro;
+      // }else{
         this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.logro = logro;
-      }
+      //}
 
      this.resultadologro[index].porcientologro=this.evaluacion.evaluacionDesempenoMetas[index].meta
      this.resultadologro[index]=this.calcularresultadologro(this.resultadologro[index],this.evaluacion.evaluacionDesempenoMetas[index])

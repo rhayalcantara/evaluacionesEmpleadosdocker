@@ -63,7 +63,7 @@
         <h3>Puntaje Final de la Evaluación</h3>
         <div class="score">{{evaluacionempleado.totalcolaborador | number:'1.2-2' }}</div>
       </div>
-      <div class="aceptacion-prompt">
+      <div *ngIf="mostarAceptarBoton" class="aceptacion-prompt" >
         <p>¿Desea aceptar la evaluación?</p>
         <button type="submit" class="btn-aceptar" (click)="onAceptarEvaluacion()">
           <i class="fas fa-check"></i> Aceptar Evaluación

@@ -2,10 +2,9 @@ const { shareAll, withModuleFederationPlugin } = require('@angular-architects/mo
 
 const moduleFederationConfig = withModuleFederationPlugin({
   remotes: {
-    //"loginapp": "/loginapp/remoteEntry.js",
-    //"loginapp": "http://localhost/loginapp/remoteEntry.js",
-    // "loginapp": "http://192.168.7.222/loginapp/remoteEntry.js",  //x/ produccion
-    "loginapp": "http:localhost:4300/remoteEntry.js",
+    "loginapp": process.env.NODE_ENV === 'production' 
+      ? "http://192.168.7.222/loginapp/remoteEntry.js"  // Production URL
+      : "/loginapp/remoteEntry.js", // Local development URL (uses proxy)
   },
 
   shared: {
@@ -14,8 +13,11 @@ const moduleFederationConfig = withModuleFederationPlugin({
   sharedMappings:["@commons-lib"]
 });
 
-moduleFederationConfig.output.pathinfo = false
-moduleFederationConfig.output.clean = true
-moduleFederationConfig.output.publicPath = '/'
-//moduleFederationConfig.output.publicPath = '/evaluacionempleado/' // produccion
+moduleFederationConfig.output.pathinfo = false;
+moduleFederationConfig.output.clean = true;
+
+// Set publicPath based on environment
+moduleFederationConfig.output.publicPath = process.env.NODE_ENV === 'production'
+  ? '/evaluacionempleado/' // Production path
+  : 'auto'; // Development path - let webpack figure out the path automatically
 module.exports =moduleFederationConfig
