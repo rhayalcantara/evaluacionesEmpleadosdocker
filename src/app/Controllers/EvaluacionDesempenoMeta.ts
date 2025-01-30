@@ -99,6 +99,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
     }
 
     public insert(obj: IEvaluacionDesempenoMeta): Observable<IEvaluacionDesempenoMeta> {
+        console.log('insertando', obj)
         return this.datos.insertardatos<IEvaluacionDesempenoMeta>(this.rutaapi, obj);
     }
 

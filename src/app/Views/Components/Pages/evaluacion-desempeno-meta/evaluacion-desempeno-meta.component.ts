@@ -43,7 +43,7 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
     public metaService: EvaluacionDesempenoMeta
   ) { 
     this.metaService.TRegistros.subscribe(() => {
-      console.table(this.metaService.arraymodel[0].evaluacion)
+     // console.table(this.metaService.arraymodel[0].evaluacion)
   //   this.dataSource = this.metaService.arraymodel;
       this.dataSources.data = this.metaService.arraymodel;
       this.dataSources.paginator = this.paginator;
