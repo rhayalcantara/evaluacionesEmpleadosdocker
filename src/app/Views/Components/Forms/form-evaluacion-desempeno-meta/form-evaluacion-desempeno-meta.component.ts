@@ -51,8 +51,8 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) {
     this.fg = this.fb.group({
-      Id: [0],
-      EvaluacionId: [0],
+      id: [0],
+      evaluacionId: [0],
       tipo: ['', Validators.required],
       descripcion: ['', Validators.required],
       meta: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -63,11 +63,15 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     if (this.data.model.id) {
       this.titulo = 'Editar Meta de Evaluación';            
     }
     this.fg.patchValue(this.data.model);
+    this.fg.controls['secuencialId'].setValue(this.data.model.evaluacion?.empleado?.secuencial);
+    console.log('Llego al formulario',this.fg.value);
     this.empleadocontroller.getdatos();
+    this.selectedEmpleado = this.data.model.evaluacion?.empleado;
 
     this.empleadocontroller.TRegistros.subscribe(() => {
       if (this.fg.get('secuencialId')?.value) {
@@ -97,8 +101,9 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   grabar(): void {
-    console.table(this.fg.value);
+    //console.table(this.fg.value);
     if (this.fg.valid) {
+      console.log('Grabando meta',this.fg.value);
       const meta: IEvaluacionDesempenoMeta = this.fg.value;      
       
       this.metaService.model = meta;

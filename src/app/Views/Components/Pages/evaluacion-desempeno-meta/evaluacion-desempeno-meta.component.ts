@@ -61,7 +61,7 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    console.log('se llamao a getdatos')
+   // console.log('se llamao a getdatos')
     this.metaService.getdatos();
     //this.dataSource = this.metaService.arraymodel;
   }

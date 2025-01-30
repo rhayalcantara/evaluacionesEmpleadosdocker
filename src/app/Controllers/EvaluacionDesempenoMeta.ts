@@ -43,7 +43,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
     public inicializamodelo(): IEvaluacionDesempenoMeta {
         return {
             id: 0,
-            EvaluacionId: 0,
+            evaluacionId: 0,
             tipo: '',
             descripcion: '',
             meta: 0,
@@ -59,7 +59,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
-                    console.log('llegaron al controlador los datos',this.arraymodel)
+                    //console.log('llegaron al controlador los datos',this.arraymodel)
                     this.TRegistros.emit(this.totalregistros)
                 }
             })
@@ -69,7 +69,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
         return this.Gets().pipe(
             map((rep: ModelResponse) => {
                 let metas: IEvaluacionDesempenoMeta[] = rep.data;
-                return metas.filter(x => x.EvaluacionId == evaluacionId);
+                return metas.filter(x => x.evaluacionId == evaluacionId);
             })
         );
     }
@@ -124,7 +124,8 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     }
                 );
             } else {
-                // actualiza el registro            
+                // actualiza el registro 
+                console.log('actualiza el registro', this.model)           
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IEvaluacionDesempenoMeta) => {
                         this.model = rep;

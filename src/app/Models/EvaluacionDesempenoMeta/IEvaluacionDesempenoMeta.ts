@@ -2,7 +2,7 @@ import { IEvaluacion } from "../Evaluacion/IEvaluacion";
 
 export interface IEvaluacionDesempenoMeta {
     id: number;
-    EvaluacionId: number;
+    evaluacionId: number;
     tipo: string;
     descripcion: string;
     meta: number;
