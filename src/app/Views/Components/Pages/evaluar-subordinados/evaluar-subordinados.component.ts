@@ -19,6 +19,8 @@ export class EvaluarSubordinadosComponent implements OnInit {
 onDepartamentoChange() {
   throw new Error('Method not implemented.');
 }
+
+
   periodo:IPeriodo={
     id: 1,
     descripcion: 'Evaluacion de Medio Año 2024',

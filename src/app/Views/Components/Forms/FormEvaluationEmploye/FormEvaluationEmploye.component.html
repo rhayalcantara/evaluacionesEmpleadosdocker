@@ -63,11 +63,47 @@
         <h3>Puntaje Final de la Evaluación</h3>
         <div class="score">{{evaluacionempleado.totalcolaborador | number:'1.2-2' }}</div>
       </div>
-      <div *ngIf="mostarAceptarBoton" class="aceptacion-prompt" >
-        <p>¿Desea aceptar la evaluación?</p>
-        <button type="submit" class="btn-aceptar" (click)="onAceptarEvaluacion()">
-          <i class="fas fa-check"></i> Aceptar Evaluación
-        </button>
+
+      <div *ngIf="mostarAceptarBoton" class="opciones-aceptacion">
+        <div class="entrevista-supervisor">
+          <h4>Entrevista con Supervisor</h4>
+          <label>
+            ¿Se entrevistó con el supervisor?
+            <input type="radio" [(ngModel)]="entrevistaConSupervisor" name="entrevistaConSupervisor">
+             Si
+          </label>
+          <label>
+            <input type="radio"  name="entrevistaConSupervisor">
+             No
+          </label>
+        </div>
+        
+        <div class="acepta-disgusto">
+          <h4>Aceptación de Evaluación</h4>
+          <label>
+            
+            <input type="radio" [(ngModel)]="aceptaEnDisgusto" name="aceptaEnDisgusto">
+            Acepta en No Conformidad con evaluación
+          </label>
+          <label>            
+            <input type="radio"  name="aceptaEnDisgusto"  >
+            Acepta en Conformidad con evaluación
+          </label>
+        </div>
+        
+
+        <div *ngIf="aceptaEnDisgusto" class="comentario-disgusto">
+          <h4>Comentario de No Conformidad</h4>
+          <textarea id="comentarioDisgusto" [(ngModel)]="comentarioDisgusto" name="comentarioDisgusto" 
+                    placeholder="Por favor, explique su No Conformidad con la evaluación"></textarea>
+        </div>
+
+        <div class="aceptacion-final">
+          <p>¿Desea aceptar la evaluación?</p>
+          <button type="submit" class="btn-aceptar" (click)="onAceptarEvaluacion()">
+            <i class="fas fa-check"></i> Aceptar Evaluación
+          </button>
+        </div>
       </div>
     </div>
     </form>

@@ -110,7 +110,9 @@ export class CardEmpleadoComponent implements OnInit {
         //console.log('estado evaluacion',rep)  
         this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
         if (this.estadoAutoevaluacion == 'Pendiente' || 
-            this.estadoAutoevaluacion == 'Completado'){
+            this.estadoAutoevaluacion == 'Completado' || 
+            this.estadoAutoevaluacion == 'Enviado'
+          ){
           this.llamarevaluacion = false
         }else{
           this.llamarevaluacion = true
@@ -120,6 +122,7 @@ export class CardEmpleadoComponent implements OnInit {
         }else{
           this.mostarenviar=false
         }
+
         //this.estadoEvaluacionSupervisor = rep.data[1].EstadoEvaluacion
         this.cdr.detectChanges();
       }

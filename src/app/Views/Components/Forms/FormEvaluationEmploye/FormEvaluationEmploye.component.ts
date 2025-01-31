@@ -47,6 +47,9 @@ export class FormEvaluationEmployeComponent {
   public fecha:Date=new Date()
   public evaluacionempleado:IEvaluacion
   public comentarioAdicional: string = '';
+  public comentarioDisgusto: string = '';
+  public entrevistaConSupervisor: boolean = false;
+  public aceptaEnDisgusto: boolean = false;
   public desempeno:IEvalucionResultDto[]=[]
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
@@ -124,6 +127,7 @@ export class FormEvaluationEmployeComponent {
 
   onCursoSeleccionado(curso: ICursoCapacitacion): void {
     if (this.cursosSeleccionados.length < 3) {
+      // Verificar si el curso ya fue seleccionado
       if (!this.cursosSeleccionados.find(c => c.cursoCapacitacionId === curso.id)) {
         const evaluacionCurso: IEvaluacionCursoCapacitacion = {
           id: 0,
@@ -328,7 +332,18 @@ export class FormEvaluationEmployeComponent {
         ...cursosContent,
         
         { text: 'Comentario Final', style: 'sectionHeader' },
-        { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] }
+        { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] },
+
+        // Agregar información de entrevista y disgusto si aplica
+        ...(this.evaluacionempleado.estadoevaluacion === 'Completado' ? [
+          { text: 'Información Adicional', style: 'sectionHeader' },
+          { text: `Entrevista con Supervisor: ${this.evaluacionempleado.entrevistaConSupervisor ? 'Sí' : 'No'}` },
+          ...(this.evaluacionempleado.aceptaEnDisgusto ? [
+            { text: 'Aceptación en No Conformidad: Sí' },
+            { text: 'Comentario de No Conformidad:', style: 'subHeader' },
+            { text: this.evaluacionempleado.comentarioDisgusto || 'Sin comentario', margin: [0, 0, 0, 10] }
+          ] : [])
+        ] : [])
       ];
   
       const docDefinition = {
@@ -402,6 +417,12 @@ export class FormEvaluationEmployeComponent {
             fontSize: 10,
             italics: true,
             margin: [0, 0, 0, 5],
+            alignment: 'left'
+          },
+          subHeader: {
+            fontSize: 12,
+            bold: true,
+            margin: [0, 10, 0, 5],
             alignment: 'left'
           }
         },
@@ -506,16 +527,22 @@ export class FormEvaluationEmployeComponent {
     
   }
   onAceptarEvaluacion() {
+    if (this.aceptaEnDisgusto && !this.comentarioDisgusto) {
+      this.datos.showMessage("Debe proporcionar un comentario de disgusto", this.titulo, "error");
+      return;
+    }
+
     this.evaluacionempleado.estadoevaluacion = 'Completado';
+    this.evaluacionempleado.entrevistaConSupervisor = this.entrevistaConSupervisor;
+    this.evaluacionempleado.aceptaEnDisgusto  = this.aceptaEnDisgusto;
+    this.evaluacionempleado.comentarioDisgusto = this.comentarioDisgusto;
+    
     this.EvaluacionController.model = this.evaluacionempleado;
       
     this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
-        
         this.datos.showMessage("Grabado",this.titulo,"sucess");
         this.generatePDF();            
         this.router.navigate(['/Home'])
-      
     });
-
   }
 }

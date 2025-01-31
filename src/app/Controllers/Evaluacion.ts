@@ -87,7 +87,10 @@ export class Evaluacion implements OnInit {
             puntuaciondesempenosupervidor:0,
             puntuacioncompetenciasupervisor:0,
             totalsupervisor:0,
-            estadoevaluacion:'Pendiente'    
+            estadoevaluacion:'Pendiente'   ,
+            entrevistaConSupervisor: false,
+            aceptaEnDisgusto: false,
+            comentarioDisgusto: ''
         };
     }
 
@@ -308,14 +311,17 @@ export class Evaluacion implements OnInit {
             puntuaciondesempenosupervidor:obj.puntuaciondesempenosupervidor,
             puntuacioncompetenciasupervisor:obj.puntuacioncompetenciasupervisor,
             totalsupervisor:obj.totalsupervisor,
-            estadoevaluacion:obj.estadoevaluacion
+            estadoevaluacion:obj.estadoevaluacion,
+            entrevistaConSupervisor:obj.entrevistaConSupervisor,
+            aceptaEnDisgusto:obj.aceptaEnDisgusto,
+            comentarioDisgusto:obj.comentarioDisgusto
         }
         console.log('evaluacionCursoCapacitacion',evaluaciondto,obj)
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
     public async grabar(Supervisor:Boolean): Promise<boolean> {
-        
+        console.log('grabar',this.model)
         return new Promise<boolean>(async (resolve) => {
             try {
                 if (this.model.evaluacionDesempenoMetas.length==0){

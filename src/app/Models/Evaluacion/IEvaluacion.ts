@@ -24,6 +24,9 @@ export interface IEvaluacion {
     puntuacioncompetenciasupervisor:number
     totalsupervisor:number
     estadoevaluacion:string
+    entrevistaConSupervisor: boolean
+    aceptaEnDisgusto: boolean
+    comentarioDisgusto: string
   }
   export interface IEvaluacionGoal {
     id: number
@@ -66,6 +69,9 @@ export interface IEvaluacion {
     puntuacioncompetenciasupervisor:number
     totalsupervisor:number
     estadoevaluacion:string
+    entrevistaConSupervisor?: boolean
+    aceptaEnDisgusto?: boolean
+    comentarioDisgusto?: string
   }
 
   export interface IEvalucionResultDto{
@@ -144,4 +150,7 @@ export interface IReporte02 {
   totalColaborador: number;
   totalSupervisor: number;
   estadoEvaluacion: string;
+  entrevistaConSupervisor?: boolean
+  aceptaEnDisgusto?: boolean
+  comentarioDisgusto?: string
 }
