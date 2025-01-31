@@ -32,6 +32,9 @@ declare const pdfMake: any;
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
 export class FormEvaluationEmployeComponent {
+ondes() {
+  this.cd.detectChanges();
+}
 
   @Input() empleado: IEmpleado=this.empleadocontroller.inicializamodelo();
   @Input() periodo: IPeriodo=this.periodocontroller.inicializamodelo();

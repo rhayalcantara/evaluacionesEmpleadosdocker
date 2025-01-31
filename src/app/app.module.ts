@@ -13,6 +13,7 @@ import { NavmenuComponent } from './Views/Components/navmenu/navmenu.component';
 import { FileUploadComponent } from './archivoextras/file-upload-component';
 import { FileUploadPageComponent } from './Views/Components/Pages/file-upload-page/file-upload-page.component';
 import { ResultadoEvaluacionComponent } from './Views/Components/Pages/resultado-evaluacion/resultado-evaluacion.component';
+import { ReporteCursosComponent } from './Views/Components/reporte-cursos/reporte-cursos.component';
 
 @NgModule({
   declarations: [

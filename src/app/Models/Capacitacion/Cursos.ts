@@ -9,3 +9,11 @@ export interface IEvaluacionCursoCapacitacion{
     cursoCapacitacion?:ICursoCapacitacion
     porque:string
 }
+export interface IReporteCursos {
+  empleadoSecuencial: number;
+  nombreUnido: string;
+  departamento: string;
+  cargo: string;
+  curso: string;
+  razon: string;
+}

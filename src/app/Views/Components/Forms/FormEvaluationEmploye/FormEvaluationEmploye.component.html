@@ -69,12 +69,13 @@
           <h4>Entrevista con Supervisor</h4>
           <label>
             ¿Se entrevistó con el supervisor?
-            <input type="radio" [(ngModel)]="entrevistaConSupervisor" name="entrevistaConSupervisor">
+            <input type="radio" [(ngModel)]="entrevistaConSupervisor" [value]="true" name="entrevistaConSupervisor">
              Si
+             <input type="radio"  [(ngModel)]="entrevistaConSupervisor" [value]="false" name="entrevistaConSupervisor">
+             No
           </label>
           <label>
-            <input type="radio"  name="entrevistaConSupervisor">
-             No
+            
           </label>
         </div>
         
@@ -82,15 +83,15 @@
           <h4>Aceptación de Evaluación</h4>
           <label>
             
-            <input type="radio" [(ngModel)]="aceptaEnDisgusto" name="aceptaEnDisgusto">
-            Acepta en No Conformidad con evaluación
+            <input type="radio" [(ngModel)]="aceptaEnDisgusto" [value]="true"  (click)="ondes()" name="aceptaEnDisgusto">
+            Acepta en No Conformidad con la evaluación
           </label>
           <label>            
-            <input type="radio"  name="aceptaEnDisgusto"  >
-            Acepta en Conformidad con evaluación
+            <input type="radio"  name="aceptaEnDisgusto" [value]="false" (click)="ondes()" [(ngModel)]="aceptaEnDisgusto"  >
+            Acepta en Conformidad con la evaluación
           </label>
         </div>
-        
+       
 
         <div *ngIf="aceptaEnDisgusto" class="comentario-disgusto">
           <h4>Comentario de No Conformidad</h4>

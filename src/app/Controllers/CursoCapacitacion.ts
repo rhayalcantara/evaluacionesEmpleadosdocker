@@ -66,7 +66,11 @@ export class CursoCapacitacionController implements OnInit {
             }
         )
     }
-
+    public GetReportePeriodo(periodo:number): Observable<ModelResponse> {
+        console.log('url',this.datos.URL + '/api/EvaluacionCursoCapacitacions/ReporteCursos?periodo='+periodo)
+        return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/EvaluacionCursoCapacitacions/ReporteCursos?periodo='+periodo)
+    }
+    
     public Gets(): Observable<ModelResponse> {
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
