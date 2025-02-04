@@ -46,7 +46,8 @@ onDepartamentoChange() {
     nivel: 0,
     fechapostulacion: '',
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   }
   public subordinado:IEmpleado={
     secuencial: 0,
@@ -63,7 +64,8 @@ onDepartamentoChange() {
     nivel: 0,
     fechapostulacion: '',
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   }
   constructor(public empl:Empleados) {
     this.usuario= JSON.parse(localStorage.getItem('usuario') ?? "")

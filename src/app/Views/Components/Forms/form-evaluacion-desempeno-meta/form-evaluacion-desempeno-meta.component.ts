@@ -42,7 +42,8 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     nivel: 0,
     fechapostulacion: '',
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   };
 
   constructor(

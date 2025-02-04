@@ -54,7 +54,8 @@ export class CardEmpleadoComponent implements OnInit {
     nivel: 0,
     fechapostulacion: "",
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   }
   @Input() mostrarEstadoEvaluacion: boolean = false;
   @Input() mostrarboton:boolean =false

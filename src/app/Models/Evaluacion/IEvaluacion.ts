@@ -108,6 +108,7 @@ export interface IEvaluacion {
   puntuaciondesempenosupervidor: number;
   puntuacioncompetenciasupervisor: number;
   totalCalculo: number;
+  oficina: string;
 }
 
 export interface IReporte02 {

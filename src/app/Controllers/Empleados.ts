@@ -28,7 +28,8 @@ export class Empleados implements OnInit{
     {cargo:'Puesto'},
     {codigoestado:'Estatus'},
     {nivel:'Nivel'},
-    {jefeinmediato:'Jefe Inmediato'}
+    {jefeinmediato:'Jefe Inmediato'},
+    {oficina:'Oficina'}
  ]
  public estado:string='`'
  public totalregistros:number=0
@@ -72,7 +73,9 @@ export class Empleados implements OnInit{
       nivel: 0,
       fechapostulacion:"",
       jefeinmediatO_SECUENCIAL:0,
-      jefeinmediato:''
+      jefeinmediato:'',
+      oficina:''
+
    }
   }
   public  getdatos(){

@@ -14,5 +14,5 @@ export interface IEmpleado {
   fechapostulacion:string
   jefeinmediatO_SECUENCIAL:number
   jefeinmediato:string
-
+  oficina:string
 }

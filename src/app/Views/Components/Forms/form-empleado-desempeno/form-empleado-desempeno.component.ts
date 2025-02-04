@@ -63,7 +63,8 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     nivel: 0,
     fechapostulacion: '',
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   };
   selectedObjetivo: IObjetivoProyectoPerspectiva | undefined  = {
     id: 0,

@@ -44,8 +44,8 @@ export class EvaluacionReporteComponent implements OnInit {
   selectedStatus: string = '';
   selectedDepartment: string = '';
   departments: string[] = [];
-  campos: string[] = ['identificacion', 'colaborador', 'departamento', 'posision', 'supersivos', 'estatus_evaluacion', 'puntuaciondesempenocolaborador', 'totalcolaborador', 'puntuaciondesempenosupervidor', 'puntuacioncompetenciasupervisor', 'totalCalculo'];
-  titulos: string[] = ['ID', 'Colaborador', 'Departamento', 'Posición', 'Supervisor', 'Estatus', 'Desempeño', 'Total Colaborador', 'Desempeño Supervisor', 'Competencia Supervisor', 'Total'];
+  campos: string[] = ['identificacion', 'colaborador','oficina', 'departamento', 'posision', 'supersivos', 'estatus_evaluacion', 'puntuaciondesempenocolaborador', 'totalcolaborador', 'puntuaciondesempenosupervidor', 'puntuacioncompetenciasupervisor', 'totalCalculo'];
+  titulos: string[] = ['ID', 'Colaborador','Oficina', 'Departamento', 'Posición', 'Supervisor', 'Estatus', 'Desempeño', 'Total Colaborador', 'Desempeño Supervisor', 'Competencia Supervisor', 'Total'];
 
   constructor(
     private evaluacionService: Evaluacion,

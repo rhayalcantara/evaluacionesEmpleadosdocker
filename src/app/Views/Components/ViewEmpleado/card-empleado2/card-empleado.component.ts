@@ -47,7 +47,8 @@ export class CardEmpleadoComponent2 implements OnInit {
     nivel: 0,
     fechapostulacion: "",
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   }
   @Input() periodo!:IPeriodo
   @Input() llamarevaluacion: boolean = false;

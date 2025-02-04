@@ -38,7 +38,8 @@ export class EmpleadoTeamComponent2 implements OnInit {
     nivel: 0,
     fechapostulacion: '',
     jefeinmediatO_SECUENCIAL: 0,
-    jefeinmediato: ''
+    jefeinmediato: '',
+    oficina: ''
   };
   searchTerm: string = '';
   public periodo:IPeriodo=this.peri.inicializamodelo();

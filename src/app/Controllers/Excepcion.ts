@@ -65,7 +65,8 @@ export class Excepcion {
           nivel: 0,
           fechapostulacion: "",
           jefeinmediatO_SECUENCIAL: 0,
-          jefeinmediato: ""
+          jefeinmediato: "",
+          oficina: ""
         },
         nombreempleado:""
       }
