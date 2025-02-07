@@ -108,6 +108,10 @@ export class EvaluacionDesempenoMeta implements OnInit {
         return this.datos.updatedatos<IEvaluacionDesempenoMeta>(this.rutaapi + `/${obj.id}`, obj);
     }
 
+    public Delete(id: number): Observable<any> {
+        return this.datos.delbyid(this.rutaapi + `/${id}`);
+    }
+
     public async grabar(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
             if (this.model.id == 0) {

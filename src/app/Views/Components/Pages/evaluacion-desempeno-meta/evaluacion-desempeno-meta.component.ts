@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +33,7 @@ import { MatSort } from '@angular/material/sort';
   ]
 })
 export class EvaluacionDesempenoMetaComponent implements OnInit {
-  displayedColumns: string[] = ['Empleado','Perspectiva','Tipo', 'descripcion', 'meta','peso', 'inverso', 'acciones'];
+  displayedColumns: string[] = ['Empleado','Perspectiva','Tipo', 'descripcion', 'meta','peso', 'inverso', 'acciones', 'eliminar'];
  // dataSource: IEvaluacionDesempenoMeta[] = [];
   dataSources = new MatTableDataSource<IEvaluacionDesempenoMeta>();
   searchTerm: string = '';
@@ -40,7 +42,8 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
   
   constructor(
     private dialog: MatDialog,
-    public metaService: EvaluacionDesempenoMeta
+    public metaService: EvaluacionDesempenoMeta,
+    private datosService: DatosServiceService
   ) { 
     this.metaService.TRegistros.subscribe(() => {
      // console.table(this.metaService.arraymodel[0].evaluacion)
@@ -94,5 +97,29 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
   limpiarBusqueda(): void {
     this.searchTerm = '';
     this.cargarDatos();
+  }
+
+  eliminar(meta: IEvaluacionDesempenoMeta): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirmar eliminación',
+        message: '¿Está seguro que desea eliminar este registro?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.metaService.Delete(meta.id).subscribe({
+          next: () => {
+            this.datosService.showMessage('Registro eliminado correctamente', 'Evaluación Desempeño Meta', 'success');
+            this.cargarDatos();
+          },
+          error: (error) => {
+            this.datosService.showMessage('Error al eliminar el registro: ' + error.message, 'Evaluación Desempeño Meta', 'error');
+          }
+        });
+      }
+    });
   }
 }
