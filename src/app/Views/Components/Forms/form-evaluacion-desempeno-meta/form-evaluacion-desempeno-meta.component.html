@@ -44,7 +44,13 @@
         La descripción es requerida
       </div>
     </div>
-
+    <div class="form-group">
+      <label for="perspectiva">Descripción</label>
+      <textarea class="form-control" id="perspectiva" formControlName="perspectiva" required rows="3"></textarea>
+      <div class="invalid-feedback" *ngIf="fg.get('perspectiva')?.errors?.['required'] && fg.get('perspectiva')?.touched">
+        La Perspectiva es requerida
+      </div>
+    </div>
     <div class="form-group">
       <label for="meta">Meta (%)</label>
       <input type="number" class="form-control" id="meta" formControlName="meta" required min="0" max="100">

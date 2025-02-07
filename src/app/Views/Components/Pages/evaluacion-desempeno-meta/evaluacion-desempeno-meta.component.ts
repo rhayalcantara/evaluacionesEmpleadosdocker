@@ -31,7 +31,7 @@ import { MatSort } from '@angular/material/sort';
   ]
 })
 export class EvaluacionDesempenoMetaComponent implements OnInit {
-  displayedColumns: string[] = ['Empleado','Tipo', 'descripcion', 'meta','peso', 'inverso', 'acciones'];
+  displayedColumns: string[] = ['Empleado','Perspectiva','Tipo', 'descripcion', 'meta','peso', 'inverso', 'acciones'];
  // dataSource: IEvaluacionDesempenoMeta[] = [];
   dataSources = new MatTableDataSource<IEvaluacionDesempenoMeta>();
   searchTerm: string = '';
@@ -50,7 +50,7 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
       this.dataSources.sort = this.sort;
     });
     this.dataSources.filterPredicate = (data: IEvaluacionDesempenoMeta, filter: string) => {
-      const dataStr = `${data.evaluacion!.empleado!.nombreunido} ${data.tipo} ${data.descripcion} ${data.meta} ${data.peso}`;
+      const dataStr = `${data.evaluacion!.empleado!.nombreunido} ${data.perspectiva} ${data.tipo} ${data.descripcion} ${data.meta} ${data.peso}`;
       return dataStr.toLowerCase().includes(filter);
     };
   }

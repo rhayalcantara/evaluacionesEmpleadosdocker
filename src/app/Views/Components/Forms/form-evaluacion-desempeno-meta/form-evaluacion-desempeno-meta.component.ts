@@ -65,6 +65,7 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
       meta: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       peso: ['', [Validators.required, Validators.min(1), Validators.max(100)]],
       inverso: [false],
+      perspectiva: ['', Validators.required],
       secuencialId: [0, Validators.required] // Using secuencialId for employee reference
     });
   }
@@ -78,7 +79,7 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     }
     this.fg.patchValue(this.data.model);
     this.fg.controls['secuencialId'].setValue(this.data.model.evaluacion?.empleado?.secuencial);
-    console.log('Llego al formulario',this.fg.value);
+    //console.log('Llego al formulario',this.fg.value);
     this.empleadocontroller.getdatos();
     this.selectedEmpleado = this.data.model.evaluacion?.empleado;
 
@@ -120,7 +121,9 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
         descripcion: this.fg.get('descripcion')?.value,
         meta: this.fg.get('meta')?.value,
         peso:  this.fg.get('peso')?.value,
-        inverso: this.fg.get('inverso')?.value      
+        inverso: this.fg.get('inverso')?.value,
+        perspectiva: this.fg.get('perspectiva')?.value,
+
       }
       // si la meta es nueva hay que buscar la evaluacion del empleado esta se obtiene con el secuencialId y periodoid 
       if (meta.id === 0) {

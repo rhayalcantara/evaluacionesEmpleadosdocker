@@ -8,6 +8,7 @@ export interface IEvaluacionDesempenoMeta {
     meta: number;
     peso:number;
     inverso: boolean;
+    perspectiva:string;
     evaluacion?: IEvaluacion;
     evaluacionDesempenoRespuestas?: IDesempenoRespuesta;
     evaluacioneDesempenoMetaRespuestas?: IEvaluacionDesempenoMetaRespuesta;
