@@ -493,11 +493,10 @@ ondes() {
           puede=false;
         }           
     });
-    console.log(puede,this.evaluacionempleado.evaluacionDesempenoMetas)
+    
     if (puede){
-      if( this.EvaluacionController.model.totalcolaborador = NaN){
-        this.EvaluacionController.model.totalcolaborador=this.EvaluacionController.model.puntuacioncompetenciacolaborador
-      }
+
+      
       // Agregar los cursos seleccionados a la evaluación
       this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados.map(c => c.cursoCapacitacion!);      
       this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados;
@@ -507,8 +506,11 @@ ondes() {
       }else{
         this.evaluacionempleado.estadoevaluacion='AutoEvaluado';
       }
+      if( this.evaluacionempleado.evaluacionDesempenoMetas.length==0){
+        this.evaluacionempleado.totalcolaborador=this.evaluacionempleado.puntuacioncompetenciacolaborador
+      }
       this.EvaluacionController.model = this.evaluacionempleado;
-      
+      console.log('verificacion evaluacion:',puede,this.evaluacionempleado,this.EvaluacionController.model)
       this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
           
           this.datos.showMessage("Grabado",this.titulo,"sucess");
