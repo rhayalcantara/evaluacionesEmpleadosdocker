@@ -64,7 +64,8 @@ export class ResultadoEvaluacionComponent implements OnInit {
     repuesta: 0,
     repuestasupervisor: 0,
     weight: 0,
-    observacion: ''
+    observacion: '',
+    observacionsupervisor:''
   };
 
   constructor(

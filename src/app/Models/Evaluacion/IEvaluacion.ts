@@ -43,6 +43,7 @@ export interface IEvaluacion {
     repuestasupervisor:number
     weight: number
     observacion: string
+    observacionsupervisor:string
   }
 
   export interface IEvaluacionEstadoDts {

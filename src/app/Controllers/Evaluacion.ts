@@ -31,6 +31,7 @@ export class Evaluacion implements OnInit {
     public desempenoFinal: string|number = 0;
     public porcentajeDesempeno: any;
     public promedioCompetencias: string|number =0;
+    public promedioCompetenciassupervisor: string|number =0;
     public competenciasFinal: string|number=0;
     public porcentajeCompetencia: any;
     public CompetenciaFinal: string|number=0;
@@ -139,10 +140,11 @@ export class Evaluacion implements OnInit {
                     if (item.repuestasupervisor!=0){
                         competencias+=await this.GetvalorEvaluacion(item.repuestasupervisor,"id");                                     
                     }
-                }
+                }else{
                 if(item.repuesta!=0){
                     competencias+=await this.GetvalorEvaluacion(item.repuesta,"id");
                 }
+            }
             
         }
         
@@ -150,8 +152,9 @@ export class Evaluacion implements OnInit {
     }
 
     async calculaelpromediodesempeno(supervisor:Boolean,resultadologro:IResultadoLogro[]){
+  
        //console.log('se llamo a calculaelpromediodesempeno')
-        this.promedioCompetencias=0
+        
         let num:number=0
         resultadologro.forEach((e)=>{
           
@@ -174,19 +177,30 @@ export class Evaluacion implements OnInit {
 
         // desempeño
         this.promedioDesempeno=num/resultadologro.length
+        let px0:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
+        this.promedioCompetencias=px0?.valor??0 
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
-        this.porcentajeDesempeno = px1?.valor??0        
-        this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
-        
+        this.porcentajeDesempeno = px1?.valor??0    
 
-    
+        this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+
+        
         //Competencia
+              //calculo del empleado
+        this.model.puntuacioncompetenciacolaborador = (await this.CalculoCompetencias(false)/this.model.goalEmpleadoRespuestas.length)
+        this.model.totalcolaborador = this.desempenoFinal + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
+        this.model.totalCalculo = this.model.totalcolaborador
+        
+    
+              //calculo supervisor
         if(supervisor){
-          this.promedioCompetencias = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length*2))
-        }else{
-          this.promedioCompetencias = (await this.CalculoCompetencias(supervisor)/this.model.goalEmpleadoRespuestas.length)
-          this.model.totalcolaborador = this.desempenoFinal +((this.porcentajeCompetencia * this.promedioCompetencias)/100)
+            console.log('total competencia supervisor',await this.CalculoCompetencias(supervisor))
+            this.model.puntuacioncompetenciasupervisor = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length))
+            this.model.totalsupervisor = this.desempenoFinal + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
+            this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
+            console.log({colaborador:this.model.totalcolaborador,supervisor:this.model.totalsupervisor,total:this.model.totalCalculo })
         }
+        
         //console.log('promedioCompetencias',this.promedioCompetencias)
         
         let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
@@ -195,9 +209,8 @@ export class Evaluacion implements OnInit {
         this.puntuacionFinal = this.CompetenciaFinal + this.desempenoFinal
 
         // actualizacion de desempeño del modelo
-        this.model.puntuaciondesempenocolaborador = this.desempenoFinal
-        this.model.puntuacioncompetenciasupervisor = this.CompetenciaFinal
-        this.model.totalCalculo =  this.puntuacionFinal
+        
+        //this.model.totalCalculo =  this.puntuacionFinal
         this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
     
       }
@@ -376,7 +389,7 @@ export class Evaluacion implements OnInit {
                 dc.valordesempeno = (dc.desempeno * desempeno) / 100;
                 dc.total = dc.valorcompetencia + dc.valordesempeno;
                 
-                this.model.totalCalculo = dc.total;
+                //this.model.totalCalculo = dc.total;
 
                 // Insertar o actualizar según corresponda
                 if (this.model.id === 0) {

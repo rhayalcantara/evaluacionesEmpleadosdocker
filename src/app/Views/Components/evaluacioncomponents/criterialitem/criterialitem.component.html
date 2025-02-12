@@ -46,7 +46,7 @@
           <td class="text-end">
             
             <input type="number" (change)="onLogroChange($event, index)" 
-             [(ngModel)]="resultadologro[index].logro" name="evaluacion" min="1" max="100">
+             [(ngModel)]="resultadologro[index].logro" name="evaluacion" >
 
              <!-- <input type="number" (change)="onLogroChange($event, index)" *ngIf="supervisor"
              [(ngModel)]="resultadologro[index].logro" name="evaluacion" readonly> -->
@@ -116,18 +116,28 @@
                 <strong>Documentar Resultado:</strong>
                 <div class="description-text">
                   <textarea 
-                    
+                    *ngIf="!supervisor"                    
                     type="text"  
                     [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
                     name="comentario" 
-                    (change)="onComentarioChange($event, index)"></textarea>
-                    <!-- <textarea 
+                    (change)="onComentarioChange($event, index)">
+                  </textarea>
+                  <textarea 
                     *ngIf="supervisor"
                     readonly
                     type="text"  
                     [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacion"  
                     name="comentario" 
-                    (change)="onComentarioChange($event, index)"></textarea> -->
+                    (change)="onComentarioChange($event, index)">
+                  </textarea> 
+                  <strong *ngIf="supervisor" >Documentar Resultado Supervisor:</strong>
+                  <textarea 
+                    *ngIf="supervisor"                    
+                    type="text"  
+                    [(ngModel)]="evaluacion.goalEmpleadoRespuestas[index].observacionsupervisor"  
+                    name="comentariosupervisor" 
+                    (change)="onComentarioChangesupervisor($event, index)">
+                  </textarea>                   
                 </div>
               </div>
             </div>
@@ -155,16 +165,43 @@
     </div>
 
 </div>
-  <table class="table table-bordered">
+
+<table class="table table-bordered" *ngIf="supervisor">
+  <tfoot>
+  <tr>
+      <td colspan="7" class="text-end"><strong>Promedio Competencia Empleado:</strong></td>
+      <td>{{evaluacion.puntuacioncompetenciacolaborador | number:'1.2-2'}}%</td>
+      <td colspan="7" class="text-end"><strong>Promedio Competencia Supervisor:</strong></td>
+      <td>{{evaluacion.puntuacioncompetenciasupervisor | number:'1.2-2'}}%</td>
+  </tr>
+  <tr>
+      <td colspan="7" class="text-end"><strong>Competencia Final Empleado :</strong></td>
+      <td>{{evaluacion.totalcolaborador | number:'1.2-2'}}%</td>        
+      <td colspan="7" class="text-end"><strong>Competencia Final Supervisor :</strong></td>
+      <td>{{evaluacion.totalsupervisor | number:'1.2-2'}}%</td>
+  </tr>
+  <tr>
+    <td colspan="7" class="text-end"><strong>Total Evaluacion :</strong></td>    
+    <td colspan="7" class="text-end"><strong>{{evaluacion.totalCalculo | number:'1.2-2'}}%</strong></td>
+</tr>
+</tfoot>
+</table>
+
+
+  <table class="table table-bordered" *ngIf="!supervisor">
     <tfoot>
     <tr>
         <td colspan="7" class="text-end"><strong>Promedio Competencia:</strong></td>
-        <td>{{promedioCompetencias | number:'1.2-2'}}%</td>
+        <td>{{evaluacion.puntuacioncompetenciacolaborador | number:'1.2-2'}}%</td>
     </tr>
     <tr>
         <td colspan="7" class="text-end"><strong>Competencia Final ({{porcentajeCompetencia}}%):</strong></td>
-        <td>{{CompetenciaFinal | number:'1.2-2'}}%</td>
+        <td>{{evaluacion.puntuacioncompetenciacolaborador * (porcentajeCompetencia/100) | number:'1.2-2'}}%</td>
     </tr>
+    <tr>
+      <td colspan="7" class="text-end"><strong>Evaluacion Empleado :</strong></td>
+      <td>{{evaluacion.totalCalculo  | number:'1.2-2'}}%</td>
+  </tr>
   </tfoot>
   </table>
   

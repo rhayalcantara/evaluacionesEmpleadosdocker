@@ -49,6 +49,7 @@ export class CriterialitemComponent implements OnInit {
     competenciasFinal: string|number=0;
     porcentajeCompetencia: any;
     CompetenciaFinal: string|number=0;
+    public puntuacionFinal:number=0;
     public sololectura:boolean=false
     public totalPeso: number = 0
 
@@ -114,7 +115,8 @@ export class CriterialitemComponent implements OnInit {
                 porcientologro:  0,
                 resultadologro: 0,
                 medioverificacion: '',
-                comentario: ''
+                comentario: '',
+                comentariosupervisor:''
               }
                                            
               this.resultadologro.push(rl)
@@ -155,7 +157,8 @@ export class CriterialitemComponent implements OnInit {
                   medioverificacion: '',
                   comentario: '',
                   porcientologro: 0,
-                  resultadologro: 0
+                  resultadologro: 0,
+                  comentariosupervisor:''
                 }
                 
                 r.logro = Number(item.evaluacioneDesempenoMetaRespuestas?.logro)
@@ -209,21 +212,26 @@ export class CriterialitemComponent implements OnInit {
                 
 
         this.evaluacion.puntuaciondesempenocolaborador = Number(this.desempenoFinal)
+        /*
         if (this.supervisor){
-          this.evaluacion.puntuacioncompetenciasupervisor = Number(this.CompetenciaFinal)
+          this.evaluacion.puntuacioncompetenciasupervisor = this.EvaluacionControler.model.puntuacioncompetenciasupervisor
+          this.evaluacion.puntuacioncompetenciacolaborador = this.EvaluacionControler.model.puntuacioncompetenciacolaborador
           
         }else{
-          this.evaluacion.puntuacioncompetenciacolaborador = Number(this.CompetenciaFinal)
+          this.evaluacion.puntuacioncompetenciasupervisor = 0
+          this.evaluacion.puntuacioncompetenciacolaborador = this.EvaluacionControler.model.puntuacioncompetenciacolaborador
         }
-
+        this.evaluacion.totalsupervisor = this.evaluacion.puntuacioncompetenciasupervisor
         this.evaluacion.totalCalculo = Number(this.desempenoFinal) + Number(this.CompetenciaFinal)
 
-        
+        */
         let num = Number(this.EvaluacionControler.desempenoFinal) + Number(this.EvaluacionControler.CompetenciaFinal)
-        this.evaluacion.totalcolaborador = num
+        //this.evaluacion.totalcolaborador = num
         //console.log('Actualizar variables',this.evaluacion)
+        
         this.onPuntacionChange.emit(num)
         this.onEvaluacionChange.emit(this.evaluacion)
+        this.cd.detectChanges()
       }
    })
 
@@ -355,7 +363,6 @@ export class CriterialitemComponent implements OnInit {
     //this.supervisor,this.resultadologro
     this.EvaluacionControler.calculaelpromediodesempeno(this.supervisor,this.resultadologro)
     this.onEvaluacionChange.emit(this.evaluacion)
-    
     // Aquí puedes agregar cualquier lógica adicional que necesites
     //////console.log('Respuesta actualizada:', respuesta);
     
@@ -365,6 +372,14 @@ export class CriterialitemComponent implements OnInit {
     let coment:string = event.target.value
     this.evaluacion.goalEmpleadoRespuestas[index].observacion = coment
     this.onEvaluacionChange.emit(this.evaluacion)
+    //////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
+  }
+  onComentarioChangesupervisor(event:any,index:number){
+
+    let coment:string = event.target.value
+    this.evaluacion.goalEmpleadoRespuestas[index].observacionsupervisor = coment
+    this.onEvaluacionChange.emit(this.evaluacion)
+
     //////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
   }
 }

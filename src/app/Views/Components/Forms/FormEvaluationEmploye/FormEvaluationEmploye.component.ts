@@ -56,7 +56,7 @@ ondes() {
   public desempeno:IEvalucionResultDto[]=[]
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
-  
+  public dialogRef:any
 
   constructor(private EvaluacionController:Evaluacion,
               private datos:DatosServiceService,
@@ -84,7 +84,7 @@ ondes() {
     this.loadLogoAsBase64();
     // Cargar evaluación
     // mostrar loading component hasta que lleguen los datos
-    const dialogRef = this.toastr.open(LoadingComponent, {
+    this.dialogRef = this.toastr.open(LoadingComponent, {
       width: '340px',
       height: '180px', 
     }); 
@@ -94,22 +94,22 @@ ondes() {
       next: (rep: IEvaluacion) => {
         this.evaluacionempleado = rep;
 
-      // Verificar si la evaluacion esta en estado Enviada
+        // Verificar si la evaluacion esta en estado Enviada
         console.log(this.evaluacionempleado.estadoevaluacion)
-      if (this.evaluacionempleado.estadoevaluacion == "Enviado") {
-        this.mostarAceptar = true;
-        this.mostarAceptarBoton=true;
-        this.mostargrabar = false;
-      }
-      if (this.evaluacionempleado.estadoevaluacion == "Completado") {
-        this.mostarAceptar = true;
-        this.mostargrabar = false;
-      }
-      
+        if (this.evaluacionempleado.estadoevaluacion == "Enviado") {
+          this.mostarAceptar = true;
+          this.mostarAceptarBoton=true;
+          this.mostargrabar = false;
+        }
+        if (this.evaluacionempleado.estadoevaluacion == "Completado") {
+          this.mostarAceptar = true;
+          this.mostargrabar = false;
+        }
+        
 
         this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
         this.cd.detectChanges(); 
-        dialogRef.close();
+        
         this.comentarioAdicional = this.evaluacionempleado.observacion;
         this.cursosSeleccionados=[]
         this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
@@ -152,6 +152,7 @@ ondes() {
 
   onPuntacionChange(event:number){
     this.puntuacion.emit(event)
+    this.dialogRef.close();
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {
     this.evaluacionempleado = evaluacion;

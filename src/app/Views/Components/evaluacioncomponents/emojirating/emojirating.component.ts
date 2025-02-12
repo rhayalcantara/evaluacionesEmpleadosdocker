@@ -24,7 +24,8 @@ export class EmojiratingComponent implements OnInit{
     repuesta: 0,
     repuestasupervisor: 0,
     weight: 0,
-    observacion: ''
+    observacion: '',
+    observacionsupervisor:''
   }
   
  @Input() desempenorepuesta:IDesempenoRespuesta | undefined ={

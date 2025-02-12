@@ -36,6 +36,7 @@ export interface IDesempenoRespuesta {
     logro:number
     medioverificacion:string
     comentario:string
+    comentariosupervisor:string
     porcientologro:number
     resultadologro:number
   }
