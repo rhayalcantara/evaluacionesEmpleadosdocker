@@ -495,6 +495,9 @@ ondes() {
     });
     console.log(puede,this.evaluacionempleado.evaluacionDesempenoMetas)
     if (puede){
+      if( this.EvaluacionController.model.totalcolaborador = NaN){
+        this.EvaluacionController.model.totalcolaborador=this.EvaluacionController.model.puntuacioncompetenciacolaborador
+      }
       // Agregar los cursos seleccionados a la evaluación
       this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados.map(c => c.cursoCapacitacion!);      
       this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados;
