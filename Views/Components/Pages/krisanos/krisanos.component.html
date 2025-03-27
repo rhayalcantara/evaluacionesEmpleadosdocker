@@ -1,0 +1,84 @@
+<div class="container">
+    <div class="header">
+        <h1>Gestión de Kri en los Años</h1>
+        <button class="btn-add" (click)="abrirModal(kriano)">Agregar Nuevo</button>
+    </div>
+
+    <div class="tabla-container">
+        <table id="tabla-kriano">
+            <thead>
+                <tr>
+                    <th>Año ID</th>
+                    <th>Porcentaje</th>
+                    <th>Valor</th>
+                    <th>Inverso</th>
+                    <th>Logro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-body">
+                <tr *ngFor="let kriano of kriService.arraymodel">
+                    <td>{{getAnoById(kriano.plan_AnosId)}}</td>
+                    <td>{{kriano.porcientoValor}}</td>
+                    <td>{{kriano.valor}}</td>
+                    <td>{{kriano.inverso}}</td>
+                    <td>{{kriano.logro}}</td>                                                            
+                    <td class="actions">
+                      <button class="btn-delete" (click)="onDelete(kriano)" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <button class="btn-edit" (click)="onEdit(kriano)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                      </button>                      
+                    </td>
+                  </tr>
+            </tbody>
+        </table>
+        <mat-paginator
+            #paginator
+            [length]="totalItems"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            [pageIndex]="pageIndex"
+            (page)="onPageChange($event)"
+            aria-label="Seleccionar página">
+        </mat-paginator>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-contenido">
+        <h2 id="modal-titulo">Agregar KriAno</h2>
+        <form id="form-kriano" onsubmit="guardarKriAno(event)">
+            <input type="hidden" id="id">
+            <div class="form-grupo">
+                <label for="kriId">KRI ID:</label>
+                <input type="number" id="kriId" required>
+            </div>
+            <div class="form-grupo">
+                <label for="plan_AnosId">Plan Años ID:</label>
+                <input type="number" id="plan_AnosId" required>
+            </div>
+            <div class="form-grupo">
+                <label for="porcientoValor">Porcentaje Valor:</label>
+                <input type="text" id="porcientoValor" required>
+            </div>
+            <div class="form-grupo">
+                <label for="valor">Valor:</label>
+                <input type="number" id="valor" required>
+            </div>
+            <div class="form-grupo">
+                <label for="inverso">Inverso:</label>
+                <input type="checkbox" id="inverso">
+            </div>
+            <div class="form-grupo">
+                <label for="logro">Logro:</label>
+                <input type="number" id="logro" required>
+            </div>
+            <div class="modal-botones">
+                <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

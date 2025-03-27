@@ -1,0 +1,79 @@
+<div class="card">
+<div class="table-responsive-md">  
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th *ngFor="let campo of titulos; let i = index" class="centrado" [width]="ancho" (click)="sort(campos[i])">
+                    {{campo}}
+                    <span *ngIf="sortColumn === campos[i]">
+                        <i class="fa" [ngClass]="{'fa-sort-asc': sortDirection === 'asc', 'fa-sort-desc': sortDirection === 'desc'}"></i>
+                    </span>
+                </th>
+                <th class="centrado">Opciones</th>
+            </tr>    
+        </thead>
+    </table>
+    <div id="div1">
+        <table class='table table-striped' aria-labelledby="tableLabel">
+            <tbody>
+                
+                <tr *ngFor="let datos of arraydatos | paginate: { id:id, itemsPerPage: config.itemsPerPage, currentPage: config.currentPage, totalItems: config.totalItems }">
+                     <ng-container *ngIf="tipocampo.length==0"> 
+                        <td *ngFor="let campo of campos" class="centrado" [width]="ancho">{{datos[campo]}}</td>   
+                    </ng-container>
+
+                    <ng-container *ngIf="tipocampo.length!=0">
+                        <td *ngFor="let tc of tipocampo" class="centrado" [width]="ancho">                            
+                            <ng-container [ngSwitch]="tc.tipo">
+                                <ng-container *ngSwitchCase="'texto'" 
+                                            [formControlName]="tc.campo">
+                                    {{datos[tc.campo]}} 
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'boton'">
+                                    <button class="btn btn-outline-success" data-toggle="modal" 
+                                    data-bs-target="#exampleModal" (click)="opcion(datos[tc.campo],'boton')">
+                                        {{datos[tc.campo]}}
+                                    </button>
+                                </ng-container>                                
+                                <ng-container *ngSwitchCase="'checkbox'">                                    
+                                    <input type="checkbox" [checked]="datos[tc.campo]">
+                                </ng-container> 
+                                <ng-container *ngSwitchCase="'select'">
+                                    <select #teams class="form-control" [id]="tc.campo">
+                                      <option [ngValue]="null" disabled selected="selected">Selecione una Sucursal</option>
+                                      <option *ngFor="let p of tc.arraydata" [value]="p[tc.arrayid]">{{p[tc.arraynombre]}}</option>          
+                                    </select> 
+                                </ng-container> 
+                                <ng-container *ngSwitchCase="'date'">
+                                    <input type="date" [value]="datos[tc.campo]">                                      
+                                </ng-container>                                    
+                            </ng-container>                            
+                        </td>   
+                    </ng-container> 
+                    <td *ngIf="selected" class="centrado">                        
+                        <button class="btn" (click)="opcion(datos,'selected')"><i class="fa fa-check"></i></button>                                                
+                    </td>  
+                    <td *ngIf="!selected" class="centrado">                        
+                        <button class="btn" (click)="opcion(datos,'edit')"><i class="fa fa-edit"></i></button>                        
+                        <button *ngIf="deleted" class="btn" (click)="opcion(datos,'del')"><i class="fa fa-trash"></i></button>
+                    </td>                      
+                </tr>      
+            </tbody>
+        </table> 
+    </div>
+    
+<pagination-controls 
+id="{{id}}"
+[maxSize]="config.itemsPerPage"
+[directionLinks]="true"
+[autoHide]="true"
+[responsive]="true"
+[previousLabel]="labels.previousLabel"
+[nextLabel]="labels.nextLabel"
+[screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+[screenReaderPageLabel]="labels.screenReaderPageLabel"
+[screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+(pageChange)="onPageChange($event)"></pagination-controls>  
+</div>
+<div><small>Total Registro:{{config.totalItems}}</small></div>
+</div>

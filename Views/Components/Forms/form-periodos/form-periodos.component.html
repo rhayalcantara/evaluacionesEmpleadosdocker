@@ -1,0 +1,27 @@
+<div class="container mx-auto px-4">
+  <div class="card">
+    <div class="card-header">
+  <h2 class="text-2xl font-bold mb-4">{{ model.id === 0 ? 'Crear' : 'Editar' }} Periodo</h2>
+    </div>
+  <form [formGroup]="fg" (ngSubmit)="onSubmit()" >
+    <div class="form-group" >
+      
+        
+        <label for="descripcion" style="margin-top: 10px;">Descripcion</label>        
+        <input  type="text" class="form-control" id="descripcion" formControlName="descripcion">
+        <label for="fechaInicio" style="margin-top: 10px;">FechaInicio</label>
+        <input  type="date" class="form-control" id="fechaInicio" formControlName="fechaInicio">
+        <label for="fechaFin" style="margin-top: 10px;">FechaFin</label>
+        <input  type="date" class="form-control" id="fechaFin" formControlName="fechaFin">  
+        <label for="activa" style="margin-top: 10px;">FechaFin</label>      
+        <input  type="text" class="form-control" id="activa" formControlName="activa" style="align-items: self-start;">
+      
+      
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary" >Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+  </div>
+</div>

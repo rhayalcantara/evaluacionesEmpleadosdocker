@@ -1,0 +1,122 @@
+<nav class="navbar navbar-expand-lg custom-bg">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <div class="logo-div"></div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/Home">Inicio</a>
+        </li>
+        
+        <!-- Empleados -->
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Empleados
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Empleado">Gestión de Empleados</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Puesto">Puestos</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/CategoriasPuestoa">Categorías de Puestos</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/rol-categoria-puesto">Rol Categoria Puesto</a></li>  
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Departamento">Departamentos</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/ExcepcionSupervisorInmediato">Excepción Supervisor Inmediato</a></li>
+          </ul>
+        </li>
+        
+        <!-- Evaluaciones -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Evaluaciones
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Evaluacion">AutoEvaluación</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/EvaluarSubordinados" *ngIf="empleadoRolController.model.rolId<=2" >Evaluar Equipo</a></li>
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/resultado-evaluacion"  >Resultado Evaluacion</a></li>             -->
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/PoliticaEvaluacion" *ngIf="empleadoRolController.model.rolId==1" >Política de Evaluación</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/evaluation-periods" *ngIf="empleadoRolController.model.rolId==1" >Períodos de Evaluación</a></li>            
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/evaluation-recalculo" *ngIf="empleadoRolController.model.rolId==1" >Recalcular Evaluaciónes</a></li>            
+          </ul>
+        </li>
+        
+        <!-- Configuración -->
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Configuración
+          </a>
+          <ul class="dropdown-menu">
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/Meta">Metas</a></li> -->
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Periodo">Periodos</a></li>
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/Tipo">Tipos</a></li> -->
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Estado">Estados</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/grupo-competencias">Grupo Competencias</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Objetivo">Competencias</a></li>
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/empleado-desempeno">Asignacion Desempeño a Empleado</a></li> -->
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/uploadfile">Carga de Archivos KPIs</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/empleado-desempeno-meta">Evaluacion Objetivos</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/valores-evaluacion">Valores de Evaluación</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/porciento-desempeno-competencia">Porciento Desempeño/Competencia</a></li>   
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/cursos-capacitacion">Cursos Capacitacion</a></li>   
+          </ul>
+        </li>
+
+        <!-- Usuarios -->
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Usuarios
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Roles">Roles</a></li>            
+          </ul>
+        </li>         
+
+        <!-- Plan Estratégico -->
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1" >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Plan Estratégico
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/PlanEstrategico">Plan Estratégico</a></li>
+            <!-- <li><a class="dropdown-item" (click)="precionado()" routerLink="/Aspiracion">Aspiraciones</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/Perspectiva">Perspectivas</a></li> -->
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/ObjetivoEstrategico">Objetivos Estratégico</a></li>            
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/kri">KRIs</a></li> 
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/kpi">KPIs</a></li> 
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/opp">Proyectos/Objetivos</a></li> 
+          </ul>
+        </li>
+
+        <!-- <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1">
+          <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboard</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/dashboard">Dashboard</a></li>
+            <li><a class="dropdown-item" (click)="precionado()" routerLink="/organigrama">Organigrama</a></li>
+          </ul>
+        </li> -->
+
+        <li class="nav-item dropdown" *ngIf="empleadoRolController.model.rolId==1">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           Reportes
+          </a>
+          <ul class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/Reportes">Reporte Estado Evaluacion</a>
+          <a class="dropdown-item" routerLink="/ReportesCursos">Reporte Cursos Solicitados Por Periodos</a>
+        </ul>
+        
+        </li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" (click)="log()">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld2JveD0iMCAwIDI0IDI0IiBpZD0ibG9nb3V0Ij48cGF0aCBkPSJNNCwxMmExLDEsMCwwLDAsMSwxaDcuNTlsLTIuMywyLjI5YTEsMSwwLDAsMCwwLDEuNDIsMSwxLDAsMCwwLDEuNDIsMGw0LTRhMSwxLDAsMCwwLC4yMS0uMzMsMSwxLDAsMCwwLDAtLjc2LDEsMSwwLDAsMC0uMjEtLjMzbC00LTRhMSwxLDAsMSwwLTEuNDIsMS40MkwxMi41OSwxMUg1QTEsMSwwLDAsMCw0LDEyWk0xNywySDdBMywzLDAsMCwwLDQsNVY4QTEsMSwwLDAsMCw2LDhWNUExLDEsMCwwLDEsNyw0SDE3YTEsMSwwLDAsMSwxLDFWMTlhMSwxLDAsMCwxLTEsMUg3YTEsMSwwLDAsMS0xLTFWMTZhMSwxLDAsMCwwLTIsMHYzYTMsMywwLDAsMCwzLDNIMTdhMywzLDAsMCwwLDMtM1Y1QTMsMywwLDAsMCwxNywyWiIgLz48L3N2Zz4=" id="logout" alt="Logout">
+            {{logg}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

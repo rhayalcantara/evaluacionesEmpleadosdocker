@@ -1,0 +1,25 @@
+<div class="card">
+    
+       
+        <!-- <button (click)="subdelsub()" [ngStyle]="getButtonStyle()">Mostrar Subordinados del Empleado</button> -->
+ 
+        <h3>{{rolcategoriapuesto}}</h3>
+    
+    <div class="employee-photo">
+        <img src="./././assets/user.png" alt="Employee photo" width="100" height="100">
+    </div>
+
+    <div class="employee-details">
+        <p><strong>Nombre:       </strong>     {{empleado.nombreunido}} </p>
+        <p><strong>Departamento: </strong>     {{empleado.departamento}}</p>
+        <p><strong>Posicion:     </strong>     {{empleado.cargo}}</p>  
+        <p><strong>Fecha Ingreso:</strong>     {{empleado.fechapostulacion | date : 'dd/MM/yyyy'}}</p>    
+    </div>  
+    <div class="puntuacion-final">
+        <h2>PUNTUACION FINAL</h2>
+        <div class="score">{{ puntuacionFinal | number:'1.2-2' }}</div>
+    </div>  
+    <div class="evaluation-button" *ngIf="llamarevaluacion">
+        <button (click)="openEvaluationForm()" [ngStyle]="getButtonStyle()">Evaluar Empleado</button>
+    </div>
+</div>

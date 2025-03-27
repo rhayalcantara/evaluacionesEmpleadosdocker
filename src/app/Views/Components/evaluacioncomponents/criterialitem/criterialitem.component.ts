@@ -171,7 +171,6 @@ export class CriterialitemComponent implements OnInit {
             })
             
             this.EvaluacionControler.calculaelpromediodesempeno(this.supervisor,this.resultadologro)
-
             
           },
           error: (err) => console.error('Error al obtener la evaluación:', err)
@@ -229,7 +228,7 @@ export class CriterialitemComponent implements OnInit {
         //this.evaluacion.totalcolaborador = num
         //console.log('Actualizar variables',this.evaluacion)
         
-        this.onPuntacionChange.emit(num)
+        this.onPuntacionChange.emit(this.evaluacion.totalCalculo)
         this.onEvaluacionChange.emit(this.evaluacion)
         this.cd.detectChanges()
       }

@@ -1,0 +1,23 @@
+
+<div class="emoji-rating">
+  <div class="emoji-option" *ngFor="let i of [1, 2, 3, 4, 5]">
+    <div class="rating-column">
+      <div class="rating-label">{{getLabel(i)}}</div>
+      <label [for]="'jobKnowledgeCheck' + i" class="emoji-label">
+        {{ getEmoji(i) }}
+      </label>
+      <div class="checkbox-container">
+        <input
+          [id]="namex+'jobKnowledgeCheck' + i"
+          type="checkbox"
+          [name]="namex+'rating-' + i"
+          [checked]="valorSeleccionado === i"
+          (click)="cambiovalor(i)"
+          [disabled]="sololectura"
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+

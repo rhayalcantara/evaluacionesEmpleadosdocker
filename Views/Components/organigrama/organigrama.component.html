@@ -1,0 +1,73 @@
+<div class="header">
+  <div class="header-left">
+    <h1>Organigrama</h1>
+    <div class="search-container">
+      <div class="search-field">
+        <input 
+          type="text" 
+          [placeholder]="'Buscar por ' + (searchField === 'nombre' ? 'nombre' : 'cargo')"
+          [value]="searchTerm"
+          (input)="onSearch($any($event.target).value)">
+        <select (change)="onSearchFieldChange($any($event.target).value)">
+          <option value="nombre" [selected]="searchField === 'nombre'">Buscar por nombre</option>
+          <option value="cargo" [selected]="searchField === 'cargo'">Buscar por cargo</option>
+        </select>
+      </div>
+    </div>
+    <div class="breadcrumbs" *ngIf="jerarquia.length > 0">
+      <span class="breadcrumb-item" (click)="loadEmpleados()">Inicio</span>
+      <span *ngFor="let emp of jerarquia" class="breadcrumb-item" (click)="navegarA(emp)">
+        > {{emp.nombreunido}}
+      </span>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="back-btn" *ngIf="jerarquia.length > 0" (click)="subirNivel()">
+      ← Subir Nivel
+    </button>
+    <button class="export-btn" (click)="exportarSVG()">Exportar SVG</button>
+  </div>
+</div>
+
+<div class="loading-error-container">
+  <div class="loading" *ngIf="isLoading | async">Cargando...</div>
+  <div class="error" *ngIf="error | async as errorMessage">{{errorMessage}}</div>
+</div>
+
+<div class="organigrama" #organigramaContainer>
+  <!-- Nivel Superior -->
+  <div class="nivel" *ngIf="empleados.length > 0 && !selectedEmpleado">
+    <div class="empleado" *ngFor="let emp of empleadosFiltrados">
+      <div class="hexagono" (click)="mostrarSubordinados(emp)">
+        <img [src]="'assets/user.png'" [alt]="emp.nombreunido" 
+             (error)="handleImageError($event)">
+      </div>
+      <div class="nombre">{{emp.nombreunido}}</div>
+      <div class="cargo">{{emp.cargo}}</div>
+    </div>
+  </div>
+
+  <!-- Jefe Seleccionado -->
+  <div class="nivel nivel-jefe" *ngIf="selectedEmpleado">
+    <div class="empleado empleado-selected">
+      <div class="hexagono">
+        <img [src]="'assets/user.png'" [alt]="selectedEmpleado.nombreunido"
+             (error)="handleImageError($event)">
+      </div>
+      <div class="nombre">{{selectedEmpleado.nombreunido}}</div>
+      <div class="cargo">{{selectedEmpleado.cargo}}</div>
+    </div>
+  </div>
+
+  <!-- Nivel Subordinados -->
+  <div class="nivel nivel-2" *ngIf="subordinados.length > 0">
+    <div class="empleado" *ngFor="let sub of subordinados">
+      <div class="hexagono" (click)="mostrarSubordinados(sub)">
+        <img [src]="'assets/user.png'" [alt]="sub.nombreunido"
+             (error)="handleImageError($event)">
+      </div>
+      <div class="nombre">{{sub.nombreunido}}</div>
+      <div class="cargo">{{sub.cargo}}</div>
+    </div>
+  </div>
+</div>

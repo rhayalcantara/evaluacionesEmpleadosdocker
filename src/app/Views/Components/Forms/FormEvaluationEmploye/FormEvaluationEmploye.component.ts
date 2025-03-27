@@ -152,6 +152,7 @@ ondes() {
 
   onPuntacionChange(event:number){
     this.puntuacion.emit(event)
+    console.log('FormEvaluationEmployeComponent puntuacion',event)
     this.dialogRef.close();
   }
   onEvaluacionChange(evaluacion:IEvaluacion): void {

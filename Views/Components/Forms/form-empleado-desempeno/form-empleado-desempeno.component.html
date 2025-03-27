@@ -1,0 +1,91 @@
+<div class="container">
+  <h2>{{titulo}}</h2>
+
+  <form class="edit-form" [formGroup]="fg">
+    <div class="form-group">
+      <label for="id">ID</label>
+      <input type="text" id="id" name="id" formControlName="Id" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="secuencialId">Empleado</label>
+      <div class="input-group">
+        <div class="selected-item">{{selectedEmpleado?.nombreunido}}</div>
+        <button class="btn btn-secondary" type="button" (click)="buscarEmpleado()">Buscar Empleado</button>
+      </div>
+      <div *ngIf="fg.get('SecuencialId')?.invalid && (fg.get('SecuencialId')?.dirty || fg.get('SecuencialId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('SecuencialId')?.errors?.['required']">
+          El Empleado es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="tipoSeleccion">Tipo de Selección</label>
+      <select id="tipoSeleccion" formControlName="tipoSeleccion" class="form-control" (change)="onTipoSeleccionChange()">
+        <option value="">Seleccione un tipo</option>
+        <option value="kri">KRI</option>
+        <option value="kpi">KPI</option>
+        <option value="objetivo">{{selectedObjetivo?.tipo}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="fg.get('tipoSeleccion')?.value === 'kri'">
+      <label for="kriId">KRI</label>
+      <div class="selected-item">{{selectedKri.descripcion}}</div>
+      <button class="btn btn-secondary btn-block" type="button" (click)="seleccionarKri()">Buscar KRI</button>
+      <div *ngIf="fg.get('KriId')?.invalid && (fg.get('KriId')?.dirty || fg.get('KriId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('KriId')?.errors?.['required']">
+          El KRI es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="fg.get('tipoSeleccion')?.value === 'kpi'">
+      <label for="kpiId">KPI</label>
+      <!-- <select id="kpiId" formControlName="KpiId" class="form-control" required>
+        <option [value]="0">Seleccione un KPI</option>
+        <option *ngFor="let kpi of kpis" [value]="kpi.id">{{kpi.descripcion}}</option>
+      </select> -->
+      <div class="selected-item">{{selectedKpi.descripcion}}</div>
+      <button class="btn btn-secondary btn-block" type="button" (click)="seleccionarKpi()">Buscar KRI</button>
+      <div *ngIf="fg.get('KpiId')?.invalid && (fg.get('KpiId')?.dirty || fg.get('KpiId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('KpiId')?.errors?.['required']">
+          El KPI es requerido.
+        </div>
+      </div>
+    </div>
+    <!-- agregar selecion de periodo -->
+    <div class="form-group">
+      <label for="periodoId">Periodo</label>
+      <select id="periodoId" formControlName="periodoId" class="form-control" required>
+        <option [value]="0">Seleccione un periodo</option>
+        <option *ngFor="let periodo of periodos" [value]="+periodo.id">{{periodo.descripcion}}</option>
+      </select>
+      <div *ngIf="fg.get('PeriodoId')?.invalid && (fg.get('PeriodoId')?.dirty || fg.get('PeriodoId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('PeriodoId')?.errors?.['required']">
+          El Periodo es requerido.
+        </div>
+      </div>
+      </div>
+    <div class="form-group" *ngIf="fg.get('tipoSeleccion')?.value === 'objetivo'">
+      <label for="objetivoProyectoId">{{selectedObjetivo?.tipo}}</label>
+      <div class="input-group">
+        <div class="selected-item">{{selectedObjetivo?.descripcion}}</div>
+        <button class="btn btn-secondary" type="button" (click)="seleccionarObjetivo()">Buscar {{selectedObjetivo?.tipo}}</button>
+      </div>
+      <div *ngIf="fg.get('ObjetivoProyectoId')?.invalid && (fg.get('ObjetivoProyectoId')?.dirty || fg.get('ObjetivoProyectoId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('ObjetivoProyectoId')?.errors?.['required']">
+          El Objetivo del Proyecto es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center pt-1 mb-5 pb-1">
+      <div class="d-grid gap-2">
+        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="button" [disabled]="fg.invalid">Grabar</button>
+        <button class="btn btn-secondary btn-block" type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</div>

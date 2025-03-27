@@ -1,0 +1,51 @@
+<div class="container">
+  <h2>{{titulo}}</h2>
+
+  <form class="edit-form" id="editKriForm" [formGroup]="fg">
+    <div class="form-group">
+      <label for="id">ID</label>
+      <input type="text" id="id" name="id" formControlName="id" readonly>
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="objetivoExtrategicoId">Objetivo Estratégico ID</label>
+      <input type="number" id="objetivoExtrategicoId" name="objetivoExtrategicoId" formControlName="objetivoExtrategicoId" required>
+      <div *ngIf="fg.get('objetivoExtrategicoId')?.invalid && (fg.get('objetivoExtrategicoId')?.dirty || fg.get('objetivoExtrategicoId')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('objetivoExtrategicoId')?.errors?.['required']">
+          El Objetivo Estratégico ID es requerido.
+        </div>
+      </div>
+    </div> -->
+
+    <div class="form-group">
+      <label for="descripcion">Descripción</label>
+      <input type="text" id="descripcion" name="descripcion" formControlName="descripcion" required>
+      <div *ngIf="fg.get('descripcion')?.invalid && (fg.get('descripcion')?.dirty || fg.get('descripcion')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('descripcion')?.errors?.['required']">
+          La descripción es requerida.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="ponderacion">Ponderación</label>
+      <input type="number" id="ponderacion" name="ponderacion" formControlName="ponderacion" required min="0" max="100">
+      <div *ngIf="fg.get('ponderacion')?.invalid && (fg.get('ponderacion')?.dirty || fg.get('ponderacion')?.touched)" class="alert alert-danger">
+        <div *ngIf="fg.get('ponderacion')?.errors?.['required']">
+          La ponderación es requerida.
+        </div>
+        <div *ngIf="fg.get('ponderacion')?.errors?.['min'] || fg.get('ponderacion')?.errors?.['max']">
+          La ponderación debe estar entre 0 y 100.
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center pt-1 mb-5 pb-1">
+      <div class="d-grid gap-2">
+        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="button" [disabled]="fg.invalid">Grabar</button>
+        <button class="btn btn-secondary btn-block" type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+  
+</div>

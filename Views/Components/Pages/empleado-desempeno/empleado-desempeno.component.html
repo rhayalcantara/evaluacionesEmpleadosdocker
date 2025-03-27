@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="header">
+    <h2>Desempeño del Empleado</h2>
+    <button class="btn-add" (click)="onAdd()" title="Agregar">
+      <i class="fas fa-plus"></i> Agregar
+    </button>
+  </div>
+
+  <div class="filter-container">
+    <input 
+      type="text" 
+      [(ngModel)]="filterText" 
+      (input)="onFilter($event)" 
+      placeholder="Filtrar..."
+      class="filter-input"
+    >
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Secuencial</th>
+          <th>KRI</th>
+          <th>KPI</th>
+          <th>Objetivo del Proyecto</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="empleadoDesempenos.length === 0">
+          <td colspan="5" class="no-data">
+            No hay registros disponibles
+          </td>
+        </tr>
+        <tr *ngFor="let empleadoDesempeno of displayedEmpleadoDesempenos">
+          <td>{{empleadoDesempeno.empleado?.nombreunido}}</td>
+          <td>{{empleadoDesempeno.kri?.descripcion}}</td>
+          <td>{{empleadoDesempeno.kpi?.descripcion}}</td>
+          <td>{{empleadoDesempeno.objetivoProyecto?.descripcion}}</td>
+          <td class="actions">
+            <button class="btn-edit" (click)="onEdit(empleadoDesempeno)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-delete" (click)="onDelete(empleadoDesempeno)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+    aria-label="Select page">
+  </mat-paginator>
+</div>

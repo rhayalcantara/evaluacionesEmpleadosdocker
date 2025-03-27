@@ -1,0 +1,28 @@
+/* seleccion-kri.component.css */
+.container {
+    padding: 20px;
+    max-height: 400px;
+    overflow: auto;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .selected-row {
+    background-color: #f5f5f5;
+  }
+  
+  tr.mat-row:hover {
+    background-color: #eeeeee;
+    cursor: pointer;
+  }
+  
+  .mat-column-id {
+    width: 100px;
+  }

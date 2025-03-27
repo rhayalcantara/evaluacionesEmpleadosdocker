@@ -177,10 +177,17 @@ export class Evaluacion implements OnInit {
 
         // desempeño
         this.promedioDesempeno=num/resultadologro.length
+        //se busca el valor maximo de la tabla de valores evaluacion
+        await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
+            this.promedioDesempeno=rep             
+        })
+        
+        let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
+        this.porcentajeDesempeno = px1?.valor??0 
+        
         let px0:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
         this.promedioCompetencias=px0?.valor??0 
-        let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
-        this.porcentajeDesempeno = px1?.valor??0    
+          
 
         this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
 

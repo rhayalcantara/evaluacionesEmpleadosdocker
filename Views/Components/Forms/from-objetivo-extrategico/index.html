@@ -1,0 +1,287 @@
+<div class="kris-section">
+    <!-- Formulario para nuevo KRI -->
+    <div class="kri-form">
+        <h3 class="form-subtitle">Agregar nuevo KRI</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Descripción del KRI</label>
+                <input type="text" class="form-control" placeholder="Ingrese la descripción del KRI">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ponderación</label>
+                <input type="number" class="form-control" placeholder="Ingrese la ponderación">
+            </div>
+            <button type="button" class="btn btn-primary">Agregar KRI</button>
+        </div>
+    </div>
+
+    <!-- KRI Item con contenido colapsable -->
+    <div class="kri-item">
+        <div class="kri-item-header" onclick="toggleYearSection(this)">
+            <div class="kri-item-info">
+                <span class="kri-description">Eficiencia financiera</span>
+                <span class="kri-ponderacion">Ponderación: 60%</span>
+            </div>
+            <div class="kri-item-actions">
+                <i class="toggle-icon fas fa-chevron-down"></i>
+                <button type="button" class="btn btn-outline-danger" onclick="event.stopPropagation()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Contenido colapsable -->
+        <div class="kri-item-content collapsed">
+            <!-- Formulario para agregar nuevo año -->
+            <div class="add-year-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Año</label>
+                        <select class="form-control">
+                            <option>2024</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-control">
+                            <option>Porciento</option>
+                            <option>Valor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valor</label>
+                        <input type="number" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Inverso</label>
+                        <input type="checkbox" class="form-control">
+                    </div>   
+                    <div class="form-group">
+                        <label class="form-label">logro</label>
+                        <input type="number" class="form-control">
+                    </div>                 
+                    <button type="button" class="btn btn-secondary">Agregar Año</button>
+                </div>
+            </div>
+
+            <!-- Tabla de años -->
+            <div class="table-container">
+                <!-- Tabla de años -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Porciento/Valor</th>
+                        <th>Valor</th>
+                        <th>Inverso?</th>
+                        <th>Logro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024</td>
+                        <td>Porciento</td>
+                        <td>60</td>
+                        <td style="text-align: center;">
+                            <input type="checkbox">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" value="75">
+                        </td>
+                        <td style="text-align: center;">
+                            <button class="btn btn-danger">×</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Estilos existentes... */
+body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+
+        /* Sección de nuevo KRI */
+        .new-kri-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        /* Campos de formulario */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        /* Botones */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+        /* KRI Item */
+        .kri-item {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .kri-header {
+            background-color: #e9ecef;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .kri-content {
+            padding: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Tabla */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+        }
+
+        /* Inputs dentro de la tabla */
+        .table .form-control {
+            width: 90%;
+            padding: 6px 8px;
+        }
+
+        /* Checkbox personalizado */
+        .table input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        /* Layout grid para el formulario */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+.kri-item-header {
+    background-color: #edf2f7;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.kri-item-header:hover {
+    background-color: #e2e8f0;
+}
+
+.kri-item-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    max-height: 90%; /* Altura máxima cuando está expandido */
+}
+
+.kri-item-content.collapsed {
+    max-height: 0;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+    margin-right: 1rem;
+}
+
+.toggle-icon.rotated {
+    transform: rotate(180deg);
+}
+
+/* Resto de estilos... */
+</style>
+
+<script>
+function toggleYearSection(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    
+    content.classList.toggle('collapsed');
+    icon.classList.toggle('rotated');
+}
+</script>

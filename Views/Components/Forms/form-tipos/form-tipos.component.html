@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+  <h2>{{ tipo.id ? 'Editar' : 'Agregar' }} Meta</h2>
+  </div>
+  <div class="card-body">
+  <form [formGroup]="fg" (ngSubmit)="grabar()">
+    <div class="form-group" >
+      
+        <label for="descripcion">Descripcion</label>
+        <input class="form-control" id="descripcion" formControlName="descripcion" required>
+ 
+    </div>
+
+    
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary" >Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
