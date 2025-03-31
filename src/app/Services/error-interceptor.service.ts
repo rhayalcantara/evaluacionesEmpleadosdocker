@@ -19,13 +19,12 @@ export class ErrorInterceptorService implements HttpInterceptor {
 intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError((err) => {
       
-        if ((err.status === 401 ) || (err.status=== 404)) {
+        //if ((err.status === 401 ) || (err.status=== 404)) {
+        if ((err.status)) {
             // auto logout if 401 response returned from api
             this.datos.showMessage('Error: error estatus:'+err.status.toString()+' error mensaje:'+err.message,'error','Error')
             this.authenticationService.logout();
-            this.router.navigate(['/'])
-            
-           
+            this.router.navigate(['login'])                       
         }
         const error = err.error.message || err.statusText;
         return throwError(error);

@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonsLibService } from '@commons-lib';
 import { Usuario } from 'src/app/Models/Usuario/usuario';
@@ -21,14 +21,15 @@ import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 })
 export class NavmenuComponent implements OnInit {
   public logg:string = 'Login'
-  mostramenu:Boolean=false
+  public mostramenu:Boolean=false
   public periodo:IPeriodo = this.peri.inicializamodelo()
   public empleado:IEmpleado=this.empl.inicializamodelo()
- public imagen:any ="assets/user.png"
+  public imagen:any ="assets/user.png"
   usuarioSegurity: any;
   constructor(private router: Router,
               private empl:Empleados,
               private peri:Periodos,
+              private cd: ChangeDetectorRef,
               public empleadoRolController:EmpleadoRol,
               @Inject(CommonsLibService) private commons: CommonsLibService,
               @Inject(SegurityService)  private usuarioservicio:SegurityService
@@ -70,7 +71,7 @@ export class NavmenuComponent implements OnInit {
         );
 
           this.mostramenu=true
-          this.router.navigate(['/Home'])
+          this.router.navigate(['Home'])
           this.logg='LogOut'
         }
         if (mess=='nologuiado'){
@@ -131,28 +132,30 @@ export class NavmenuComponent implements OnInit {
   ngOnInit(): void {
     //console.log('entro al navbar')
       this.mostramenu=false
-      this.router.navigate(['/login']);
+      this.router.navigate(['login']);
  
     
   }
   log():void{
    // console.log(this.logg)
-    if (this.logg!='LogOut'){
+  /*  if (this.logg!='LogOut'){
               
         this.logg= 'LogOut'
 
         this.mostramenu=true
-       // this.router.navigate(['/login'])
+        this.router.navigate(['login'])
     }else{
-      
+      */
         this.logg= 'Login'
         localStorage.removeItem('usuario');
         localStorage.removeItem('token');
         localStorage.removeItem('empleado');
-       
-      this.mostramenu=false
-       this.router.navigate(['/login']);
-    }
+        localStorage.removeItem('periodo');
+        localStorage.removeItem('rol');       
+        this.mostramenu=false        
+        this.router.navigate(['login']);
+        this.cd.detectChanges();
+   // }
 }
 
 

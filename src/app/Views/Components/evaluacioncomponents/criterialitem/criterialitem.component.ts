@@ -128,7 +128,7 @@ export class CriterialitemComponent implements OnInit {
             this.cd.detectChanges(); 
           }
         })   
-
+        if(this.empleado.secuencial!=0){
         // obtener la evaluacion 
         this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
         .subscribe({
@@ -176,7 +176,7 @@ export class CriterialitemComponent implements OnInit {
           error: (err) => console.error('Error al obtener la evaluación:', err)
          
         } );
-        
+      }
       }
       if (data.mensaje ==='Actualizar variables'){
         //console.log(data)
@@ -328,6 +328,7 @@ export class CriterialitemComponent implements OnInit {
   }
   
   onLogroChange(event:any,index:number){
+    console.log('logro',event.target.value,index)
     let logro:number = event.target.value
     this.logro[index] = logro
     ////console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
@@ -342,12 +343,13 @@ export class CriterialitemComponent implements OnInit {
      this.resultadologro[index]=this.calcularresultadologro(this.resultadologro[index],this.evaluacion.evaluacionDesempenoMetas[index])
      this.EvaluacionControler.calculaelpromediodesempeno(false,this.resultadologro)
 
-
+    console.log('logro',this.resultadologro[index],this.evaluacion)
 
      this.onEvaluacionChange.emit(this.evaluacion)
     
     //////console.log("cambio el logro",this.evaluacion.evaluacionDesempenoMetas[index])
   }
+
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
     // verificar de que tipo es la respuesta

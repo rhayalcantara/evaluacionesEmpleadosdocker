@@ -17,6 +17,12 @@ export class SegurityService {
     this._usuario=value;
    // this.commons.sendData('loguiado');
   }
-  public logout(){}
+  public logout(){
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    localStorage.removeItem('empleado');
+    localStorage.removeItem('periodo');
+    localStorage.removeItem('rol');
+  }
   constructor( @Inject(CommonsLibService) private commons: CommonsLibService,) { }
 }

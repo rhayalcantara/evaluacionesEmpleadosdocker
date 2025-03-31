@@ -179,8 +179,12 @@ export class Evaluacion implements OnInit {
         this.promedioDesempeno=num/resultadologro.length
         //se busca el valor maximo de la tabla de valores evaluacion
         await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
-            this.promedioDesempeno=rep             
-        })
+            if (typeof this.promedioDesempeno === 'number') {
+                if(this.promedioDesempeno>100){
+                    this.promedioDesempeno=rep             
+                }   
+            }
+        });
         
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
         this.porcentajeDesempeno = px1?.valor??0 
@@ -188,16 +192,20 @@ export class Evaluacion implements OnInit {
         let px0:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
         this.promedioCompetencias=px0?.valor??0 
           
-
-        this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+        if (this.porcentajeDesempeno!=0){
+            this.desempenoFinal=(this.porcentajeDesempeno * this.promedioDesempeno)/100
+        }else{
+            this.desempenoFinal=0
+        }
+        
 
         
         //Competencia
               //calculo del empleado
         this.model.puntuacioncompetenciacolaborador = (await this.CalculoCompetencias(false)/this.model.goalEmpleadoRespuestas.length)
-        this.model.totalcolaborador = this.desempenoFinal + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
+        this.model.totalcolaborador = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
         this.model.totalCalculo = this.model.totalcolaborador
-        
+        console.log('evaluacion calculo competencia',this.model.totalCalculo,(this.desempenoFinal??0),((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100))
     
               //calculo supervisor
         if(supervisor){
@@ -205,6 +213,7 @@ export class Evaluacion implements OnInit {
             this.model.puntuacioncompetenciasupervisor = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length))
             this.model.totalsupervisor = this.desempenoFinal + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
             this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
+            console.log('evaluacion calculo competencia con supervisor',this.model.totalCalculo)
             console.log({colaborador:this.model.totalcolaborador,supervisor:this.model.totalsupervisor,total:this.model.totalCalculo })
         }
         
@@ -213,7 +222,7 @@ export class Evaluacion implements OnInit {
         let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
         this.porcentajeCompetencia = px2?.valor 
         this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
-        this.puntuacionFinal = this.CompetenciaFinal + this.desempenoFinal
+        this.puntuacionFinal = this.CompetenciaFinal + (this.desempenoFinal??0)
 
         // actualizacion de desempeño del modelo
         
