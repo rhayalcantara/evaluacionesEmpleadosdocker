@@ -4,7 +4,7 @@ const moduleFederationConfig = withModuleFederationPlugin({
   remotes: {
     "loginapp": process.env.NODE_ENV === 'production' 
       ? "http://192.168.7.222/loginapp/remoteEntry.js"  // Production URL
-      : "http://localhost:4300/remoteEntry.js", // Local development URL (uses proxy)
+      : "/loginapp/remoteEntry.js", // "http://localhost:4300/remoteEntry.js" Local development URL (uses proxy)
   },
 
   shared: {

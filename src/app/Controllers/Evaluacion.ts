@@ -178,13 +178,13 @@ export class Evaluacion implements OnInit {
         // desempeño
         this.promedioDesempeno=num/resultadologro.length
         //se busca el valor maximo de la tabla de valores evaluacion
-        await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
+       // await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
             if (typeof this.promedioDesempeno === 'number') {
-                if(this.promedioDesempeno>100){
-                    this.promedioDesempeno=rep             
+                if(this.promedioDesempeno>110){
+                    this.promedioDesempeno=110           
                 }   
             }
-        });
+       // });
         
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
         this.porcentajeDesempeno = px1?.valor??0 
