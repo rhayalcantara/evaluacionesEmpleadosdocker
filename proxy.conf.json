@@ -1,6 +1,6 @@
 {
     "/loginapp": {
-      "target": "http://192.168.7.222",
+      "target": "http://192.168.7.222/",
       "secure": false,
       "changeOrigin": true
     }
