@@ -158,7 +158,9 @@ export class Evaluacion implements OnInit {
         let num:number=0
         resultadologro.forEach((e)=>{
           
-          num = num + e.porcientologro
+          num = num +((e.porcientologro * e.peso)/100)
+          
+
         })
 
         this.pdclocal=this.pdclocal.filter(x=>x.periodId==this.model.periodId)
@@ -176,7 +178,8 @@ export class Evaluacion implements OnInit {
               }
 
         // desempeño
-        this.promedioDesempeno=num/resultadologro.length
+        //this.promedioDesempeno=num/resultadologro.length
+        this.promedioDesempeno=num
         //se busca el valor maximo de la tabla de valores evaluacion
        // await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
             if (typeof this.promedioDesempeno === 'number') {

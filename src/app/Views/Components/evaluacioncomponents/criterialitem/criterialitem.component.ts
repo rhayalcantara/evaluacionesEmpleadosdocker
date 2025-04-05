@@ -116,7 +116,8 @@ export class CriterialitemComponent implements OnInit {
                 resultadologro: 0,
                 medioverificacion: '',
                 comentario: '',
-                comentariosupervisor:''
+                comentariosupervisor:'',
+                peso:item.peso
               }
                                            
               this.resultadologro.push(rl)
@@ -158,7 +159,8 @@ export class CriterialitemComponent implements OnInit {
                   comentario: '',
                   porcientologro: 0,
                   resultadologro: 0,
-                  comentariosupervisor:''
+                  comentariosupervisor:'',
+                  peso:0
                 }
                 
                 r.logro = Number(item.evaluacioneDesempenoMetaRespuestas?.logro)

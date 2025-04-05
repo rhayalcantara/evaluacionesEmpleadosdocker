@@ -39,4 +39,5 @@ export interface IDesempenoRespuesta {
     comentariosupervisor:string
     porcientologro:number
     resultadologro:number
+    peso:number
   }
