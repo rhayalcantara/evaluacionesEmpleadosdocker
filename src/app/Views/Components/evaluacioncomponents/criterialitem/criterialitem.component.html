@@ -184,8 +184,8 @@
       </tr>
       <tr>
         <td>Desempeño Final (70%):</td>
-        <td class="text-end">{{evaluacion.totalcolaborador | number:'1.2-2'}}</td>
-        <td class="text-end">{{evaluacion.totalsupervisor | number:'1.2-2'}}</td>
+        <td class="text-end">{{(evaluacion.puntuacioncompetenciacolaborador)*.7 | number:'1.2-2'}}</td>
+        <td class="text-end">{{(evaluacion.puntuacioncompetenciasupervisor)*.7 | number:'1.2-2'}}</td>
       </tr>
       <tr>
         <td>Total Evaluación (Objetivos +Competencias)</td>
