@@ -214,7 +214,7 @@ export class Evaluacion implements OnInit {
         if(supervisor){
             console.log('total competencia supervisor',await this.CalculoCompetencias(supervisor))
             this.model.puntuacioncompetenciasupervisor = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length))
-            this.model.totalsupervisor = this.desempenoFinal + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
+            this.model.totalsupervisor = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
             this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
             console.log('evaluacion calculo competencia con supervisor',this.model.totalCalculo)
             console.log({colaborador:this.model.totalcolaborador,supervisor:this.model.totalsupervisor,total:this.model.totalCalculo })

@@ -166,43 +166,43 @@
 
 </div>
 
-<table class="table table-bordered" *ngIf="supervisor">
-  <tfoot>
-  <tr>
-      <td colspan="7" class="text-end"><strong>Promedio Competencia Empleado:</strong></td>
-      <td>{{evaluacion.puntuacioncompetenciacolaborador | number:'1.2-2'}}%</td>
-      <td colspan="7" class="text-end"><strong>Promedio Competencia Supervisor:</strong></td>
-      <td>{{evaluacion.puntuacioncompetenciasupervisor | number:'1.2-2'}}%</td>
-  </tr>
-  <tr>
-      <td colspan="7" class="text-end"><strong>Competencia Final Empleado :</strong></td>
-      <td>{{evaluacion.totalcolaborador | number:'1.2-2'}}%</td>        
-      <td colspan="7" class="text-end"><strong>Competencia Final Supervisor :</strong></td>
-      <td>{{evaluacion.totalsupervisor | number:'1.2-2'}}%</td>
-  </tr>
-  <tr>
-    <td colspan="7" class="text-end"><strong>Total Evaluacion :</strong></td>    
-    <td colspan="7" class="text-end"><strong>{{evaluacion.totalCalculo | number:'1.2-2'}}%</strong></td>
-</tr>
-</tfoot>
-</table>
-
-
-  <table class="table table-bordered" *ngIf="!supervisor">
-    <tfoot>
-    <tr>
-        <td colspan="7" class="text-end"><strong>Promedio Competencia:</strong></td>
-        <td>{{evaluacion.puntuacioncompetenciacolaborador | number:'1.2-2'}}%</td>
-    </tr>
-    <tr>
-        <td colspan="7" class="text-end"><strong>Competencia Final ({{porcentajeCompetencia}}%):</strong></td>
-        <td>{{evaluacion.puntuacioncompetenciacolaborador * (porcentajeCompetencia/100) | number:'1.2-2'}}%</td>
-    </tr>
-    <tr>
-      <td colspan="7" class="text-end"><strong>Evaluacion Empleado :</strong></td>
-      <td>{{evaluacion.totalCalculo  | number:'1.2-2'}}%</td>
-  </tr>
-  </tfoot>
+<div class="table-responsive">
+  <h3>RESULTADOS COMPETENCIAS (70%)</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>COMPETENCIAS (70%)</th>
+        <th>Autoevaluación</th>
+        <th>Evaluación Supervisor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Promedio Desempeño de las Competencias</td>
+        <td class="text-end">{{evaluacion.puntuacioncompetenciacolaborador | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.puntuacioncompetenciasupervisor | number:'1.2-2'}}</td>
+      </tr>
+      <tr>
+        <td>Desempeño Final (70%):</td>
+        <td class="text-end">{{evaluacion.totalcolaborador | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.totalsupervisor | number:'1.2-2'}}</td>
+      </tr>
+      <tr>
+        <td>Total Evaluación (Objetivos +Competencias)</td>
+        <td class="text-end">{{evaluacion.totalCalculo | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.totalCalculo | number:'1.2-2'}}</td>
+      </tr>
+      <tr>
+        <td>Ponderación Evaluación (20% Autoeva + 80% Eva Supervisor)</td>
+        <td class="text-end">{{evaluacion.totalcolaborador * 0.2 | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.totalsupervisor * 0.8 | number:'1.2-2'}}</td>
+      </tr>
+      <tr class="table-success">
+        <td><strong>Puntuación Final</strong></td>
+        <td colspan="2" class="text-end"><strong>{{evaluacion.totalCalculo | number:'1.2-2'}}</strong></td>
+      </tr>
+    </tbody>
   </table>
+</div>
   
 </div>
