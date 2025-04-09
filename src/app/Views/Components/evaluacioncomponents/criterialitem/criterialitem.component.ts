@@ -237,6 +237,22 @@ export class CriterialitemComponent implements OnInit {
    })
 
   }
+
+public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
+    let num: number;
+
+    if (typeof valor === 'string') {
+        num = Number(valor.trim().replace(/,/g, ''));
+    } else {
+        num = valor; // Ya es un número (podría ser NaN o Infinity si eso se pasó)
+    }
+
+    // Verificar si el resultado es NaN y devolver el valor por defecto si lo es
+    return isNaN(num) ? defaultValue : num;
+  }
+
+  
+
   getgrupoCompetencia(id:number){
     return this.grupoCompetencia.arraymodel.find(x=>x.id==id)?.nombre
   }

@@ -65,6 +65,7 @@
         
       </tbody>
       <tfoot>
+        <!--
         <tr>
             <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
             <td>{{totalPeso | number:'1.0-0'}}</td>
@@ -74,13 +75,35 @@
             <td>{{promedioDesempeno | number:'1.2-2'}}%</td>
         </tr>
         <tr>
-            <td colspan="4" class="text-end"><strong>Desempeño Final ({{porcentajeDesempeno}}%):</strong></td>
+            <td colspan="4" class="text-end"><strong>Desempeño Objetivo ({{porcentajeDesempeno}}%):</strong></td>
             <td>{{desempenoFinal | number:'1.2-2'}}</td>
         </tr>
+        -->
+
     </tfoot>
     </table>
 
   </div>
+</div>
+<div class="table-responsive">
+  <h3>RESULTADOS OBJETIVOS </h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
+        <td>{{totalPeso | number:'1.0-0'}}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-end"><strong>Promedio Objetivos:</strong></td>
+        <td>{{promedioDesempeno | number:'1.2-2'}}%</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-end"><strong>Desempeño Objetivo ({{porcentajeDesempeno}}%):</strong></td>
+        <td>{{desempenoFinal | number:'1.2-2'}}</td>
+    </tr>
+
+    </thead>
+  </table>
 </div>
 <!-- criterialitem.component.html -->
 <div *ngIf="evaluacion.evaluacionGoals.length>0">
@@ -165,6 +188,26 @@
     </div>
 
 </div>
+<div class="table-responsive">
+  <h3>RESULTADOS OBJETIVOS (20%)</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
+        <td>{{totalPeso | number:'1.0-0'}}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-end"><strong>Promedio Objetivos:</strong></td>
+        <td>{{promedioDesempeno | number:'1.2-2'}}%</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-end"><strong>Desempeño Objetivo ({{porcentajeDesempeno}}%):</strong></td>
+        <td>{{desempenoFinal | number:'1.2-2'}}</td>
+    </tr>
+ 
+    </thead>
+  </table>
+
 
 <div class="table-responsive">
   <h3>RESULTADOS COMPETENCIAS (70%)</h3>
@@ -184,13 +227,14 @@
       </tr>
       <tr>
         <td>Desempeño Final (70%):</td>
-        <td class="text-end">{{(evaluacion.puntuacioncompetenciacolaborador)*.7 | number:'1.2-2'}}</td>
-        <td class="text-end">{{(evaluacion.puntuacioncompetenciasupervisor)*.7 | number:'1.2-2'}}</td>
+        <td class="text-end">{{(evaluacion.puntuacioncompetenciacolaborador ? (evaluacion.puntuacioncompetenciacolaborador * 0.7) : 0) | number:'1.2-2'}}</td>
+        <td class="text-end">{{(evaluacion.puntuacioncompetenciasupervisor ? (evaluacion.puntuacioncompetenciasupervisor * 0.7) : 0) | number:'1.2-2'}}</td>
       </tr>
       <tr>
         <td>Total Evaluación (Objetivos +Competencias)</td>
-        <td class="text-end">{{evaluacion.totalCalculo | number:'1.2-2'}}</td>
-        <td class="text-end">{{evaluacion.totalCalculo | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.totalcolaborador  | number:'1.2-2'}}</td>
+        <td class="text-end">{{evaluacion.totalsupervisor   | number:'1.2-2'}}</td>
+
       </tr>
       <tr>
         <td>Ponderación Evaluación (20% Autoeva + 80% Eva Supervisor)</td>
