@@ -1,16 +1,14 @@
 import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
 import { CriterialitemComponent } from '../../evaluacioncomponents/criterialitem/criterialitem.component';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { IEvaluacion, IEvaluacionDto, IEvalucionResultDto } from 'src/app/Models/Evaluacion/IEvaluacion';
+import { IEvaluacion, IEvaluacionDto, IEvalucionResultDto, IGoalEmpleadoRespuesta, IEvaluacionGoal } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
-import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
@@ -19,7 +17,6 @@ import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from 'src/app/Models
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
-
 import { HttpClient } from '@angular/common/http';
 
 declare const pdfMake: any;
@@ -27,99 +24,110 @@ declare const pdfMake: any;
 @Component({
   selector: 'app-form-evaluation-employe',
   standalone: true,
-  imports: [CommonModule, FormsModule, CriterialitemComponent,MatDialogModule],
+  imports: [CommonModule, FormsModule, CriterialitemComponent, MatDialogModule],
   templateUrl: './FormEvaluationEmploye.component.html',
   styleUrls: ['./FormEvaluationEmploye.component.css']
 })
 export class FormEvaluationEmployeComponent {
-ondes() {
-  this.cd.detectChanges();
-}
+  ondes() {
+    this.cd.detectChanges();
+  }
 
-  @Input() empleado: IEmpleado=this.empleadocontroller.inicializamodelo();
-  @Input() periodo: IPeriodo=this.periodocontroller.inicializamodelo();
-  @Input() titulo:string="";
-  @Input() supervisor:Boolean=false
-  @Input() mostargrabar:Boolean=true
-  @Input() mostarAceptar:Boolean=false
-  @Input() mostarAceptarBoton:Boolean=false
+  @Input() empleado: IEmpleado = this.empleadocontroller.inicializamodelo();
+  @Input() periodo: IPeriodo = this.periodocontroller.inicializamodelo();
+  @Input() titulo: string = "";
+  @Input() supervisor: Boolean = false
+  @Input() mostargrabar: Boolean = true
+  @Input() mostarAceptar: Boolean = false
+  @Input() mostarAceptarBoton: Boolean = false
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
   @Output() puntuacion: EventEmitter<number> = new EventEmitter();
   public logoBase64: string = '';
-  public obervaciones:string=""
-  public fecha:Date=new Date()
-  public evaluacionempleado:IEvaluacion
+  public obervaciones: string = ""
+  public fecha: Date = new Date()
+  public evaluacionempleado!: IEvaluacion
   public comentarioAdicional: string = '';
   public comentarioDisgusto: string = '';
   public entrevistaConSupervisor: boolean = false;
   public aceptaEnDisgusto: boolean = false;
-  public desempeno:IEvalucionResultDto[]=[]
+  public desempeno: IEvalucionResultDto[] = []
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
-  public dialogRef:any
+  public dialogRef: any
 
-  constructor(private EvaluacionController:Evaluacion,
-              private datos:DatosServiceService,
-              private empleadocontroller:Empleados,
-              private periodocontroller:Periodos,
-              private ServiceComunicacion:ComunicacionService, 
-              private cd: ChangeDetectorRef,
-              private router: Router,
-              private toastr: MatDialog,
-              private http: HttpClient,
-              private cursoCapacitacionController: CursoCapacitacionController
-  ){
-    this.evaluacionempleado = EvaluacionController.inicializamodelo()
+  constructor(
+    public EvaluacionController: Evaluacion,
+    private datos: DatosServiceService,
+    private empleadocontroller: Empleados,
+    private periodocontroller: Periodos,
+    private ServiceComunicacion: ComunicacionService,
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private toastr: MatDialog,
+    private http: HttpClient,
+    private cursoCapacitacionController: CursoCapacitacionController
+  ) {
+     this.evaluacionempleado = this.EvaluacionController.inicializamodelo();
   }
+
   private loadLogoAsBase64() {
     this.http.get('assets/LOGO-COOPASPIRE.png', { responseType: 'blob' }).subscribe(blob => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        this.logoBase64 = reader.result as string; // Almacena el contenido Base64
+        this.logoBase64 = reader.result as string;
       };
-      reader.readAsDataURL(blob); // Lee el archivo como Base64
+      reader.readAsDataURL(blob);
     });
   }
+
   ngOnInit(): void {
     this.loadLogoAsBase64();
-    // Cargar evaluación
-    // mostrar loading component hasta que lleguen los datos
     this.dialogRef = this.toastr.open(LoadingComponent, {
       width: '340px',
-      height: '180px', 
-    }); 
-
-    this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
-    .subscribe({
-      next: (rep: IEvaluacion) => {
-        this.evaluacionempleado = rep;
-
-        // Verificar si la evaluacion esta en estado Enviada
-        console.log(this.evaluacionempleado.estadoevaluacion)
-        if (this.evaluacionempleado.estadoevaluacion == "Enviado") {
-          this.mostarAceptar = true;
-          this.mostarAceptarBoton=true;
-          this.mostargrabar = false;
-        }
-        if (this.evaluacionempleado.estadoevaluacion == "Completado") {
-          this.mostarAceptar = true;
-          this.mostargrabar = false;
-        }
-        
-
-        this.ServiceComunicacion.enviarMensaje({mensaje:'buscar',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
-        this.cd.detectChanges(); 
-        
-        this.comentarioAdicional = this.evaluacionempleado.observacion;
-        this.cursosSeleccionados=[]
-        this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
-
-        
-      },
-      error: (err: Error) => console.error('Error al obtener la evaluación:', err)
+      height: '180px',
+      disableClose: true
     });
 
-    // Cargar cursos
+    this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
+      .subscribe({
+        next: (rep: IEvaluacion) => {
+          this.evaluacionempleado = rep;
+          this.EvaluacionController.model = rep;
+
+          console.log('Evaluación cargada:', this.evaluacionempleado);
+
+          if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
+            this.mostarAceptar = true;
+            this.mostarAceptarBoton = true;
+            this.mostargrabar = false;
+          } else if (this.evaluacionempleado.estadoevaluacion === "Completado") {
+            this.mostarAceptar = true;
+            this.mostargrabar = false;
+            this.mostarAceptarBoton = false;
+          } else {
+             this.mostarAceptar = false;
+             this.mostarAceptarBoton = false;
+             this.mostargrabar = true;
+          }
+
+          this.ServiceComunicacion.enviarMensaje({ mensaje: 'buscar', id: this.evaluacionempleado.id, model: this.evaluacionempleado })
+          this.cd.detectChanges();
+
+          this.comentarioAdicional = this.evaluacionempleado.observacion || '';
+          this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
+          this.entrevistaConSupervisor = this.evaluacionempleado.entrevistaConSupervisor ?? false;
+          this.aceptaEnDisgusto = this.evaluacionempleado.aceptaEnDisgusto ?? false;
+          this.comentarioDisgusto = this.evaluacionempleado.comentarioDisgusto || '';
+
+          this.dialogRef.close();
+        },
+        error: (err: Error) => {
+          console.error('Error al obtener la evaluación:', err);
+          this.dialogRef.close();
+          this.datos.showMessage("Error al cargar la evaluación", this.titulo, "error");
+        }
+      });
+
     this.cursoCapacitacionController.Gets().subscribe({
       next: (rep: ModelResponse) => {
         this.cursos = rep.data as ICursoCapacitacion[];
@@ -130,7 +138,6 @@ ondes() {
 
   onCursoSeleccionado(curso: ICursoCapacitacion): void {
     if (this.cursosSeleccionados.length < 3) {
-      // Verificar si el curso ya fue seleccionado
       if (!this.cursosSeleccionados.find(c => c.cursoCapacitacionId === curso.id)) {
         const evaluacionCurso: IEvaluacionCursoCapacitacion = {
           id: 0,
@@ -150,310 +157,242 @@ ondes() {
     this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.cursoCapacitacionId !== curso.cursoCapacitacionId);
   }
 
-  onPuntacionChange(event:number){
-    this.puntuacion.emit(event)
-    console.log('FormEvaluationEmployeComponent puntuacion',event)
-    this.dialogRef.close();
-  }
-  onEvaluacionChange(evaluacion:IEvaluacion): void {
-    this.evaluacionempleado = evaluacion;
-    
-    //this.ServiceComunicacion.enviarMensaje({mensaje:'Actualizar variables',id:this.evaluacionempleado.id,model:this.evaluacionempleado})
+  onPuntacionChange(event: number) {
+    console.log('Puntuación total recalculada por hijo:', event);
+     if (this.evaluacionempleado) {
+       this.evaluacionempleado.totalCalculo = event;
+       this.puntuacion.emit(event);
+     }
   }
 
+  onEvaluacionChange(evaluacionActualizada: IEvaluacion): void {
+    this.evaluacionempleado = evaluacionActualizada;
+    this.EvaluacionController.model = evaluacionActualizada;
+    console.log('Evaluación actualizada desde criterialitem:', this.EvaluacionController.model);
+    this.puntuacion.emit(evaluacionActualizada.totalCalculo);
+  }
+
+  // --- Getters para cálculos (devuelven number) ---
+  get porcentajeDesempeno(): number {
+    return Number(this.EvaluacionController.porcentajeDesempeno) || 0.2;
+  }
+  get porcentajeCompetencia(): number {
+    return Number(this.EvaluacionController.porcentajeCompetencia) || 0.7;
+  }
+  get promedioDesempeno(): number {
+     const metas = this.evaluacionempleado?.evaluacionDesempenoMetas || [];
+     if (metas.length === 0) return 0;
+     const sumaPorcentajes = metas.reduce((sum, item) => {
+        const perc = parseFloat(this.calculatePercentage(item));
+        return sum + (isNaN(perc) ? 0 : perc);
+     }, 0);
+     const avg = sumaPorcentajes / metas.length;
+     return isNaN(avg) ? 0 : avg;
+  }
+   get desempenoFinal(): number {
+     return (this.promedioDesempeno * this.porcentajeDesempeno) || 0;
+   }
+   get promedioCompetenciasSupervisor(): number {
+      return Number(this.evaluacionempleado?.puntuacioncompetenciasupervisor) || 0;
+   }
+    get promedioCompetenciasColaborador(): number {
+      return Number(this.evaluacionempleado?.puntuacioncompetenciacolaborador) || 0;
+   }
+   get competenciaFinalSupervisor(): number {
+      return (this.promedioCompetenciasSupervisor * this.porcentajeCompetencia) || 0;
+   }
+    get competenciaFinalColaborador(): number {
+      return (this.promedioCompetenciasColaborador * this.porcentajeCompetencia) || 0;
+   }
+   get totalCalculo(): number {
+      const compFinal = this.supervisor ? this.competenciaFinalSupervisor : this.competenciaFinalColaborador;
+      const total = (Number(this.desempenoFinal) || 0) + (Number(compFinal) || 0);
+      return isNaN(total) ? 0 : total;
+   }
+
+
   generatePDF(): void {
+     if (!this.evaluacionempleado) {
+        this.datos.showMessage("No hay datos de evaluación para generar el PDF.", this.titulo, "warning");
+        return;
+     }
+     // Obtener valores calculados como números
+     const currentPromedioDesempeno = this.promedioDesempeno;
+     const currentDesempenoFinal = this.desempenoFinal;
+     const currentPromedioCompColab = this.promedioCompetenciasColaborador;
+     const currentPromedioCompSup = this.promedioCompetenciasSupervisor;
+     const currentCompFinalColab = this.competenciaFinalColaborador;
+     const currentCompFinalSup = this.competenciaFinalSupervisor;
+     const currentTotalCalculo = this.totalCalculo;
+
     try {
-      const competenciasContent = this.evaluacionempleado.evaluacionGoals.map((goal, index) => {
-        const evaluationText = this.supervisor ? 
-          `Evaluación Empleado: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuesta} - Evaluación Supervisor: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor}` :
-          `Evaluación Empleado: ${this.evaluacionempleado.goalEmpleadoRespuestas[index].repuesta}`;
-  
-        return [
-          { text: goal.goal.objetivo.nombre, style: 'goalHeader' },
-          { text: goal.goal.objetivo.descripcion, style: 'goalDescription' },
-          { text: evaluationText },
-          { text: '\n' }
-        ];
-      }).flat();
-  
-      const cursosContent = this.cursosSeleccionados.length > 0 ? [
-        { text: 'Cursos de Capacitación Seleccionados:', style: 'sectionHeader' },
+      // --- Contenido Competencias ---
+      let competenciasContent: any[] = [];
+      if (this.evaluacionempleado.evaluacionGoals && this.evaluacionempleado.evaluacionGoals.length > 0) {
+          competenciasContent = this.evaluacionempleado.evaluacionGoals.map((goal: IEvaluacionGoal) => {
+              const respuesta = (this.evaluacionempleado.goalEmpleadoRespuestas || []).find(r => r.goalId === goal.goalId); // Usar goalId
+              const evalEmpleado = respuesta?.repuesta ?? 'N/A';
+              const evalSupervisor = respuesta?.repuestasupervisor ?? 'N/A';
+              const evaluationText = this.supervisor ? `Evaluación Empleado: ${evalEmpleado} - Evaluación Supervisor: ${evalSupervisor}` : `Evaluación Empleado: ${evalEmpleado}`;
+              const nombre = goal.goal?.objetivo?.nombre ?? 'Competencia sin nombre';
+              const descripcion = goal.goal?.objetivo?.descripcion ?? 'Sin descripción';
+              return [
+                  { text: nombre, style: 'goalHeader' },
+                  { text: descripcion, style: 'goalDescription' },
+                  { text: evaluationText },
+                  { text: '\n' }
+              ];
+          }).flat();
+      } else {
+          competenciasContent.push({ text: 'No hay competencias definidas.', italics: true, margin: [0, 5, 0, 10] });
+      }
+
+
+      // --- Contenido Cursos ---
+      const cursosContent = (this.cursosSeleccionados || []).length > 0 ? [
+        { text: 'Cursos de Capacitación Sugeridos:', style: 'sectionHeader' },
         {
-          ul: this.cursosSeleccionados.map(curso => 
-            `${curso.cursoCapacitacion?.descripcion} - Porque: ${curso.porque || 'No especificado'}`
+          ul: this.cursosSeleccionados.map(curso =>
+            `${curso.cursoCapacitacion?.descripcion ?? 'Curso desconocido'} - Por qué: ${curso.porque || 'No especificado'}`
           )
         },
         { text: '\n' }
       ] : [];
-  
+
+      // --- Contenido Objetivos ---
+      let objetivosTableBody: any[] = [];
+      if (this.evaluacionempleado.evaluacionDesempenoMetas && this.evaluacionempleado.evaluacionDesempenoMetas.length > 0) {
+          objetivosTableBody = [
+              [ 'Tipo', 'Descripción', 'Meta', 'Peso', 'Logro', '%' ].map(h => ({ text: h, style: 'tableHeader' })),
+              ...(this.evaluacionempleado.evaluacionDesempenoMetas.map(item => [
+                  item.tipo || '',
+                  item.descripcion || '',
+                  item.meta?.toString() || 'N/A',
+                  (item.peso?.toString() ?? '0') + '%',
+                  item.evaluacioneDesempenoMetaRespuestas?.logro?.toString() || '0',
+                  this.calculatePercentage(item) + '%'
+              ]))
+          ];
+      }
+
+      // --- Contenido Principal ---
       const content: any[] = [
-        {
+         {
           columns: [
-            {
-              text: this.periodo.descripcion,
-              style: 'header',
-              width: '*'
-            },
-            {
-              image: this.logoBase64,
-              width: 100,
-              alignment: 'right'
-            }
+            { text: this.periodo?.descripcion ?? 'Periodo no especificado', style: 'header', width: '*' },
+            { image: this.logoBase64 || '', width: 100, alignment: 'right' }
           ]
         },
         {
           text: [
-            { text: 'Empleado: ', bold: true }, this.empleado.nombreunido, '\n',
-            { text: 'Departamento: ', bold: true }, this.empleado.departamento, '\n',
-            { text: 'Periodo: ', bold: true }, this.periodo.descripcion, '\n',
-            { text: 'Fecha: ', bold: true }, this.fecha.toLocaleDateString(), '\n\n'
+            { text: 'Empleado: ', bold: true }, this.empleado?.nombreunido ?? 'N/A', '\n',
+            { text: 'Departamento: ', bold: true }, this.empleado?.departamento ?? 'N/A', '\n',
+            { text: 'Periodo: ', bold: true }, this.periodo?.descripcion ?? 'N/A', '\n',
+            { text: 'Fecha Generación: ', bold: true }, this.fecha.toLocaleDateString(), '\n\n'
           ]
         },
-        {
-          table: {
-            widths: ['*'], // Hacer que el título abarque todo el ancho
-            body: [
-              [
-          {text: 'Puntuación Final: ' + (Number(this.EvaluacionController.desempenoFinal) + Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2),
-          style: 'puntuacion',
-          }
-        ]
-      ]
-    }
-        },
-        {
-          table: {
- 
-            widths: ['*'],
-            
-            body: [
-              [
-                { text: 'Objetivos', style: 'categoryHeader' }
-              ]
-            ]
-          },
-          layout: 'noBorders',
-          margin: [0, 10, 0, 10]
-        },
-        {
-          table: {
-            headerRows: 1,
-            widths: ['auto', '*', 'auto', 'auto', 'auto', 'auto'],
-            body: [
-              [
-                { text: 'Tipo', style: 'tableHeader' },
-                { text: 'Descripción', style: 'tableHeader' },
-                { text: 'Meta', style: 'tableHeader' },
-                { text: 'Peso', style: 'tableHeader' },
-                { text: 'Logro', style: 'tableHeader' },
-                { text: '%', style: 'tableHeader' }
-              ],
-              ...this.evaluacionempleado.evaluacionDesempenoMetas.map(item => [
-                item.tipo || '',
-                item.descripcion || '',
-                item.meta?.toString() || '',
-                item.peso?.toString() || '',
-                item.evaluacioneDesempenoMetaRespuestas?.logro?.toString() || '',
-                this.calculatePercentage(item)
-              ])
-            ]
-          }
-        },
-        
-        { 
-          table: {
-            widths: ['*'], // Hacer que el título abarque todo el ancho
-            body: [
-              [              
-              {text: 'Promedio Objetivos:' + Number(this.EvaluacionController.promedioDesempeno).toFixed(2) + '%'
-            , style: 'puntuacion' ,
-            layout: 'noBorders'}
-        ]
-      ]
-    }
-        },
-        {  table: {
-          widths: ['*'], // Hacer que el título abarque todo el ancho
-          body: [
-            [
-        {text: 'Desempeño Final :' + Number(this.EvaluacionController.desempenoFinal).toFixed(2)
-          , style: 'puntuacion' ,
-          layout: 'noBorders'},
-      ]
-    ]
-  }
-}, 
-        {
-          table: {
-            widths: ['*'],
-            body: [
-              [
-                { text: 'COMPETENCIAS', style: 'categoryHeader' }
-              ]
-            ]
-          },
-          layout: 'noBorders',
-          margin: [0, 20, 0, 10]
-        },
-        ...competenciasContent,
-        { 
-          
-          table: {
-            widths: ['*'],
-            body: [
-              [{text: 'Promedio Competencias:' + Number(this.EvaluacionController.promedioCompetencias).toFixed(2) + '%', style: 'puntuacion'},               
-              ]
-            ]
-          },
-                layout: 'noBorders'
-            }   
-                
-                ,
-        {   table: {
-          widths: ['*'],
-          body: [
-            [ {text: 'Competencias Final :' + Number(this.EvaluacionController.CompetenciaFinal).toFixed(2), style: 'puntuacion' },
-            ]
-          ]
-        },
-              layout: 'noBorders'
-          
-          },
-
+        // --- Tabla Objetivos (Condicional) ---
+        ...(objetivosTableBody.length > 0 ? [
+            { table: { widths: ['*'], body: [[{ text: 'Objetivos de Desempeño', style: 'categoryHeader' }]] }, layout: 'noBorders', margin: [0, 10, 0, 5] },
             {
-              table: {
-                widths: ['*'], // Hacer que el título abarque todo el ancho
-                body: [
-                  [
-              {text: 'Total Puntuación Final: ' + (Number(this.EvaluacionController.desempenoFinal) + Number(this.EvaluacionController.CompetenciaFinal)).toFixed(2),
-              style: 'puntuacionfinal',
-              margin: [10, 10, 10, 10]
-              }
-            ]
-          ]
-        }
+              table: { headerRows: 1, widths: ['auto', '*', 'auto', 'auto', 'auto', 'auto'], body: objetivosTableBody },
+              layout: 'lightHorizontalLines'
             },
+        ] : [{ text: 'No hay objetivos de desempeño definidos.', italics: true, margin: [0, 10, 0, 10] }]), // Mensaje si no hay objetivos
 
+        // --- Tabla Competencias (Condicional) ---
+         { table: { widths: ['*'], body: [[{ text: 'Competencias', style: 'categoryHeader' }]] }, layout: 'noBorders', margin: [0, 15, 0, 5] },
+         ...competenciasContent, // Ya incluye mensaje si está vacío
+        // ******** INICIO: SALTO DE PÁGINA ********
+        { text: '', pageBreak: 'before' },
+        // ******** FIN: SALTO DE PÁGINA ********
+
+        // --- Tabla Resultados --- Ponderación Evaluación (20% Autoeva + 80% Eva Supervisor)
+        {
+          table: {
+            widths: ['*', 'auto', 'auto'],
+            body: [
+              [{ text: `RESULTADOS OBJETIVOS (${(this.porcentajeDesempeno).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
+              [{ text: 'Total Peso:', bold: true }, {}, { text: '100%', alignment: 'right' }],
+              [{ text: 'Promedio Objetivos:', bold: true }, {}, { text: `${currentPromedioDesempeno.toFixed(2)}%`, alignment: 'right' }],
+              [{ text: `Desempeño Objetivo (${(this.porcentajeDesempeno ).toFixed(0)}%):`, bold: true }, {}, { text: (currentDesempenoFinal/100).toFixed(2), alignment: 'right' }],
+              [{ text: `RESULTADOS COMPETENCIAS (${(this.porcentajeCompetencia ).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
+              [{ text: `COMPETENCIAS (${(this.porcentajeCompetencia).toFixed(0)}%)`, style: 'resultsSubHeader', fillColor: '#EAECEE' },  { text: 'Evaluación Supervisor', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' } , { text: 'Autoevaluación', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' }],
+              [{ text: 'Promedio Desempeño de las Competencias' },  { text: currentPromedioCompSup.toFixed(2), alignment: 'right' } , { text: currentPromedioCompColab.toFixed(2), alignment: 'right' }],
+              [{ text: `Desempeño Final (${(this.porcentajeCompetencia ).toFixed(0)}%):` },  { text: (currentCompFinalSup/100).toFixed(2), alignment: 'right' } , { text: (currentCompFinalColab/100).toFixed(2), alignment: 'right' }],
+              [{ text: 'Total Evaluación (Objetivos + Competencias)' }, { text: ((currentDesempenoFinal + currentCompFinalSup)/100).toFixed(2), alignment: 'right' } , { text: ((currentDesempenoFinal + currentCompFinalColab)/100).toFixed(2), alignment: 'right' }],
+              [{ text: 'Ponderación Evaluación ( 80% Eva Supervisor+20% Autoeva )' }, { text: (((currentDesempenoFinal + currentCompFinalSup)/100)*.8).toFixed(2), alignment: 'right' } , { text: (((currentDesempenoFinal + currentCompFinalColab)/100)*.2).toFixed(2), alignment: 'right' }],
+              [{ text: 'Puntuación Final', style: 'resultsTotal',colSpan: 2, bold: true, fillColor: '#D5F5E3' }, {}, { text: ((((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2)).toFixed(2), style: 'resultsTotal', bold: true, alignment: 'right', fillColor: '#D5F5E3' }]
+            ]
+          },
+          layout: 'lightHorizontalLines', style: 'resultsTable'
+        },
+        // --- Cursos y Comentarios ---
         ...cursosContent,
-        
-        { text: 'Comentario Final', style: 'sectionHeader' },
-        { text: this.comentarioAdicional || 'Sin comentarios', margin: [0, 0, 0, 20] },
-
-        // Agregar información de entrevista y disgusto si aplica
-        ...(this.evaluacionempleado.estadoevaluacion === 'Completado' ? [
-          { text: 'Información Adicional', style: 'sectionHeader' },
-          { text: `Entrevista con Supervisor: ${this.evaluacionempleado.entrevistaConSupervisor ? 'Sí' : 'No'}` },
-          ...(this.evaluacionempleado.aceptaEnDisgusto ? [
-            { text: 'Aceptación en No Conformidad: Sí' },
-            { text: 'Comentario de No Conformidad:', style: 'subHeader' },
-            { text: this.evaluacionempleado.comentarioDisgusto || 'Sin comentario', margin: [0, 0, 0, 10] }
-          ] : [])
-        ] : [])
+        { text: 'Comentario Adicional:', style: 'sectionHeader' },
+        { text: this.comentarioAdicional || 'Sin comentarios adicionales.', margin: [0, 0, 0, 20] },
+        // --- Firmas ---
+        {
+          columns: [
+            { qr: `Empleado: ${this.empleado?.nombreunido ?? 'N/A'}\nPeriodo: ${this.periodo?.descripcion ?? 'N/A'}\nFecha: ${this.fecha.toLocaleDateString()}\nPuntaje: ${currentTotalCalculo.toFixed(2)}`, fit: '80' },
+            { text: '', width: '*' },
+            {
+              stack: [
+                { text: '\n\n\n_________________________', style: 'signatureLine' },
+                { text: 'Firma del Empleado', style: 'signatureText' },
+                 { text: `Fecha: ${this.evaluacionempleado.fechaRepuestas ? new Date(this.evaluacionempleado.fechaRepuestas).toLocaleDateString() : '_______________'}`, style: 'signatureText' }
+              ], width: 'auto'
+            },
+            { text: '', width: '*' },
+            {
+              stack: [
+                { text: '\n\n\n_________________________', style: 'signatureLine' },
+                { text: 'Firma del Supervisor', style: 'signatureText' },
+                 { text: `Fecha: _______________`, style: 'signatureText' }
+              ], width: 'auto'
+            }
+          ],
+          margin: [0, 40, 0, 0]
+        }
       ];
-  
-      const docDefinition = {
+
+      // --- Definición del Documento ---
+      const docDefinition: any = {
         content,
         styles: {
-          categoryHeader: {
-            fontSize: 14,
-            bold: true,
-            alignment: 'left',
-            color: 'white',
-            fillColor: '#808080',
-            margin: [0, 5, 0, 5]
-          },
-          puntuacion: {
-            fontSize: 14,
-            bold: true,
-            alignment: 'right',
-            color: 'white',
-            fillColor: '#1a237e',
-            margin:[0, 10, 0, 10]
-          },
-          puntuacionfinal: {
-            fontSize: 14,
-            bold: true,
-            alignment: 'center',
-            color: 'white',
-            fillColor: '#1a237e',
-            margin:[0, 10, 0, 10]
-          },
-          promedio: {
-            fontSize: 14,
-            bold: true,
-            alignment: 'right',        
-            fillColor: '#808080',
-            margin:[0, 20, 0, 10]
-          },
-          header: {
-            fontSize: 22,
-            bold: true,
-            alignment: 'center',
-            margin: [0, 0, 0, 10],
-            color: '#1a237e'
-          },
-          scoreBox: {
-            fontSize: 18,
-            bold: true,
-            margin: [0, 10, 0, 20],
-            fillColor: '#1a237e',
-            color: 'white',
-            alignment: 'center'
-          },
-          sectionHeader: {
-            fontSize: 14,
-            bold: true,
-            margin: [0, 20, 0, 10],
-            alignment: 'left'
-          },
-          tableHeader: {
-            bold: true,
-            fillColor: '#1a237e',
-            color: 'white',
-            alignment: 'center'
-          },
-          goalHeader: {
-            fontSize: 12,
-            bold: true,
-            margin: [0, 10, 0, 5],
-            alignment: 'left'
-          },
-          goalDescription: {
-            fontSize: 10,
-            italics: true,
-            margin: [0, 0, 0, 5],
-            alignment: 'left'
-          },
-          subHeader: {
-            fontSize: 12,
-            bold: true,
-            margin: [0, 10, 0, 5],
-            alignment: 'left'
-          }
+          header: { fontSize: 18, bold: true, alignment: 'center', margin: [0, 0, 0, 15], color: '#1a237e' },
+          categoryHeader: { fontSize: 12, bold: true, alignment: 'left', color: 'white', fillColor: '#5DADE2', margin: [0, 5, 0, 5] },
+          tableHeader: { fontSize: 10, bold: true, fillColor: '#AEB6BF', color: 'black', alignment: 'center' },
+          goalHeader: { fontSize: 11, bold: true, margin: [0, 8, 0, 2], alignment: 'left' },
+          goalDescription: { fontSize: 9, italics: true, margin: [0, 0, 0, 4], alignment: 'left' },
+          sectionHeader: { fontSize: 12, bold: true, margin: [0, 15, 0, 5], alignment: 'left', color: '#1A5276' },
+          resultsTable: { margin: [0, 15, 0, 15] },
+          resultsHeader: { fontSize: 12, bold: true, color: 'white', margin: [0, 4, 0, 4] },
+          resultsSubHeader: { fontSize: 10, bold: true, margin: [0, 2, 0, 2] },
+          resultsTotal: { fontSize: 11, bold: true, margin: [0, 4, 0, 4] },
+          signatureLine: { margin: [0, 0, 0, 2], alignment: 'center' },
+          signatureText: { fontSize: 9, alignment: 'center' }
         },
-        defaultStyle: {
-          alignment: 'justify'
-        }
+        defaultStyle: { alignment: 'justify', fontSize: 10 }
       };
-  
-      pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado.nombreunido}_${this.periodo.descripcion}.pdf`);
+
+      //console.log("Definición del documento PDF:", JSON.stringify(docDefinition, null, 2));
+      pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado?.nombreunido ?? 'empleado'}_${this.periodo?.descripcion ?? 'periodo'}.pdf`);
     } catch (error) {
-      this.datos.showMessage("Error al generar el PDF", this.titulo, "error");
+      console.error('Error detallado al generar el PDF:', error);
+      this.datos.showMessage('Error al generar el PDF. Verifique la consola para más detalles.', this.titulo, 'error');
     }
   }
-  
 
   calculatePercentage(item: IEvaluacionDesempenoMeta): string {
     if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
-    
     const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
     const meta = item.meta || 1;
     const inverso = item.inverso || false;
-    
-    const percentage = inverso ? 
-      (meta / logro) * 100 :
-      (logro / meta) * 100;
-    
+    if (meta === 0 && !inverso) return '0.00';
+    if (logro === 0 && inverso) return '0.00';
+    if (logro === 0 && !inverso) return '0.00';
+    const percentage = inverso ? (meta / logro) * 100 : (logro / meta) * 100;
     return percentage.toFixed(2);
   }
 
@@ -464,95 +403,126 @@ ondes() {
   }
 
   onSubmit(): void {
-    let puede:boolean=true;
+    let puede: boolean = true;
+    if (!this.evaluacionempleado) {
+        this.datos.showMessage("Error: No se ha cargado la evaluación.", this.titulo, "error");
+        return;
+    }
     this.evaluacionempleado.observacion = this.comentarioAdicional;
-  
+
     const fechaActual = new Date();
-    this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().replace('T', ' ').slice(0, 10);
-    
-    // verifica si hay repuestas en cero en caso de que encuentre no podra seguir
-    this.evaluacionempleado.goalEmpleadoRespuestas.forEach(element => {
-        if(this.supervisor){          
-          if(element.repuestasupervisor==0 || element.repuesta==0){    
-            this.datos.showMessage(element.repuestasupervisor.toString(),"Error","error")          
-            puede=false;
-          }          
-        }else{
-          if (element.repuesta==0){
-            this.datos.showMessage(element.evaluacionId.toString(),"Error","error")
-            puede=false;
-          }
+    if (!this.supervisor) {
+       this.evaluacionempleado.fechaRepuestas = fechaActual.toISOString().split('T')[0];
+    }
+
+    (this.evaluacionempleado.goalEmpleadoRespuestas || []).forEach(respuesta => {
+      // CORREGIDO: Usar goalId para enlazar
+      const goalRelacionado = (this.evaluacionempleado.evaluacionGoals || []).find(g => g.goalId === respuesta.goalId);
+      const nombreCompetencia = goalRelacionado?.goal?.objetivo?.nombre || `ID ${respuesta.goalId}`;
+      if (this.supervisor) {
+        if ((respuesta.repuestasupervisor ?? 0) === 0 || (respuesta.repuesta ?? 0) === 0) {
+          this.datos.showMessage(`Respuesta(s) faltante(s) en competencia: ${nombreCompetencia}`, "Error", "error");
+          puede = false;
         }
-    });
-    
-    console.log(puede,this.evaluacionempleado.goalEmpleadoRespuestas)
-
-    this.evaluacionempleado.evaluacionDesempenoMetas.forEach((item)=>{
-      item.evaluacion=undefined;
-        if((item.evaluacioneDesempenoMetaRespuestas?.logro)==0){
-          this.datos.showMessage(item.evaluacioneDesempenoMetaRespuestas?.logro.toString() ,"Error","error")
-          puede=false;
-        }           
-    });
-    
-    if (puede){
-
-      
-      // Agregar los cursos seleccionados a la evaluación
-      this.evaluacionempleado.cursosCapacitacion = this.cursosSeleccionados.map(c => c.cursoCapacitacion!);      
-      this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados;
-      //console.table(this.evaluacionempleado.evaluacionCursoCapacitacions)
-      if (this.supervisor){
-        this.evaluacionempleado.estadoevaluacion='EvaluadoPorSupervisor';
-      }else{
-        this.evaluacionempleado.estadoevaluacion='AutoEvaluado';
+      } else {
+        if ((respuesta.repuesta ?? 0) === 0) {
+          this.datos.showMessage(`Respuesta faltante en competencia: ${nombreCompetencia}`, "Error", "error");
+          puede = false;
+        }
       }
-      if( this.evaluacionempleado.evaluacionDesempenoMetas.length==0){
-        this.evaluacionempleado.totalcolaborador=this.evaluacionempleado.puntuacioncompetenciacolaborador
+    });
+
+    console.log('Puede continuar (competencias)?', puede);
+
+    (this.evaluacionempleado.evaluacionDesempenoMetas || []).forEach((item) => {
+      item.evaluacion = undefined;
+      if (!this.supervisor && (item.evaluacioneDesempenoMetaRespuestas?.logro ?? 0) === 0) {
+        this.datos.showMessage(`Logro faltante en objetivo: ${item.descripcion || 'sin descripción'}`, "Error", "error");
+        puede = false;
       }
-      this.EvaluacionController.model = this.evaluacionempleado;
-      console.log('verificacion evaluacion:',puede,this.evaluacionempleado,this.EvaluacionController.model)
-      this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
-          
-          this.datos.showMessage("Grabado",this.titulo,"sucess");
-          if (this.supervisor){
-            this.dataEmitter.emit("grabado");
-            this.generatePDF();            
-          }          
-          this.router.navigate(['/Home'])
-        
+    });
+
+    console.log('Puede continuar (objetivos)?', puede);
+
+    if (puede) {
+      this.evaluacionempleado.evaluacionCursoCapacitacions = (this.cursosSeleccionados || []).map(c => {
+         const cursoLimpio: Partial<IEvaluacionCursoCapacitacion> = {...c};
+         delete cursoLimpio.cursoCapacitacion;
+         return cursoLimpio as IEvaluacionCursoCapacitacion;
       });
-      
-    }else{
-      this.datos.showMessage("Favor Verificar tiene respuestas sin contestar",this.titulo,"error");
+
+      if (this.supervisor) {
+        this.evaluacionempleado.estadoevaluacion = 'EvaluadoPorSupervisor';
+      } else {
+        this.evaluacionempleado.estadoevaluacion = 'AutoEvaluado';
+      }
+
+      this.evaluacionempleado.totalCalculo = this.totalCalculo;
+      this.EvaluacionController.model = this.evaluacionempleado;
+
+      console.log('Enviando a grabar:', JSON.stringify(this.EvaluacionController.model, null, 2));
+
+      this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
+
+      this.EvaluacionController.grabar(this.supervisor).then((rep) => {
+        this.dialogRef.close();
+        this.datos.showMessage("Grabado con éxito", this.titulo, "success");
+        if (this.supervisor) {
+          this.dataEmitter.emit("grabado");
+          this.generatePDF();
+        }
+        this.router.navigate(['/Home']);
+      }).catch(err => {
+        this.dialogRef.close();
+        console.error("Error al grabar:", err);
+        const errorMsg = err?.error?.message || err?.message || "Error desconocido al grabar";
+        this.datos.showMessage(`Error al grabar: ${errorMsg}`, this.titulo, "error");
+      });
+
+    } else {
+      this.datos.showMessage("Favor verificar, tiene respuestas o logros sin completar.", this.titulo, "error");
     }
   }
 
   cancelar(): void {
-    if (this.supervisor){
-    this.dataEmitter.emit("cancelar");
-    }else{
-      this.router.navigate(['/Home'])
+    if (this.supervisor) {
+      this.dataEmitter.emit("cancelar");
+    } else {
+      this.router.navigate(['/Home']);
     }
-    
   }
+
   onAceptarEvaluacion() {
+     if (!this.evaluacionempleado) {
+        this.datos.showMessage("Error: No se ha cargado la evaluación.", this.titulo, "error");
+        return;
+    }
     if (this.aceptaEnDisgusto && !this.comentarioDisgusto) {
-      this.datos.showMessage("Debe proporcionar un comentario de disgusto", this.titulo, "error");
+      this.datos.showMessage("Debe proporcionar un comentario de No Conformidad.", this.titulo, "error");
       return;
     }
 
     this.evaluacionempleado.estadoevaluacion = 'Completado';
     this.evaluacionempleado.entrevistaConSupervisor = this.entrevistaConSupervisor;
-    this.evaluacionempleado.aceptaEnDisgusto  = this.aceptaEnDisgusto;
+    this.evaluacionempleado.aceptaEnDisgusto = this.aceptaEnDisgusto;
     this.evaluacionempleado.comentarioDisgusto = this.comentarioDisgusto;
-    
+    this.evaluacionempleado.totalCalculo = this.totalCalculo;
+
     this.EvaluacionController.model = this.evaluacionempleado;
-      
-    this.EvaluacionController.grabar(this.supervisor).then((rep)=>{
-        this.datos.showMessage("Grabado",this.titulo,"sucess");
-        this.generatePDF();            
-        this.router.navigate(['/Home'])
+    console.log('Enviando a aceptar:', JSON.stringify(this.EvaluacionController.model, null, 2));
+
+    this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
+
+    this.EvaluacionController.grabar(this.supervisor).then((rep) => {
+      this.dialogRef.close();
+      this.datos.showMessage("Evaluación Aceptada con éxito", this.titulo, "success");
+      this.generatePDF();
+      this.router.navigate(['/Home']);
+    }).catch(err => {
+      this.dialogRef.close();
+      console.error("Error al aceptar:", err);
+       const errorMsg = err?.error?.message || err?.message || "Error desconocido al aceptar";
+      this.datos.showMessage(`Error al aceptar: ${errorMsg}`, this.titulo, "error");
     });
   }
 }

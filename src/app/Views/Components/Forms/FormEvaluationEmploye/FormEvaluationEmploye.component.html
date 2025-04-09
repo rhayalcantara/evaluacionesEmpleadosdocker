@@ -2,6 +2,7 @@
     <h1>{{titulo}}</h1>
     <h3>Periodo:{{periodo.descripcion}}</h3>
     <p>Fecha:{{fecha | date}}</p>
+    <button type="button"  class="btn-aceptar" (click)="generatePDF()">Mostrar en PDF</button>
     <div class="performance-criteria">
       <app-criterialitem 
         [empleado]="empleado"
@@ -57,6 +58,7 @@
   
       <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
       <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
+       <!-- Botón añadido -->
     
     <div *ngIf="mostarAceptar" class="evaluacion-aceptacion">
       <div class="puntaje-final">
