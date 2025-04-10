@@ -184,6 +184,18 @@ const routes: Routes = [
     loadComponent:()=> import('./Views/Components/evaluacion-reporte/evaluacion-reporte.component')
     .then((m)=> m.EvaluacionReporteComponent),
     canActivate: [AuthGuard]
+  },
+  { path: 'consejal',
+    loadComponent: () => import('./Views/Components/Pages/consejal/consejal-list/consejal-list.component').then(m => m.ConsejalListComponent),
+    canActivate: [AuthGuard]
+  },
+  { path: 'consejal/new',
+    loadComponent: () => import('./Views/Components/Pages/consejal/consejal-form/consejal-form.component').then(m => m.ConsejalFormComponent),
+    canActivate: [AuthGuard]
+  },
+  { path: 'consejal/edit/:id',
+    loadComponent: () => import('./Views/Components/Pages/consejal/consejal-form/consejal-form.component').then(m => m.ConsejalFormComponent),
+    canActivate: [AuthGuard]
   }
 ];
 

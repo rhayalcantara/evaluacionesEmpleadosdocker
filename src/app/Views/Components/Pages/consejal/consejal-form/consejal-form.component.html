@@ -1,0 +1,99 @@
+<div class="container mt-4">
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading">
+    <form (ngSubmit)="saveConsejal()" #consejalForm="ngForm">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>{{ isNew ? 'Nuevo Consejal' : 'Editar Consejal' }}</h4>
+        </div>
+        <div class="card-body">
+          <!-- Campos básicos del Consejal -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="identificacion" class="form-label">Identificación</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="identificacion" 
+                name="identificacion"
+                [(ngModel)]="consejal.identificacion"
+                required
+              >
+            </div>
+            <div class="col-md-6">
+              <label for="nombreunido" class="form-label">Nombre</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombreunido" 
+                name="nombreunido"
+                [(ngModel)]="consejal.nombreunido"
+                required
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Equipo de Consejal -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4>Equipo de Consejero</h4>
+          <button type="button" class="btn btn-primary" (click)="openEmpleadoSelector()">
+            <i class="fas fa-plus"></i> Añadir Empleado
+          </button>
+        </div>
+      
+
+        <div class="card-body" >
+             <div *ngIf="consejal.consejal_Team.length===0" class="alert alert-info">
+                        No hay empleados en el equipo. Haga clic en "Añadir Empleado" para agregar miembros al equipo.
+                    </div>
+          <div *ngIf="consejal.consejal_Team.length > 0" class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Secuencial</th>
+                  <th>Nombre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let teamMember of consejal.consejal_Team; let i = index">
+                  <td>{{ teamMember.id === 0 ? 'Nuevo' : teamMember.id }}</td>
+                  <td>{{ teamMember.empleadoSecuencial }}</td>
+                  <td>
+                    <!-- Aquí podríamos mostrar el nombre del empleado si tuviéramos la información -->
+                    {{ empleadosSeleccionados[i].nombreunido || 'Empleado #' + teamMember.empleadoSecuencial }}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="removeEmpleadoFromTeam(teamMember, i)">
+                      <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="saving">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="consejalForm.invalid || saving">
+          <span *ngIf="saving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          {{ isNew ? 'Crear' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

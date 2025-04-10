@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Listado de Consejeros</h2>
+    <button class="btn btn-primary" (click)="createConsejal()">
+      <i class="fas fa-plus"></i> Nuevo Consejero
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error && consejales.length === 0" class="alert alert-info">
+    No hay concejeros registrados.
+  </div>
+
+  <div *ngIf="!loading && consejales.length > 0" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Identificación</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consejal of consejales">
+          <td>{{ consejal.id }}</td>
+          <td>{{ consejal.identificacion || 'N/A' }}</td>
+          <td>{{ consejal.nombreunido || 'N/A' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="editConsejal(consejal.id)">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteConsejal(consejal.id)">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Aquí podrías añadir paginación si es necesario -->
+  </div>
+</div>
