@@ -233,13 +233,20 @@ export class FormEvaluationEmployeComponent {
               const respuesta = (this.evaluacionempleado.goalEmpleadoRespuestas || []).find(r => r.goalId === goal.goalId); // Usar goalId
               const evalEmpleado = respuesta?.repuesta ?? 'N/A';
               const evalSupervisor = respuesta?.repuestasupervisor ?? 'N/A';
-              const evaluationText = this.supervisor ? `Evaluación Empleado: ${evalEmpleado} - Evaluación Supervisor: ${evalSupervisor}` : `Evaluación Empleado: ${evalEmpleado}`;
+              const evaluationText =  `Evaluación Empleado: ${evalEmpleado} - Evaluación Supervisor: ${evalSupervisor}` ;
               const nombre = goal.goal?.objetivo?.nombre ?? 'Competencia sin nombre';
               const descripcion = goal.goal?.objetivo?.descripcion ?? 'Sin descripción';
+              let observacion = respuesta?.observacion ?? 'Sin observación';
+              let observacionSupervisor = respuesta?.observacionsupervisor ?? 'Sin observación';
+              const observacionempleado = `Comentario Empleado : ${observacion}`; 
+              const observacionsupervisor = `Comentario Supervisor : ${observacionSupervisor}`;	
+             
               return [
                   { text: nombre, style: 'goalHeader' },
                   { text: descripcion, style: 'goalDescription' },
                   { text: evaluationText },
+                  { text: observacionempleado },
+                  { text: observacionsupervisor },
                   { text: '\n' }
               ];
           }).flat();
