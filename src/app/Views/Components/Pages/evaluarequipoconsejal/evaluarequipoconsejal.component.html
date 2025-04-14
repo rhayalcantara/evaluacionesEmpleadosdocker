@@ -1,0 +1,24 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1>Evaluar equipo Consejero</h1>
+      <h2>Periodo: {{periodo.descripcion}}</h2>
+      <h2>Evaluador: {{consejal.nombreunido}}</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h2>Equipo</h2>
+    </div>
+  </div>
+</div>
+<div class="Equipo">
+    <app-card-empleado 
+      [empleado]="emple" 
+      [llamarevaluacion]="true"
+      [periodo]="periodo"
+      [mostrarEstadoEvaluacion]="true"
+      *ngFor="let emple of empl">
+    </app-card-empleado>
+  </div>

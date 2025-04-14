@@ -196,7 +196,14 @@ const routes: Routes = [
   { path: 'consejal/edit/:id',
     loadComponent: () => import('./Views/Components/Pages/consejal/consejal-form/consejal-form.component').then(m => m.ConsejalFormComponent),
     canActivate: [AuthGuard]
-  }
+  },
+  //ConsejalFormComponent
+  { path: 'consejal/evaluacion/:consejal',
+    loadComponent: () => import('./Views/Components/Pages/evaluarequipoconsejal/evaluarequipoconsejal.component')
+    .then(m => m.EvaluarequipoconsejalComponent),
+   
+  },
+ 
 ];
 
 @NgModule({

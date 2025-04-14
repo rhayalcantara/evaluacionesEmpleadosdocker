@@ -13,6 +13,7 @@ import { Empleados } from 'src/app/Controllers/Empleados';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { IConsejal } from 'src/app/Models/Consejal/Iconsejal';
 
 @Component({
   selector: 'app-navmenu',
@@ -40,32 +41,46 @@ export class NavmenuComponent implements OnInit {
         
         
         if (mess=='loguiado'){
-          
-         //console.log(localStorage.getItem('usuario'))
-         this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))
-         
-         //busca el periodo activo
-         this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
-          
-          this.periodo=rep;
-          //actualiza el periodo activo en memoria
-          // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
-          // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
-          // Consider using a dedicated state management library like NgRx or Akita for managing application state.
-          localStorage.setItem("periodo", JSON.stringify(this.periodo))
-          // busca el empleado
-          this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
-            this.empl.model = rep
-            this.empl.getsubordinados(this.periodo)
-            this.empleado = rep
-            //actualiza el empleado en memoria
+          let tipousario = localStorage.getItem('tipodeusuario')      
+          if (tipousario=='consejal'){
+            let consejal:IConsejal = JSON.parse(localStorage.getItem('consejal') ?? "")
+            console.log('consejal',consejal)
+                      //busca el periodo activo
+          this.peri.GetActivo().subscribe((rep:IPeriodo)=>{           
+            this.periodo=rep;
+            //actualiza el periodo activo en memoria
             // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
             // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
             // Consider using a dedicated state management library like NgRx or Akita for managing application state.
-            localStorage.setItem("empleado", JSON.stringify(this.empleado))
-            //busca el rol del empleado
-            this.buscarEmpleadoRol()
-          })
+            localStorage.setItem("periodo", JSON.stringify(this.periodo))
+            // busca el empleado
+            this.router.navigate(['/consejal/evaluacion/', JSON.stringify(consejal)]);
+           })
+          }else{
+              //console.log(localStorage.getItem('usuario'))
+              this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))         
+              //busca el periodo activo
+              this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
+                
+                this.periodo=rep;
+                //actualiza el periodo activo en memoria
+                // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
+                // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
+                // Consider using a dedicated state management library like NgRx or Akita for managing application state.
+                localStorage.setItem("periodo", JSON.stringify(this.periodo))
+                // busca el empleado
+                this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
+                  this.empl.model = rep
+                  this.empl.getsubordinados(this.periodo)
+                  this.empleado = rep
+                  //actualiza el empleado en memoria
+                  // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
+                  // Review all localStorage usage and determine if the data being stored is sensitive and if there are alternative, more secure ways to store it.
+                  // Consider using a dedicated state management library like NgRx or Akita for managing application state.
+                  localStorage.setItem("empleado", JSON.stringify(this.empleado))
+                  //busca el rol del empleado
+                  this.buscarEmpleadoRol()
+                })
         }
           
         );
@@ -74,6 +89,7 @@ export class NavmenuComponent implements OnInit {
           this.router.navigate(['Home'])
           this.logg='LogOut'
         }
+      }
         if (mess=='nologuiado'){
           //console.log('entro en nologiado')
           this.mostramenu=false
@@ -147,11 +163,17 @@ export class NavmenuComponent implements OnInit {
     }else{
       */
         this.logg= 'Login'
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('token');
         localStorage.removeItem('empleado');
         localStorage.removeItem('periodo');
-        localStorage.removeItem('rol');       
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('tipodeusuario')
+        let tipodeusuario = localStorage.getItem('tipodeusuario')
+        if (tipodeusuario=='consejal'){
+          localStorage.removeItem('consejal')          
+        }else{
+          localStorage.removeItem('rol');       
+        }
         this.mostramenu=false        
         this.router.navigate(['login']);
         this.cd.detectChanges();

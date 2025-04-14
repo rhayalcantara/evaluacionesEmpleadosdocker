@@ -37,6 +37,23 @@
               >
             </div>
           </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="identificacion" class="form-label">Codigo de Usuario</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="identificacion" 
+                name="identificacion"
+                [(ngModel)]="consejalclave.usuario"                          
+              >
+            </div>            
+          <button type="button" class="btn btn-sm btn-secondary" (click)="crearusuario(consejal)">
+            <i class="fas fa-plus"></i> Usuario 
+          </button>
+        </div>
+
+          
         </div>
       </div>
 
@@ -70,13 +87,14 @@
                   <td>{{ teamMember.empleadoSecuencial }}</td>
                   <td>
                     <!-- Aquí podríamos mostrar el nombre del empleado si tuviéramos la información -->
-                    {{ empleadosSeleccionados[i].nombreunido || 'Empleado #' + teamMember.empleadoSecuencial }}
+                    {{ teamMember.empleado.nombreunido || 'Empleado #' + teamMember.empleadoSecuencial }}
                   </td>
+
                   <td>
                     <button type="button" class="btn btn-sm btn-danger" (click)="removeEmpleadoFromTeam(teamMember, i)">
                       <i class="fas fa-trash"></i> Eliminar
                     </button>
-                  </td>
+                  </td>                  
                 </tr>
               </tbody>
             </table>

@@ -1,0 +1,59 @@
+<div class="dialog-container">
+  <h2 class="dialog-title">Asignar Credenciales al Consejal</h2>
+
+  <div class="dialog-content">
+    <p>Establece el nombre de usuario y la contraseña para el consejal.</p>
+
+    <form [formGroup]="claveForm">
+      <div class="form-field full-width">
+        <label for="usuario">Nombre de Usuario</label>
+        <input 
+          id="usuario"
+          type="text" 
+          class="form-control" 
+          formControlName="usuario" 
+          required
+        >
+        <div *ngIf="claveForm.get('usuario')?.hasError('required') && claveForm.get('usuario')?.touched" class="error-message">
+          El nombre de usuario es requerido.
+        </div>
+        <div *ngIf="claveForm.get('usuario')?.hasError('minlength') && claveForm.get('usuario')?.touched" class="error-message">
+          Debe tener al menos 3 caracteres.
+        </div>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="password">Contraseña</label>
+        <input 
+          id="password"
+          type="password" 
+          class="form-control" 
+          formControlName="password" 
+          required
+        >
+        <div *ngIf="claveForm.get('password')?.hasError('required') && claveForm.get('password')?.touched" class="error-message">
+          La contraseña es requerida.
+        </div>
+        <div *ngIf="claveForm.get('password')?.hasError('minlength') && claveForm.get('password')?.touched" class="error-message">
+          Debe tener al menos 6 caracteres.
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="spinner-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Guardando...</span>
+        </div>
+        <span>Guardando...</span>
+      </div>
+    </form>
+  </div>
+
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isLoading">
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="isLoading || claveForm.invalid">
+      {{ isEditMode ? 'Actualizar' : 'Guardar' }} Credenciales
+    </button>
+  </div>
+</div>

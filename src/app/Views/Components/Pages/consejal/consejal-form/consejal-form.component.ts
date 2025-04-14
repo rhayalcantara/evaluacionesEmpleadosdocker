@@ -3,30 +3,47 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConsejalClaveFormComponent } from '../consejal-clave-form/consejal-clave-form.component';
 import { ConsejalController } from '../../../../../Controllers/ConsejalController';
-import { IConsejal, IConsejalTeam } from '../../../../../Models/Consejal/Iconsejal';
+import { IConsejal, IConsejalClave, IConsejalTeam } from '../../../../../Models/Consejal/Iconsejal';
 import { ComunicacionService } from '../../../../../Services/comunicacion.service';
 import { DatosServiceService } from '../../../../../Services/datos-service.service';
 import { SeleccionEmpleadoComponent } from '../../../Forms/seleccion-empleado/seleccion-empleado.component';
 import { IEmpleado } from '../../../../../Models/Empleado/IEmpleado';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Empleados } from  '../../../../../Controllers/Empleados'
+import { ConsejalClaveController } from 'src/app/Controllers/ConsejalClaveController';
 
 @Component({
   selector: 'app-consejal-form',
   templateUrl: './consejal-form.component.html',
   styleUrls: ['./consejal-form.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule],
+  imports: [CommonModule, FormsModule, MatDialogModule, ConsejalClaveFormComponent],
   providers: [ConsejalController, ComunicacionService, DatosServiceService]
 })
 export class ConsejalFormComponent implements OnInit {
+crearusuario(consejal: IConsejal) {
+  // Abrir el diálogo para crear/editar credenciales
+  const dialogRef = this.dialog.open(ConsejalClaveFormComponent, {
+    width: '500px',
+    data: { consejalId: this.consejal.id }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      // Si el resultado es true, significa que se guardaron las credenciales
+      this.datosService.showMessage('Credenciales guardadas correctamente', 'Éxito', 'success');
+    }
+  });
+}
   consejal: IConsejal;
   isNew: boolean = true;
   loading: boolean = false;
   saving: boolean = false;
   empleadosSeleccionados: IEmpleado[] = []; // Para mostrar información de los empleados
-
+  consejalclave: IConsejalClave= this.consejalclaveController.inicializamodelo(); // Inicializar el modelo de ConsejalClave
+  
   constructor(
     private consejalController: ConsejalController,
     private route: ActivatedRoute,
@@ -34,7 +51,8 @@ export class ConsejalFormComponent implements OnInit {
     private comunicacionService: ComunicacionService,
     private datosService: DatosServiceService,
     private dialog: MatDialog,
-    private empleado:Empleados
+    private empleado:Empleados,
+    private consejalclaveController: ConsejalClaveController
   ) {
     // Inicializar el modelo
     this.consejal = this.consejalController.inicializamodelo();
@@ -53,7 +71,19 @@ export class ConsejalFormComponent implements OnInit {
       this.comunicacionService.enviarMensaje({ titulo: "Nuevo Consejero" });
     }
   }
-
+ getconsejalclave(){
+  this.consejalclaveController.Getconsejalid(this.consejal.id.toString())
+  .subscribe(
+    (data: IConsejalClave) => {
+      console.log('Data del consejal clave:', data);
+      this.consejalclave = data;
+    },
+    (error: HttpErrorResponse) => {
+      console.error('Error fetching consejal clave:', error);
+      this.datosService.showMessage(`Error al cargar Consejero Clave: ${error.message}`, 'Error', 'error');
+    }
+  )
+ }
   loadConsejal(id: string): void {
     this.loading = true;
     this.consejalController.Get(id).subscribe(
@@ -63,6 +93,7 @@ export class ConsejalFormComponent implements OnInit {
         this.loading = false;
         // Aquí podrías cargar la información de los empleados asociados
         this.loadEmpleadosInfo();
+        this.getconsejalclave()
       },
       (error: HttpErrorResponse) => {
         console.error('Error fetching consejal:', error);
@@ -105,7 +136,7 @@ export class ConsejalFormComponent implements OnInit {
         id: 0, // ID temporal, se asignará en el servidor
         consejalId: this.consejal.id,
         empleadoSecuencial: empleado.secuencial,
-        Empleado: {}
+        empleado: this.empleado.inicializamodelo()
       };
 
       // Añadir al array local
