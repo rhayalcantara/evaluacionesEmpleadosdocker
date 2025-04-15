@@ -183,28 +183,9 @@ export class EvaluacionReporteComponent implements OnInit {
     );
   }
   downloadExcel() {
-    const data = this.filteredData.map(item => ({
-      'ID': item.identificacion,
-      'Colaborador': item.colaborador,
-      'Oficina': item.oficina,
-      'Inicio Contrato': item.fecha_Ingreso,
-      'Departamento': item.departamento,
-      'Posición': item.posision,
-      'Supervisor': item.supersivor,
-      'Estatus': item.estatus_evaluacion,
-      'Desempeño': item.puntuaciondesempenocolaborador,
-      'Objetivo 30%': item.objetivo30,
-      'Competencia 70%': item.autocompetencia70,
-      'Autoevaluación': item.autoevaluacion,
-      'Autoevaluación 20%': item.autoevaluacion20,
-      'Competencia Supervisor 70%': item.compSuper70,
-      'Evaluación del Supervisor': item.superevaluacion,
-      'Evaluación del Supervisor 80%': item.superevaluacion80,
-      'Puntuación General': item.totalCalculo,
-      
-    }));
-
-    this.excelService.exportAsExcelFile(data, 'Reporte_Evaluaciones');
+    // El mapeo manual ha sido eliminado.
+    // Llamar a la nueva función pasando los datos filtrados directamente
+    this.excelService.exportReporte1AsExcelFile(this.filteredData, 'Reporte_Evaluaciones');
   }
   downloadExce2() {
     
