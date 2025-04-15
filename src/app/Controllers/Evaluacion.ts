@@ -207,7 +207,7 @@ export class Evaluacion implements OnInit {
               //calculo del empleado
         this.model.puntuacioncompetenciacolaborador = (await this.CalculoCompetencias(false)/this.model.goalEmpleadoRespuestas.length)
         this.model.totalcolaborador = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
-        this.model.totalCalculo = this.model.totalcolaborador
+        
         console.log('evaluacion calculo competencia',this.model.totalCalculo,(this.desempenoFinal??0),((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100))
     
               //calculo supervisor
@@ -226,7 +226,7 @@ export class Evaluacion implements OnInit {
         this.porcentajeCompetencia = px2?.valor 
         this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
         this.puntuacionFinal = this.CompetenciaFinal + (this.desempenoFinal??0)
-
+        this.model.totalCalculo = this.puntuacionFinal
         // actualizacion de desempeño del modelo
         
         //this.model.totalCalculo =  this.puntuacionFinal
