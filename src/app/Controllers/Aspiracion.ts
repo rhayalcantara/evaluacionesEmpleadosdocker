@@ -54,7 +54,7 @@ export class Aspiracion {
     public getdatos() {
         this.Gets().subscribe({
             next:(rep:ModelResponse) => {
-                //console.log('llegaron los datos datos', rep.count)
+                //// console.log('llegaron los datos datos', rep.count)
                 this.totalregistros = rep.count
                 this.pagesize = rep.count
                 this.arraymodel = []
@@ -62,7 +62,7 @@ export class Aspiracion {
                 this.arraymodel = rep.data   
                 this.arraytotal = rep.data
                 this.arraymodel.sort((a, b) => a.descripcion.localeCompare(b.descripcion))
-                //console.log('datos', this.arraymodel)     
+                //// console.log('datos', this.arraymodel)     
                 this.TRegistros.emit(this.totalregistros)        
             }
         }) 
@@ -71,7 +71,7 @@ export class Aspiracion {
         
        return  this.Gets().pipe(
             map((resp: ModelResponse) => {
-                //console.log({'las aspireciones':resp})
+                //// console.log({'las aspireciones':resp})
                 let apiraciones:IAspiracion[] = resp.data; // Store the fetched aspirations in the local array
                 return apiraciones.filter(a => a.planExtrategicoModelId === Planid);
             })
@@ -79,7 +79,7 @@ export class Aspiracion {
     }
 
     public Gets():Observable<ModelResponse> {
-        //console.log(this.rutaapi)
+        //// console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
   
@@ -93,7 +93,7 @@ export class Aspiracion {
     }
   
     public insert(obj:IAspiracion):Observable<IAspiracion> {  
-        //console.log('llego a insert en aspiracion', obj)
+        //// console.log('llego a insert en aspiracion', obj)
         return this.datos.insertardatos<IAspiracion>(this.rutaapi, obj)
     }
   
@@ -106,7 +106,7 @@ export class Aspiracion {
             if (this.model.id == 0) {
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IAspiracion) => {
-                        //console.log(rep)
+                        //// console.log(rep)
                         this.model = rep
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success")                
                         resolve(true)
@@ -117,10 +117,10 @@ export class Aspiracion {
                     }
                 )
             } else {
-                //console.log(this.model)
+                //// console.log(this.model)
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IAspiracion) => {
-                        //console.log('se actualizo la aspiracion:', rep)
+                        //// console.log('se actualizo la aspiracion:', rep)
                         let m = this.arraymodel.find(x => x.id == this.model.id)
                         if (m != undefined) {
                             m.id = this.model.id

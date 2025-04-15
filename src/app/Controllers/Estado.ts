@@ -49,10 +49,10 @@ export class Estado {
     public  getdatos(){
      
       
-       //console.log('entro y llama a los datos')
+       //// console.log('entro y llama a los datos')
   
        this.Gets().subscribe({next:(rep:ModelResponse)=>{
-          console.log('llegaron los datos datos',rep.count)
+          // console.log('llegaron los datos datos',rep.count)
           //se obtiene los datos y se ponen en los array
           this.totalregistros =  rep.count
           this.pagesize=rep.count
@@ -62,7 +62,7 @@ export class Estado {
           this.arraytotal=rep.data
           //ordernar por nombre de puestos
           this.arraymodel.sort((a, b) => a.descripcion.localeCompare(b.descripcion))
-          console.log('datos',this.arraymodel)     
+          // console.log('datos',this.arraymodel)     
           this.TRegistros.emit(this.totalregistros)        
   
           
@@ -72,7 +72,7 @@ export class Estado {
       ) 
     }
     public Gets():Observable<ModelResponse> {
-      console.log(this.rutaapi)
+      // console.log(this.rutaapi)
       return this.datos.getdatos<ModelResponse>(this.rutaapi)
   }
   
@@ -84,7 +84,7 @@ export class Estado {
   }
   
   public insert(obj:IEstado):Observable<IEstado>{  
-    console.log('llego a insert en produc',obj)
+    // console.log('llego a insert en produc',obj)
   
     return this.datos.insertardatos<IEstado>(this.rutaapi, obj ); 
   }
@@ -96,13 +96,13 @@ export class Estado {
   
   public async grabar(): Promise<boolean> {
     // Envuelve el código en una nueva Promise
-    console.log('llego producto a grabar',this.model)
+    // console.log('llego producto a grabar',this.model)
     return new Promise<boolean>(async (resolve) => {
       if (this.model.id == 0) {
         // inserta el registro
         await firstValueFrom(this.insert(this.model)).then(
           (rep: IEstado) => {
-            console.log(rep)
+            // console.log(rep)
             this.model = rep;
   
             this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
@@ -115,10 +115,10 @@ export class Estado {
         );
       } else {
         // actualiza el registro
-        console.log(this.model)
+        // console.log(this.model)
         await firstValueFrom(this.Update(this.model)).then(
           (rep: IEstado) => {
-            console.log('se actualizo la zona:',rep)
+            // console.log('se actualizo la zona:',rep)
           //  this.model = rep;
             let m = this.arraymodel.find(x=>x.id==this.model.id)
             if (m!=undefined){

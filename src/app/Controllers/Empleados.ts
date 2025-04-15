@@ -79,14 +79,14 @@ export class Empleados implements OnInit{
    }
   }
   public  getdatos(){
-      //console.log('entro y llama a cargando')
+      //// console.log('entro y llama a cargando')
 
-     //console.log('entro y llama a los datos')
+     //// console.log('entro y llama a los datos')
 
      this.arraymodel=[]
      this.arraymodelsubordinados=[]
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-        //console.log('llegaron los datos datos',rep.count)
+        //// console.log('llegaron los datos datos',rep.count)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         //this.pagesize=rep.count
@@ -105,7 +105,7 @@ export class Empleados implements OnInit{
         }
         
 
-        //console.log('datos',this.arraymodel)     
+        //// console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)      
 
         //dialogRef.close()
@@ -123,15 +123,15 @@ export class Empleados implements OnInit{
     let fecha:Date =new Date(periodo.fechaFin)
 
    this.Getsub(this.model.secuencial.toString(),UtilsService.formatDateForInput(fecha.toDateString())).subscribe({next:(rep:ModelResponse)=>{
-      //console.log('llegaron los datos ',rep.count)
+      //// console.log('llegaron los datos ',rep.count)
       //se obtiene los datos y se ponen en los array
       this.arraymodelsubordinados=rep.data 
-      //console.log('Subordinates data received:', rep.data);
+      //// console.log('Subordinates data received:', rep.data);
       //llena los puestos
       this.arraymodelsubordinados.map((x:IEmpleado)=>{
          this.datos.getbyid<IPuesto>(this.datos.URL+`/api/Positions/${x.scargo}`).subscribe((puesto:IPuesto)=>{
             this.arraypuestossub.push(puesto);
-           // console.log('emmpleados subpueto',this.arraypuestossub)
+           // // console.log('emmpleados subpueto',this.arraypuestossub)
          })
       })
       
@@ -140,11 +140,11 @@ export class Empleados implements OnInit{
   ) 
 }
   public Gets():Observable<ModelResponse> {
-    console.log(this.rutaapi)
+    // console.log(this.rutaapi)
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
 public Getsub(empleado_secuencial:string,fechaconsulta:string):Observable<ModelResponse> {
- //console.log(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
+ //// console.log(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
 
   return this.datos.getdatos<ModelResponse>(this.rutaapi+`/equipo/?JEFEINMEDIATO_SECUENCIAL=${empleado_secuencial}&fechaconsulta=${fechaconsulta}`)
 }

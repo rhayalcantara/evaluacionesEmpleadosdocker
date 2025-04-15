@@ -19,8 +19,8 @@ moduleFederationConfig.output.pathinfo = false;
 moduleFederationConfig.output.clean = true;
 
 // Set publicPath based on environment
-// moduleFederationConfig.output.publicPath = '/evaluacionempleado/'
-moduleFederationConfig.output.publicPath = '/'
+moduleFederationConfig.output.publicPath = '/evaluacionempleado/'
+//moduleFederationConfig.output.publicPath = '/'
 //moduleFederationConfig.output.publicPath =  process.env.NODE_ENV === 'production'
 //  ? '/evaluacionempleado/' // Production path
 //  : '/'; // Development path - let webpack figure out the path automatically

@@ -44,8 +44,8 @@ export class EvaluacionReporteComponent implements OnInit {
   selectedStatus: string = '';
   selectedDepartment: string = '';
   departments: string[] = [];
-  campos: string[] = ['identificacion', 'colaborador','oficina', 'departamento', 'posision', 'supersivos', 'estatus_evaluacion', 'puntuaciondesempenocolaborador', 'totalcolaborador', 'puntuaciondesempenosupervidor', 'puntuacioncompetenciasupervisor', 'totalCalculo'];
-  titulos: string[] = ['ID', 'Colaborador','Oficina', 'Departamento', 'Posición', 'Supervisor', 'Estatus', 'Desempeño', 'Total Colaborador', 'Desempeño Supervisor', 'Competencia Supervisor', 'Total'];
+  campos: string[] = ['identificacion', 'colaborador','oficina','fecha_Ingreso'  , 'departamento', 'posision', 'supervisor', 'estatus_evaluacion', 'puntuaciondesempenocolaborador','objetivo30'               ,'puntuacioncompetenciacolaborador','autocompetencia70'               ,'autoevaluacion'                            ,'autoevaluacion20'            ,'puntuacioncompetenciasupervisor','compSuper70'                                 , 'superevaluacion'                           , 'superevaluacion80'                 , 'totalCalculo'];
+  titulos: string[] = ['ID'           , 'Colaborador','Oficina','Inicio Contrato', 'Departamento', 'Posición', 'Supervisor', 'Estatus'           , 'Total Puntuación Objetivos'    ,'Resultado Objetivos (30%)','AutoEvaluacion Competencia     ' ,'Autoevaluación Competencia (70%)','Resultado Final AutoEvaluación (30% + 70%)','20% Resultado AutoEvaluación','Competencia Supervisor'         ,'Evaluacion del Supervisor Competencia (70%)' ,'Resultado Evaluacion Supervisor (30% + 70%)','80% Resultado Evaluacion Supervisor', 'Puntuacion General (20% + 80%)'];
 
   constructor(
     private evaluacionService: Evaluacion,
@@ -186,14 +186,22 @@ export class EvaluacionReporteComponent implements OnInit {
     const data = this.filteredData.map(item => ({
       'ID': item.identificacion,
       'Colaborador': item.colaborador,
+      'Oficina': item.oficina,
+      'Inicio Contrato': item.fecha_Ingreso,
       'Departamento': item.departamento,
       'Posición': item.posision,
-      'Supervisor': item.supersivos,
+      'Supervisor': item.supersivor,
       'Estatus': item.estatus_evaluacion,
       'Desempeño': item.puntuaciondesempenocolaborador,
-      'Total Colaborador': item.totalcolaborador,      
-      'Competencia Supervisor': item.puntuacioncompetenciasupervisor,
-      'Total': item.totalCalculo
+      'Objetivo 30%': item.objetivo30,
+      'Competencia 70%': item.autocompetencia70,
+      'Autoevaluación': item.autoevaluacion,
+      'Autoevaluación 20%': item.autoevaluacion20,
+      'Competencia Supervisor 70%': item.compSuper70,
+      'Evaluación del Supervisor': item.superevaluacion,
+      'Evaluación del Supervisor 80%': item.superevaluacion80,
+      'Puntuación General': item.totalCalculo,
+      
     }));
 
     this.excelService.exportAsExcelFile(data, 'Reporte_Evaluaciones');

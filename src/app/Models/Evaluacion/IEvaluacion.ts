@@ -95,20 +95,22 @@ export interface IEvaluacion {
   evaluacionid: number;
   identificacion: string;
   colaborador: string;
-  fechA_INGRESO: string;
-  supersivos: string;
+  oficina: string;
+  fecha_Ingreso: string;
   departamento: string;
-  sucursal: string;
   posision: string;
-  evaluadopor: string;
-  tipO_ROL: string;
-  tienE_META: string;
+  supersivor: string;
   estatus_evaluacion: string;
   puntuaciondesempenocolaborador: number;
-  puntuacioncompetenciacolaborador:number;
-  totalcolaborador: number;
+  objetivo30: number;
+  puntuacioncompetenciacolaborador: number;
+  autocompetencia70: number;
+  autoevaluacion: number;
+  autoevaluacion20: number;
   puntuacioncompetenciasupervisor: number;
-  totalsupervisor:number;
+  compSuper70: number;
+  superevaluacion: number;
+  superevaluacion80: number;  
   totalCalculo: number;
 }
 
