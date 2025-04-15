@@ -178,7 +178,6 @@ export class Evaluacion implements OnInit {
               }
 
         // desempeño
-        //this.promedioDesempeno=num/resultadologro.length
         this.promedioDesempeno=num
         //se busca el valor maximo de la tabla de valores evaluacion
        // await this.GetvalorEvaluacion(this.promedioDesempeno,'porciento').then((rep)=>{
@@ -188,7 +187,7 @@ export class Evaluacion implements OnInit {
                 }   
             }
        // });
-        
+        console.log('promedioDesempeno',this.promedioDesempeno)
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
         this.porcentajeDesempeno = px1?.valor??0 
         
@@ -200,24 +199,22 @@ export class Evaluacion implements OnInit {
         }else{
             this.desempenoFinal=0
         }
-        
+        console.log('desempenoFinal',this.desempenoFinal)
 
         
         //Competencia
               //calculo del empleado
         this.model.puntuacioncompetenciacolaborador = (await this.CalculoCompetencias(false)/this.model.goalEmpleadoRespuestas.length)
         this.model.totalcolaborador = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
-        
-        console.log('evaluacion calculo competencia',this.model.totalCalculo,(this.desempenoFinal??0),((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100))
+        this.model.totalCalculo = this.model.totalcolaborador 
+        console.log('totalcolaborador/puntuacioncompetenciacolaborador',this.model.totalcolaborador,this.model.puntuacioncompetenciacolaborador)
     
               //calculo supervisor
         if(supervisor){
             console.log('total competencia supervisor',await this.CalculoCompetencias(supervisor))
             this.model.puntuacioncompetenciasupervisor = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length))
             this.model.totalsupervisor = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
-            this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
-            console.log('evaluacion calculo competencia con supervisor',this.model.totalCalculo)
-            console.log({colaborador:this.model.totalcolaborador,supervisor:this.model.totalsupervisor,total:this.model.totalCalculo })
+            this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)                    
         }
         
         //console.log('promedioCompetencias',this.promedioCompetencias)
@@ -226,9 +223,9 @@ export class Evaluacion implements OnInit {
         this.porcentajeCompetencia = px2?.valor 
         this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
         this.puntuacionFinal = this.CompetenciaFinal + (this.desempenoFinal??0)
-        this.model.totalCalculo = this.puntuacionFinal
+        //this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
         // actualizacion de desempeño del modelo
-        
+        console.log('totalcalculo',this.model.totalCalculo)
         //this.model.totalCalculo =  this.puntuacionFinal
         this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
     
@@ -356,6 +353,7 @@ export class Evaluacion implements OnInit {
         console.log('grabar',this.model)
         return new Promise<boolean>(async (resolve) => {
             try {
+                /*
                 if (this.model.evaluacionDesempenoMetas.length==0){
                     this.pdclocal = this.pdclocal.map((x)=>{
                       if (x.descripcion==='Desempeño'){
@@ -366,6 +364,7 @@ export class Evaluacion implements OnInit {
                       return x
                     })
                 }
+                
                 // Calcular competencia
                 let competencia:number = await this.CalculoCompetencias(Supervisor);
                 
@@ -374,7 +373,7 @@ export class Evaluacion implements OnInit {
                 if (this.model.evaluacionDesempenoMetas.length > 0) {
                     desempeno = await this.CalculoDesempeno();
                 }
-                
+       
                 // Obtener los porcentajes de desempeño y competencia
                 const porcientosResponse = await firstValueFrom(
                     this.porcientoDesempenoCompetencia.Gets().pipe(
@@ -401,16 +400,18 @@ export class Evaluacion implements OnInit {
                     } else if (item.descripcion === 'Competencia') {
                         dc.competencia = item.valor;
                     }
-                });
-
+                }); 
+                
+                
                 // Calcular valores finales
                 dc.valorcompetencia = (dc.competencia * competencia) / 100;
                 dc.valordesempeno = (dc.desempeno * desempeno) / 100;
                 dc.total = dc.valorcompetencia + dc.valordesempeno;
-                
+                */
                 //this.model.totalCalculo = dc.total;
 
                 // Insertar o actualizar según corresponda
+                console.log('grabando',this.model)
                 if (this.model.id === 0) {
                     const response = await firstValueFrom(this.insert(this.model));
                     this.model = response;

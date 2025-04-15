@@ -439,7 +439,7 @@ export class FormEvaluationEmployeComponent {
       }
     });
 
-    console.log('Puede continuar (competencias)?', puede);
+    //console.log('Puede continuar (competencias)?', puede);
 
     (this.evaluacionempleado.evaluacionDesempenoMetas || []).forEach((item) => {
       item.evaluacion = undefined;
@@ -449,25 +449,32 @@ export class FormEvaluationEmployeComponent {
       }
     });
 
-    console.log('Puede continuar (objetivos)?', puede);
+    //console.log('Puede continuar (objetivos)?', puede);
 
     if (puede) {
-      this.evaluacionempleado.evaluacionCursoCapacitacions = (this.cursosSeleccionados || []).map(c => {
-         const cursoLimpio: Partial<IEvaluacionCursoCapacitacion> = {...c};
-         delete cursoLimpio.cursoCapacitacion;
-         return cursoLimpio as IEvaluacionCursoCapacitacion;
-      });
 
       if (this.supervisor) {
         this.evaluacionempleado.estadoevaluacion = 'EvaluadoPorSupervisor';
       } else {
         this.evaluacionempleado.estadoevaluacion = 'AutoEvaluado';
       }
-
-      this.evaluacionempleado.totalCalculo = this.totalCalculo;
+    } else {
+      if (this.supervisor) {
+        this.evaluacionempleado.estadoevaluacion = 'Pendiente Terminar Supervisor';
+      } else {
+        this.evaluacionempleado.estadoevaluacion = 'Pendiente Terminar Autoevaluación';
+      }
+    }
+    this.evaluacionempleado.evaluacionCursoCapacitacions = (this.cursosSeleccionados || []).map(c => {
+      const cursoLimpio: Partial<IEvaluacionCursoCapacitacion> = {...c};
+      delete cursoLimpio.cursoCapacitacion;
+      return cursoLimpio as IEvaluacionCursoCapacitacion;
+   });
+     // this.evaluacionempleado.totalCalculo = this.totalCalculo;
       this.EvaluacionController.model = this.evaluacionempleado;
 
-      console.log('Enviando a grabar:', JSON.stringify(this.EvaluacionController.model, null, 2));
+      //console.log('Enviando a grabar:', JSON.stringify(this.EvaluacionController.model, null, 2));
+      console.log('enviado a grabar',this.EvaluacionController.model.totalCalculo)
 
       this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 
@@ -478,7 +485,7 @@ export class FormEvaluationEmployeComponent {
           this.dataEmitter.emit("grabado");
           this.generatePDF();
         }
-        this.router.navigate(['/Home']);
+        //this.router.navigate(['/Home']);
       }).catch(err => {
         this.dialogRef.close();
         console.error("Error al grabar:", err);
@@ -486,9 +493,7 @@ export class FormEvaluationEmployeComponent {
         this.datos.showMessage(`Error al grabar: ${errorMsg}`, this.titulo, "error");
       });
 
-    } else {
-      this.datos.showMessage("Favor verificar, tiene respuestas o logros sin completar.", this.titulo, "error");
-    }
+    
   }
 
   cancelar(): void {

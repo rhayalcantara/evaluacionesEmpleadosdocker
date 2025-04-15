@@ -175,7 +175,8 @@
 
 /* Estilos para los botones principales */
 button[type="submit"],
-button[type="cancelar"] {
+button[type="cancelar"],
+button[type="sm"] {
   padding: 12px 25px;
   border-radius: 4px;
   cursor: pointer;
@@ -187,13 +188,13 @@ button[type="cancelar"] {
 }
 
 button[type="submit"] {
-  background-color: #1a237e;
+  background-color: #1fb14b;
   color: white;
   border: none;
 }
 
 button[type="submit"]:hover {
-  background-color: #0e1642;
+  background-color: #1a237e ;
 }
 
 button[type="cancelar"] {

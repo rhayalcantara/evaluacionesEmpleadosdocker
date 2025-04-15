@@ -191,8 +191,7 @@ export class EvaluacionReporteComponent implements OnInit {
       'Supervisor': item.supersivos,
       'Estatus': item.estatus_evaluacion,
       'Desempeño': item.puntuaciondesempenocolaborador,
-      'Total Colaborador': item.totalcolaborador,
-      'Desempeño Supervisor': item.puntuaciondesempenosupervidor,
+      'Total Colaborador': item.totalcolaborador,      
       'Competencia Supervisor': item.puntuacioncompetenciasupervisor,
       'Total': item.totalCalculo
     }));

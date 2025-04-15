@@ -105,11 +105,11 @@ export interface IEvaluacion {
   tienE_META: string;
   estatus_evaluacion: string;
   puntuaciondesempenocolaborador: number;
+  puntuacioncompetenciacolaborador:number;
   totalcolaborador: number;
-  puntuaciondesempenosupervidor: number;
   puntuacioncompetenciasupervisor: number;
+  totalsupervisor:number;
   totalCalculo: number;
-  oficina: string;
 }
 
 export interface IReporte02 {
