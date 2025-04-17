@@ -45,10 +45,10 @@ public exportReporte1AsExcelFile(jsonData: IReporte01[], excelFileName: string):
         item.identificacion || '',
         item.colaborador || '',
         item.oficina || '',
-        item.fecha_Ingreso || '', // Asegúrate que el formato de fecha sea adecuado o formatéalo aquí si es necesario
+        item.fechA_INGRESO || '', // Asegúrate que el formato de fecha sea adecuado o formatéalo aquí si es necesario
         item.departamento || '',
         item.posision || '',
-        item.supersivor || '', // Usando 'supersivor' como en el componente
+        item.supervisor || '', 
         item.estatus_evaluacion || '',
         item.puntuaciondesempenocolaborador ?? '', // 'Total Puntuación Objetivo'
         item.objetivo30 ?? '',                     // 'Resultado Objetivo %' (30%)

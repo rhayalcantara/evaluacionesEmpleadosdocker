@@ -96,10 +96,10 @@ export interface IEvaluacion {
   identificacion: string;
   colaborador: string;
   oficina: string;
-  fecha_Ingreso: string;
+  fechA_INGRESO: string;
   departamento: string;
   posision: string;
-  supersivor: string;
+  supervisor: string;
   estatus_evaluacion: string;
   puntuaciondesempenocolaborador: number;
   objetivo30: number;
