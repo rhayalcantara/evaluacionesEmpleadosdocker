@@ -1,0 +1,34 @@
+<h2>Detalle de Tarea</h2>
+
+<form [formGroup]="tareaForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="descripcion">Descripción:</label>
+    <input id="descripcion" type="text" formControlName="descripcion">
+  </div>
+  <div>
+    <label for="pasos">Pasos (separados por coma):</label>
+    <input id="pasos" type="text" formControlName="pasos" (input)="updatePasos($event)">
+  </div>
+  <div>
+    <label for="fechaInicio">Fecha de Inicio:</label>
+    <input id="fechaInicio" type="date" formControlName="fechaInicio">
+  </div>
+  <div>
+    <label for="fechaPropuestaEntrega">Fecha Propuesta de Entrega:</label>
+    <input id="fechaPropuestaEntrega" type="date" formControlName="fechaPropuestaEntrega">
+  </div>
+  <div>
+    <label for="fechaTerminada">Fecha Terminada:</label>
+    <input id="fechaTerminada" type="date" formControlName="fechaTerminada">
+  </div>
+  <div>
+    <label for="estado">Estado:</label>
+    <input id="estado" type="text" formControlName="estado">
+  </div>
+  <div>
+    <label for="empleadoId">ID Empleado:</label>
+    <input id="empleadoId" type="number" formControlName="empleadoId">
+  </div>
+  <button type="submit" [disabled]="!tareaForm.valid">Guardar Cambios</button>
+  <button type="button" (click)="router.navigate(['/tareas'])">Cancelar</button>
+</form>

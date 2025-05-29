@@ -12,10 +12,13 @@ import { DashboardComponent } from './Views/Components/Pages/dashboard/dashboard
 import { KrisComponent } from './Views/Components/Pages/kris/kris.component';
 import { KpisComponent } from './Views/Components/Pages/kpis/kpis.component';
 import { FileUploadPageComponent } from './Views/Components/Pages/file-upload-page/file-upload-page.component';
+import { TareaListComponent } from './Views/Components/tareas/tarea-list/tarea-list.component';
+import { TareaFormComponent } from './Views/Components/tareas/tarea-form/tarea-form.component';
+import { TareaDetailComponent } from './Views/Components/tareas/tarea-detail/tarea-detail.component';
 
 const routes: Routes = [
   {
-    path:'login',
+    path: 'login',
     loadChildren: ()=> 
     import ('loginapp/ComponentLogin').then((m)=>m.ShowmoduleModule)
   },
@@ -203,7 +206,9 @@ const routes: Routes = [
     .then(m => m.EvaluarequipoconsejalComponent),
    
   },
- 
+  { path: 'tareas', component: TareaListComponent, canActivate: [AuthGuard] },
+  { path: 'tareas/nueva', component: TareaFormComponent, canActivate: [AuthGuard] },
+  { path: 'tareas/:id', component: TareaDetailComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

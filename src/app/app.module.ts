@@ -14,6 +14,9 @@ import { FileUploadComponent } from './archivoextras/file-upload-component';
 import { FileUploadPageComponent } from './Views/Components/Pages/file-upload-page/file-upload-page.component';
 import { ResultadoEvaluacionComponent } from './Views/Components/Pages/resultado-evaluacion/resultado-evaluacion.component';
 import { ReporteCursosComponent } from './Views/Components/reporte-cursos/reporte-cursos.component';
+import { TareaListComponent } from './Views/Components/tareas/tarea-list/tarea-list.component';
+import { TareaFormComponent } from './Views/Components/tareas/tarea-form/tarea-form.component';
+import { TareaDetailComponent } from './Views/Components/tareas/tarea-detail/tarea-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { ReporteCursosComponent } from './Views/Components/reporte-cursos/report
     DashboardComponent,
     NavmenuComponent,
     FileUploadComponent,
-    FileUploadPageComponent
+    FileUploadPageComponent,
+    TareaListComponent,
+    TareaFormComponent,
+    TareaDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,33 @@
+<h2>Lista de Tareas</h2>
+
+<button routerLink="/tareas/nueva">Crear Nueva Tarea</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Descripción</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha Propuesta</th>
+      <th>Fecha Terminada</th>
+      <th>Estado</th>
+      <th>Empleado ID</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let tarea of tareas">
+      <td>{{ tarea.id }}</td>
+      <td>{{ tarea.descripcion }}</td>
+      <td>{{ tarea.fechaInicio | date }}</td>
+      <td>{{ tarea.fechaPropuestaEntrega | date }}</td>
+      <td>{{ tarea.fechaTerminada | date }}</td>
+      <td>{{ tarea.estado }}</td>
+      <td>{{ tarea.empleadoId }}</td>
+      <td>
+        <button [routerLink]="['/tareas', tarea.id]">Ver Detalle</button>
+        <button (click)="deleteTarea(tarea.id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

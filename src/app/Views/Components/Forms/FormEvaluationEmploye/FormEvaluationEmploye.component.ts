@@ -518,7 +518,7 @@ export class FormEvaluationEmployeComponent {
     this.evaluacionempleado.entrevistaConSupervisor = this.entrevistaConSupervisor;
     this.evaluacionempleado.aceptaEnDisgusto = this.aceptaEnDisgusto;
     this.evaluacionempleado.comentarioDisgusto = this.comentarioDisgusto;
-    this.evaluacionempleado.totalCalculo = this.totalCalculo;
+    //this.evaluacionempleado.totalCalculo = this.totalCalculo;
 
     this.EvaluacionController.model = this.evaluacionempleado;
     console.log('Enviando a aceptar:', JSON.stringify(this.EvaluacionController.model, null, 2));
