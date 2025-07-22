@@ -45,10 +45,13 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="perspectiva">Descripción</label>
-      <textarea class="form-control" id="perspectiva" formControlName="perspectiva" required rows="3"></textarea>
+      <label for="perspectiva">Perspectiva</label>
+      <select class="form-control" id="perspectiva" formControlName="perspectiva" required>
+        <option value="" disabled>Seleccione una perspectiva</option>
+        <option *ngFor="let p of perspectivaOptions" [value]="p">{{p}}</option>
+      </select>
       <div class="invalid-feedback" *ngIf="fg.get('perspectiva')?.errors?.['required'] && fg.get('perspectiva')?.touched">
-        La Perspectiva es requerida
+        La perspectiva es requerida
       </div>
     </div>
     <div class="form-group">

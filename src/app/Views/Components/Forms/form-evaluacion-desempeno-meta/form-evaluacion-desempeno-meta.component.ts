@@ -25,6 +25,7 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   fg: FormGroup;
   titulo: string = 'Nueva Meta de Evaluación';
   tipoOptions: string[] = ['KRI', 'KPI', 'OBJETIVO', 'PROYECTO'];
+  perspectivaOptions: string[] = ['Financiera', 'Cliente', 'Procesos Internos', 'Aprendizaje y Crecimiento'];
   periodoactual:IPeriodo = {} as IPeriodo;
 
   selectedEmpleado: IEmpleado | undefined = {
