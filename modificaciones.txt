@@ -1,0 +1,51 @@
+Como parte del proceso de mejora del sistema de evaluación del desempeño, hemos identificado algunos aspectos que pueden optimizarse. A continuación, le compartimos los puntos más relevantes:
+
+De manera General:
+
+•	Mejoras en el sistema- Autoevaluación
+1.	En el renglón perspectivas, que solo se puedan registrar las perspectivas definidas (hay un cambio en las perspectivas)
+2.	No permitir al colaborador hacer cambios, una vez haya sometido su evaluación al supervisor, solo cuando el supervisor se la devuelva para cambios y agregar botón de modificar
+3.	Agregar “Calificación” en la sección de objetivos
+ 
+•	Mejoras en el sistema - Evaluación del supervisor
+1.	Que el supervisor pueda visualizar a sus reportes directos como una lista
+2.	Agregar el botón “devolver”, para que el colaborador pueda hacer cambios, si es necesario
+ 
+•	Mejoras en el sistema - Versión imprimible en PDF
+1.	Agregar RESULTADOS OBJETIVOS (30%), debajo de los objetivos calificados
+
+De manera Particular:
+
+Sustituir, corregir y agregar en los objetivos:
+•         Medio de verificación por ¿Cómo se Mide?
+•         Logro por Resultado
+•         % por % de logro o % de puntuación
+•         Documentar por nota o comentario
+•         Corregir las perspectivas
+•         Agregar en el promedio de los objetivos las calificaciones. Ej: Excelente, necesita mejorar, etc.
+Botones:
+A continuación, los botones que debemos de agregar:
+Autoevaluación:
+•         Botón iniciar, permite grabar
+•         Botón Completada, permite editar (en caso de que el colaborar necesite cambiar una respuesta antes de darle a someter)
+•         Botón Someter, (se desactiva el botón de editar)
+Supervisor
+•         Botón iniciar, grabar
+•         Botón de devolver autoevaluación, con nota
+•         Botón aprobar autoevaluación
+•         Botón de completada, permite editar
+•         Botón de someter
+ 
+Estos botones deben de estar al inicio y al final de cada página, tanto en la autoevaluación como la del líder.
+ 
+Para ambos casos agregar el botón
+•         Home-Atrás (debido a que la actual no permite ir hacia atrás)
+Modificar:
+Cuando el líder entre a evaluar el equipo debe de presentarse de la siguiente manera:
+1.      Eliminar los iconos existentes
+2.      Que aparezca solo en forma de lista los colaborares que le reportan con su estatus y  con la puntuación de la autoevaluación.
+Cuando el líder finaliza la evaluación. Al empleado se le debe reflejar las siguientes opciones:
+1.      En conocimiento
+2.      Conforme
+3.      Inconforme
+4.      De acuerdo
