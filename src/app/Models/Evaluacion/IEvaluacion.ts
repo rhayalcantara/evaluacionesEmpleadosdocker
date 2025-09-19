@@ -4,6 +4,10 @@ import { IEvaluacionDesempenoMeta } from "../EvaluacionDesempenoMeta/IEvaluacion
 import { IMeta, IMetaDts } from "../Meta/IMeta"
 import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from "../Capacitacion/Cursos"
 
+
+
+export { IEvaluacionDesempenoMeta } from "../EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+
 export interface IEvaluacion {
     id: number
     periodId: number
@@ -27,7 +31,141 @@ export interface IEvaluacion {
     entrevistaConSupervisor: boolean
     aceptaEnDisgusto: boolean
     comentarioDisgusto: string
+    porcentajeDesempeno: number;
+    porcentajeCompetencia: number;
   }
+  export interface IEvaluacionGoal {
+    id: number
+    evaluacionId: number
+    goalId: number
+    goal:IMetaDts
+  }
+
+  export interface IGoalEmpleadoRespuesta {
+    id: number
+    evaluacionId: number
+    goalId: number
+    repuesta: number
+    repuestasupervisor:number
+    weight: number
+    observacion: string
+    observacionsupervisor:string
+  }
+
+  export interface IEvaluacionEstadoDts {
+    EvaluacionId: number
+    EmpleadoSecuencial:number
+    estadoEvaluacion:string
+  }
+
+  export interface IEvaluacionDto{
+    id: number
+    periodId: number
+    secuencialempleado: number
+    totalCalculo: number
+    fechaRepuestas: string
+    observacion: string
+    goalEmpleadoRespuestas: IGoalEmpleadoRespuesta[]
+    evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
+    cursosCapacitacion?: ICursoCapacitacion[]
+    evaluacionCursoCapacitacions?:IEvaluacionCursoCapacitacion[]
+    puntuaciondesempenocolaborador:number
+    puntuacioncompetenciacolaborador:number
+    totalcolaborador:number
+    puntuaciondesempenosupervidor:number
+    puntuacioncompetenciasupervisor:number
+    totalsupervisor:number
+    estadoevaluacion:string
+    entrevistaConSupervisor?: boolean
+    aceptaEnDisgusto?: boolean
+    comentarioDisgusto?: string
+  }
+
+  export interface IEvalucionResultDto{
+    evaluacionId:number
+    id:number
+    inverso:boolean
+    perspectiva:string
+    objetivo:string
+    tipo:string
+    meta:number
+    peso:number
+  }
+
+  export interface IEvaluacionResultMostrarDto extends IEvalucionResultDto{
+    logrado:number
+    porciento:number
+  }
+
+  export interface IReporte01 {
+  evaluacionid: number;
+  identificacion: string;
+  colaborador: string;
+  oficina: string;
+  fechA_INGRESO: string;
+  departamento: string;
+  posision: string;
+  supervisor: string;
+  estatus_evaluacion: string;
+  puntuaciondesempenocolaborador: number;
+  objetivo30: number;
+  puntuacioncompetenciacolaborador: number;
+  autocompetencia70: number;
+  autoevaluacion: number;
+  autoevaluacion20: number;
+  puntuacioncompetenciasupervisor: number;
+  compSuper70: number;
+  superevaluacion: number;
+  superevaluacion80: number;  
+  totalCalculo: number;
+  secuencial_empleado: number;
+}
+
+export interface IReporte02 {
+  evaluacionId: number;
+  enfoqueAlSocio: number;
+  enfoqueAResultados: number;
+  flexibilidadYAdaptacion: number;
+  trabajoEnEquipoComunicacionInterpersonalInteligenciaEmocional: number;
+  desarrolloPersonalYAutoAprendizaje: number;
+  enfoqueALosSistemasInstitucionalesRegulacionesYCulturales: number;
+  tomaDeDecisionesCorajeGerencialEstiloColaboracion: number;
+  supervisionDesarrolloYMotivacionOtros: number;
+  habilidadesDeComunicacionYPresenciaProfesional: number;
+  tomaDeDecisionesYSolucionCreativaProblemas: number;
+  pensamientoAnaliticoYRigorIntelectual: number;
+  conocimientoDelNegocioEnfoqueEstrategicoVisionYProposito: number;
+  enfoqueAlSocioSupervisor: number;
+  enfoqueAResultadosSupervisor: number;
+  flexibilidadYAdaptacionSupervisor: number;
+  trabajoEnEquipoComunicacionInterpersonalInteligenciaEmocionalSupervisor: number;
+  desarrolloPersonalYAutoAprendizajeSupervisor: number;
+  enfoqueALosSistemasInstitucionalesRegulacionesYCulturalesSupervisor: number;
+  tomaDeDecisionesCorajeGerencialEstiloColaboracionSupervisor: number;
+  supervisionDesarrolloYMotivacionOtrosSupervisor: number;
+  habilidadesDeComunicacionYPresenciaProfesionalSupervisor: number;
+  tomaDeDecisionesYSolucionCreativaProblemasSupervisor: number;
+  pensamientoAnaliticoYRigorIntelectualSupervisor: number;
+  conocimientoDelNegocioEnfoqueEstrategicoVisionYPropositoSupervisor: number;
+  id: number;
+  periodId: number;
+  empleadoSecuencial: number;
+  totalCalculo: number;
+  fechaRepuestas: string;
+  observacion: string;
+  secuenciaSupervisor: number;
+  puntuacionCompetenciaColaborador: number;
+  puntuacionCompetenciaSupervisor: number;
+  puntuacionDesempenoColaborador: number;
+  puntuacionDesempenoSupervisor: number;
+  totalColaborador: number;
+  totalSupervisor: number;
+  estadoEvaluacion: string;
+  entrevistaConSupervisor?: boolean
+  aceptaEnDisgusto?: boolean
+  comentarioDisgusto?: string
+}
+
   export interface IEvaluacionGoal {
     id: number
     evaluacionId: number

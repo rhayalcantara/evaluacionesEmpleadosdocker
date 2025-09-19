@@ -174,10 +174,12 @@ export class FormEvaluationEmployeComponent {
 
   // --- Getters para cálculos (devuelven number) ---
   get porcentajeDesempeno(): number {
-    return Number(this.EvaluacionController.porcentajeDesempeno) || 0.2;
+    console.log('porcentajeDesempeno', this.EvaluacionController.porcentajeDesempeno)
+    return Number(this.EvaluacionController.porcentajeDesempeno) || 30;
   }
   get porcentajeCompetencia(): number {
-    return Number(this.EvaluacionController.porcentajeCompetencia) || 0.7;
+    console.log('porcentajeCompetencia', this.EvaluacionController.porcentajeCompetencia)
+    return Number(this.EvaluacionController.porcentajeCompetencia) || 70;
   }
   get promedioDesempeno(): number {
      const metas = this.evaluacionempleado?.evaluacionDesempenoMetas || [];
@@ -313,7 +315,7 @@ export class FormEvaluationEmployeComponent {
         // ******** INICIO: SALTO DE PÁGINA ********
         { text: '', pageBreak: 'before' },
         // ******** FIN: SALTO DE PÁGINA ********
-
+        
         // --- Tabla Resultados --- Ponderación Evaluación (20% Autoeva + 80% Eva Supervisor)
         {
           table: {

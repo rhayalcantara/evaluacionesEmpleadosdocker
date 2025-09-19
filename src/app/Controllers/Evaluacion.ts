@@ -72,27 +72,32 @@ export class Evaluacion implements OnInit {
     }
 
     public inicializamodelo(): IEvaluacion {
-        return {
+        
+        let ee:IEvaluacion={
             id: 0,
             periodId: 0,
             empleadoSecuencial: 0,
             totalCalculo: 0,
-            fechaRepuestas: '',
-            observacion: '',
+            fechaRepuestas: "",
+            observacion: "",
             evaluacionGoals: [],
             evaluacionDesempenoMetas: [],
             goalEmpleadoRespuestas: [],
-            puntuaciondesempenocolaborador:0,
-            puntuacioncompetenciacolaborador:0 ,
-            totalcolaborador:0,
-            puntuaciondesempenosupervidor:0,
-            puntuacioncompetenciasupervisor:0,
-            totalsupervisor:0,
-            estadoevaluacion:'Pendiente'   ,
+            puntuaciondesempenocolaborador: 0,
+            puntuacioncompetenciacolaborador: 0,
+            totalcolaborador: 0,
+            puntuaciondesempenosupervidor: 0,
+            puntuacioncompetenciasupervisor: 0,
+            totalsupervisor: 0,
+            estadoevaluacion: "",
             entrevistaConSupervisor: false,
             aceptaEnDisgusto: false,
-            comentarioDisgusto: ''
-        };
+            comentarioDisgusto: "",
+            porcentajeDesempeno: 0,
+            porcentajeCompetencia: 0
+        }
+        
+        return ee;
     }
 
     public async CalculoDesempeno(): Promise<number> {

@@ -46,13 +46,21 @@ export class PeriodosEvaluacion implements OnInit {
     }
 
     public inicializamodelo(): IPeriodoEvaluacion {
-
-        return {
+        let pe: IPeriodoEvaluacion ={
             id: 0,
             periodId: 0,
             positionSecuential: 0,
-            goalId: 0
+            goalId: 0,
+            periodo: {
+                id: 0,
+                descripcion: "",
+                fechaInicio: new Date(),
+                fechaFin: new Date(),
+                activa: false,
+                estadoid: 0
+            }
         }
+        return pe;
     }
 
     public getdatos() {

@@ -15,7 +15,7 @@ export class DatosServiceService {
   //public URL:string='http://192.168.137.234:9090'
     public URL:string = process.env['NODE_ENV'] === 'production'
     ? 'http://192.168.7.222:7070' // Production url
-    : 'https://localhost:7067'; // 'https://localhost:7067'Development path - let webpack figure out the path automatically
+    : 'http://192.168.7.222:7070'; // 'https://localhost:7067'Development path - let webpack figure out the path automatically
     
     
     //public URL:string ='https://localhost:7067'

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Evaluacion } from '../../../Controllers/Evaluacion';
 import { PeriodosEvaluacion } from '../../../Controllers/PeriodosEvaluacion';
 import { IEvaluacion, IEvaluacionDto, IReporte01 } from '../../../Models/Evaluacion/IEvaluacion';
@@ -12,7 +12,11 @@ import { ComunicacionService } from '../../../Services/comunicacion.service';
 import { TablesComponent } from '../../Components/tables/tables.component';
 import { ExcelService } from '../../../Services/excel.service';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
-
+import { UtilsService } from 'src/app/Helpers/utils.service';
+import { Empleados } from 'src/app/Controllers/Empleados';
+import { LoadingComponent } from '../loading/loading.component';
+import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { firstValueFrom } from 'rxjs'; // New import
 
 @Component({
   selector: 'app-evaluacion-reporte',
@@ -29,7 +33,7 @@ export class EvaluacionReporteComponent implements OnInit {
   currentPeriodId: number = 0;
   loading: boolean = false;
   error: string | null = null;
-  periodo: IPeriodoEvaluacion = {} as IPeriodoEvaluacion;
+  periodo: IPeriodo = {} as IPeriodo; 
   
   // Pagination config
   config: any = {
@@ -52,7 +56,10 @@ export class EvaluacionReporteComponent implements OnInit {
     private periodosService: PeriodosEvaluacion,
     private datosService: DatosServiceService,
     private comunicacionService: ComunicacionService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private utilsService: UtilsService,
+    private empleadoService: Empleados,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -106,81 +113,55 @@ export class EvaluacionReporteComponent implements OnInit {
     this.applyFilters();
   }
   opcion($event: TableResponse) {
-    /*
     const reporte = $event.key as IReporte01;
     const evaluacionId = reporte.evaluacionid;
-    console.log('llego el dato',reporte,evaluacionId)
-    this.evaluacionService.Get(evaluacionId.toString()).subscribe({
-      next: (evaluacion: IEvaluacion) => {
-        if (evaluacion) {
-          
-          // Initialize goalEmpleadoRespuestas
-          evaluacion.goalEmpleadoRespuestas = evaluacion.goalEmpleadoRespuestas.map(goal => ({
-            ...goal,
-            repuesta: 0,
-            repuestasupervisor: 0,
-            observacion: ""
-          }));
 
-          // Inicializa la puntucion de la evaluacion
-          evaluacion.puntuaciondesempenocolaborador = 0;
-          evaluacion.puntuacioncompetenciacolaborador = 0;
-          evaluacion.totalcolaborador = 0;
-          evaluacion.puntuaciondesempenosupervidor = 0;
-          evaluacion.puntuacioncompetenciasupervisor = 0;
-          evaluacion.totalsupervisor = 0;
-          evaluacion.observacion = "";
-          evaluacion.estadoevaluacion = 'Pendiente';
-
-
-          // Update the evaluation
-          this.evaluacionService.Update(evaluacion).subscribe({
-            next: (updateResponse: IEvaluacionDto) => {
-              if (updateResponse) {
-                this.datosService.showMessage(
-                  'Evaluación inicializada correctamente',
-                  'Evaluaciones',
-                  'success'
-                );
-                //localiza IReporte01 y actualiza el estado de la evaluacion
-                const reporteIndex = this.reportData.findIndex(item => item.evaluacionid === evaluacionId);
-                if (reporteIndex != 0) {
-                  this.reportData[reporteIndex].estatus_evaluacion ='Pendiente'
-                  this.reportData[reporteIndex].puntuaciondesempenocolaborador=0
-                  this.reportData[reporteIndex].totalcolaborador=0
-                  this.reportData[reporteIndex].puntuaciondesempenosupervidor=0
-                  this.reportData[reporteIndex].puntuacioncompetenciasupervisor=0
-                  this.reportData[reporteIndex].totalCalculo=0
-                  //this.loadReportData(); // Refresh the data
-                }
-                // envia mensaje para actualizar la tabla
-                this.comunicacionService.enviarMensaje(this.config);
-              }
-            },
-            error: (error: Error) => {
-              this.datosService.showMessage(
-                'Error al actualizar la evaluación: ' + error.message,
-                'Evaluaciones',
-                'error'
-              );
-            }
-          });
-        }
-      },
-      error: (error: Error) => {
+    switch ($event.option) {
+      case 'edit':
+        // Existing edit logic (currently commented out)
         this.datosService.showMessage(
-          'Error al cargar la evaluación: ' + error.message,
+          'Favor Informar al Departamento de IT',
           'Evaluaciones',
           'error'
         );
-      }
-    });
-    */
-    this.datosService.showMessage(
-      'Favor Informar al Departamento de IT',
-      'Evaluaciones',
-      'error'
-    );
+        break;
+      case 'del':
+        // Existing delete logic (currently commented out)
+        this.datosService.showMessage(
+          'Favor Informar al Departamento de IT',
+          'Evaluaciones',
+          'error'
+        );
+        break;
+      case 'print':
+        // New print logic
+        if (reporte.evaluacionid === undefined || reporte.identificacion === undefined) {
+          this.datosService.showMessage('No se puede imprimir: faltan datos de evaluación o empleado.', 'Generar PDF', 'warning');
+          return;
+        }
+        
+        // Use firstValueFrom for consistency
+        Promise.all([
+          firstValueFrom(this.evaluacionService.Get(reporte.evaluacionid.toString())),
+          firstValueFrom(this.empleadoService.GetByCedula(reporte.identificacion))
+        ]).then(([evaluacion, empleado]) => {
+          if (evaluacion && empleado) {
+            this.utilsService.generatePDFEvaluacion(evaluacion, empleado, this.periodo);
+          } else {
+            this.datosService.showMessage('No se encontró información completa para generar el PDF.', 'Generar PDF', 'warning');
+          }
+        }).catch((err: any) => {
+          this.datosService.showMessage('Error al generar el PDF: ' + err.message, 'Generar PDF', 'error');
+        });
+        break;
+      default:
+        this.datosService.showMessage(
+          'Acción no reconocida',
+          'Evaluaciones',
+          'warning'
+        );
+        break;
+    }
   }
   downloadExcel() {
     // El mapeo manual ha sido eliminado.
@@ -210,9 +191,21 @@ export class EvaluacionReporteComponent implements OnInit {
     this.loading = true;
     this.error = null;
     
-    // Get the most recent period as active
-    this.periodo = JSON.parse(localStorage.getItem('periodo') ?? "")
-    this.currentPeriodId = this.periodo.id;
+    const periodoString = localStorage.getItem('periodo');
+    if (periodoString) {
+      try {
+        this.periodo = JSON.parse(periodoString);
+        this.currentPeriodId = this.periodo.id;
+      } catch (e) {
+        console.error("Error parsing 'periodo' from localStorage", e);
+        this.datosService.showMessage('Error al cargar el periodo desde el almacenamiento local.', 'Periodo', 'error');
+        this.periodo = { id: 0, descripcion: '', fechaInicio: new Date(), fechaFin: new Date(), activa: false, estadoid: 0 };
+        this.currentPeriodId = 0;
+      }
+    } else {
+      this.periodo = { id: 0, descripcion: '', fechaInicio: new Date(), fechaFin: new Date(), activa: false, estadoid: 0 };
+      this.currentPeriodId = 0;
+    }
     this.loading = false;
     this.loadReportData();
   }
@@ -247,5 +240,41 @@ export class EvaluacionReporteComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  async generateAllPdfs() {
+
+    const activeEvaluations = this.filteredData.filter(item => item.estatus_evaluacion.toLowerCase() === 'autoevaluado');
+    if (activeEvaluations.length === 0) {
+      this.datosService.showMessage('No hay evaluaciones activas para generar PDF.', 'Generar PDFs', 'info');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(LoadingComponent, {
+      disableClose: true,
+      data: { title: 'Generando PDFs...' }
+    });
+    
+    try {
+      for (const report of activeEvaluations) {
+       
+        if (report.evaluacionid === undefined || report.identificacion === undefined) {
+          console.warn('Skipping report due to missing evaluacionid or secuencial_empleado:', report);
+          continue; // Skip this iteration
+        }
+        const [evaluacion, empleado] = await Promise.all([          
+          firstValueFrom(this.evaluacionService.Get(report.evaluacionid.toString())),
+          firstValueFrom(this.empleadoService.GetByCedula(report.identificacion))
+        ]);
+        
+        if (evaluacion && empleado) {
+          this.utilsService.generatePDFEvaluacion(evaluacion, empleado, this.periodo);
+        }
+      }
+    } catch (error: any) {
+      this.datosService.showMessage('Error al generar los PDFs: ' + error.message, 'Generar PDFs', 'error');
+    } finally {
+      dialogRef.close();
+    }
   }
 }

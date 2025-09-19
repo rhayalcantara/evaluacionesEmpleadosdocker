@@ -55,6 +55,7 @@
                     </td>  
                     <td *ngIf="!selected" class="centrado">                        
                         <button class="btn" (click)="opcion(datos,'edit')"><i class="fa fa-edit"></i></button>                        
+                        <button class="btn" (click)="opcion(datos,'print')"><i class="fa fa-print"></i></button> <!-- New Print Button -->
                         <button *ngIf="deleted" class="btn" (click)="opcion(datos,'del')"><i class="fa fa-trash"></i></button>
                     </td>                      
                 </tr>      
