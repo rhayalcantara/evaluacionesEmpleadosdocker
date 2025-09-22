@@ -243,8 +243,7 @@ export class EvaluacionReporteComponent implements OnInit {
   }
 
   async generateAllPdfs() {
-
-    const activeEvaluations = this.filteredData.filter(item => item.estatus_evaluacion.toLowerCase() === 'autoevaluado');
+    const activeEvaluations = this.reportData //this.reportData.filter(item => item.estatus_evaluacion.toLowerCase() === 'autoevaluado');
     if (activeEvaluations.length === 0) {
       this.datosService.showMessage('No hay evaluaciones activas para generar PDF.', 'Generar PDFs', 'info');
       return;
@@ -254,23 +253,59 @@ export class EvaluacionReporteComponent implements OnInit {
       disableClose: true,
       data: { title: 'Generando PDFs...' }
     });
-    
+
     try {
+      // Importar JSZip dinámicamente
+      const JSZipModule = await import('jszip');
+      const JSZip = (JSZipModule as any).default || JSZipModule;
+
+      const zip = new (JSZip as any)();
+      const pdfPromises: Promise<{blob: Blob, filename: string}>[] = [];
+
       for (const report of activeEvaluations) {
-       
         if (report.evaluacionid === undefined || report.identificacion === undefined) {
           console.warn('Skipping report due to missing evaluacionid or secuencial_empleado:', report);
-          continue; // Skip this iteration
+          continue;
         }
-        const [evaluacion, empleado] = await Promise.all([          
+
+        const pdfPromise = Promise.all([
           firstValueFrom(this.evaluacionService.Get(report.evaluacionid.toString())),
           firstValueFrom(this.empleadoService.GetByCedula(report.identificacion))
-        ]);
-        
-        if (evaluacion && empleado) {
-          this.utilsService.generatePDFEvaluacion(evaluacion, empleado, this.periodo);
-        }
+        ]).then(async ([evaluacion, empleado]) => {
+          if (evaluacion && empleado) {
+            const blob = await this.utilsService.generatePDFEvaluacionBlob(evaluacion, empleado, this.periodo);
+            const filename = `evaluacion_${empleado.nombreunido || 'empleado'}_${this.periodo.descripcion || 'periodo'}.pdf`;
+            return { blob, filename };
+          }
+          throw new Error('No se pudo obtener evaluación o empleado');
+        });
+
+        pdfPromises.push(pdfPromise);
       }
+
+      // Esperar a que todos los PDFs se generen
+      const pdfResults = await Promise.all(pdfPromises);
+
+      // Agregar cada PDF al ZIP
+      pdfResults.forEach(({ blob, filename }) => {
+        zip.file(filename, blob);
+      });
+
+      // Generar el archivo ZIP y descargarlo usando la API nativa del navegador
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const filename = `evaluaciones_${this.periodo.descripcion || 'periodo'}_${new Date().toISOString().split('T')[0]}.zip`;
+
+      // Crear enlace de descarga usando la API nativa del navegador
+      const url = window.URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      this.datosService.showMessage(`Se generaron ${pdfResults.length} PDFs en un archivo ZIP.`, 'Generar PDFs', 'success');
     } catch (error: any) {
       this.datosService.showMessage('Error al generar los PDFs: ' + error.message, 'Generar PDFs', 'error');
     } finally {
