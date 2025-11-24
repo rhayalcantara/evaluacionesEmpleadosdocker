@@ -18,6 +18,8 @@ import { DatosServiceService } from '../../../../Services/datos-service.service'
 import { LoggerService } from '../../../../Services/logger.service';
 import { Periodos } from '../../../../Controllers/Periodos';
 import { ExcelService } from '../../../../Services/excel.service';
+import { ComparacionModalComponent } from './modals/comparacion-modal.component';
+import { DetalleEvaluacionModalComponent } from './modals/detalle-evaluacion-modal.component';
 
 import {
   IHistorialEvaluacionResumen,
@@ -416,15 +418,16 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.logger.info('Comparación generada', comparacion);
 
-        // Mostrar resultados de comparación (podría ser un modal)
-        const mensaje = `
-          Diferencia Total: ${comparacion.diferenciaTotal.toFixed(2)}
-          Diferencia Desempeño: ${comparacion.diferenciaDesempeno.toFixed(2)}
-          Diferencia Competencias: ${comparacion.diferenciaCompetencia.toFixed(2)}
-          Tendencia: ${comparacion.tendencia}
-        `;
+        // Abrir modal con la comparación
+        this.dialog.open(ComparacionModalComponent, {
+          width: '900px',
+          maxWidth: '95vw',
+          data: comparacion,
+          autoFocus: false
+        });
 
-        this.datosService.showMessage(mensaje, 'Comparación de Evaluaciones', 'info');
+        // Limpiar selección después de mostrar
+        this.evaluacionesSeleccionadas = [];
       },
       error: (error) => {
         this.loading = false;
@@ -499,7 +502,26 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
    */
   verDetalle(evaluacionId: number): void {
     this.logger.debug('Ver detalle de evaluación', { evaluacionId });
-    // Funcionalidad pendiente: navegación a detalle completo de evaluación
+
+    // Buscar la evaluación en el historial
+    const evaluacion = this.historial.find(ev => ev.evaluacionId === evaluacionId);
+
+    if (!evaluacion) {
+      this.datosService.showMessage(
+        'No se encontró la evaluación solicitada',
+        'Error',
+        'error'
+      );
+      return;
+    }
+
+    // Abrir modal con el detalle completo
+    this.dialog.open(DetalleEvaluacionModalComponent, {
+      width: '800px',
+      maxWidth: '95vw',
+      data: evaluacion,
+      autoFocus: false
+    });
   }
 
   /**
