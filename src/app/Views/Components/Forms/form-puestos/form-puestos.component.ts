@@ -33,7 +33,6 @@ export class FormPuestosComponent implements OnInit {
       this.fg=this.fb.group({});
     }
   ngOnInit(): void {
-    console.log(this.data.model)
     this.puesto = this.data.model
     this.departamentos.getdatos()
 

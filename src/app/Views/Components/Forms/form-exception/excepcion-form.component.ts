@@ -34,7 +34,6 @@ excepcionForm: any;
 
 
   ngOnInit(): void {
- //    console.log(this.data.model);
     this.excepcionmodel = this.data.model;
    
     

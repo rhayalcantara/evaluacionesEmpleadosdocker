@@ -13,7 +13,6 @@ export class VisorpdfComponent implements OnInit {
 
   ngOnInit(): void {
     const targetElement =  document.querySelector('iframe')
-    console.log('targetElement',targetElement,'url',this.data.url)
     if (targetElement != null){
       targetElement.src=this.data.url  
     }

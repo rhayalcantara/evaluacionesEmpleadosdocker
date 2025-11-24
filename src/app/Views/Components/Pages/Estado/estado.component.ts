@@ -34,7 +34,6 @@ export class EstadoComponent implements OnInit {
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.log('estadoServices Constructor: ' + mensaje);
       }
     });
   }
@@ -43,7 +42,6 @@ export class EstadoComponent implements OnInit {
     this.estadoService.getdatos();
     this.estadoService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }
@@ -64,7 +62,6 @@ export class EstadoComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
 
     const acct: any = {
       edit: this.edita,
@@ -82,7 +79,6 @@ export class EstadoComponent implements OnInit {
   edita(estado: IEstado, p: Estado, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = estado;
-      console.log('estadoService edit', p.model);
 
       const dialogRef = t.open(FormEstadoComponent, {
         width: '800px', data: { model: p.model }
@@ -117,11 +113,9 @@ export class EstadoComponent implements OnInit {
 
   paginacambio(event: number) {
     this.estadoService.actualpage = event;
-    console.log(this.estadoService.actualpage);
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event);
     this.config.id = event;
   }
 

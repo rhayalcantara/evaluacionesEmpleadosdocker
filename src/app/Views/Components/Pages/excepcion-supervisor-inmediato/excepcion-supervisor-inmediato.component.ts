@@ -47,7 +47,6 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
     });
     this.excepcionController.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }
@@ -126,7 +125,6 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
       this.excepcionController.actualpage = $event;
     }
     opcion(event: TableResponse) {
-      console.log(event);
   
       const acct: any = {
         edit: this.edita,
@@ -146,7 +144,6 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
     edita(estado: IExcepcionSupervisorInmediatoDts, p: ExcepcionSupervisorInmediato, t: MatDialog): Promise<any> {
       return new Promise((resolve: any, reject: any) => {
         p.model = estado;
-        console.log('estadoService edit', p.model);
   
         const dialogRef = t.open(FormExcepcionSupervisorInmediatoComponent, {
           width: '800px', data: { model: p.model }

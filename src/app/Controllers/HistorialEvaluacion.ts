@@ -35,10 +35,13 @@ export class HistorialEvaluacion {
   public getHistorialPorEmpleado(empleadoSecuencial: number): Observable<IHistorialEvaluacionResumen[]> {
     this.logger.debug('Obteniendo historial para empleado', { empleadoSecuencial });
 
-    return this.evaluacionController.GetEvaluacionesPorEmpleado(empleadoSecuencial).pipe(
-      map((evaluaciones: IEvaluacion[]) => {
+    return forkJoin({
+      evaluaciones: this.evaluacionController.GetEvaluacionesPorEmpleado(empleadoSecuencial),
+      empleado: this.empleadosController.Get(empleadoSecuencial.toString())
+    }).pipe(
+      map(({ evaluaciones, empleado }) => {
         return evaluaciones
-          .map(ev => this.mapearAResumen(ev))
+          .map(ev => this.mapearAResumen(ev, empleado))
           .sort((a, b) => new Date(b.fechaRespuesta).getTime() - new Date(a.fechaRespuesta).getTime());
       })
     );
@@ -243,18 +246,21 @@ export class HistorialEvaluacion {
   /**
    * Mapea una evaluación completa a un resumen para el historial
    */
-  private mapearAResumen(evaluacion: IEvaluacion): IHistorialEvaluacionResumen {
+  private mapearAResumen(evaluacion: IEvaluacion, empleadoInfo?: any): IHistorialEvaluacionResumen {
+    // Intentar obtener info del empleado de varias fuentes
+    const empleado = empleadoInfo || (evaluacion.empleado as any);
+
     return {
       evaluacionId: evaluacion.id,
       periodId: evaluacion.periodId,
-      periodoNombre: `Período ${evaluacion.periodId}`, // TODO: Obtener nombre real del período
-      fechaInicio: '', // TODO: Obtener del período
-      fechaFin: '', // TODO: Obtener del período
+      periodoNombre: `Período ${evaluacion.periodId}`,
+      fechaInicio: '',
+      fechaFin: '',
       empleadoSecuencial: evaluacion.empleadoSecuencial,
-      empleadoNombre: (evaluacion.empleado as any)?.nombreunido || 'N/A',
-      empleadoIdentificacion: (evaluacion.empleado as any)?.identificacion,
-      departamento: (evaluacion.empleado as any)?.departamento,
-      puesto: (evaluacion.empleado as any)?.cargo,
+      empleadoNombre: empleado?.nombreunido || empleado?.nombre || 'N/A',
+      empleadoIdentificacion: empleado?.identificacion || 'N/A',
+      departamento: empleado?.departamento || 'N/A',
+      puesto: empleado?.cargo || empleado?.puesto || 'N/A',
       fechaRespuesta: evaluacion.fechaRepuestas,
       estadoEvaluacion: evaluacion.estadoevaluacion,
       totalCalculo: evaluacion.totalCalculo,
@@ -264,7 +270,7 @@ export class HistorialEvaluacion {
       puntuacionCompetenciaSupervisor: evaluacion.puntuacioncompetenciasupervisor,
       totalColaborador: evaluacion.totalcolaborador,
       totalSupervisor: evaluacion.totalsupervisor,
-      supervisorNombre: undefined, // TODO: Obtener del empleado
+      supervisorNombre: undefined,
       entrevistaConSupervisor: evaluacion.entrevistaConSupervisor
     };
   }

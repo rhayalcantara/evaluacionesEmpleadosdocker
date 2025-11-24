@@ -44,7 +44,6 @@ export class FormPoliticaEvaluacionComponent implements OnInit {
   onSubmit(): void {
     if (this.politicaEvaluacionForm.valid) {
       this.PE.model =  this.politicaEvaluacionForm.value as IPoliticaEvaluacion;
-      console.log('Política de Evaluación:', this.PE.model);
       // Here you would typically call a service to save the data
       this.PE.grabar().then((x:boolean)=>{
         if(x){

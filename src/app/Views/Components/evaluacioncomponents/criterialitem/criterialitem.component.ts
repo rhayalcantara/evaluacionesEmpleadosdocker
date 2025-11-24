@@ -68,7 +68,6 @@ export class CriterialitemComponent implements OnInit {
     this.periodo = this.PeriodoModel.inicializamodelo()
     this.PorCientoDC.Gets().subscribe({
       next:(rep)=>{
-        ////console.log('porcientodesempenocompetencia',rep)
         let pdc:IPorcientoDesempenoCompetencia[]=rep.data
         this.pdclocal = pdc.filter(x=>x.periodId==this.periodo.id)
 
@@ -78,7 +77,6 @@ export class CriterialitemComponent implements OnInit {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe((data:any)=>{
       
       if ( data.mensaje === 'buscar'){
-        ////console.log('data mensaje',data)
         // busca los desempeños
         const dialogRef = this.toastr.open(LoadingComponent, {
           width: '340px',
@@ -124,7 +122,6 @@ export class CriterialitemComponent implements OnInit {
            
           })
 
-            //console.log('actualizar desempeno',this.resultadologro)
             dialogRef.close();
             this.cd.detectChanges(); 
           }
@@ -134,7 +131,6 @@ export class CriterialitemComponent implements OnInit {
         this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
         .subscribe({
           next: (rep: IEvaluacion) => {
-            console.log('Evaluacion Recibida:', rep);
             this.evaluacion = rep;            
             this.EvaluacionControler.model = this.evaluacion
 
@@ -168,7 +164,6 @@ export class CriterialitemComponent implements OnInit {
                 r.medioverificacion = item.evaluacioneDesempenoMetaRespuestas?.medioverificacion ?? ''
                 r=this.calcularresultadologro(r,item)     
                 this.cd.detectChanges()           
-               //console.log('repuesta',r,item)
              
             })
             
@@ -181,7 +176,6 @@ export class CriterialitemComponent implements OnInit {
       }
       }
       if (data.mensaje ==='Actualizar variables'){
-        //console.log(data)
         // aqui se actualiza las variables
         if (this.desempeno.length!=0){
           this.pdclocal = this.EvaluacionControler.pdclocal
@@ -228,7 +222,6 @@ export class CriterialitemComponent implements OnInit {
         */
         let num = Number(this.EvaluacionControler.desempenoFinal) + Number(this.EvaluacionControler.CompetenciaFinal)
         //this.evaluacion.totalcolaborador = num
-        //console.log('Actualizar variables',this.evaluacion)
         
         this.onPuntacionChange.emit(this.evaluacion.totalCalculo)
         this.onEvaluacionChange.emit(this.evaluacion)
@@ -260,7 +253,6 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
   // 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
   calcularresultadologro(rl:IResultadoLogro,item:IEvaluacionDesempenoMeta):IResultadoLogro{
     //calculo porcientologro
-    ////console.log(item.inverso,item.evaluacioneDesempenoMetaRespuestas?.logro,item.meta,item.descripcion)
     if(item.inverso){
       
       if((item.evaluacioneDesempenoMetaRespuestas?.logro??0)!=0){
@@ -330,12 +322,10 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
     let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
     this.porcentajeCompetencia = px2?.valor 
     this.CompetenciaFinal = (this.porcentajeCompetencia * this.promedioCompetencias)/100
-    ////console.log('competencias',this.porcentajeCompetencia)
 
   }
 
   ngOnInit(): void {
-    //////console.log('CriterialitemComponent',this.evaluacion)
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
     this.logro = this.logro.map((x)=>0)
@@ -346,10 +336,8 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
   }
   
   onLogroChange(event:any,index:number){
-    console.log('logro',event.target.value,index)
     let logro:number = event.target.value
     this.logro[index] = logro
-    ////console.log('logro',logro,index,this.evaluacion.evaluacionDesempenoMetas[index])
      
       // if(this.supervisor){
       //   this.evaluacion.evaluacionDesempenoMetas[index].evaluacioneDesempenoMetaRespuestas!.supervisado_logro = logro;
@@ -361,17 +349,14 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
      this.resultadologro[index]=this.calcularresultadologro(this.resultadologro[index],this.evaluacion.evaluacionDesempenoMetas[index])
      this.EvaluacionControler.calculaelpromediodesempeno(false,this.resultadologro)
 
-    console.log('logro',this.resultadologro[index],this.evaluacion)
 
      this.onEvaluacionChange.emit(this.evaluacion)
     
-    //////console.log("cambio el logro",this.evaluacion.evaluacionDesempenoMetas[index])
   }
 
   onRespuestaChange(respuesta: IGoalEmpleadoRespuesta | IDesempenoRespuesta, index: number) {
     // Actualiza la respuesta en el array
     // verificar de que tipo es la respuesta
-    ////console.log('respuesta',respuesta,index)
     if (respuesta.hasOwnProperty('goalId')) 
         this.evaluacion.goalEmpleadoRespuestas[index] = respuesta as IGoalEmpleadoRespuesta;
     else{
@@ -383,7 +368,6 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
     this.EvaluacionControler.calculaelpromediodesempeno(this.supervisor,this.resultadologro)
     this.onEvaluacionChange.emit(this.evaluacion)
     // Aquí puedes agregar cualquier lógica adicional que necesites
-    //////console.log('Respuesta actualizada:', respuesta);
     
     // Si necesitas hacer algo más con la respuesta, como enviarla al servidor, puedes hacerlo aquí
   }
@@ -391,7 +375,6 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
     let coment:string = event.target.value
     this.evaluacion.goalEmpleadoRespuestas[index].observacion = coment
     this.onEvaluacionChange.emit(this.evaluacion)
-    //////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
   }
   onComentarioChangesupervisor(event:any,index:number){
 
@@ -399,6 +382,5 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
     this.evaluacion.goalEmpleadoRespuestas[index].observacionsupervisor = coment
     this.onEvaluacionChange.emit(this.evaluacion)
 
-    //////console.log("cambio el comentario",this.evaluacion.goalEmpleadoRespuestas[index])
   }
 }

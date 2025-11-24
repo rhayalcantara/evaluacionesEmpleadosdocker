@@ -34,7 +34,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
         console.table(mensaje);
-        console.log('objetivoEstrategicoService Constructor: ' + mensaje);
       }
     });
   }
@@ -43,7 +42,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     this.objetivoEstrategicoService.getdatos();
     this.objetivoEstrategicoService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         console.table(this.objetivoEstrategicoService.arraymodel);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
@@ -65,7 +63,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
 
     const acct: any = {
       edit: this.edita,
@@ -83,7 +80,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   edita(objetivo: IObjetivoEstrategico, p: ObjetivoEstrategico, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = objetivo;
-      console.log('objetivoEstrategicoService edit', p.model);
 
       const dialogRef = t.open(FromObjetivoExtrategicoComponent, {
         width: '90%', data: { model: p.model }
@@ -118,11 +114,9 @@ export class ObjetivoEstrategicoComponent implements OnInit {
 
   paginacambio(event: number) {
     this.objetivoEstrategicoService.actualpage = event;
-    console.log(this.objetivoEstrategicoService.actualpage);
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event);
     this.config.id = event;
   }
 

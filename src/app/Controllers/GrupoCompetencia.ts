@@ -53,7 +53,6 @@ export class GrupoCompetencia {
         this.Gets().subscribe({
             next: (rep: ModelResponse) => {
                 
-                console.log('llegaron los datos', rep.count);
                 this.totalregistros = rep.count;
                 this.pagesize = rep.count;
                 this.arraymodel = [];
@@ -63,14 +62,12 @@ export class GrupoCompetencia {
                 if(rep.count>0){
                     this.arraymodel.sort((a, b) => a.nombre.localeCompare(b.nombre));
                 }
-                console.log('datos', this.arraymodel);
                 this.TRegistros.emit(this.totalregistros);
             }
         });
     }
 
     public Gets(): Observable<ModelResponse> {
-        console.log(this.rutaapi);
         return this.datos.getdatos<ModelResponse>(this.rutaapi);
     }
 
@@ -83,7 +80,6 @@ export class GrupoCompetencia {
     }
 
     public insert(obj: IGrupoCompetencia): Observable<IGrupoCompetencia> {
-        console.log('llego a insert en GrupoCompetencia', obj);
         return this.datos.insertardatos<IGrupoCompetencia>(this.rutaapi, obj);
     }
 
@@ -96,7 +92,6 @@ export class GrupoCompetencia {
             if (this.model.id == 0) {
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IGrupoCompetencia) => {
-                        console.log(rep);
                         this.model = rep;
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensaje, "success");
                         resolve(true);
@@ -107,10 +102,8 @@ export class GrupoCompetencia {
                     }
                 );
             } else {
-                console.log(this.model);
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IGrupoCompetencia) => {
-                        console.log('se actualizó el grupo de competencia:', rep);
                         let m = this.arraymodel.find(x => x.id == this.model.id);
                         if (m != undefined) {
                             m.id = this.model.id;

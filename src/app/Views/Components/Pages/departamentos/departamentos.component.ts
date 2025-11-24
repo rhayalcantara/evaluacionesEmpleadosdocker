@@ -25,7 +25,6 @@ export class DepartamentosComponent implements OnInit {
     ) { 
       // this.departamento.getdatos()
       this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:string)=>{
-        console.log('departamentos Construtor: '+mensaje)   
       
       }})
     }
@@ -41,7 +40,6 @@ export class DepartamentosComponent implements OnInit {
     this.departamento.getdatos()
     this.departamento.TRegistros.subscribe({
      next:(rep:number)=>{
-      console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
      }
@@ -64,7 +62,6 @@ export class DepartamentosComponent implements OnInit {
      
    }
    opcion(event:TableResponse){
-    console.log(event)
     
     const acct:any ={
       edit:this.edita,
@@ -96,12 +93,10 @@ export class DepartamentosComponent implements OnInit {
       // p.getdatos()
       
       p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IDepartamento
-      console.log('departamento edit',p.model)
       /*
         const  dialogRef = t.open(FormdepartamentoComponent,{
           width: '900px',data:{model:p.model}})
           dialogRef.afterClosed().subscribe((result:IDepartamento)=>{
-            //console.log('llego del formulario de departamento',result)
             if (result){
               resolve(result);
             }else{
@@ -121,7 +116,6 @@ export class DepartamentosComponent implements OnInit {
     const  dialogRef = t.open(FormdepartamentoComponent,{
       width: '900px',data:{model:p.model}})
       dialogRef.afterClosed().subscribe((rep:IDepartamento)=>{
-        //console.log('llego del formulario de departamento',result)
         this.departamento.arraymodel.push(rep)
         this.datos.showMessage("Registro Insertado Correctamente",this.departamento.titulomensage,"sucess")
       }); */
@@ -135,7 +129,6 @@ export class DepartamentosComponent implements OnInit {
     //this.departamento.filtrar()
   }
   actualizaelidtable(event:string){
-    console.log('se actualizo el config',event)
     this.config.id = event
   }
   filtro(){

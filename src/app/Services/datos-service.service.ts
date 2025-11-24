@@ -24,7 +24,6 @@ export class DatosServiceService {
   });
     //Archivo
     public Uploadfile(file: File,expedienteid:string,descripcion:string): Observable<HttpEvent<any>>{
-      // console.log('en el servicio',file,expedienteid,descripcion )
       const formData: FormData = new FormData();
         formData.append('files', file);
        
@@ -91,7 +90,6 @@ export class DatosServiceService {
          
          
         let  campos:string[] = Object.keys(obj)
-        // console.log('los campos',campos)
         let formGroup:FormGroup=new FormGroup({})
          for (let control of campos) {
            
@@ -110,7 +108,6 @@ export class DatosServiceService {
             let newFormControl: FormControl = new FormControl();      
             newFormControl.setValue(obj[control]);
             formGroup.addControl(control, newFormControl);
-            //console.log({campo:control,fg:newFormControl.value})
           //}
 
         } 

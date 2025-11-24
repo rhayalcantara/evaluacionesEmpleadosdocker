@@ -29,7 +29,6 @@ constructor(public meta:Metas,
   ngOnInit(): void {
       this.meta.getdatos()
       this.meta.TRegistros.subscribe({next:(rep:number)=>{
-        console.log("evento#:",rep)
          this.config.totalItems=rep
          this.ServiceComunicacion.enviarMensaje(this.config)
        }
@@ -56,7 +55,6 @@ paginacambio($event: number) {
  
 }
 opcion(event: TableResponse) {
-  console.log(event)
     
     const acct:any ={
       edit:this.edita,
@@ -95,12 +93,10 @@ edita(prod:IMeta ,p:Metas ,t:MatDialog):Promise<any> {
     // p.getdatos()
     
     p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IMeta 
-    console.log('Meta  edit',p.model)
     
       const  dialogRef = t.open(FormMetasComponent,{
         width: '800px',data:{model:p.model}})
         dialogRef.afterClosed().subscribe((result:IMeta )=>{
-          //console.log('llego del formulario de Meta ',result)
           if (result){
             resolve(result);
           }else{
@@ -120,7 +116,6 @@ abrirmodalzona(t:MatDialog,p:Metas ){
   const  dialogRef = t.open(FormMetasComponent,{
     width: '800px',data:{model:p.model}})
     dialogRef.afterClosed().subscribe((rep:IMetaDts )=>{
-      //console.log('llego del formulario de Meta ',result)
       this.meta.arraymodel.push(rep)
       this.datos.showMessage("Registro Insertado Correctamente",this.meta.titulomensage,"sucess")
     }); 

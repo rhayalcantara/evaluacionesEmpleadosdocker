@@ -68,7 +68,6 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
   loadCategoriasPuesto() {
     this.categoriaPuestoService.Gets().subscribe({
       next: (response) => {
-        console.log('Categorias loaded:', response);
         this.categoriasPuesto = response.data;
         this.updateCategoriasDisponibles();
       },
@@ -98,7 +97,6 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
           cat => !usedCategorias.has(cat.id) || this.categoriasSeleccionadas.includes(cat.id)
         );
 
-        console.log('Categorias disponibles:', this.categoriasDisponibles);
       },
       error: (error) => {
         console.error('Error loading Rol Categorias:', error);
@@ -120,7 +118,6 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
           rolCategoriaPuestoId: formValue.id
         }))        
       };
-      //console.log('a grabar',rolCategoriaPuesto)
       this.rolCategoriaService.model = rolCategoriaPuesto;
       this.rolCategoriaService.grabar().then(
         (success) => {

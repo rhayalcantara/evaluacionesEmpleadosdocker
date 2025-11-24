@@ -90,7 +90,6 @@ export class ObjetivoExtrategicoAno {
          map((rep:ModelResponse) => {
           
           let oea:IObjetivoExtrategicoAno[] = rep.data;
-          console.log('objano',rep,oea);
           return oea.filter(item => item.objetivoExtrategicoId === objetivoExtrategicoId);
          })
       )

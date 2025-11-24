@@ -78,7 +78,6 @@ export class HomeComponent implements OnInit {
   onPageChange(event: any) {}
 
   opcion(event: TableResponse) {
-    //console.log(event)
   }
   agregametasub(){
     const dialogRef = this.dialog.open(SupervisorGoalsComponent, {

@@ -34,7 +34,6 @@ export class FormValoresEvaluacionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data.model)
     if (this.data.model.id) {
       this.titulo = 'Editar Valor de Evaluación';            
     }

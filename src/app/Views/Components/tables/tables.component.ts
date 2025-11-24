@@ -65,7 +65,6 @@ export class TablesComponent implements OnInit {
     if(tt.id==this.id){
       this.config.totalItems=tt.totalItems
       this.config.itemsPerPage=tt.itemsPerPage
-      console.log('itemsPerPage',this.config.itemsPerPage)
       this.cd.detectChanges();
     }
   }

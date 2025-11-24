@@ -50,7 +50,6 @@ export class PlanAnos {
     public getdatos() {
         this.Gets().subscribe({
             next:(rep:ModelResponse) => {
-                console.log('llegaron los datos datos', rep.count)
                 this.totalregistros = rep.count
                 this.pagesize = rep.count
                 this.arraymodel = []
@@ -58,7 +57,6 @@ export class PlanAnos {
                 this.arraymodel = rep.data   
                 this.arraytotal = rep.data
                 this.arraymodel.sort((a, b) => a.ano.localeCompare(b.ano))
-                console.log('datos', this.arraymodel)     
                 this.TRegistros.emit(this.totalregistros)        
             }
         }) 
@@ -71,7 +69,6 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
          map((resp: ModelResponse) => {
              
              let apiraciones:IPlan_Anos[] = resp.data; // Store the fetched aspirations in the local array
-             console.log({'los anos del plan':resp,id:Planid,aspiracion:apiraciones})
              this.TRegistros.emit(this.totalregistros);
              return apiraciones.filter(a => a.planExtrategicoId === Planid);
          })
@@ -79,7 +76,6 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
  }
 
     public Gets():Observable<ModelResponse> {
-        console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
@@ -92,7 +88,6 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
     }
 
     public insert(obj:IPlan_Anos):Observable<IPlan_Anos> {  
-        console.log('llego a insert en plan años', obj)
         return this.datos.insertardatos<IPlan_Anos>(this.rutaapi, obj)
     }
 
@@ -105,7 +100,6 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
             if (this.model.id == 0) {
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IPlan_Anos) => {
-                        console.log(rep)
                         this.model = rep
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success")                
                         resolve(true)
@@ -116,10 +110,8 @@ public GetsPlan(Planid:number):Observable<IPlan_Anos[]> {
                     }
                 )
             } else {
-                console.log(this.model)
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IPlan_Anos) => {
-                        console.log('se actualizo el plan año:', rep)
                         let m = this.arraymodel.find(x => x.id == this.model.id)
                         if (m != undefined) {
                             m.id = this.model.id

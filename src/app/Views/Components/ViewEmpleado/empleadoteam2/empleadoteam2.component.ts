@@ -55,7 +55,6 @@ export class EmpleadoTeamComponent2 implements OnInit {
 
       this.empleado=this.data.empleado
       this.periodo=this.data.periodo
-      console.log('data EmpleadoTeamComponent2',this.data)
       this.empleados = this.emplx.crear() 
       this.empleados.model = this.empleado
       this.empleados.getsubordinados(this.data.periodo)
@@ -77,7 +76,6 @@ export class EmpleadoTeamComponent2 implements OnInit {
   }
   agregametasub() {
     // Implement the agregametasub functionality here
-    console.log('Agregar metas para subordinados');
     // You may need to inject necessary services and implement the logic
     
   }

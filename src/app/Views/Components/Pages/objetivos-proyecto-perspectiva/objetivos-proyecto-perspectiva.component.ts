@@ -55,7 +55,6 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
   loadObjetivos() {
     this.objetivoService.Gets().subscribe({
       next: (response:ModelResponse) => {
-        console.log('los objetivos', response.data,'el tipo',this.Tipo,'el objetivoestrategicoid',this.objetivoestrategicoId);
         this.objetivos = response.data;
 
         
@@ -65,7 +64,6 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
         
         //filtra por tipo de objetivo
         //this.objetivos = this.objetivos.filter(obj=> obj.tipo == this.Tipo);
-        console.log(this.Tipo,this.objetivos)
         this.totalItems = this.objetivos.length;
         this.updateDisplayedObjetivos();
       },
@@ -97,7 +95,6 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
 
   onDelete(objetivo: IObjetivoProyectoPerspectiva) {
     if (confirm('¿Está seguro que desea eliminar este Objetivo/Proyecto?')) {
-      console.log('Delete Objetivo:', objetivo);
       this.loadObjetivos();
     }
   }
@@ -115,12 +112,10 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
   }
 
   onEdit(objetivo: IObjetivoProyectoPerspectiva) {
-    console.log('el objetivo a editar',objetivo)
     this.abrirformulario(objetivo);
   }
 
   onVerAnos(objetivo: IObjetivoProyectoPerspectiva) {
     // Placeholder for future functionality
-    console.log('Ver años for objetivo:', objetivo);
   }
 }

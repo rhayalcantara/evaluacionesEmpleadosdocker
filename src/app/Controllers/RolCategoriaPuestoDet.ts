@@ -79,7 +79,6 @@ export class RolCategoriaPuestoDet implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
-        //console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 

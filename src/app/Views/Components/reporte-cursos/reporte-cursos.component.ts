@@ -139,7 +139,6 @@ export class ReporteCursosComponent implements OnInit {
         this.evaluacionService.GetReportePeriodo(this.currentPeriodId).subscribe({
           next: (response: ModelResponse) => {
             if (response && response.data) {
-              console.log('Reporte de cursos', response.data);
               this.reportData = response.data;
               this.filteredData = [...this.reportData];
               

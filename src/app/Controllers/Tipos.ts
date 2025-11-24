@@ -55,7 +55,6 @@ export class Tipos implements OnInit{
        this.totalregistros =  rep.count
        this.arraymodel=[]
        this.arraymodel=rep.data    
-       console.log(rep.data)
        this.TRegistros.emit(this.totalregistros)        
        
     
@@ -75,25 +74,21 @@ public Get(id:string):Observable<ITipo>{
 }
 
 public insert(obj:ITipo):Observable<ITipo>{  
-  console.log('llego a insert en produc',obj)
 
   return this.datosServiceService.insertardatos<ITipo>(this.rutaapi, obj ); 
 }
 
 public Update(obj:ITipo):Observable<ITipo>{
-  console.log(this.rutaapi+`/${obj.id}`,obj)
   return this.datosServiceService.updatedatos<ITipo>(this.rutaapi+`/${obj.id}`,obj); 
 }
 
 public async grabar(): Promise<boolean> {
   // Envuelve el código en una nueva Promise
-  //console.log('llego producto a grabar',this.model,this.zs.arraymodel)
   return new Promise<boolean>(async (resolve) => {
     if (this.model.id == 0) {
       // inserta el registro
       await firstValueFrom(this.insert(this.model)).then(
         (rep: ITipo) => {
-          console.log(rep)
           this.model = rep;
 
           this.datosServiceService.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
@@ -106,10 +101,8 @@ public async grabar(): Promise<boolean> {
       );
     } else {
       // actualiza el registro
-      console.log(this.model)
       await firstValueFrom(this.Update(this.model)).then(
         (rep: ITipo) => {
-          console.log('se actualizo la zona:',rep)
      
           this.TRegistros.emit(this.totalregistros)
 

@@ -64,7 +64,6 @@ export class PoliticaEvaluacion implements OnInit {
 
     this.Gets().subscribe({
       next: (rep: ModelResponse) => {
-        console.log('llegaron los datos', rep.count)
         this.totalregistros = rep.count
         this.pagesize = rep.count
         this.arraymodel = []
@@ -73,7 +72,6 @@ export class PoliticaEvaluacion implements OnInit {
             this.arraymodel.sort((a, b) => a.nombre.localeCompare(b.nombre));
         }
         
-        console.log('datos', this.arraymodel)
         this.TRegistros.emit(this.totalregistros)
        
       }

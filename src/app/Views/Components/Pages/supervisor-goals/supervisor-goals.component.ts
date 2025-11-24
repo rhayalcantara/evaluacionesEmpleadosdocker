@@ -99,7 +99,6 @@ config: any;
     const  dialogRef = this.dialog.open(FormMetasComponent,{
       width: '1200px',data:{model:this.newGoal}})
       dialogRef.afterClosed().subscribe((rep:IMetaDts )=>{
-        //console.log('llego del formulario de Meta ',result)
         this.fetchGoalsForPosition(this.selectedPosition.secuencial)
         this.datosService.showMessage("Registro Insertado Correctamente","Metas SubOrdinados","sucess")
       }); 
@@ -132,13 +131,11 @@ config: any;
     const  dialogRef = this.dialog.open(FormMetasComponent,{
       width: '1200px',data:{model:this.newGoal}})
       dialogRef.afterClosed().subscribe((rep:IMetaDts )=>{
-        //console.log('llego del formulario de Meta ',result)
         this.fetchGoalsForPosition(this.selectedPosition.secuencial)
         this.datosService.showMessage("Registro Insertado Correctamente","Metas SubOrdinados","sucess")
       }); 
   }
   onPositionSelect(position: IPuesto) {
-    console.log('Seleciono el puesto',position)
     this.selectedPosition = position;
     //this.fetchGoalsForPosition(position.id);
     
@@ -146,10 +143,8 @@ config: any;
   }
 
   fetchGoalsForPosition(positionId: number) {
-    console.log('buscando las metas',positionId,this.periodo)
     this.metascontroller.GetMetasPorPeriodoYPuesto(this.periodo.id,positionId)
       .subscribe((rep:IMeta[])=>{
-        console.log('las metas',rep)
         this.metas=rep
         this.config = {
           id:'',
@@ -170,7 +165,6 @@ config: any;
 
      /* this.datosService.add('meta', newGoal).subscribe(
         (response: any) => {
-          console.log('Goal added successfully:', response);
           this.goals.push({ id: response.Id, description: this.goalInput });
           this.goalInput = ''; // Clear the input after submission
         },

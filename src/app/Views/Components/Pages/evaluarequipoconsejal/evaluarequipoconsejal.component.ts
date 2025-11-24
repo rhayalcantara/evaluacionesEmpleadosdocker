@@ -31,15 +31,11 @@ export class EvaluarequipoconsejalComponent implements OnInit {
     
     const consejal = this.route.snapshot.paramMap.get('consejal');
     if (consejal) {
-      console.log('cons',consejal)
       this.consejal = JSON.parse(consejal)
-      console.log('Consejal recibido:', this.consejal);
        this.consejal.consejal_Team.map((teamMember:IConsejalTeam)=> {
           this.empl.push(teamMember.empleado)
-          console.log('Empleados seleccionados:', teamMember.empleado );
        })
       
-      console.log('Modelo inicializado:', this.consejal);
     } 
   }
 }

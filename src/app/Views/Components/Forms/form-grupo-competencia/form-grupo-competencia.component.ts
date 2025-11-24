@@ -25,14 +25,12 @@ export class FormGrupoCompetenciaComponent implements OnInit {
   }
   onSubmit(form: NgForm): void {
     if (form.valid) {
-      console.log('Formulario enviado', this.model);
       // Aquí puedes agregar la lógica para guardar el grupo de competencia
       this.dialogRef.close(this.model)
     }
   }
 
   onCancel(): void {
-    console.log('Formulario cancelado');
     // Aquí puedes agregar la lógica para cerrar el formulario o limpiar los campos
     this.dialogRef.close(null)
   }

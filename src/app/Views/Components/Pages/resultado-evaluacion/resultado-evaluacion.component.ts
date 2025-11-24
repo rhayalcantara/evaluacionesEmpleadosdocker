@@ -126,6 +126,5 @@ export class ResultadoEvaluacionComponent implements OnInit {
 
   // Método para manejar el evento de selección de emoji
   onEmojiSelect(event: any): void {
-    console.log('Emoji seleccionado:', event);
   }
 }

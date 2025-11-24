@@ -59,7 +59,6 @@ export class PlanExtrategico implements OnInit {
          this.Gets()
             .subscribe({
                 next: (rep: ModelResponse) => {
-                    console.log('los planes',rep)
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
@@ -92,7 +91,6 @@ export class PlanExtrategico implements OnInit {
     }
 
     public insert(obj: IPlanExtrategicoCreate): Observable<IPlanExtrategicoCreate> {
-        console.log(obj)
         return this.datos.insertardatos<IPlanExtrategicoCreate>(this.rutaapi, obj);
     }
     public insertanos(obj:IPlan_Anos[]):Observable<IPlan_Anos[]>{

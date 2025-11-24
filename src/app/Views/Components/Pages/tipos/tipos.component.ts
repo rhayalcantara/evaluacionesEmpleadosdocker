@@ -24,7 +24,6 @@ export class TiposComponent implements OnInit {
     private toastr: MatDialog
   ) {
     // this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:string)=>{
-    //   console.log('Tipos Construtor: '+mensaje)   
     
     // }})
    }
@@ -38,7 +37,6 @@ export class TiposComponent implements OnInit {
     this.tiposController.getdatos()
     this.tiposController.TRegistros.subscribe({
      next:(rep:number)=>{
-      console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
      }
@@ -61,7 +59,6 @@ export class TiposComponent implements OnInit {
      
   }
   opcion(event:TableResponse){
-    console.log(event)
     
     const acct:any ={
       edit:this.edita,
@@ -82,12 +79,10 @@ export class TiposComponent implements OnInit {
       // p.getdatos()
       
       p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IPuesto
-      console.log('tiposController edit',p.model)
       
         const  dialogRef = t.open(FormTiposComponent,{
           width: '800px',data:{model:p.model}})
           dialogRef.afterClosed().subscribe((result:ITipo)=>{
-            //console.log('llego del formulario de tiposController',result)
             if (result){
               resolve(result);
             }else{
@@ -107,7 +102,6 @@ export class TiposComponent implements OnInit {
     const  dialogRef = t.open(FormTiposComponent,{
       width: '800px',data:{model:p.model}})
       dialogRef.afterClosed().subscribe((rep:ITipo)=>{
-        //console.log('llego del formulario de tiposController',result)
         this.tiposController.arraymodel.push(rep)
         this.datos.showMessage("Registro Insertado Correctamente",this.tiposController.titulomensage,"sucess")
       }); 
@@ -118,11 +112,9 @@ export class TiposComponent implements OnInit {
 
   paginacambio(event:number){
     this.tiposController.actualpage = event
-    console.log(this.tiposController.actualpage)
     //this.tiposController.filtrar()
   }
   actualizaelidtable(event:string){
-    console.log('se actualizo el config',event)
     this.config.id = event
   }
   filtro(){

@@ -83,18 +83,15 @@ export class ConsejalClaveController implements OnInit { // Cambiar nombre de cl
     // Construir URL con parámetros de paginación y filtro si la API los soporta
     // Ejemplo: const url = `${this.rutaapi}?page=${this.actualpage}&pageSize=${this.pagesize}&filter=${this.filtro}&status=${this.estado}`;
     const url = this.rutaapi; // URL base por ahora
-    // console.log('Requesting data from:', url);
     return this.datos.getdatos<ModelResponse>(url);
   }
 
   public Get(id: string): Observable<IConsejalClave> {
     const url = `${this.rutaapi}/${id}`;
-    // console.log('Requesting single ConsejalClave from:', url);
     return this.datos.getbyid<IConsejalClave>(url);
   }
   public Getconsejalid(id: string): Observable<IConsejalClave> {
     const url = `${this.rutaapi}/consejal/${id}`;
-    // console.log('Requesting single ConsejalClave from:', url);
     return this.datos.getbyid<IConsejalClave>(url);
   }
   // --- Métodos específicos de Empleados eliminados ---
@@ -106,7 +103,6 @@ export class ConsejalClaveController implements OnInit { // Cambiar nombre de cl
   // GetCount podría mantenerse si la API lo soporta para ConsejalClave
   public GetCount(): Observable<number> {
     const url = `${this.rutaapi}/count`;
-    // console.log('Requesting count from:', url);
     return this.datos.getdatoscount(url);
   }
 

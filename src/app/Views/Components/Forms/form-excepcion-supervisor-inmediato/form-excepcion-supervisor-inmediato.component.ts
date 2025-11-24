@@ -111,7 +111,6 @@ export class FormExcepcionSupervisorInmediatoComponent implements OnInit {
         nombrenuevojefe: '',
         nombrenuevodepartamento: ''
       };
-      console.log('Excepción a guardar:', excepcion);
       this.esicontroller.modeldts =excepcion
       this.esicontroller.grabar().then((rep:boolean)=>{
         if(rep){

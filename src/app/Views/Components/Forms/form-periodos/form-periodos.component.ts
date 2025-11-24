@@ -42,7 +42,6 @@ cancelar() {
   ngOnInit(): void {
   
     this.model = this.data.model;
-    console.log({model:this.model})
     this.periodoController.titulos.map((x:string|any)=>{
       let nx:string = x[Object.keys(x)[0]]
       this.campos.push(...Object.keys(x))
@@ -67,7 +66,6 @@ cancelar() {
      this.model.fechaInicio = this.fg.controls["fechaInicio"].value
      this.model.fechaFin = this.fg.controls["fechaFin"].value
      this.model.activa = false
-      console.log({modelo:this.model})
     if (this.model.id === 0) {
       this.periodoController.insert(this.model).subscribe({
         next: (result) => {

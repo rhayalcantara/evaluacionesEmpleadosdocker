@@ -35,7 +35,6 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
     private dialogmat: MatDialog
   ) {
     this.subscription = this.empleadoDesempenoService.TRegistros.subscribe(() => {
-      console.log('EmpleadoDesempenos updated', this.empleadoDesempenoService.arraymodel);
       this.empleadoDesempenos = this.empleadoDesempenoService.arraymodel.sort((a, b) => a.secuencialId - b.secuencialId);
       this.totalItems = this.empleadoDesempenos.length;
       this.updateDisplayedEmpleadoDesempenos();
@@ -55,7 +54,6 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
   loadEmpleadoDesempenos() {
     this.empleadoDesempenoService.Gets().subscribe({
       next: (response) => {
-        console.log('los empleado desempenos', response);
         this.empleadoDesempenos = response.data;
         this.totalItems = this.empleadoDesempenos.length;
         this.updateDisplayedEmpleadoDesempenos();
@@ -83,7 +81,6 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.displayedEmpleadoDesempenos = filteredData.slice(startIndex, endIndex);
-    console.log('Displayed EmpleadoDesempenos:', this.displayedEmpleadoDesempenos);
   }
 
   onFilter(event: Event) {
@@ -116,7 +113,6 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
 
   onDelete(empleadoDesempeno: IEmpleadoDesempeno) {
     if (confirm('¿Está seguro que desea eliminar este registro?')) {
-      console.log('Delete EmpleadoDesempeno:', empleadoDesempeno);
       const url = `${this.empleadoDesempenoService.rutaapi}/${empleadoDesempeno.id}`;
       this.datosService.delbyid(url).subscribe({
         next: () => {

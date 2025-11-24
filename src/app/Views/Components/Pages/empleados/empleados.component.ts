@@ -46,7 +46,6 @@ export class EmpleadosComponent implements OnInit {
     
     this.empleadosController.TRegistros.subscribe({
      next:(rep:number)=>{
-      //console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
        dialogRef.close()
@@ -90,7 +89,6 @@ export class EmpleadosComponent implements OnInit {
     }    
    }
   filtrarPuestos() {
-    console.log("cambio a:",this.selectedDepartamento)
     this.empleadosController.arraymodel=this.empleadosController.arraytotal
     if (this.selectedDepartamento) {
       this.empleadosController.arraymodel = this.empleadosController.arraymodel.filter(
@@ -113,7 +111,6 @@ export class EmpleadosComponent implements OnInit {
     const  dialogRef = t.open(FormEmpleadoRolComponent,{
       width: '900px',data:{model:p}})
       dialogRef.afterClosed().subscribe((rep:IEmpleado)=>{
-        // console.log('llego del formulario de empleadosController',result)
         // this.empleadosController.arraymodel.push(rep)
         // this.datos.showMessage("Registro Insertado Correctamente",this.empleadosController.titulomensage,"sucess")
       }); 
@@ -125,7 +122,6 @@ export class EmpleadosComponent implements OnInit {
     //this.empleadosController.filtrar()
   }
   actualizaelidtable(event:string){
-    console.log('se actualizo el config',event)
     this.config.id = event
   }
   filtro(){

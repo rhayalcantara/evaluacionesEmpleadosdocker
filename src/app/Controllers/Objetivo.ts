@@ -51,7 +51,6 @@ export class Objetivo {
     public getdatos(): void {
       this.Gets().subscribe({
         next: (rep: ModelResponse) => {
-          console.log('llegaron los datos', rep.data);
           this.totalregistros = rep.count;
           this.arraymodel = rep.data;
           this.TRegistros.emit(this.totalregistros) 

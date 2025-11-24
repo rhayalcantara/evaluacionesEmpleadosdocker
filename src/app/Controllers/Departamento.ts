@@ -49,14 +49,11 @@ export class Departamento implements OnInit{
    }
   }
   public  getdatos(){
-      ////// console.log('entro y llama a cargando')
 
     
-     ////// console.log('entro y llama a los datos')
 
 
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-        //// console.log('llegaron los datos datos',rep.count)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
@@ -65,7 +62,6 @@ export class Departamento implements OnInit{
         //ordena los datos por nombre alfabeticamente
         this.arraymodel.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
-        //// console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)      
 
         //dialogRef.close()
@@ -75,7 +71,6 @@ export class Departamento implements OnInit{
     ) 
   }
   public Gets():Observable<ModelResponse> {
-    //// console.log(this.rutaapi)
     return this.datos.getdatos<ModelResponse>(this.rutaapi)
 }
 

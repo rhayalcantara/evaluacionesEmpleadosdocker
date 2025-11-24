@@ -52,7 +52,6 @@ export class FormPlanEstrategicoComponent implements OnInit {
       this.AspirecionesController.GetsPlan(this.model.id).subscribe( 
         {
           next:(data: IAspiracion[]) => {
-            console.log(data);
             this.aspiraciones = data;
             this.model.aspiraciones = data;
           }

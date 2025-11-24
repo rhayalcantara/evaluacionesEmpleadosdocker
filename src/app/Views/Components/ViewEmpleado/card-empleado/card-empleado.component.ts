@@ -80,16 +80,13 @@ export class CardEmpleadoComponent implements OnInit {
     this.puestocontroller.Get(this.empleado.scargo.toString()).subscribe({
       next:(rep:IPuesto)=>{
         // al retornar el puesto busca la categoria
-        //console.log('puesto',rep)
         this.categoriapuestocontroller.Get(rep.categoriaPuestoId.toString()).subscribe({
           next:(cp:ICategoriaPuesto)=>{
-            //console.log('ICategoriaPuesto',cp)
             // al retornar la categoria busco el rolcategoriapuestodet
             this.rolcategoriapuestodet.Gets().subscribe({
               next:(rep:ModelResponse)=>{
                   let t:IRolCategoriaPuestoDet[] = rep.data
                   let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId==cp.id)[0]
-                  //console.log('IRolCategoriaPuestoDet',tx)
                   // buscar el rolcategoriapuesto
                   this.rolcategoriapuestocontroller.Get(tx.rolCategoriaPuestoId.toString()).subscribe({
                     next:(rep:IRolCategoriaPuesto)=>{
@@ -108,7 +105,6 @@ export class CardEmpleadoComponent implements OnInit {
     if (this.periodo && this.empleado){
     this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial).subscribe({
       next:(rep:ModelResponse)=>{
-        //console.log('estado evaluacion',rep)  
         this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
         if (this.estadoAutoevaluacion == 'Pendiente' || 
             this.estadoAutoevaluacion == 'Completado' || 
@@ -165,12 +161,10 @@ export class CardEmpleadoComponent implements OnInit {
     
     this.evaluacion.GetEvaluacionePorEmpleadoyPeriodo(emp,this.periodo.id).subscribe({
       next:(rep:IEvaluacion)=>{
-        console.log(rep)
         let t:IEvaluacion  = rep       
         t.estadoevaluacion = 'Enviado'        
         this.evaluacion.Update(t).subscribe({
           next:(repx)=>{
-            console.log('actualizado',repx)
             this.datos.showMessage("Enviado","Envio de Evaluacion","success");
             this.mostarenviar=false
             this.llamarevaluacion=false

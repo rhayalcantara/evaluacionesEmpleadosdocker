@@ -36,7 +36,6 @@ export class GrupoCompetenciasComponent implements OnInit {
   ngOnInit(): void {
     this.grupoCompetencia.getdatos();
     this.grupoCompetencia.TRegistros.subscribe({next:(rep:number)=>{
-      console.log("evento#:",rep);
       this.config.totalItems=rep;
       this.ServiceComunicacion.enviarMensaje(this.config);
     }});
@@ -64,7 +63,6 @@ export class GrupoCompetenciasComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
     const acct:any = {
       edit: this.edita,
       del: this.delete
@@ -83,12 +81,10 @@ export class GrupoCompetenciasComponent implements OnInit {
       // p.getdatos()
       
       p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IEmpleado
-      console.log(' edit',p.model)
       
         const  dialogRef = t.open(FormGrupoCompetenciaComponent,{
           width: '900px',data:{model:p.model}})
           dialogRef.afterClosed().subscribe((result:IGrupoCompetencia)=>{
-            console.log('llego del formulario de empleadosController',result)
             if (result){
                 
               resolve(result);
@@ -116,12 +112,10 @@ export class GrupoCompetenciasComponent implements OnInit {
 
   excel() {
     // Logic for exporting to Excel
-    console.log('Exporting to Excel...');
   }
 
   pdf() {
     // Logic for exporting to PDF
-    console.log('Exporting to PDF...');
   }
 
   abrirmodalzona(t: MatDialog, p: GrupoCompetencia) {
@@ -134,7 +128,6 @@ export class GrupoCompetenciasComponent implements OnInit {
             // if(this.grupoCompetencia.model.id==0){
             //     this.grupoCompetencia.arraymodel.push(rep);
             // }
-            console.log('llego del formulario',rep)
            this.graba(rep)
             
             

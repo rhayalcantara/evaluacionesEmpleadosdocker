@@ -60,7 +60,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
-                    //console.log('llegaron al controlador los datos',this.arraymodel)
                     this.TRegistros.emit(this.totalregistros)
                 }
             })
@@ -100,7 +99,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
     }
 
     public insert(obj: IEvaluacionDesempenoMeta): Observable<IEvaluacionDesempenoMeta> {
-        console.log('insertando', obj)
         return this.datos.insertardatos<IEvaluacionDesempenoMeta>(this.rutaapi, obj);
     }
 
@@ -131,7 +129,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
                 );
             } else {
                 // actualiza el registro 
-                console.log('actualiza el registro', this.model)           
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IEvaluacionDesempenoMeta) => {
                         this.model = rep;

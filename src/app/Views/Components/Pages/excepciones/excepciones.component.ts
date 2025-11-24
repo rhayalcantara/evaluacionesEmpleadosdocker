@@ -35,7 +35,6 @@ constructor(public excepcioncontrolador:Excepcion,
 ) { 
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
         next: (mensaje: string) => {
-          console.log('estadoServices Constructor: ' + mensaje);
         }
     });
 }
@@ -44,7 +43,6 @@ ngOnInit(): void {
     this.excepcioncontrolador.getdatos() // obtiene los datos
     this.excepcioncontrolador.TRegistros.subscribe({
         next: (rep: number) => {
-          console.log("evento#:", rep);
           this.config.totalItems = rep;
           this.ServiceComunicacion.enviarMensaje(this.config);
         }

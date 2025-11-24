@@ -65,7 +65,6 @@ throw new Error('Method not implemented.');
     this.loadObjetivos();
     this.objetivoController.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         this.config.totalItems=rep
         this.ServiceComunicacion.enviarMensaje(this.config)
       }
@@ -81,7 +80,6 @@ throw new Error('Method not implemented.');
       this.campos.push(...Object.keys(x))
       this.tituloslocal.push(nx)
     })
-    console.log('los campos',this.campos,'los titulos',this.tituloslocal)
     this.cd.detectChanges();
   }
 

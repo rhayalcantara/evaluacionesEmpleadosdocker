@@ -56,7 +56,6 @@ crearusuario(consejal: IConsejal) {
   ) {
     // Inicializar el modelo
     this.consejal = this.consejalController.inicializamodelo();
-    console.log('Modelo inicializado:', this.consejal);
   }
 
   ngOnInit(): void {
@@ -75,7 +74,6 @@ crearusuario(consejal: IConsejal) {
   this.consejalclaveController.Getconsejalid(this.consejal.id.toString())
   .subscribe(
     (data: IConsejalClave) => {
-      console.log('Data del consejal clave:', data);
       this.consejalclave = data;
     },
     (error: HttpErrorResponse) => {
@@ -88,7 +86,6 @@ crearusuario(consejal: IConsejal) {
     this.loading = true;
     this.consejalController.Get(id).subscribe(
       (data: IConsejal) => {
-        console.log('data del consejero llego al formulario',data)
         this.consejal = data;
         this.loading = false;
         // Aquí podrías cargar la información de los empleados asociados

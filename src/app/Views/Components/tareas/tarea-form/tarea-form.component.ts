@@ -34,7 +34,6 @@ export class TareaFormComponent implements OnInit {
       const tarea: ITarea = this.tareaForm.value;
       this.tareaService.createTarea(tarea).subscribe(
         (response: ITarea) => {
-          console.log('Tarea creada:', response);
           // Redirigir a la lista de tareas o mostrar un mensaje de éxito
         },
         (error: any) => {

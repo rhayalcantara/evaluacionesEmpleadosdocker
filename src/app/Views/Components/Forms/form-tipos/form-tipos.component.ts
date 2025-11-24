@@ -36,7 +36,6 @@ export class FormTiposComponent implements OnInit {
       }
 
   ngOnInit() {
-    console.log(this.data.model)
     this.tipo = this.data.model
     
 
@@ -49,7 +48,6 @@ export class FormTiposComponent implements OnInit {
   grabar() {
     
     this.tiposController.model = this.fg.value as ITipo
-    console.log({model:this.tiposController.model},{fg:this.fg.value as ITipo})
     this.tiposController.grabar()
     this.dialogre.close(this.tiposController.model)
   }

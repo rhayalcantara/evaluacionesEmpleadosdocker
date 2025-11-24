@@ -44,7 +44,6 @@ export class NavmenuComponent implements OnInit {
           let tipousario = localStorage.getItem('tipodeusuario')      
           if (tipousario=='consejal'){
             let consejal:IConsejal = JSON.parse(localStorage.getItem('consejal') ?? "")
-            // console.log('consejal',consejal)
                       //busca el periodo activo
           this.peri.GetActivo().subscribe((rep:IPeriodo)=>{           
             this.periodo=rep;
@@ -57,7 +56,6 @@ export class NavmenuComponent implements OnInit {
             this.router.navigate(['/consejal/evaluacion/', JSON.stringify(consejal)]);
            })
           }else{
-              //// console.log(localStorage.getItem('usuario'))
               this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))         
               //busca el periodo activo
               this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
@@ -91,7 +89,6 @@ export class NavmenuComponent implements OnInit {
         }
       }
         if (mess=='nologuiado'){
-          //// console.log('entro en nologiado')
           this.mostramenu=false
           this.logg='Login'
           this.router.navigate(['login'])
@@ -146,14 +143,12 @@ export class NavmenuComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    //// console.log('entro al navbar')
       this.mostramenu=false
       this.router.navigate(['login']);
  
     
   }
   log():void{
-   // // console.log(this.logg)
   /*  if (this.logg!='LogOut'){
               
         this.logg= 'LogOut'

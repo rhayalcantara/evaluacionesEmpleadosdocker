@@ -80,7 +80,6 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     }
     this.fg.patchValue(this.data.model);
     this.fg.controls['secuencialId'].setValue(this.data.model.evaluacion?.empleado?.secuencial);
-    //console.log('Llego al formulario',this.fg.value);
     this.empleadocontroller.getdatos();
     this.selectedEmpleado = this.data.model.evaluacion?.empleado;
 
@@ -114,7 +113,6 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   grabar(): void {
     //console.table(this.fg.value);
     if (this.fg.valid) {
-      //console.log('Grabando meta',this.fg.value);
       const meta: IEvaluacionDesempenoMeta ={
         id: this.fg.get('id')?.value,
         evaluacionId: this.fg.get('evaluacionId')?.value,
@@ -151,7 +149,6 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   grabarsub(meta:IEvaluacionDesempenoMeta): void {
-    console.log('Grabando meta',meta);
     this.metaService.model = meta;
     this.metaService.grabar().then(() => {
       this.datosService.showMessage('Meta guardada exitosamente', 'Éxito', 'success');

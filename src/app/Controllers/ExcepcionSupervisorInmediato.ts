@@ -83,14 +83,12 @@ export class ExcepcionSupervisorInmediato {
     public async getdatos(): Promise<void> {
       try {
         const rep: ModelResponse = await firstValueFrom(this.Gets());
-        console.log('llegaron los datos', rep.count)
         this.totalregistros = rep.count
         this.pagesize = rep.count
         this.arraymodel = rep.data   
         this.arraytotal = rep.data
         // Ordenar por fecha de inicio (puedes cambiar esto según tus necesidades)
         this.arraymodel.sort((a, b) => new Date(a.fechaInicio).getTime() - new Date(b.fechaInicio).getTime())
-        console.log('datos', this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -100,7 +98,6 @@ export class ExcepcionSupervisorInmediato {
     }
 
     public Gets(): Observable<ModelResponse> {
-      console.log(this.rutaapi)
       return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
   
@@ -113,7 +110,6 @@ export class ExcepcionSupervisorInmediato {
     }
   
     public insert(obj: IExcepcionSupervisorInmediatoDts): Observable<IExcepcionSupervisorInmediatoDts> {  
-     // console.log('llego a insert en excepción supervisor inmediato', obj)
        return this.datos.insertardatos<IExcepcionSupervisorInmediatoDts>(this.rutaapi, obj)
        
     }
@@ -129,7 +125,6 @@ export class ExcepcionSupervisorInmediato {
             // inserta el registro
             
             const rep: IExcepcionSupervisorInmediatoDts = await firstValueFrom(this.insert(this.modeldts));
-            console.log(rep)
             this.model = rep
             this.arraymodel.push(rep);
             this.arraytotal.push(rep);
@@ -139,9 +134,7 @@ export class ExcepcionSupervisorInmediato {
             resolve(true)
           } else {
             // actualiza el registro
-            console.log(this.model)
             const rep: IExcepcionSupervisorInmediato = await firstValueFrom(this.Update(this.model));
-            console.log('se actualizó la excepción:', rep)
             let m = this.arraymodel.find(x => x.id === this.model.id)
             if (m !== undefined) {
               Object.assign(m, this.model)

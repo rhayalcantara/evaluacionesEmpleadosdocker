@@ -88,7 +88,6 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     private datosService: DatosServiceService,
     private cd: ChangeDetectorRef,
   ) {
-    console.log('data', data);
     //seccion de reccion de datos
     if (data.model.id) {
       
@@ -149,7 +148,6 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       this.cd.detectChanges();
     });
     this.empleadocontroller.TRegistros.subscribe(() => {
-      console.log('data.model.secuencialId', data.model.secuencialId);
       if (data.model.secuencialId!=0) {
 
         this.selectedEmpleado = this.getempleado(data.model.secuencialId);
@@ -157,7 +155,6 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       this.cd.detectChanges();
     });    
     this.objetivoProyectoService.TRegistros.subscribe(() => {
-      console.log('data.model.objetivoProyectoId', data.model.objetivoProyectoId);
       if (data.model.objetivoProyectoId!=0) {
         this.selectedObjetivo = this.objetivoProyectoService.arraymodel.find((objetivo) => objetivo.id === data.model.objetivoProyectoId);
 
@@ -182,7 +179,6 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
 
   }
   getempleado(id: number): IEmpleado | undefined {
-    console.log('id', id);
     return this.empleadocontroller.arraymodel.find((empleado) => empleado.secuencial === id);
   }
   buscarEmpleado() {

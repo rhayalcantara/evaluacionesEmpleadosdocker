@@ -69,7 +69,6 @@ export class RolCategoriaPuesto implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
-        console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
@@ -93,7 +92,6 @@ export class RolCategoriaPuesto implements OnInit {
 
     public Delete(id: number): Observable<IRolCategoriaPuesto> {
         const url = this.rutaapi + `/${id}`;
-        console.log('Eliminar',url)
         return this.datos.delbyid<IRolCategoriaPuesto>(url);
     }
 

@@ -43,7 +43,6 @@ export class SeleccionObjetivoProyectoComponent implements OnInit {
     this.objetivoService.TRegistros.subscribe(() => {
       this.dataSource = new MatTableDataSource(this.objetivoService.arraymodel);
       this.dataSource.paginator = this.paginator;
-      console.log(this.dataSource);
     });
   }
 

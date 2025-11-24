@@ -71,7 +71,6 @@ export class PeriodosEvaluacion implements OnInit {
 */
         this.Gets().subscribe({
             next: (rep: ModelResponse) => {
-                console.log('llegaron los datos', rep.count)
                 this.totalregistros = rep.count
                 this.pagesize = rep.count
                 this.arraymodel = []
@@ -79,7 +78,6 @@ export class PeriodosEvaluacion implements OnInit {
                 this.arraymodel = rep.data
                 this.arraytotal = rep.data
                 
-                console.log('datos', this.arraymodel)
                 this.TRegistros.emit(this.totalregistros)
 
                // dialogRef.close()
@@ -88,7 +86,6 @@ export class PeriodosEvaluacion implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
-        console.log(this.rutaapi)
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
 
@@ -101,12 +98,10 @@ export class PeriodosEvaluacion implements OnInit {
     }
 
     public insert(obj: IPeriodoEvaluacion): Observable<IPeriodoEvaluacion> {
-        console.log('llego a insert en periodo evaluacion', obj)
         return this.datos.insertardatos<IPeriodoEvaluacion>(this.rutaapi, obj);
     }
 
     public Update(obj: IPeriodoEvaluacion): Observable<IPeriodoEvaluacion> {
-        //console.log(this.rutaapi + `/${obj.secuencial}`, obj)
         return this.datos.updatedatos<IPeriodoEvaluacion>(this.rutaapi + `/${obj.id}`, obj);
     }
 
@@ -115,7 +110,6 @@ export class PeriodosEvaluacion implements OnInit {
             if (this.model.id == 0) {
                 await firstValueFrom(this.insert(this.model)).then(
                     (rep: IPeriodoEvaluacion) => {
-                        console.log(rep)
                         this.model = rep;
 
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
@@ -127,10 +121,8 @@ export class PeriodosEvaluacion implements OnInit {
                     }
                 );
             } else {
-                console.log(this.model)
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IPeriodoEvaluacion) => {
-                        console.log('se actualizo el periodo de evaluación:', rep)
                         /*
                         let m = this.arraymodel.find(x => x.secuencial == this.model.secuencial)
                         if (m != undefined) {

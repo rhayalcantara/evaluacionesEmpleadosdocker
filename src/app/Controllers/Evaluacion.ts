@@ -56,7 +56,6 @@ export class Evaluacion implements OnInit {
     ) { 
         this.PorCientoDC.Gets().subscribe({
             next:(rep)=>{
-              //console.log('porcientodesempenocompetencia',rep)
               this.pdclocal = rep.data
       
             }
@@ -137,7 +136,6 @@ export class Evaluacion implements OnInit {
     public async CalculoCompetencias(supervisor:Boolean): Promise<number> {
         this.model.totalCalculo = 0;
         let competencias:number=0;
-        //console.log('competencias calculo',this.model.goalEmpleadoRespuestas)
         for (let item of this.model.goalEmpleadoRespuestas) {
             
                 // hay que buscar en la tabla de ValoresEvaluacion  
@@ -158,7 +156,6 @@ export class Evaluacion implements OnInit {
 
     async calculaelpromediodesempeno(supervisor:Boolean,resultadologro:IResultadoLogro[]){
   
-       //console.log('se llamo a calculaelpromediodesempeno')
         
         let num:number=0
         resultadologro.forEach((e)=>{
@@ -192,7 +189,6 @@ export class Evaluacion implements OnInit {
                 }   
             }
        // });
-        console.log('promedioDesempeno',this.promedioDesempeno)
         let px1:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Desempeño')
         this.porcentajeDesempeno = px1?.valor??0 
         
@@ -204,7 +200,6 @@ export class Evaluacion implements OnInit {
         }else{
             this.desempenoFinal=0
         }
-        console.log('desempenoFinal',this.desempenoFinal)
 
         
         //Competencia
@@ -212,17 +207,14 @@ export class Evaluacion implements OnInit {
         this.model.puntuacioncompetenciacolaborador = (await this.CalculoCompetencias(false)/this.model.goalEmpleadoRespuestas.length)
         this.model.totalcolaborador = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciacolaborador * this.promedioCompetencias)/100)
         this.model.totalCalculo = this.model.totalcolaborador 
-        console.log('totalcolaborador/puntuacioncompetenciacolaborador',this.model.totalcolaborador,this.model.puntuacioncompetenciacolaborador)
     
               //calculo supervisor
         if(supervisor){
-            console.log('total competencia supervisor',await this.CalculoCompetencias(supervisor))
             this.model.puntuacioncompetenciasupervisor = (await this.CalculoCompetencias(supervisor)/(this.model.goalEmpleadoRespuestas.length))
             this.model.totalsupervisor = (this.desempenoFinal??0) + ((this.model.puntuacioncompetenciasupervisor * this.promedioCompetencias)/100)            
             this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)                    
         }
         
-        //console.log('promedioCompetencias',this.promedioCompetencias)
         
         let px2:IPorcientoDesempenoCompetencia|undefined=this.pdclocal.find(x=>x.descripcion==='Competencia')
         this.porcentajeCompetencia = px2?.valor 
@@ -230,7 +222,6 @@ export class Evaluacion implements OnInit {
         this.puntuacionFinal = this.CompetenciaFinal + (this.desempenoFinal??0)
         //this.model.totalCalculo = (this.model.totalcolaborador*.2) + (this.model.totalsupervisor*.8)
         // actualizacion de desempeño del modelo
-        console.log('totalcalculo',this.model.totalCalculo)
         //this.model.totalCalculo =  this.puntuacionFinal
         this.ServicioComunicacion.enviarMensaje({mensaje:'Actualizar variables'})
     
@@ -277,7 +268,6 @@ export class Evaluacion implements OnInit {
                 break;
         }
     
-        //console.log(retornar, id, valor);
         return valor;
     }
 
@@ -292,7 +282,6 @@ export class Evaluacion implements OnInit {
                     this.totalregistros = rep.count;
                     this.arraymodel = [];
                     this.arraymodel = rep.data;
-                    //console.log(rep.data);
                     this.TRegistros.emit(this.totalregistros);
                 }
             });
@@ -350,12 +339,10 @@ export class Evaluacion implements OnInit {
             aceptaEnDisgusto:obj.aceptaEnDisgusto,
             comentarioDisgusto:obj.comentarioDisgusto
         }
-        console.log('evaluacionCursoCapacitacion',evaluaciondto,obj)
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }
 
     public async grabar(Supervisor:Boolean): Promise<boolean> {
-        console.log('grabar',this.model)
         return new Promise<boolean>(async (resolve) => {
             try {
                 /*
@@ -416,7 +403,6 @@ export class Evaluacion implements OnInit {
                 //this.model.totalCalculo = dc.total;
 
                 // Insertar o actualizar según corresponda
-                console.log('grabando',this.model)
                 if (this.model.id === 0) {
                     const response = await firstValueFrom(this.insert(this.model));
                     this.model = response;

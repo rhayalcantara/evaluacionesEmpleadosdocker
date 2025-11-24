@@ -52,7 +52,6 @@ export class Perspectiva {
     public getdatos(){
        this.Gets().subscribe({
          next:(rep:ModelResponse)=>{
-          console.log('llegaron los datos datos',rep.count)
           this.totalregistros = rep.count
           this.pagesize=rep.count
           this.arraymodel=[]
@@ -64,7 +63,6 @@ export class Perspectiva {
             this.arraymodel.sort((a, b) => a.name.localeCompare(b.name))
           }*/
           
-          console.log('datos',this.arraymodel)     
           this.TRegistros.emit(this.totalregistros)        
         }
       }) 
@@ -74,7 +72,6 @@ export class Perspectiva {
         
       return  this.Gets().pipe(
            map((resp: ModelResponse) => {
-               console.log({'las perspertivas':resp})
                let apiraciones:IPerspectiva[] = resp.data; // Store the fetched aspirations in the local array
                return apiraciones.filter(a => a.planExtrategicoModelId === Planid);
            })
@@ -83,7 +80,6 @@ export class Perspectiva {
 
 
     public Gets():Observable<ModelResponse> {
-      console.log(this.rutaapi)
       return this.datos.getdatos<ModelResponse>(this.rutaapi)
     }
   
@@ -96,7 +92,6 @@ export class Perspectiva {
     }
   
     public insert(obj:IPerspectiva):Observable<IPerspectiva>{  
-      console.log('llego a insert en perspectiva',obj)
       return this.datos.insertardatos<IPerspectiva>(this.rutaapi, obj); 
     }
   
@@ -110,7 +105,6 @@ export class Perspectiva {
           // inserta el registro
           await firstValueFrom(this.insert(this.model)).then(
             (rep: IPerspectiva) => {
-              console.log(rep)
               this.model = rep;
               this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
               resolve(true);
@@ -122,10 +116,8 @@ export class Perspectiva {
           );
         } else {
           // actualiza el registro
-          console.log(this.model)
           await firstValueFrom(this.Update(this.model)).then(
             (rep: IPerspectiva) => {
-              console.log('se actualizo la perspectiva:',rep)
               let m = this.arraymodel.find(x=>x.id==this.model.id)
               if (m!=undefined){
                 m.id = this.model.id

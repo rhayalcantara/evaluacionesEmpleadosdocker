@@ -37,7 +37,6 @@ export class FormObjetivosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('Llego al formulario',this.data.model)
     this.objetivoController = this.data.model;
     this.objetivo = this.objetivoController.model;
     this.initForm();

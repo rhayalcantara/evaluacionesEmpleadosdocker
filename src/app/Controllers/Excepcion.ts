@@ -74,10 +74,8 @@ export class Excepcion {
     public  getdatos(){
      
       
-       //console.log('entro y llama a los datos')
   
        this.Gets().subscribe({next:(rep:ModelResponse)=>{
-          console.log('llegaron los datos datos',rep.count)
           //se obtiene los datos y se ponen en los array
           this.totalregistros =  rep.count
           this.pagesize=rep.count
@@ -87,7 +85,6 @@ export class Excepcion {
           this.arraytotal=rep.data
           //ordernar por nombre de empleado
           this.arraymodel.sort((a, b) => a.nombreempleado.localeCompare(b.nombreempleado))
-          console.log('datos',this.arraymodel)     
           this.TRegistros.emit(this.totalregistros)        
   
           
@@ -97,7 +94,6 @@ export class Excepcion {
       ) 
     }
     public Gets():Observable<ModelResponse> {
-      console.log(this.rutaapi)
       return this.datos.getdatos<ModelResponse>(this.rutaapi)
   }
   
@@ -109,7 +105,6 @@ export class Excepcion {
   }
   
   public insert(obj:IExceptionDts):Observable<IExceptionDts>{  
-    console.log('llego a insert en excepcion',obj)
   
     return this.datos.insertardatos<IExceptionDts>(this.rutaapi, obj ); 
   }
@@ -121,13 +116,11 @@ export class Excepcion {
   
   public async grabar(): Promise<boolean> {
     // Envuelve el código en una nueva Promise
-    console.log('llego excepcion a grabar',this.model)
     return new Promise<boolean>(async (resolve) => {
       if (this.model.id == 0) {
         // inserta el registro
         await firstValueFrom(this.insert(this.model)).then(
           (rep: IExceptionDts) => {
-            console.log(rep)
             this.model = rep;
   
             this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
@@ -140,10 +133,8 @@ export class Excepcion {
         );
       } else {
         // actualiza el registro
-        console.log(this.model)
         await firstValueFrom(this.Update(this.model)).then(
           (rep: IExceptionDts) => {
-            console.log('se actualizo la excepcion:',rep)
           //  this.model = rep;
             let m = this.arraymodel.find(x=>x.id==this.model.id)
             if (m!=undefined){

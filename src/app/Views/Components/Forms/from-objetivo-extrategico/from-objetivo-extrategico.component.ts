@@ -62,7 +62,6 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
     })
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.log('estadoServices Constructor: ' + mensaje);
       }
     });
   }
@@ -94,7 +93,6 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
       })
     //Cargar los planes
     this.planestrategicocontroller.getdatos()
-    console.log('la data que llego',this.data)
 
     this.objetivoEstrategicoService.model = this.data.model
     if(this.objetivoEstrategicoService.model.id!=0){
@@ -103,7 +101,6 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
       // buscar la perspectiva 
       this.PrespectivasController.Get(this.objetivoEstrategicoService.model.perspectivaId.toString()).subscribe({
         next: (perspectiva) => {
-          console.log('la Perspectiva',perspectiva)
           this.objetivoEstrategicoService.model.perspectiva = perspectiva;
           this.planExtrategicoModelId = perspectiva.planExtrategicoModelId;
           this.cargarPerspectivas(perspectiva.planExtrategicoModelId,perspectiva.id);
@@ -132,7 +129,6 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
     });
   }
   crearObjetivoFormGroupwithdatos (datos: IKriAno) {
-    console.log('kri',datos)
     return this.fb.group({
       id:datos.id,     
       plan_anosid:datos.plan_AnosId,
@@ -190,9 +186,7 @@ agregarFila() {
       next: (data) => {
 
         this.plananos = data;
-        console.log('consiguio los anos',this.plananos)
         if(this.objetivoEstrategicoService.model.id !== 0) {
-          console.log('anos activos',this.plananos)
             // buscar los kriPorAnos 
             this.kriAno.getKriAnosPorPlanAno(this.objetivoEstrategicoService.model.id).subscribe({
               next: (objetivos) => {
@@ -210,7 +204,6 @@ agregarFila() {
   }
   onSubmit() {
     //grabar 
-    console.log( this.objetivoEstrategicoService.model )
   }
   cargarPlanesEstrategicos() {
     // Implementar la carga de planes estratégicos desde el servicio
@@ -236,7 +229,6 @@ agregarFila() {
         obj.kriId=this.objetivoEstrategicoService.model.id;
       })
       // manda a grabar el array 
-      console.log('objetivoestragicoAno a grabar',this.KriPorAnos )
       this.kriAno.insertarray(this.KriPorAnos).subscribe({
         next: (response:IKriAno[]) => {
         this.KriPorAnos = response

@@ -116,9 +116,18 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
    */
   private inicializarComponente(): void {
     // Obtener rol y empleado actual
-    this.rolUsuario = localStorage.getItem('rol') || '';
-    const empleadoJson = localStorage.getItem('empleado');
+    const rolJson = localStorage.getItem('rol') || '';
 
+    // El rol puede venir como JSON o como string simple
+    try {
+      const rolObj = JSON.parse(rolJson);
+      this.rolUsuario = rolObj.name || rolObj.rol || 'Usuario';
+    } catch {
+      // Si no es JSON, usar como está
+      this.rolUsuario = rolJson || 'Usuario';
+    }
+
+    const empleadoJson = localStorage.getItem('empleado');
     if (empleadoJson) {
       try {
         const empleado = JSON.parse(empleadoJson);
