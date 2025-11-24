@@ -458,13 +458,7 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
    */
   verDetalle(evaluacionId: number): void {
     this.logger.debug('Ver detalle de evaluación', { evaluacionId });
-    // TODO: Implementar navegación a detalle de evaluación
-    // this.router.navigate(['/evaluacion', evaluacionId]);
-    this.datosService.showMessage(
-      'Funcionalidad de detalle en desarrollo',
-      'Información',
-      'info'
-    );
+    // Funcionalidad pendiente: navegación a detalle completo de evaluación
   }
 
   /**
