@@ -251,10 +251,10 @@ export class HistorialEvaluacion {
       fechaInicio: '', // TODO: Obtener del período
       fechaFin: '', // TODO: Obtener del período
       empleadoSecuencial: evaluacion.empleadoSecuencial,
-      empleadoNombre: evaluacion.empleado?.nombre || 'N/A',
-      empleadoIdentificacion: evaluacion.empleado?.identificacion,
-      departamento: evaluacion.empleado?.departamento,
-      puesto: evaluacion.empleado?.puesto,
+      empleadoNombre: (evaluacion.empleado as any)?.nombreunido || 'N/A',
+      empleadoIdentificacion: (evaluacion.empleado as any)?.identificacion,
+      departamento: (evaluacion.empleado as any)?.departamento,
+      puesto: (evaluacion.empleado as any)?.cargo,
       fechaRespuesta: evaluacion.fechaRepuestas,
       estadoEvaluacion: evaluacion.estadoevaluacion,
       totalCalculo: evaluacion.totalCalculo,

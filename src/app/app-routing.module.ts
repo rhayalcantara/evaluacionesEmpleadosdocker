@@ -167,7 +167,12 @@ const routes: Routes = [
     .then((m)=> m.ReporteCursosComponent),
     canActivate: [AuthGuard]
   },
-  
+  { path: 'historial-evaluaciones',
+    loadComponent:()=> import('./Views/Components/Pages/historial-evaluaciones/historial-evaluaciones.component')
+    .then((m)=> m.HistorialEvaluacionesComponent),
+    canActivate: [AuthGuard]
+  },
+
   { path: 'opp',
     loadComponent:()=> import('./Views/Components/Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component')
     .then((m)=> m.ObjetivosProyectoPerspectivaComponent),
