@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, forkJoin } from 'rxjs';
+import { Observable, map, forkJoin, switchMap, of } from 'rxjs';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { LoggerService } from '../Services/logger.service';
 import { Evaluacion } from './Evaluacion';
@@ -58,12 +58,15 @@ export class HistorialEvaluacion {
 
     // Primero obtenemos los subordinados del supervisor usando Getsub
     return this.empleadosController.Getsub(supervisorSecuencial.toString(), fechaConsulta).pipe(
-      map((response: ModelResponse) => {
+      switchMap((response: ModelResponse) => {
         const subordinados: any[] = response.data;
 
-        if (subordinados.length === 0) {
-          return [];
+        if (!subordinados || subordinados.length === 0) {
+          this.logger.debug('No hay subordinados para este supervisor');
+          return of([]);
         }
+
+        this.logger.debug('Subordinados encontrados', { cantidad: subordinados.length });
 
         const historiales: Observable<IHistorialEvaluacionResumen[]>[] = subordinados.map(sub =>
           this.getHistorialPorEmpleado(sub.secuencial)
@@ -79,10 +82,8 @@ export class HistorialEvaluacion {
             );
           })
         );
-      }),
-      // Aplanar el Observable anidado
-      map((obs: any) => obs)
-    ) as any;
+      })
+    );
   }
 
   /**

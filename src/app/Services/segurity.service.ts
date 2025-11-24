@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { CommonsLibService } from '@commons-lib';
@@ -20,20 +21,22 @@ export class SegurityService {
   }
   public logout(): Observable<any> {
     // 1. Limpiar localStorage
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('token');
-    localStorage.removeItem('empleado');
-    localStorage.removeItem('periodo');
-    localStorage.removeItem('rol');
+    localStorage.clear();
 
     // 2. Limpiar estado de usuario
     this._usuario = null!;
 
     // 3. Notificar a otros componentes
     this.commons.sendData('logout');
+    
+    // 4. Redirigir al login
+    this.router.navigate(['/login']);
 
-    // 4. Retornar Observable para manejo asíncrono
+    // 5. Retornar Observable para manejo asíncrono
     return of({ success: true });
   }
-  constructor( @Inject(CommonsLibService) private commons: CommonsLibService,) { }
+  constructor( 
+    @Inject(CommonsLibService) private commons: CommonsLibService,
+    private router: Router
+  ) { }
 }

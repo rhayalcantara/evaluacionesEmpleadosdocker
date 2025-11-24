@@ -121,7 +121,12 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
     // El rol puede venir como JSON o como string simple
     try {
       const rolObj = JSON.parse(rolJson);
-      this.rolUsuario = rolObj.name || rolObj.rol || 'Usuario';
+      // Intentar múltiples propiedades donde puede estar el nombre del rol
+      this.rolUsuario = rolObj.rol?.name || rolObj.name || rolObj.descripcion ||
+                        rolObj.rol?.descripcion || rolObj.nombreRol || 'Usuario';
+
+      // Log para debugging
+      this.logger.debug('Rol parseado', { rolObj, rolUsuario: this.rolUsuario });
     } catch {
       // Si no es JSON, usar como está
       this.rolUsuario = rolJson || 'Usuario';
@@ -132,6 +137,7 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
       try {
         const empleado = JSON.parse(empleadoJson);
         this.empleadoSecuencialActual = empleado.secuencial || 0;
+        this.logger.debug('Empleado cargado', { secuencial: this.empleadoSecuencialActual });
       } catch (error) {
         this.logger.error('Error al parsear empleado de localStorage', error as Error);
       }
@@ -251,9 +257,35 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
       );
     }
 
+    // Filtro por período
+    if (this.filtros.periodoId !== undefined) {
+      resultado = resultado.filter(item => item.periodId === this.filtros.periodoId);
+      this.logger.debug('Filtro por período aplicado', { periodoId: this.filtros.periodoId, resultados: resultado.length });
+    }
+
+    // Filtro por estado
+    if (this.filtros.estadoEvaluacion !== undefined) {
+      resultado = resultado.filter(item => item.estadoEvaluacion === this.filtros.estadoEvaluacion);
+      this.logger.debug('Filtro por estado aplicado', { estado: this.filtros.estadoEvaluacion, resultados: resultado.length });
+    }
+
+    // Filtro por fechas
+    if (this.filtros.fechaDesde) {
+      resultado = resultado.filter(item =>
+        new Date(item.fechaRespuesta) >= new Date(this.filtros.fechaDesde!)
+      );
+    }
+
+    if (this.filtros.fechaHasta) {
+      resultado = resultado.filter(item =>
+        new Date(item.fechaRespuesta) <= new Date(this.filtros.fechaHasta!)
+      );
+    }
+
     this.historialFiltrado = resultado;
     this.totalItems = resultado.length;
     this.pageIndex = 0; // Resetear a primera página
+    this.logger.debug('Filtros locales aplicados', { total: this.totalItems, historialLength: this.historial.length });
     this.actualizarPaginacion();
   }
 
