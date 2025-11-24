@@ -41,6 +41,14 @@ import {
     MatCardModule,
     MatChipsModule
   ],
+  providers: [
+    HistorialEvaluacion,
+    ExcelService,
+    LoggerService,
+    DatosServiceService,
+    SegurityService,
+    Periodos
+  ],
   templateUrl: './historial-evaluaciones.component.html',
   styleUrls: ['./historial-evaluaciones.component.css']
 })
