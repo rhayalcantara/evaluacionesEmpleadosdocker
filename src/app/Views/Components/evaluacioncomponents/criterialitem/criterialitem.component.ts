@@ -249,8 +249,7 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
   getgrupoCompetencia(id:number){
     return this.grupoCompetencia.arraymodel.find(x=>x.id==id)?.nombre
   }
-  
-  // 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
+
   calcularresultadologro(rl:IResultadoLogro,item:IEvaluacionDesempenoMeta):IResultadoLogro{
     //calculo porcientologro
     if(item.inverso){
