@@ -224,20 +224,27 @@ intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<an
 ### TAREA 1.5: Preparar Migración HTTPS
 **Prioridad:** 🔴 CRÍTICA
 **Esfuerzo:** 3 días
-**Estado:** ⏳ PENDIENTE
+**Estado:** ✅ COMPLETADO (Documentación)
 **Asignado a:** DevOps + Dev Senior 2
+
+#### Documentación Creada:
+📄 **[Guía de Migración HTTPS](./guia-migracion-https.md)** - Documento completo para implementación por parte de DevOps
 
 #### Sub-tareas:
 
 **1.5.1 Infraestructura (DevOps)**
-- [ ] Adquirir certificado SSL/TLS
-- [ ] Configurar servidor para HTTPS
+- [ ] Adquirir certificado SSL/TLS (Recomendado: Let's Encrypt)
+- [ ] Configurar servidor para HTTPS (puerto 443 para API principal, 8443 para API Foto Padrón)
 - [ ] Configurar redirección HTTP → HTTPS
 - [ ] Configurar HSTS headers
 - [ ] Actualizar firewall rules
 
 **1.5.2 Código (Dev Senior 2)**
-- [ ] Actualizar todas las URLs a HTTPS en environment.prod.ts
+- [ ] Actualizar URLs a HTTPS en environment.prod.ts:
+  ```typescript
+  apiUrl: 'https://192.168.7.222:443'
+  fotoPadronUrl: 'https://192.168.7.222:8443'
+  ```
 - [ ] Configurar proxy para desarrollo con HTTPS
 - [ ] Actualizar webpack config para HTTPS
 - [ ] Verificar que Module Federation funcione con HTTPS
@@ -247,10 +254,11 @@ intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<an
 - [ ] Verificar certificados válidos
 - [ ] Verificar que no hay mixed content warnings
 - [ ] Probar en múltiples navegadores
+- [ ] Score A o superior en SSL Labs (https://www.ssllabs.com/ssltest/)
 
 #### Archivos a Modificar:
 ```
-src/environments/environment.prod.ts
+src/environments/environment.prod.ts (Ya preparado con variables apiUrl y fotoPadronUrl)
 src/proxy.conf.json
 webpack.config.js
 ```
@@ -260,6 +268,22 @@ webpack.config.js
 - [ ] Sin errores de certificado
 - [ ] Sin mixed content warnings
 - [ ] Score A+ en SSL Labs
+- [ ] Renovación automática configurada (si usa Let's Encrypt)
+
+#### Tiempo Estimado de Implementación:
+- Obtener certificado: 1-2 horas (Let's Encrypt) o 1-3 días (comercial)
+- Configurar servidor: 2-4 horas
+- Actualizar código: 30 minutos
+- Testing: 2-4 horas
+- Deploy: 1-2 horas
+- **TOTAL: 1-2 días laborales**
+
+#### Próximos Pasos:
+1. Asignar responsable DevOps
+2. Elegir opción de certificado SSL (Let's Encrypt recomendado)
+3. Definir fecha de implementación
+4. Configurar ambiente de staging con HTTPS primero
+5. Seguir checklist en guia-migracion-https.md
 
 ---
 
@@ -511,6 +535,48 @@ Equipo de TI
 ---
 
 **Próximo Documento:** Plan de Acción Fase 2 (a crear después de completar Fase 1)
+
+---
+
+## TAREAS PENDIENTES ADICIONALES
+
+### 📋 Feature Request: Historial de Evaluaciones
+**Prioridad:** 🟡 MEDIA
+**Estado:** ⏳ PENDIENTE (Para Fase 2 o posterior)
+**Solicitado:** 24/11/2025
+
+#### Descripción:
+Implementar un módulo de historial de evaluaciones que permita visualizar todas las evaluaciones pasadas de un empleado.
+
+#### Requisitos:
+**Acceso por Rol:**
+- ✅ **Supervisor:** Ver historial de sus subordinados
+- ✅ **Empleado:** Ver su propio historial
+- ✅ **Admin:** Ver historial de cualquier empleado
+
+#### Funcionalidades:
+1. Lista cronológica de evaluaciones
+2. Filtros por período/fecha
+3. Comparación entre evaluaciones
+4. Exportación del historial
+5. Gráficos de evolución/tendencias
+
+#### Estimación Inicial:
+- **Esfuerzo:** 1-2 semanas
+- **Complejidad:** Media
+- **Fase Sugerida:** Fase 2 o 3
+
+#### Archivos Potenciales a Crear:
+```
+src/app/Views/Components/Pages/historial-evaluaciones/
+src/app/Controllers/HistorialEvaluacion.ts
+src/app/Models/HistorialEvaluacion/IHistorialEvaluacion.ts
+```
+
+#### Notas:
+- Evaluar impacto en base de datos
+- Considerar paginación para muchas evaluaciones
+- UI/UX debe ser intuitiva para todos los roles
 
 ---
 

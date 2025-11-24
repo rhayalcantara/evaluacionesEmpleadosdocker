@@ -5,23 +5,20 @@ import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { FotoPadron } from '../Helpers/Interfaces';
-//import { ModelResponse } from '../Models/modelResponse';
+import { environment } from '../../environments/environment';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatosServiceService {
-  
-  //public URL:string='http://192.168.137.234:9090'
-    public URL:string = process.env['NODE_ENV'] === 'production'
-    ? 'http://192.168.7.222:7070' // Production url
-    : 'http://192.168.7.222:7070'; // 'https://localhost:7067'Development path - let webpack figure out the path automatically
-    
-    
-    //public URL:string ='https://localhost:7067'
-  //public URL:string='http://192.168.7.222:9292'
-  // public URL:string='http://192.168.7.222:7070' //produccion
-  constructor(private http: HttpClient,) { }
+
+  public URL: string = environment.apiUrl;
+
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService
+  ) { }
    headers:HttpHeaders = new HttpHeaders({    
     'Content-Type': 'application/json; charset=utf-8' 
   });
@@ -87,8 +84,7 @@ export class DatosServiceService {
   }
 
   public GetFotouser(identificacion:string): Observable<FotoPadron[]>{
-
-    return this.http.get<FotoPadron[]>( `http://192.168.7.222:8080/api/FotoPadron?identificacion=${identificacion}`)
+    return this.http.get<FotoPadron[]>(`${environment.fotoPadronUrl}/api/FotoPadron?identificacion=${identificacion}`)
   }
 
    public llenarFormGrup<T>(obj:any):FormGroup {
@@ -141,7 +137,7 @@ export class DatosServiceService {
     return this.http.get<T>(url)
    }
    public delbyid<T>(url:string):Observable<T>{
-     console.log('en delete llego a eliminar',url)
+     this.logger.debug('Eliminando recurso', { url });
     return this.http.delete<T>(url)
    }
 }

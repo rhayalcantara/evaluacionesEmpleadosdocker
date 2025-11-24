@@ -18,17 +18,42 @@ export class ErrorInterceptorService implements HttpInterceptor {
 
 intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError((err) => {
-      
-        //if ((err.status === 401 ) || (err.status=== 404)) {
-        if ((err.status)) {
-            // auto logout if 401 response returned from api
-            this.datos.showMessage('Error: error estatus:'+err.status.toString()+' error mensaje:'+err.message,'error','Error')
+
+        // Solo hacer logout automático para errores de autenticación/autorización
+        if (err.status === 401 || err.status === 403) {
+            this.datos.showMessage(
+                'Su sesión ha expirado o no tiene permisos. Por favor, inicie sesión nuevamente.',
+                'Sesión Expirada',
+                'warning'
+            );
             this.authenticationService.logout();
-            this.router.navigate(['login'])                       
+            this.router.navigate(['login']);
         }
-        const error = err.error.message || err.statusText;
-        return throwError(error);
-        
+        // Para otros errores, solo mostrar mensaje sin cerrar sesión
+        else if (err.status === 404) {
+            this.datos.showMessage(
+                'El recurso solicitado no fue encontrado.',
+                'Recurso No Encontrado',
+                'info'
+            );
+        }
+        else if (err.status >= 500) {
+            this.datos.showMessage(
+                'Error del servidor. Por favor, intente nuevamente más tarde.',
+                'Error del Servidor',
+                'error'
+            );
+        }
+        else if (err.status === 0) {
+            this.datos.showMessage(
+                'No se pudo conectar con el servidor. Verifique su conexión a internet.',
+                'Error de Conexión',
+                'error'
+            );
+        }
+
+        const error = err.error?.message || err.statusText || 'Error desconocido';
+        return throwError(() => error);
     }))
 }
 
