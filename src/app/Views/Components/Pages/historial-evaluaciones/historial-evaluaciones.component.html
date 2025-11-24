@@ -1,0 +1,321 @@
+<div class="historial-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>history</mat-icon>
+      Historial de Evaluaciones
+    </h1>
+    <p class="subtitle">
+      Rol: <strong>{{ rolUsuario }}</strong> |
+      Total: <strong>{{ totalItems }}</strong> evaluaciones
+    </p>
+  </div>
+
+  <!-- Filtros -->
+  <mat-card class="filtros-card">
+    <mat-card-content>
+      <div class="filtros-container">
+        <!-- Búsqueda por texto -->
+        <mat-form-field class="filtro-busqueda" appearance="outline">
+          <mat-label>Buscar</mat-label>
+          <input
+            matInput
+            [(ngModel)]="textoBusqueda"
+            (keyup.enter)="onBuscar()"
+            placeholder="Nombre, identificación, departamento..."
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- Filtro por período -->
+        <mat-form-field appearance="outline">
+          <mat-label>Período</mat-label>
+          <mat-select [(ngModel)]="filtros.periodoId">
+            <mat-option [value]="undefined">Todos</mat-option>
+            <mat-option *ngFor="let periodo of periodosDisponibles" [value]="periodo.id">
+              {{ periodo.nombre || 'Período ' + periodo.id }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Filtro por estado -->
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="filtros.estadoEvaluacion">
+            <mat-option [value]="undefined">Todos</mat-option>
+            <mat-option *ngFor="let estado of estadosDisponibles" [value]="estado">
+              {{ estado }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Filtro por fecha desde -->
+        <mat-form-field appearance="outline">
+          <mat-label>Desde</mat-label>
+          <input matInput type="date" [(ngModel)]="filtros.fechaDesde" />
+        </mat-form-field>
+
+        <!-- Filtro por fecha hasta -->
+        <mat-form-field appearance="outline">
+          <mat-label>Hasta</mat-label>
+          <input matInput type="date" [(ngModel)]="filtros.fechaHasta" />
+        </mat-form-field>
+
+        <!-- Botones de acción -->
+        <div class="filtros-acciones">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="aplicarFiltros()"
+            [disabled]="loading"
+          >
+            <mat-icon>filter_list</mat-icon>
+            Filtrar
+          </button>
+
+          <button mat-button (click)="limpiarFiltros()" [disabled]="loading">
+            <mat-icon>clear</mat-icon>
+            Limpiar
+          </button>
+
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="exportarExcel()"
+            [disabled]="loading || totalItems === 0"
+            matTooltip="Exportar a Excel"
+          >
+            <mat-icon>download</mat-icon>
+            Excel
+          </button>
+
+          <button
+            mat-icon-button
+            (click)="refrescar()"
+            [disabled]="loading"
+            matTooltip="Refrescar"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Botones de comparación -->
+  <div class="comparacion-controls" *ngIf="evaluacionesSeleccionadas.length > 0">
+    <mat-chip-set>
+      <mat-chip>
+        {{ evaluacionesSeleccionadas.length }} evaluaciones seleccionadas
+      </mat-chip>
+    </mat-chip-set>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="compararEvaluaciones()"
+      [disabled]="evaluacionesSeleccionadas.length !== 2"
+    >
+      <mat-icon>compare_arrows</mat-icon>
+      Comparar
+    </button>
+
+    <button mat-button (click)="evaluacionesSeleccionadas = []">
+      <mat-icon>clear</mat-icon>
+      Cancelar
+    </button>
+  </div>
+
+  <!-- Loading spinner -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-icon class="spinner">sync</mat-icon>
+    <p>Cargando historial...</p>
+  </div>
+
+  <!-- Tabla de resultados -->
+  <div class="table-container" *ngIf="!loading">
+    <!-- Mensaje de sin resultados -->
+    <div class="empty-state" *ngIf="totalItems === 0">
+      <mat-icon>inbox</mat-icon>
+      <h3>No hay evaluaciones en el historial</h3>
+      <p *ngIf="rolUsuario === 'Admin' || rolUsuario === 'Administrador'">
+        Use los filtros para buscar evaluaciones específicas
+      </p>
+    </div>
+
+    <!-- Tabla -->
+    <table class="historial-table" *ngIf="totalItems > 0">
+      <thead>
+        <tr>
+          <th class="col-select">Comparar</th>
+          <th>Período</th>
+          <th>Empleado</th>
+          <th>Identificación</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th class="col-number">Total</th>
+          <th class="col-number">Desempeño</th>
+          <th class="col-number">Competencias</th>
+          <th class="col-actions">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of displayedHistorial"
+          [class.row-selected]="estaSeleccionada(item.evaluacionId)"
+        >
+          <td class="col-select">
+            <input
+              type="checkbox"
+              [checked]="estaSeleccionada(item.evaluacionId)"
+              (change)="toggleSeleccion(item.evaluacionId)"
+            />
+          </td>
+          <td>{{ item.periodoNombre }}</td>
+          <td>
+            <div class="empleado-info">
+              <strong>{{ item.empleadoNombre }}</strong>
+              <small *ngIf="item.departamento">{{ item.departamento }}</small>
+            </div>
+          </td>
+          <td>{{ item.empleadoIdentificacion || 'N/A' }}</td>
+          <td>{{ item.fechaRespuesta | date : 'dd/MM/yyyy' }}</td>
+          <td>
+            <span [class]="'badge ' + getEstadoClass(item.estadoEvaluacion)">
+              {{ item.estadoEvaluacion }}
+            </span>
+          </td>
+          <td class="col-number">
+            <span [class]="'puntuacion ' + getPuntuacionClass(item.totalCalculo)">
+              {{ item.totalCalculo | number : '1.2-2' }}
+            </span>
+          </td>
+          <td class="col-number">
+            {{ item.puntuacionDesempenoColaborador | number : '1.2-2' }}
+          </td>
+          <td class="col-number">
+            {{ item.puntuacionCompetenciaColaborador | number : '1.2-2' }}
+          </td>
+          <td class="col-actions">
+            <button
+              mat-icon-button
+              (click)="verDetalle(item.evaluacionId)"
+              matTooltip="Ver detalle"
+              color="primary"
+            >
+              <mat-icon>visibility</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
+              (click)="mostrarEstadisticasEmpleado(item.empleadoSecuencial)"
+              matTooltip="Ver estadísticas"
+              color="accent"
+              *ngIf="rolUsuario !== 'Empleado'"
+            >
+              <mat-icon>bar_chart</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <mat-paginator
+      *ngIf="totalItems > 0"
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </div>
+
+  <!-- Panel de estadísticas -->
+  <mat-card class="estadisticas-card" *ngIf="mostrarEstadisticas && estadisticas">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>analytics</mat-icon>
+        Estadísticas de {{ estadisticas.empleadoNombre }}
+      </mat-card-title>
+      <button
+        mat-icon-button
+        (click)="mostrarEstadisticas = false"
+        class="close-button"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="estadisticas-grid">
+        <div class="stat-item">
+          <mat-icon>assessment</mat-icon>
+          <div>
+            <p class="stat-label">Total Evaluaciones</p>
+            <p class="stat-value">{{ estadisticas.totalEvaluaciones }}</p>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>trending_up</mat-icon>
+          <div>
+            <p class="stat-label">Promedio General</p>
+            <p class="stat-value">
+              {{ estadisticas.promedioGeneral | number : '1.2-2' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>star</mat-icon>
+          <div>
+            <p class="stat-label">Mejor Evaluación</p>
+            <p class="stat-value">
+              {{ estadisticas.mejorEvaluacion.totalCalculo | number : '1.2-2' }}
+            </p>
+            <small>{{ estadisticas.mejorEvaluacion.periodoNombre }}</small>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>show_chart</mat-icon>
+          <div>
+            <p class="stat-label">Tendencia</p>
+            <p class="stat-value" [class.tendencia-mejora]="estadisticas.tendenciaGeneral === 'mejora'" [class.tendencia-decline]="estadisticas.tendenciaGeneral === 'decline'">
+              {{
+                estadisticas.tendenciaGeneral === 'mejora'
+                  ? 'En Mejora'
+                  : estadisticas.tendenciaGeneral === 'decline'
+                  ? 'En Decline'
+                  : 'Estable'
+              }}
+            </p>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>work</mat-icon>
+          <div>
+            <p class="stat-label">Promedio Desempeño</p>
+            <p class="stat-value">
+              {{ estadisticas.promedioDesempeno | number : '1.2-2' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>school</mat-icon>
+          <div>
+            <p class="stat-label">Promedio Competencias</p>
+            <p class="stat-value">
+              {{ estadisticas.promedioCompetencias | number : '1.2-2' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
