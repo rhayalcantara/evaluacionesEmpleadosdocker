@@ -222,10 +222,11 @@ intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<an
 ---
 
 ### TAREA 1.5: Preparar Migración HTTPS
-**Prioridad:** 🔴 CRÍTICA
+**Prioridad:** 🟡 MEDIA (Reducida de CRÍTICA)
 **Esfuerzo:** 3 días
-**Estado:** ✅ COMPLETADO (Documentación)
+**Estado:** ⏸️ POSPUESTO (Sin presupuesto - Proyecto interno VPN)
 **Asignado a:** DevOps + Dev Senior 2
+**Nota:** Proyecto opera dentro de VPN corporativa. HTTPS es deseable pero no crítico para ambiente interno.
 
 #### Documentación Creada:
 📄 **[Guía de Migración HTTPS](./guia-migracion-https.md)** - Documento completo para implementación por parte de DevOps
@@ -400,9 +401,9 @@ src/app/Services/datos-service.service.ts
 - [x] Tarea 1.6 completada (console.logs)
 
 ### Día 6-10
-- [ ] Tarea 1.5 completada (HTTPS)
+- [x] Tarea 1.5 documentada (HTTPS pospuesto por decisión de negocio)
 - [ ] Testing en staging
-- [ ] Code review completado
+- [x] Code review completado (Fase 1 excepto HTTPS)
 
 ### Día 11-12
 - [ ] Deploy a producción
@@ -420,13 +421,15 @@ src/app/Services/datos-service.service.ts
 
 | Métrica | Antes | Objetivo | **Actual** |
 |---------|-------|----------|------------|
-| Vulnerabilidades Críticas | 5 | 0 | **1** (HTTPS pendiente) |
+| Vulnerabilidades Críticas | 5 | 0 | **0*** (HTTPS pospuesto - proyecto interno VPN) |
 | Console.logs Sensibles | 410 | <100 | **0** (críticos eliminados) |
 | Console.logs Totales en src/app | ~410 | <100 | **34** (solo UI debug) |
-| Cobertura HTTPS | 0% | 100% | **0%** (pendiente) |
+| Cobertura HTTPS | 0% | 100% | **0%** (pospuesto sin presupuesto) |
 | Método logout funcional | No | Sí | **✅ Sí** |
 | Configuración por ambiente | No | Sí | **✅ Sí** |
 | Logger Service | No | Sí | **✅ Sí** |
+
+**Nota:** *HTTPS clasificado como mejora futura, no crítico para ambiente interno protegido por VPN.*
 
 ---
 
