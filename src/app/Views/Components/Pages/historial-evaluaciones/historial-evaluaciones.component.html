@@ -208,9 +208,18 @@
 
             <button
               mat-icon-button
+              (click)="mostrarGraficoEvolucion(item.empleadoSecuencial, item.empleadoNombre)"
+              matTooltip="Ver gráfico de evolución"
+              color="accent"
+            >
+              <mat-icon>show_chart</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
               (click)="mostrarEstadisticasEmpleado(item.empleadoSecuencial)"
               matTooltip="Ver estadísticas del empleado"
-              color="accent"
+              color="warn"
               *ngIf="rolUsuario !== 'Empleado'"
             >
               <mat-icon>bar_chart</mat-icon>

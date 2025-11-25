@@ -20,6 +20,7 @@ import { Periodos } from '../../../../Controllers/Periodos';
 import { ExcelService } from '../../../../Services/excel.service';
 import { ComparacionModalComponent } from './modals/comparacion-modal.component';
 import { DetalleEvaluacionModalComponent } from './modals/detalle-evaluacion-modal.component';
+import { EvolucionModalComponent } from './modals/evolucion-modal.component';
 
 import {
   IHistorialEvaluacionResumen,
@@ -522,6 +523,53 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
       data: evaluacion,
       autoFocus: false
     });
+  }
+
+  /**
+   * Muestra el gráfico de evolución del empleado
+   */
+  mostrarGraficoEvolucion(empleadoSecuencial: number, empleadoNombre: string): void {
+    this.loading = true;
+
+    const sub = this.historialController.getDatosEvolucion(empleadoSecuencial).subscribe({
+      next: (datos) => {
+        this.loading = false;
+
+        if (datos.length === 0) {
+          this.datosService.showMessage(
+            'No hay suficientes datos para mostrar el gráfico de evolución',
+            'Información',
+            'info'
+          );
+          return;
+        }
+
+        this.logger.info('Datos de evolución cargados', { cantidad: datos.length });
+
+        // Abrir modal con el gráfico
+        this.dialog.open(EvolucionModalComponent, {
+          width: '900px',
+          maxWidth: '95vw',
+          data: {
+            empleadoNombre,
+            empleadoSecuencial,
+            datos
+          },
+          autoFocus: false
+        });
+      },
+      error: (error) => {
+        this.loading = false;
+        this.logger.error('Error al cargar datos de evolución', error);
+        this.datosService.showMessage(
+          'Error al cargar los datos de evolución',
+          'Error',
+          'error'
+        );
+      }
+    });
+
+    this.subscriptions.add(sub);
   }
 
   /**
