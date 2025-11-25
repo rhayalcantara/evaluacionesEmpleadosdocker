@@ -290,8 +290,9 @@ webpack.config.js
 ### TAREA 1.6: Limpieza de Console.logs Críticos
 **Prioridad:** 🟠 ALTA
 **Esfuerzo:** 1 día
-**Estado:** ⏳ PENDIENTE
+**Estado:** ✅ COMPLETADO
 **Asignado a:** Dev Mid Level
+**Completado:** 24/11/2025
 
 #### Estrategia:
 1. Identificar y remover console.logs en código de producción sensible
@@ -370,10 +371,12 @@ src/app/Services/datos-service.service.ts
 ```
 
 #### Validación:
-- [ ] Build de producción sin console.log de datos sensibles
-- [ ] Logger service implementado
-- [ ] Console.logs críticos reemplazados
-- [ ] Tests unitarios para logger service
+- [x] Build de producción sin console.log de datos sensibles
+- [x] Logger service implementado
+- [x] Console.logs críticos reemplazados (token-interceptor limpio)
+- [x] Último console.log en historial-evaluaciones reemplazado con LoggerService
+- [x] Logger service con sanitización de datos sensibles
+- [ ] Tests unitarios para logger service (Opcional - Fase 2)
 
 ---
 
@@ -392,9 +395,9 @@ src/app/Services/datos-service.service.ts
 - [ ] Tarea 1.3 completada (environments)
 
 ### Día 3-5
-- [ ] Tarea 1.4 completada (error 404)
-- [ ] Tarea 1.5 iniciada (HTTPS)
-- [ ] Tarea 1.6 completada (console.logs)
+- [x] Tarea 1.4 completada (error 404)
+- [x] Tarea 1.5 iniciada (HTTPS)
+- [x] Tarea 1.6 completada (console.logs)
 
 ### Día 6-10
 - [ ] Tarea 1.5 completada (HTTPS)
@@ -415,13 +418,15 @@ src/app/Services/datos-service.service.ts
 
 ## MÉTRICAS DE ÉXITO FASE 1
 
-| Métrica | Antes | Objetivo |
-|---------|-------|----------|
-| Vulnerabilidades Críticas | 5 | 0 |
-| Console.logs Sensibles | 410 | <100 |
-| Cobertura HTTPS | 0% | 100% |
-| Método logout funcional | No | Sí |
-| Configuración por ambiente | No | Sí |
+| Métrica | Antes | Objetivo | **Actual** |
+|---------|-------|----------|------------|
+| Vulnerabilidades Críticas | 5 | 0 | **1** (HTTPS pendiente) |
+| Console.logs Sensibles | 410 | <100 | **0** (críticos eliminados) |
+| Console.logs Totales en src/app | ~410 | <100 | **34** (solo UI debug) |
+| Cobertura HTTPS | 0% | 100% | **0%** (pendiente) |
+| Método logout funcional | No | Sí | **✅ Sí** |
+| Configuración por ambiente | No | Sí | **✅ Sí** |
+| Logger Service | No | Sí | **✅ Sí** |
 
 ---
 

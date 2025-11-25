@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { IHistorialEvaluacionResumen } from '../../../../../Models/HistorialEvaluacion/IHistorialEvaluacion';
+import { LoggerService } from '../../../../../Services/logger.service';
 
 @Component({
   selector: 'app-detalle-evaluacion-modal',
@@ -443,7 +444,8 @@ import { IHistorialEvaluacionResumen } from '../../../../../Models/HistorialEval
 export class DetalleEvaluacionModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DetalleEvaluacionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IHistorialEvaluacionResumen
+    @Inject(MAT_DIALOG_DATA) public data: IHistorialEvaluacionResumen,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {}
@@ -544,6 +546,9 @@ export class DetalleEvaluacionModalComponent implements OnInit {
 
   exportar(): void {
     // Esta funcionalidad se puede implementar más adelante
-    console.log('Exportar detalle de evaluación:', this.data);
+    this.logger.info('Exportar detalle de evaluación solicitado', {
+      evaluacionId: this.data.evaluacionId,
+      empleado: this.data.empleadoNombre
+    });
   }
 }
