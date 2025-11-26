@@ -61,11 +61,32 @@ export class HomeComponent implements OnInit {
 
   constructor(public empl: Empleados,
               private dialog: MatDialog,
-              private peri:Periodos) 
+              private peri:Periodos)
   {
-    this.usuario = JSON.parse(localStorage.getItem('usuario') ?? "")
-    this.empleado = JSON.parse(localStorage.getItem('empleado') ?? "") 
-    this.periodo = JSON.parse(localStorage.getItem('periodo') ?? "")           
+    // Parsear de forma segura con validación
+    const usuarioStr = localStorage.getItem('usuario');
+    const empleadoStr = localStorage.getItem('empleado');
+    const periodoStr = localStorage.getItem('periodo');
+
+    // Solo parsear si el string no es null y no está vacío
+    this.usuario = (usuarioStr && usuarioStr.trim() !== '')
+      ? JSON.parse(usuarioStr)
+      : {} as Usuario;
+
+    this.empleado = (empleadoStr && empleadoStr.trim() !== '')
+      ? JSON.parse(empleadoStr)
+      : this.empl.inicializamodelo();
+
+    this.periodo = (periodoStr && periodoStr.trim() !== '')
+      ? JSON.parse(periodoStr)
+      : {
+          id: 0,
+          descripcion: '',
+          fechaInicio: new Date(),
+          fechaFin: new Date(),
+          activa: false,
+          estadoid: 0
+        };
   }
 
   public usuario: Usuario
