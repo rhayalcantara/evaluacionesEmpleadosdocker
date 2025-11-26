@@ -124,21 +124,34 @@ export class PlanExtrategico implements OnInit {
                 await firstValueFrom(this.insert(this.modelcreate)).then(
                     (rep: IPlanExtrategicoCreate) => 
                     {
-                        firstValueFrom(this.Get(rep.id.toString())).then(t => 
+                        firstValueFrom(this.Get(rep.id.toString())).then(t =>
                         {
                             this.model.id = t.id
+
+                            // Actualizar IDs de los años y grabar UNA SOLA VEZ
                             this.model.planAnos.forEach(element => {
-                                element.planExtrategicoId= this.model.id;
-                                this.insertanos(this.model.planAnos) 
+                                element.planExtrategicoId = this.model.id;
                             });
+                            if (this.model.planAnos.length > 0) {
+                                this.insertanos(this.model.planAnos).subscribe();
+                            }
+
+                            // Actualizar IDs de perspectivas y grabar UNA SOLA VEZ
                             this.model.perspectiva.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id
-                                this.insertperperspectiva(this.model.perspectiva)
-                            })
+                                p.planExtrategicoModelId = this.model.id;
+                            });
+                            if (this.model.perspectiva.length > 0) {
+                                this.insertperperspectiva(this.model.perspectiva).subscribe();
+                            }
+
+                            // Actualizar IDs de aspiraciones y grabar UNA SOLA VEZ (CORREGIDO)
                             this.model.aspiraciones.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id
-                                this.insertperperspectiva(this.model.perspectiva)
-                            })
+                                p.planExtrategicoModelId = this.model.id;
+                            });
+                            if (this.model.aspiraciones.length > 0) {
+                                this.insertAspiracion(this.model.aspiraciones).subscribe();
+                            }
+
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
                         resolve(true);
                         },(err: Error) => {
@@ -148,10 +161,38 @@ export class PlanExtrategico implements OnInit {
                     }
                 );
             } else {
-                // actualiza el registro            
+                // actualiza el registro
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IPlanExtrategico) => {
                         this.model = rep;
+
+                        // Asegurar que los IDs estén correctamente asignados
+                        this.model.planAnos.forEach(element => {
+                            element.planExtrategicoId = this.model.id;
+                        });
+                        this.model.perspectiva.forEach(p => {
+                            p.planExtrategicoModelId = this.model.id;
+                        });
+                        this.model.aspiraciones.forEach(p => {
+                            p.planExtrategicoModelId = this.model.id;
+                        });
+
+                        // Grabar años si hay cambios
+                        if (this.model.planAnos.length > 0) {
+                            this.insertanos(this.model.planAnos).subscribe();
+                        }
+
+                        // Grabar perspectivas si hay cambios
+                        if (this.model.perspectiva.length > 0) {
+                            this.insertperperspectiva(this.model.perspectiva).subscribe();
+                        }
+
+                        // Grabar aspiraciones si hay cambios
+                        if (this.model.aspiraciones.length > 0) {
+                            this.insertAspiracion(this.model.aspiraciones).subscribe();
+                        }
+
+                        this.datos.showMessage('Registro Actualizado Correctamente', this.titulomensage, "success");
                         this.TRegistros.emit(this.totalregistros)
                         resolve(true);
                     },

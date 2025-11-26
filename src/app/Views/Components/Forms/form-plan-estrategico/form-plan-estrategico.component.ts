@@ -89,7 +89,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
     const nuevaPerspectiva: IPerspectiva = {
       id: 0,
       nombre: '',
-      planExtrategicoModelId:0,
+      planExtrategicoModelId: this.model.id, // Usar el ID del plan actual
       peso: 0
     };
     this.perspectivas.push(nuevaPerspectiva);
@@ -128,6 +128,15 @@ export class FormPlanEstrategicoComponent implements OnInit {
       }
     }
     // se actualiza las aspiraciones y las perspectivas
+    // Asegurar que todas las aspiraciones tengan el ID correcto del plan
+    this.aspiraciones.forEach(a => {
+      a.planExtrategicoModelId = this.model.id;
+    });
+    // Asegurar que todas las perspectivas tengan el ID correcto del plan
+    this.perspectivas.forEach(p => {
+      p.planExtrategicoModelId = this.model.id;
+    });
+
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
     // se envia a grabar
