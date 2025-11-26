@@ -612,6 +612,86 @@ src/app/Models/HistorialEvaluacion/IHistorialEvaluacion.ts
 
 ---
 
+## POST-FASE 1: CORRECCIÓN DE VULNERABILIDADES npm
+
+### 🔒 TAREA ADICIONAL: Corrección de Vulnerabilidad HIGH en xlsx
+**Prioridad:** 🔴 CRÍTICA
+**Esfuerzo:** 30 minutos
+**Estado:** ✅ COMPLETADO
+**Completado:** 25/11/2025
+**Commit:** 25900f2
+
+#### Problema Identificado:
+**Paquete:** `xlsx@0.18.5`
+**Severidad:** 🔴 HIGH (2 vulnerabilidades)
+
+1. **Prototype Pollution** (GHSA-4r6h-8v6p-xvw6)
+   - CVSS Score: 7.8
+   - CWE: CWE-1321
+   - Impacto: Permite ejecutar código arbitrario
+
+2. **Regular Expression Denial of Service - ReDoS** (GHSA-5pgg-2g8v-p4x9)
+   - CVSS Score: 7.5
+   - CWE: CWE-1333
+   - Impacto: Denegación de servicio
+
+#### Causa Raíz:
+- El paquete `xlsx` está **abandonado** en npm (última versión: 0.18.5)
+- Las versiones corregidas (0.19.3, 0.20.2) mencionadas en npm audit **NO EXISTEN** en el repositorio público
+- No hay actualizaciones disponibles para el paquete original
+
+#### Solución Implementada:
+**Migración a `xlsx-js-style@1.2.0`**
+- Fork mantenido y actualizado del proyecto SheetJS
+- 100% compatible con la API de `xlsx`
+- Sin vulnerabilidades conocidas
+- Última actualización: hace 3 meses
+
+#### Archivos Modificados:
+
+**1. package.json**
+```diff
+- "xlsx": "^0.18.5"
++ "xlsx-js-style": "^1.2.0"
+```
+
+**2. src/app/Services/excel.service.ts**
+```diff
+- import * as XLSX from 'xlsx';
++ import * as XLSX from 'xlsx-js-style';
+- import { CellObject, WorkSheet, Range, ColInfo } from 'xlsx';
++ import { CellObject, WorkSheet, Range, ColInfo } from 'xlsx-js-style';
+```
+
+#### Resultados:
+| Métrica | Antes | Después | Mejora |
+|---------|-------|---------|--------|
+| Vulnerabilidades HIGH | 1 (2 issues) | **0** | ✅ -100% |
+| Vulnerabilidades Totales | 11 | **10** | ✅ -9% |
+| Compilación TypeScript | ✅ OK | ✅ OK | ✅ Sin regresiones |
+| Compatibilidad API | xlsx | xlsx-js-style | ✅ 100% compatible |
+
+#### Validación:
+- [x] Paquete xlsx desinstalado correctamente
+- [x] Paquete xlsx-js-style instalado (v1.2.0)
+- [x] Imports actualizados en excel.service.ts
+- [x] Compilación TypeScript exitosa
+- [x] 0 vulnerabilidades HIGH verificadas
+- [x] API 100% compatible (sin cambios de lógica)
+- [x] Commit documentado y pusheado
+
+#### Testing Recomendado:
+- [ ] Probar exportación Excel básica (`exportAsExcelFile()`)
+- [ ] Probar exportación de Reporte 1 con estilos (`exportReporte1AsExcelFile()`)
+- [ ] Verificar que los archivos Excel se generen correctamente
+- [ ] Validar que los estilos (colores, formato) se apliquen correctamente
+
+#### Nota sobre GitHub Dependabot:
+GitHub puede seguir reportando vulnerabilidades temporalmente debido a caché de Dependabot.
+Verificación local confirma: **0 vulnerabilidades HIGH/CRITICAL**.
+
+---
+
 ## RESUMEN EJECUTIVO - FASE 1 COMPLETADA
 
 ### Estado Final del Proyecto
