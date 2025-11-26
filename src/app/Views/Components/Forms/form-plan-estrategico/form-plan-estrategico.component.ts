@@ -137,6 +137,8 @@ export class FormPlanEstrategicoComponent implements OnInit {
       this.aspiraciones = [];
       this.perspectivas = [];
       this.anoInicio = '';
+      // Cerrar el modal después de guardar exitosamente
+      this.dialogRef.close(true);
     }
   }
 
@@ -145,5 +147,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
     this.aspiraciones = [];
     this.perspectivas = [];
     this.anoInicio = '';
+    // Cerrar el modal sin enviar datos
+    this.dialogRef.close();
   }
 }
