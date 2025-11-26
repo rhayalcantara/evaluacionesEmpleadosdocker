@@ -117,6 +117,13 @@ export class PlanExtrategico implements OnInit {
 
     public async grabar(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
+            // Validación defensiva: asegurar que model no sea null o undefined
+            if (!this.model) {
+                this.datos.showMessage('Error: No hay datos para grabar', this.titulomensage, 'error');
+                resolve(false);
+                return;
+            }
+
             if (this.model.id == 0) {
                 // inserta el registro
                 this.modelcreate.descripcion= this.model.descripcion;

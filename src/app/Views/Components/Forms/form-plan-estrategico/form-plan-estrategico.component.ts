@@ -139,6 +139,10 @@ export class FormPlanEstrategicoComponent implements OnInit {
 
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
+
+    // Asignar el model del componente al service antes de grabar
+    this.planExtrategicoService.model = this.model;
+
     // se envia a grabar
     const success = await this.planExtrategicoService.grabar();
     if (success) {
