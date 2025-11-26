@@ -26,8 +26,8 @@ intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<an
                 'Sesión Expirada',
                 'warning'
             );
+            // El método logout() ya maneja la redirección al login
             this.authenticationService.logout();
-            this.router.navigate(['login']);
         }
         // Para otros errores, solo mostrar mensaje sin cerrar sesión
         else if (err.status === 404) {

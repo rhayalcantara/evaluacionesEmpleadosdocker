@@ -149,31 +149,23 @@ export class NavmenuComponent implements OnInit {
     
   }
   log():void{
-  /*  if (this.logg!='LogOut'){
-              
-        this.logg= 'LogOut'
+        // Usar el servicio centralizado de seguridad para el logout
+        this.logg = 'Login';
+        this.mostramenu = false;
 
-        this.mostramenu=true
-        this.router.navigate(['login'])
-    }else{
-      */
-        this.logg= 'Login'
-        localStorage.removeItem('empleado');
-        localStorage.removeItem('periodo');
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('tipodeusuario')
-        let tipodeusuario = localStorage.getItem('tipodeusuario')
-        if (tipodeusuario=='consejal'){
-          localStorage.removeItem('consejal')          
-        }else{
-          localStorage.removeItem('rol');       
+        // Limpiar items específicos del tipo de usuario antes del logout
+        let tipodeusuario = localStorage.getItem('tipodeusuario');
+        if (tipodeusuario === 'consejal'){
+          localStorage.removeItem('consejal');
+        } else {
+          localStorage.removeItem('rol');
         }
-        this.mostramenu=false        
-        this.router.navigate(['login']);
-        this.cd.detectChanges();
-   // }
-}
+
+        // Llamar al método centralizado de logout
+        this.usuarioservicio.logout().subscribe(() => {
+          this.cd.detectChanges();
+        });
+  }
 
 
 }
