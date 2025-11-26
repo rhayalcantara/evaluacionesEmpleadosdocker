@@ -105,19 +105,29 @@ export class CardEmpleadoComponent implements OnInit {
     if (this.periodo && this.empleado){
     this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial).subscribe({
       next:(rep:ModelResponse)=>{
-        this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion
-        if (this.estadoAutoevaluacion == 'Pendiente' || 
-            this.estadoAutoevaluacion == 'Completado' || 
-            this.estadoAutoevaluacion == 'Enviado'
-          ){
-          this.llamarevaluacion = false
-        }else{
-          this.llamarevaluacion = true
-        }
-        if(this.estadoAutoevaluacion == 'EvaluadoPorSupervisor'){
-          this.mostarenviar=true
-        }else{
-          this.mostarenviar=false
+        // Validar que rep.data existe y tiene al menos un elemento
+        if (rep && rep.data && Array.isArray(rep.data) && rep.data.length > 0 && rep.data[0]) {
+          this.estadoAutoevaluacion = rep.data[0].estadoEvaluacion || 'Pendiente';
+
+          if (this.estadoAutoevaluacion == 'Pendiente' ||
+              this.estadoAutoevaluacion == 'Completado' ||
+              this.estadoAutoevaluacion == 'Enviado'
+            ){
+            this.llamarevaluacion = false
+          }else{
+            this.llamarevaluacion = true
+          }
+
+          if(this.estadoAutoevaluacion == 'EvaluadoPorSupervisor'){
+            this.mostarenviar=true
+          }else{
+            this.mostarenviar=false
+          }
+        } else {
+          // Si no hay datos, usar valores por defecto
+          this.estadoAutoevaluacion = 'Pendiente';
+          this.llamarevaluacion = true;
+          this.mostarenviar = false;
         }
 
         //this.estadoEvaluacionSupervisor = rep.data[1].EstadoEvaluacion
