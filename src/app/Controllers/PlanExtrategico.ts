@@ -97,10 +97,10 @@ export class PlanExtrategico implements OnInit {
         return this.datos.insertardatos<IPlan_Anos[]>(this.datos.URL + `/api/plan_anos/grabararray`, obj);
     }
     public insertperperspectiva(obj: IPerspectiva[]): Observable<IPerspectiva[]> {
-        return this.datos.insertardatos<IPerspectiva[]>(this.datos.URL + `/api/perspertiva/grabararray`, obj);
+        return this.datos.insertardatos<IPerspectiva[]>(this.datos.URL + `/api/Perspectivas/grabararray`, obj);
     }
     public insertAspiracion(obj: IAspiracion[]): Observable<IAspiracion[]> {
-        return this.datos.insertardatos<IAspiracion[]>(this.datos.URL + `/api/Aspiracion/grabararray`, obj);
+        return this.datos.insertardatos<IAspiracion[]>(this.datos.URL + `/api/Aspiracions/grabararray`, obj);
     }
     public Update(obj: IPlanExtrategico): Observable<IPlanExtrategico> {
         return this.datos.updatedatos<IPlanExtrategico>(this.rutaapi + `/${obj.id}`, obj);
