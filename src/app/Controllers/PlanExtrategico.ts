@@ -169,33 +169,46 @@ export class PlanExtrategico implements OnInit {
                 );
             } else {
                 // actualiza el registro
+                // Guardar las colecciones antes de actualizar (el Update puede no devolverlas)
+                const planAnos = this.model.planAnos || [];
+                const perspectivas = this.model.perspectiva || [];
+                const aspiraciones = this.model.aspiraciones || [];
+                const modelId = this.model.id;
+
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IPlanExtrategico) => {
-                        this.model = rep;
+                        // No sobrescribir this.model completamente, solo actualizar propiedades base
+                        // y restaurar las colecciones que tenemos localmente
+                        if (rep) {
+                            this.model.id = rep.id;
+                            this.model.descripcion = rep.descripcion;
+                            this.model.cantidad_anos = rep.cantidad_anos;
+                        }
+
+                        // Restaurar las colecciones que teníamos antes del Update
+                        this.model.planAnos = planAnos;
+                        this.model.perspectiva = perspectivas;
+                        this.model.aspiraciones = aspiraciones;
 
                         // Asegurar que los IDs estén correctamente asignados
-                        this.model.planAnos.forEach(element => {
-                            element.planExtrategicoId = this.model.id;
-                        });
-                        this.model.perspectiva.forEach(p => {
-                            p.planExtrategicoModelId = this.model.id;
-                        });
-                        this.model.aspiraciones.forEach(p => {
-                            p.planExtrategicoModelId = this.model.id;
-                        });
-
-                        // Grabar años si hay cambios
-                        if (this.model.planAnos.length > 0) {
+                        if (this.model.planAnos && this.model.planAnos.length > 0) {
+                            this.model.planAnos.forEach(element => {
+                                element.planExtrategicoId = modelId;
+                            });
                             this.insertanos(this.model.planAnos).subscribe();
                         }
 
-                        // Grabar perspectivas si hay cambios
-                        if (this.model.perspectiva.length > 0) {
+                        if (this.model.perspectiva && this.model.perspectiva.length > 0) {
+                            this.model.perspectiva.forEach(p => {
+                                p.planExtrategicoModelId = modelId;
+                            });
                             this.insertperperspectiva(this.model.perspectiva).subscribe();
                         }
 
-                        // Grabar aspiraciones si hay cambios
-                        if (this.model.aspiraciones.length > 0) {
+                        if (this.model.aspiraciones && this.model.aspiraciones.length > 0) {
+                            this.model.aspiraciones.forEach(p => {
+                                p.planExtrategicoModelId = modelId;
+                            });
                             this.insertAspiracion(this.model.aspiraciones).subscribe();
                         }
 
