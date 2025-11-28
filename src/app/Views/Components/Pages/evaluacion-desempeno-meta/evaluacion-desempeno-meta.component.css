@@ -10,12 +10,45 @@
 }
 
 .search-container {
+    display: flex;
+    gap: 16px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-field {
+    min-width: 300px;
+    flex: 1;
 }
 
 .search-field {
-    width: 100%;
-    max-width: 500px;
+    min-width: 300px;
+    flex: 1;
+}
+
+.periodo-status {
+    font-size: 0.85em;
+    color: #666;
+    margin-left: 8px;
+}
+
+.periodo-status.activo {
+    color: #4caf50;
+    font-weight: 500;
+}
+
+/* Responsive - En pantallas pequeñas, los campos ocupan todo el ancho */
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+    }
+
+    .filter-field,
+    .search-field {
+        width: 100%;
+        min-width: 100%;
+    }
 }
 
 .mat-elevation-z8 {

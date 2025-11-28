@@ -14,6 +14,9 @@ import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta
 import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
 import { FormEvaluacionDesempenoMetaComponent } from '../../Forms/form-evaluacion-desempeno-meta/form-evaluacion-desempeno-meta.component';
 import { MatSort } from '@angular/material/sort';
+import { Periodos } from 'src/app/Controllers/Periodos';
+import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-evaluacion-desempeno-meta',
@@ -29,7 +32,8 @@ import { MatSort } from '@angular/material/sort';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ]
 })
 export class EvaluacionDesempenoMetaComponent implements OnInit {
@@ -37,13 +41,16 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
  // dataSource: IEvaluacionDesempenoMeta[] = [];
   dataSources = new MatTableDataSource<IEvaluacionDesempenoMeta>();
   searchTerm: string = '';
+  periodos: IPeriodo[] = [];
+  periodoSeleccionado: number | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   
   constructor(
     private dialog: MatDialog,
     public metaService: EvaluacionDesempenoMeta,
-    private datosService: DatosServiceService
+    private datosService: DatosServiceService,
+    public periodosService: Periodos
   ) { 
     this.metaService.TRegistros.subscribe(() => {
      // console.table(this.metaService.arraymodel[0].evaluacion)
@@ -59,8 +66,8 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarPeriodos();
     this.cargarDatos();
-
   }
 
   cargarDatos(): void {
@@ -120,5 +127,38 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
         });
       }
     });
+  }
+
+  /**
+   * Carga todos los periodos (activos e inactivos)
+   */
+  cargarPeriodos(): void {
+    this.periodosService.getdatos();
+    this.periodosService.TRegistros.subscribe(() => {
+      this.periodos = this.periodosService.arraymodel;
+    });
+  }
+
+  /**
+   * Maneja el cambio de periodo seleccionado
+   * @param periodoId - ID del periodo seleccionado
+   */
+  onPeriodoChange(periodoId: number | null): void {
+    this.periodoSeleccionado = periodoId;
+
+    if (periodoId) {
+      this.metaService.getDatosPorPeriodo(periodoId);
+    } else {
+      // Si no hay periodo seleccionado, cargar todos
+      this.cargarDatos();
+    }
+  }
+
+  /**
+   * Limpia el filtro de periodo
+   */
+  limpiarFiltroPeriodo(): void {
+    this.periodoSeleccionado = null;
+    this.cargarDatos();
   }
 }
