@@ -15,7 +15,7 @@ export class PoliticaEvaluacion implements OnInit {
   rutaapi: string = this.datos.URL + '/api/PoliticaEvaluacions'
   titulomensage: string = 'Políticas de Evaluación'
 
-  public model: IPoliticaEvaluacion = this.inicializamodelo()
+  public model: IPoliticaEvaluacion | null = this.inicializamodelo()
   titulos = [
     { tipo: 'Tipo' },
     { nombre: 'Nombre' }
@@ -99,15 +99,21 @@ export class PoliticaEvaluacion implements OnInit {
 
   public async grabar(): Promise<boolean> {
     // Envuelve el código en una nueva Promise
-    
+
     return new Promise<boolean>(async (resolve) => {
+      if (!this.model) {
+        this.datos.showMessage('Error: No hay datos para guardar', this.titulomensage, 'error');
+        resolve(false);
+        return;
+      }
+
       if (this.model.id == 0) {
         // inserta el registro
         await firstValueFrom(this.insert(this.model)).then(
           (rep: IPoliticaEvaluacion) => {
 
             this.model = rep;
-            this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
+            this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
             resolve(true); // Devuelve true si la operación fue exitosa
           },
           (err: Error) => {
@@ -117,12 +123,12 @@ export class PoliticaEvaluacion implements OnInit {
         );
       } else {
         // actualiza el registro
-        
+
         await firstValueFrom(this.Update(this.model)).then(
           (rep: IPoliticaEvaluacion) => {
-            
+
             this.model = rep;
-        
+
             this.TRegistros.emit(this.totalregistros)
 
             resolve(true); // Devuelve true si la operación fue exitosa
@@ -133,7 +139,7 @@ export class PoliticaEvaluacion implements OnInit {
           }
         );
       }
-     
+
 
     });
   }

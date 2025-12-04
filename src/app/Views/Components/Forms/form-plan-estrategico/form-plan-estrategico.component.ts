@@ -127,6 +127,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
         }
       }
     }
+    /*
     // se actualiza las aspiraciones y las perspectivas
     // Asegurar que todas las aspiraciones tengan el ID correcto del plan
     this.aspiraciones.forEach(a => {
@@ -136,13 +137,13 @@ export class FormPlanEstrategicoComponent implements OnInit {
     this.perspectivas.forEach(p => {
       p.planExtrategicoModelId = this.model.id;
     });
-
+*/
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
 
     // Asignar el model del componente al service antes de grabar
     this.planExtrategicoService.model = this.model;
-
+    console.log(this.planExtrategicoService.model )
     // se envia a grabar
     const success = await this.planExtrategicoService.grabar();
     if (success) {

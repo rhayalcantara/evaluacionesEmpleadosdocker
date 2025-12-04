@@ -1,13 +1,19 @@
 <div class="container">
-  <h2 class="title">Objetivo/Proyecto</h2>
-  
   <div class="actions-top">
     <button class="btn-add" (click)="onAdd()">
-      <i class="fas fa-plus"></i> Nuevo Objetivo/Proyecto
+      <i class="fas fa-plus"></i> Nuevo {{ Tipo === 'Objetivos' ? 'Objetivo' : 'Proyecto' }}
     </button>
   </div>
 
-  <div class="table-container">
+  <!-- Mensaje cuando no hay objetivos/proyectos -->
+  <div class="empty-state" *ngIf="totalItems === 0">
+    <i [class]="Tipo === 'Objetivos' ? 'fas fa-bullseye' : 'fas fa-project-diagram'"></i>
+    <p>No hay {{ Tipo === 'Objetivos' ? 'objetivos' : 'proyectos' }} registrados</p>
+    <p class="empty-state-hint">Haz clic en "Nuevo {{ Tipo === 'Objetivos' ? 'Objetivo' : 'Proyecto' }}" para agregar el primero</p>
+  </div>
+
+  <!-- Tabla de Objetivos/Proyectos -->
+  <div class="table-container" *ngIf="totalItems > 0">
     <table>
       <thead>
         <tr>
@@ -19,7 +25,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let objetivo of displayedObjetivos">
-          <td>{{objetivo.descripcion}}</td>          
+          <td>{{objetivo.descripcion}}</td>
           <td>{{objetivo.tipo}}</td>
           <td>{{objetivo.valor}}</td>
           <td class="actions">
@@ -30,7 +36,7 @@
               <i class="fas fa-edit"></i>
             </button>
             <button class="btn-years" (click)="onVerAnos(objetivo)" title="Ver Años">
-              <i class="fas fa-calendar"></i>
+              <i class="fas fa-calendar-alt"></i>
             </button>
           </td>
         </tr>

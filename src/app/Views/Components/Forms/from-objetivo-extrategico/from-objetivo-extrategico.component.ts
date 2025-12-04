@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ObjetivoEstrategico } from 'src/app/Controllers/ObjetivoEstrategico';
 import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
@@ -25,12 +26,16 @@ import { ObjetivosProyectoPerspectivaComponent } from '../../Pages/objetivos-pro
   styleUrls: ['./from-objetivo-extrategico.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule,
-    MatDialogModule, ReactiveFormsModule,
+    MatDialogModule, ReactiveFormsModule, MatTabsModule,
      KrisComponent,ObjetivosProyectoPerspectivaComponent]
 })
 export class FromObjetivoExtrategicoComponent implements OnInit {
   KriPorAnos:IKriAno[]=[] ;
 
+  // Estado del componente
+  isEditMode: boolean = false;
+  isSaved: boolean = false;
+  showChildComponents: boolean = false;
 
   public planesEstrategicos: IPlanExtrategico[] = [];
   public perpectiva:IPerspectiva[]=[]
@@ -96,22 +101,32 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
 
     this.objetivoEstrategicoService.model = this.data.model
     if(this.objetivoEstrategicoService.model.id!=0){
-      //editando
+      //editando - modo edición
+      this.isEditMode = true;
+      this.isSaved = true;
+      this.showChildComponents = true;
+
       this.Formgrup.controls['descripcion'].setValue(this.objetivoEstrategicoService.model.descripcion);
-      // buscar la perspectiva 
+      // buscar la perspectiva
       this.PrespectivasController.Get(this.objetivoEstrategicoService.model.perspectivaId.toString()).subscribe({
         next: (perspectiva) => {
           this.objetivoEstrategicoService.model.perspectiva = perspectiva;
           this.planExtrategicoModelId = perspectiva.planExtrategicoModelId;
           this.cargarPerspectivas(perspectiva.planExtrategicoModelId,perspectiva.id);
-          
+
           this.Formgrup.controls['planExtrategicoModelId'].setValue(this.planExtrategicoModelId);
           this.cd.detectChanges();
         },
+        error: (error) => {
+          this.datosService.showMessage('Error al cargar la perspectiva', 'Error', 'error');
+        }
       })
 
     }else{
-      
+      // Modo creación
+      this.isEditMode = false;
+      this.isSaved = false;
+      this.showChildComponents = false;
     }
     //this.Formgrup.patchValue(this.objetivoEstrategicoService.model);
   }
@@ -215,29 +230,99 @@ agregarFila() {
     
   }
 
-  async guardar() {
-    //verificar 
+  /**
+   * Guarda el objetivo estratégico parcialmente sin cerrar el diálogo
+   * Permite continuar editando y añadiendo KRIs/Objetivos/Proyectos
+   */
+  async guardarParcial() {
     if (this.Formgrup.valid) {
-    this.objetivoEstrategicoService.model.descripcion=this.Formgrup.get('descripcion')?.value
-    this.objetivoEstrategicoService.model.perspectivaId =this.Formgrup.get('perspectivaId')?.value
+      this.objetivoEstrategicoService.model.descripcion = this.Formgrup.get('descripcion')?.value;
+      this.objetivoEstrategicoService.model.perspectivaId = this.Formgrup.get('perspectivaId')?.value;
 
-    this.KriPorAnos = this.KriFormArray.value
-    
-    // actualiza el objetivoExtrategicoId con this.objetivoEstrategicoService.model.id
-    if (await this.objetivoEstrategicoService.grabar()) {
-      this.KriPorAnos.map(obj => {
-        obj.kriId=this.objetivoEstrategicoService.model.id;
-      })
-      // manda a grabar el array 
-      this.kriAno.insertarray(this.KriPorAnos).subscribe({
-        next: (response:IKriAno[]) => {
-        this.KriPorAnos = response
+      if (await this.objetivoEstrategicoService.grabar()) {
+        this.isSaved = true;
+        this.showChildComponents = true;
+        this.cd.detectChanges();
+
+        this.datosService.showMessage(
+          'Objetivo estratégico guardado. Ahora puedes añadir KRIs, Objetivos y Proyectos.',
+          'Guardado Exitoso',
+          'success'
+        );
+      } else {
+        this.datosService.showMessage(
+          'Error al guardar el objetivo estratégico',
+          this.objetivoEstrategicoService.titulomensage,
+          'error'
+        );
       }
-      })
-      this.dialogRef.close(this.objetivoEstrategicoService.model);
-    }}else {
-      this.datosService.showMessage('Error al grabar el objetivo',this.objetivoEstrategicoService.titulomensage,'error')
+    } else {
+      this.datosService.showMessage(
+        'Por favor completa todos los campos requeridos',
+        'Validación',
+        'warning'
+      );
     }
+  }
+
+  /**
+   * Guarda todo y cierra el diálogo
+   */
+  async guardar() {
+    //verificar
+    if (this.Formgrup.valid) {
+      this.objetivoEstrategicoService.model.descripcion = this.Formgrup.get('descripcion')?.value;
+      this.objetivoEstrategicoService.model.perspectivaId = this.Formgrup.get('perspectivaId')?.value;
+
+      this.KriPorAnos = this.KriFormArray.value;
+
+      // actualiza el objetivoExtrategicoId con this.objetivoEstrategicoService.model.id
+      if (await this.objetivoEstrategicoService.grabar()) {
+        // Si hay KRIs en el FormArray, grabarlos
+        if (this.KriPorAnos.length > 0) {
+          this.KriPorAnos.map(obj => {
+            obj.kriId = this.objetivoEstrategicoService.model.id;
+          });
+
+          // manda a grabar el array
+          this.kriAno.insertarray(this.KriPorAnos).subscribe({
+            next: (response: IKriAno[]) => {
+              this.KriPorAnos = response;
+            },
+            error: (error) => {
+              this.datosService.showMessage('Error al guardar KRIs', 'Error', 'error');
+            }
+          });
+        }
+
+        this.datosService.showMessage(
+          'Objetivo estratégico guardado exitosamente',
+          'Éxito',
+          'success'
+        );
+        this.dialogRef.close(this.objetivoEstrategicoService.model);
+      }
+    } else {
+      this.datosService.showMessage(
+        'Por favor completa todos los campos requeridos',
+        this.objetivoEstrategicoService.titulomensage,
+        'error'
+      );
+    }
+  }
+
+  /**
+   * Retorna el estado actual del objetivo estratégico
+   */
+  getEstadoObjetivo(): string {
+    if (!this.isSaved && !this.isEditMode) {
+      return 'Borrador';
+    } else if (this.isSaved && this.showChildComponents) {
+      return 'Guardado - Editando';
+    } else if (this.isEditMode) {
+      return 'Editando';
+    }
+    return 'Guardado';
   }
   cancelar() {
     this.dialogRef.close();
