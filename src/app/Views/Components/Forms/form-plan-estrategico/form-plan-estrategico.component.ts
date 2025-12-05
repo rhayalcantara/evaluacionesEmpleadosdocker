@@ -64,6 +64,10 @@ export class FormPlanEstrategicoComponent implements OnInit {
         {
           next:(data: IAspiracion[]) => {
             console.log('Aspiraciones cargadas:', data);
+            console.log('Verificando IDs de aspiraciones cargadas:');
+            data.forEach((a, index) => {
+              console.log(`  Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+            });
             this.aspiraciones = data;
             this.model.aspiraciones = data;
           },
@@ -77,6 +81,10 @@ export class FormPlanEstrategicoComponent implements OnInit {
           {
             next: (data: IPerspectiva[]) => {
               console.log('Perspectivas cargadas:', data);
+              console.log('Verificando IDs de perspectivas cargadas:');
+              data.forEach((p, index) => {
+                console.log(`  Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+              });
               this.perspectivas = data;
               this.model.perspectiva = data;
             },
@@ -167,11 +175,18 @@ export class FormPlanEstrategicoComponent implements OnInit {
     }
     // Asegurar que todas las aspiraciones tengan el ID correcto del plan
     console.log('🔧 Asignando IDs a aspiraciones y perspectivas');
-    this.aspiraciones.forEach(a => {
+    console.log('  Model ID que se va a asignar:', this.model.id);
+
+    this.aspiraciones.forEach((a, index) => {
+      console.log(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
       a.planExtrategicoModelId = this.model.id;
+      console.log(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
     });
-    this.perspectivas.forEach(p => {
+
+    this.perspectivas.forEach((p, index) => {
+      console.log(`  ANTES - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
       p.planExtrategicoModelId = this.model.id;
+      console.log(`  DESPUÉS - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
     });
 
     // Asignar los arrays al modelo
