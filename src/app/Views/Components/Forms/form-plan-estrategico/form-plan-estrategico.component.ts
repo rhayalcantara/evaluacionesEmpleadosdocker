@@ -122,51 +122,74 @@ export class FormPlanEstrategicoComponent implements OnInit {
   }
 
   async onSubmit() {
+    console.log('📤 Iniciando onSubmit');
+    console.log('📊 Estado actual - Model ID:', this.model.id);
+    console.log('📊 Aspiraciones en memoria:', this.aspiraciones);
+    console.log('📊 Perspectivas en memoria:', this.perspectivas);
+
     if (this.anoInicio) {
-      this.model.planAnos = [{
-        id: 0,
-        planExtrategicoId: this.model.id,
-        ano: this.anoInicio
-      }];
-      // si estas agregando hay que generar los anos
-      if(this.model.id==0){
-        // agegar los anos faltantes
-        for (let i = 2; i < this.model.cantidad_anos; i++) {
+      // MODO CREACIÓN - Generar años desde cero
+      if(this.model.id == 0){
+        console.log('🆕 Modo creación - Generando años');
+        this.model.planAnos = [{
+          id: 0,
+          planExtrategicoId: this.model.id,
+          ano: this.anoInicio
+        }];
+        // Agregar los años faltantes
+        for (let i = 2; i <= this.model.cantidad_anos; i++) {
           this.model.planAnos.push({
-            id: 0, 
-            planExtrategicoId: this.model.id, 
-            ano: (parseInt(this.anoInicio) + i-1 ).toString()          
+            id: 0,
+            planExtrategicoId: this.model.id,
+            ano: (parseInt(this.anoInicio) + i - 1).toString()
           });
         }
-      }else{
-        // encaso de que sea actulizando hay que verificar si el año cambio
-        if (this.model.planAnos[0].ano !== this.anoInicio) {
-          //this.model.planAnos[0].ano = this.anoInicio;
-          // hay que modificar los demas anos segun el primero y la cantiada de años
-          this.model.planAnos.forEach((ano, index) => {
-               ano.ano = (parseInt(this.anoInicio) + index).toString();            
-          })                        
+        console.log('✅ Años generados:', this.model.planAnos);
+      } else {
+        // MODO EDICIÓN - Solo actualizar años si cambió el año inicial
+        console.log('✏️ Modo edición - Verificando si cambió año inicial');
+        console.log('Año actual en BD:', this.model.planAnos[0]?.ano);
+        console.log('Año nuevo:', this.anoInicio);
+
+        if (this.model.planAnos && this.model.planAnos.length > 0) {
+          if (this.model.planAnos[0].ano !== this.anoInicio) {
+            console.log('⚠️ Año inicial cambió - Actualizando años');
+            // Actualizar todos los años según el nuevo año inicial
+            this.model.planAnos.forEach((ano, index) => {
+              ano.ano = (parseInt(this.anoInicio) + index).toString();
+            });
+            console.log('✅ Años actualizados:', this.model.planAnos);
+          } else {
+            console.log('ℹ️ Año inicial no cambió - Manteniendo años existentes');
+          }
         }
       }
     }
-    /*
-    // se actualiza las aspiraciones y las perspectivas
     // Asegurar que todas las aspiraciones tengan el ID correcto del plan
+    console.log('🔧 Asignando IDs a aspiraciones y perspectivas');
     this.aspiraciones.forEach(a => {
       a.planExtrategicoModelId = this.model.id;
     });
-    // Asegurar que todas las perspectivas tengan el ID correcto del plan
     this.perspectivas.forEach(p => {
       p.planExtrategicoModelId = this.model.id;
     });
-*/
+
+    // Asignar los arrays al modelo
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
 
+    console.log('📦 Datos finales antes de grabar:');
+    console.log('  - Descripción:', this.model.descripcion);
+    console.log('  - Cantidad años:', this.model.cantidad_anos);
+    console.log('  - PlanAnos:', this.model.planAnos);
+    console.log('  - Aspiraciones:', this.model.aspiraciones);
+    console.log('  - Perspectivas:', this.model.perspectiva);
+
     // Asignar el model del componente al service antes de grabar
     this.planExtrategicoService.model = this.model;
-    console.log(this.planExtrategicoService.model )
+
     // se envia a grabar
+    console.log('💾 Llamando a grabar()...');
     const success = await this.planExtrategicoService.grabar();
     if (success) {
       this.model = this.planExtrategicoService.inicializamodelo();
