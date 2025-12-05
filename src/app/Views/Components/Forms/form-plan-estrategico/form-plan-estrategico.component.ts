@@ -35,7 +35,12 @@ export class FormPlanEstrategicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('🔵 FormPlanEstrategico ngOnInit ejecutado');
+    console.log('📋 Data recibida:', this.data);
+    console.log('🆔 Model ID:', this.data.model?.id);
+
     if (this.data.model.id) {
+      console.log('✅ Entrando a cargar datos - ID válido:', this.data.model.id);
 
       this.model = this.data.model
       // obtener los datos complementarios
@@ -82,6 +87,8 @@ export class FormPlanEstrategicoComponent implements OnInit {
           }
         )
 
+    } else {
+      console.log('⚠️ No hay ID - Modo creación nuevo Plan Estratégico');
     }
   }
 
