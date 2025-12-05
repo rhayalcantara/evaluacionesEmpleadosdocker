@@ -175,8 +175,15 @@ export class PlanExtrategico implements OnInit {
                 const aspiraciones = this.model.aspiraciones || [];
                 const modelId = this.model.id;
 
-                await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IPlanExtrategico) => {
+                // Crear objeto limpio solo con las propiedades base (sin colecciones navegacionales)
+                const modelToUpdate: IPlanExtrategicoCreate = {
+                    id: this.model.id,
+                    descripcion: this.model.descripcion,
+                    cantidad_anos: this.model.cantidad_anos
+                };
+
+                await firstValueFrom(this.datos.updatedatos<IPlanExtrategicoCreate>(this.rutaapi + `/${modelToUpdate.id}`, modelToUpdate)).then(
+                    (rep: IPlanExtrategicoCreate) => {
                         // No sobrescribir this.model completamente, solo actualizar propiedades base
                         // y restaurar las colecciones que tenemos localmente
                         if (rep) {
