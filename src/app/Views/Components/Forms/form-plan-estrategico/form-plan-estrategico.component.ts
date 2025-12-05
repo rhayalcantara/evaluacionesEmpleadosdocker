@@ -36,7 +36,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.model.id) {
-      
+
       this.model = this.data.model
       // obtener los datos complementarios
       // obtener los anos
@@ -44,26 +44,41 @@ export class FormPlanEstrategicoComponent implements OnInit {
         {
           next:(data) => {
             this.model.planAnos = data;
-            // obtener el ano inicial
-            this.anoInicio = this.data.model.planAnos[0].ano
+            // obtener el ano inicial - con validación defensiva
+            if (data && data.length > 0) {
+              this.anoInicio = data[0].ano;
+            }
+          },
+          error: (error) => {
+            console.error('Error cargando años del plan:', error);
+            this.datosService.showMessage('Error cargando años del plan', 'Error', 'error');
           }
         })
 
-      this.AspirecionesController.GetsPlan(this.model.id).subscribe( 
+      this.AspirecionesController.GetsPlan(this.model.id).subscribe(
         {
           next:(data: IAspiracion[]) => {
+            console.log('Aspiraciones cargadas:', data);
             this.aspiraciones = data;
             this.model.aspiraciones = data;
+          },
+          error: (error) => {
+            console.error('Error cargando aspiraciones:', error);
+            this.datosService.showMessage('Error cargando aspiraciones', 'Error', 'error');
           }
-
         })
 
         this.PerspectivasController.GetsPlan(this.model.id).subscribe(
           {
             next: (data: IPerspectiva[]) => {
+              console.log('Perspectivas cargadas:', data);
               this.perspectivas = data;
               this.model.perspectiva = data;
-          }
+            },
+            error: (error) => {
+              console.error('Error cargando perspectivas:', error);
+              this.datosService.showMessage('Error cargando perspectivas', 'Error', 'error');
+            }
           }
         )
 

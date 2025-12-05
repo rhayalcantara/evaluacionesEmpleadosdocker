@@ -140,7 +140,14 @@ export class PlanExtrategico implements OnInit {
                                 element.planExtrategicoId = this.model.id;
                             });
                             if (this.model.planAnos.length > 0) {
-                                this.insertanos(this.model.planAnos).subscribe();
+                                this.insertanos(this.model.planAnos).subscribe({
+                                    next: (result) => {
+                                        console.log('Años guardados correctamente:', result);
+                                    },
+                                    error: (error) => {
+                                        console.error('Error guardando años:', error);
+                                    }
+                                });
                             }
 
                             // Actualizar IDs de perspectivas y grabar UNA SOLA VEZ
@@ -148,7 +155,15 @@ export class PlanExtrategico implements OnInit {
                                 p.planExtrategicoModelId = this.model.id;
                             });
                             if (this.model.perspectiva.length > 0) {
-                                this.insertperperspectiva(this.model.perspectiva).subscribe();
+                                this.insertperperspectiva(this.model.perspectiva).subscribe({
+                                    next: (result) => {
+                                        console.log('Perspectivas guardadas correctamente:', result);
+                                    },
+                                    error: (error) => {
+                                        console.error('Error guardando perspectivas:', error);
+                                        this.datos.showMessage('Error guardando perspectivas: ' + error.message, this.titulomensage, 'error');
+                                    }
+                                });
                             }
 
                             // Actualizar IDs de aspiraciones y grabar UNA SOLA VEZ (CORREGIDO)
@@ -156,7 +171,15 @@ export class PlanExtrategico implements OnInit {
                                 p.planExtrategicoModelId = this.model.id;
                             });
                             if (this.model.aspiraciones.length > 0) {
-                                this.insertAspiracion(this.model.aspiraciones).subscribe();
+                                this.insertAspiracion(this.model.aspiraciones).subscribe({
+                                    next: (result) => {
+                                        console.log('Aspiraciones guardadas correctamente:', result);
+                                    },
+                                    error: (error) => {
+                                        console.error('Error guardando aspiraciones:', error);
+                                        this.datos.showMessage('Error guardando aspiraciones: ' + error.message, this.titulomensage, 'error');
+                                    }
+                                });
                             }
 
                         this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
@@ -202,21 +225,44 @@ export class PlanExtrategico implements OnInit {
                             this.model.planAnos.forEach(element => {
                                 element.planExtrategicoId = modelId;
                             });
-                            this.insertanos(this.model.planAnos).subscribe();
+                            this.insertanos(this.model.planAnos).subscribe({
+                                next: (result) => {
+                                    console.log('Años guardados correctamente:', result);
+                                },
+                                error: (error) => {
+                                    console.error('Error guardando años:', error);
+                                }
+                            });
                         }
 
                         if (this.model.perspectiva && this.model.perspectiva.length > 0) {
                             this.model.perspectiva.forEach(p => {
                                 p.planExtrategicoModelId = modelId;
                             });
-                            this.insertperperspectiva(this.model.perspectiva).subscribe();
+                            this.insertperperspectiva(this.model.perspectiva).subscribe({
+                                next: (result) => {
+                                    console.log('Perspectivas guardadas correctamente:', result);
+                                },
+                                error: (error) => {
+                                    console.error('Error guardando perspectivas:', error);
+                                    this.datos.showMessage('Error guardando perspectivas: ' + error.message, this.titulomensage, 'error');
+                                }
+                            });
                         }
 
                         if (this.model.aspiraciones && this.model.aspiraciones.length > 0) {
                             this.model.aspiraciones.forEach(p => {
                                 p.planExtrategicoModelId = modelId;
                             });
-                            this.insertAspiracion(this.model.aspiraciones).subscribe();
+                            this.insertAspiracion(this.model.aspiraciones).subscribe({
+                                next: (result) => {
+                                    console.log('Aspiraciones guardadas correctamente:', result);
+                                },
+                                error: (error) => {
+                                    console.error('Error guardando aspiraciones:', error);
+                                    this.datos.showMessage('Error guardando aspiraciones: ' + error.message, this.titulomensage, 'error');
+                                }
+                            });
                         }
 
                         this.datos.showMessage('Registro Actualizado Correctamente', this.titulomensage, "success");
