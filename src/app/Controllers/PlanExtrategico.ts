@@ -93,15 +93,49 @@ export class PlanExtrategico implements OnInit {
     public insert(obj: IPlanExtrategicoCreate): Observable<IPlanExtrategicoCreate> {
         return this.datos.insertardatos<IPlanExtrategicoCreate>(this.rutaapi, obj);
     }
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/plan_anos/grabararray
+     */
     public insertanos(obj:IPlan_Anos[]):Observable<IPlan_Anos[]>{
         return this.datos.insertardatos<IPlan_Anos[]>(this.datos.URL + `/api/plan_anos/grabararray`, obj);
     }
-    public insertperperspectiva(obj: IPerspectiva[]): Observable<IPerspectiva[]> {
-        return this.datos.insertardatos<IPerspectiva[]>(this.datos.URL + `/api/Perspectivas/grabararray`, obj);
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/Perspectivas/grabararray
+     * @param planExtrategicoModelId - ID del plan estratégico al que pertenecen las perspectivas
+     * @param obj - Array de perspectivas a guardar
+     */
+    public insertperperspectiva(planExtrategicoModelId: number, obj: IPerspectiva[]): Observable<IPerspectiva[]> {
+        // Enviar como body object (Opción 1 recomendada en el informe de cambios del backend)
+        const requestBody = {
+            planExtrategicoModelId: planExtrategicoModelId,
+            perspectivas: obj
+        };
+        return this.datos.insertardatos<any>(this.datos.URL + `/api/Perspectivas/grabararray`, requestBody) as Observable<IPerspectiva[]>;
     }
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/Aspiracions/grabararray
+     */
     public insertAspiracion(obj: IAspiracion[]): Observable<IAspiracion[]> {
         return this.datos.insertardatos<IAspiracion[]>(this.datos.URL + `/api/Aspiracions/grabararray`, obj);
     }
+
+    /**
+     * Actualiza un plan estratégico completo con todas sus relaciones en una sola llamada.
+     * Implementa el patrón "Replace Collection" de la API:
+     * - Elimina registros no enviados
+     * - Actualiza registros existentes (id > 0)
+     * - Crea registros nuevos (id = 0)
+     * @param obj - Objeto completo del plan con sus relaciones (años, perspectivas, aspiraciones)
+     */
     public Update(obj: IPlanExtrategico): Observable<IPlanExtrategico> {
         return this.datos.updatedatos<IPlanExtrategico>(this.rutaapi + `/${obj.id}`, obj);
     }
@@ -125,152 +159,79 @@ export class PlanExtrategico implements OnInit {
             }
 
             if (this.model.id == 0) {
-                // inserta el registro
-                this.modelcreate.descripcion= this.model.descripcion;
+                // CREAR: Primero crear el plan base, luego actualizar con relaciones usando PUT
+                this.modelcreate.descripcion = this.model.descripcion;
                 this.modelcreate.cantidad_anos = this.model.cantidad_anos;
+
                 await firstValueFrom(this.insert(this.modelcreate)).then(
-                    (rep: IPlanExtrategicoCreate) => 
-                    {
-                        firstValueFrom(this.Get(rep.id.toString())).then(t =>
-                        {
-                            this.model.id = t.id
+                    async (rep: IPlanExtrategicoCreate) => {
+                        // Asignar el ID generado al modelo
+                        this.model.id = rep.id;
 
-                            // Actualizar IDs de los años y grabar UNA SOLA VEZ
-                            this.model.planAnos.forEach(element => {
-                                element.planExtrategicoId = this.model.id;
-                            });
-                            if (this.model.planAnos.length > 0) {
-                                this.insertanos(this.model.planAnos).subscribe({
-                                    next: (result) => {
-                                        console.log('Años guardados correctamente:', result);
-                                    },
-                                    error: (error) => {
-                                        console.error('Error guardando años:', error);
-                                    }
-                                });
+                        // Preparar IDs de relaciones
+                        this.model.planAnos = this.model.planAnos || [];
+                        this.model.planAnos.forEach(element => {
+                            element.planExtrategicoId = this.model.id;
+                        });
+
+                        this.model.perspectiva = this.model.perspectiva || [];
+                        this.model.perspectiva.forEach(p => {
+                            p.planExtrategicoModelId = this.model.id;
+                        });
+
+                        this.model.aspiraciones = this.model.aspiraciones || [];
+                        this.model.aspiraciones.forEach(a => {
+                            a.planExtrategicoId = this.model.id;
+                            a.planExtrategicoModelId = this.model.id;
+                        });
+
+                        // Ahora usar PUT para agregar las relaciones en una sola llamada
+                        await firstValueFrom(this.Update(this.model)).then(
+                            () => {
+                                this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
+                                resolve(true);
+                            },
+                            (err: Error) => {
+                                this.datos.showMessage('Error al guardar relaciones: ' + err.message, this.titulomensage, 'error');
+                                resolve(false);
                             }
-
-                            // Actualizar IDs de perspectivas y grabar UNA SOLA VEZ
-                            this.model.perspectiva.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id;
-                            });
-                            if (this.model.perspectiva.length > 0) {
-                                this.insertperperspectiva(this.model.perspectiva).subscribe({
-                                    next: (result) => {
-                                        console.log('Perspectivas guardadas correctamente:', result);
-                                    },
-                                    error: (error) => {
-                                        console.error('Error guardando perspectivas:', error);
-                                        this.datos.showMessage('Error guardando perspectivas: ' + error.message, this.titulomensage, 'error');
-                                    }
-                                });
-                            }
-
-                            // Actualizar IDs de aspiraciones y grabar UNA SOLA VEZ (CORREGIDO)
-                            this.model.aspiraciones.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id;
-                            });
-                            if (this.model.aspiraciones.length > 0) {
-                                this.insertAspiracion(this.model.aspiraciones).subscribe({
-                                    next: (result) => {
-                                        console.log('Aspiraciones guardadas correctamente:', result);
-                                    },
-                                    error: (error) => {
-                                        console.error('Error guardando aspiraciones:', error);
-                                        this.datos.showMessage('Error guardando aspiraciones: ' + error.message, this.titulomensage, 'error');
-                                    }
-                                });
-                            }
-
-                        this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
-                        resolve(true);
-                        },(err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+                        );
+                    },
+                    (err: Error) => {
+                        this.datos.showMessage('Error: ' + err.message, this.titulomensage, 'error');
                         resolve(false);
-                        })
                     }
                 );
             } else {
-                // actualiza el registro
-                // Guardar las colecciones antes de actualizar (el Update puede no devolverlas)
-                const planAnos = this.model.planAnos || [];
-                const perspectivas = this.model.perspectiva || [];
-                const aspiraciones = this.model.aspiraciones || [];
-                const modelId = this.model.id;
+                // ACTUALIZAR: Usar PUT con el objeto completo (incluye relaciones)
+                // Asegurar que los IDs de las relaciones estén correctamente asignados
+                this.model.planAnos = this.model.planAnos || [];
+                this.model.planAnos.forEach(element => {
+                    element.planExtrategicoId = this.model.id;
+                });
 
-                // Crear objeto limpio solo con las propiedades base (sin colecciones navegacionales)
-                const modelToUpdate: IPlanExtrategicoCreate = {
-                    id: this.model.id,
-                    descripcion: this.model.descripcion,
-                    cantidad_anos: this.model.cantidad_anos
-                };
+                this.model.perspectiva = this.model.perspectiva || [];
+                this.model.perspectiva.forEach(p => {
+                    p.planExtrategicoModelId = this.model.id;
+                    // Eliminar referencia circular para evitar problemas de serialización
+                    p.planExtrategicoModel = null as any;
+                });
 
-                await firstValueFrom(this.datos.updatedatos<IPlanExtrategicoCreate>(this.rutaapi + `/${modelToUpdate.id}`, modelToUpdate)).then(
-                    (rep: IPlanExtrategicoCreate) => {
-                        // No sobrescribir this.model completamente, solo actualizar propiedades base
-                        // y restaurar las colecciones que tenemos localmente
-                        if (rep) {
-                            this.model.id = rep.id;
-                            this.model.descripcion = rep.descripcion;
-                            this.model.cantidad_anos = rep.cantidad_anos;
-                        }
+                this.model.aspiraciones = this.model.aspiraciones || [];
+                this.model.aspiraciones.forEach(a => {
+                    a.planExtrategicoId = this.model.id;
+                    a.planExtrategicoModelId = this.model.id;
+                });
 
-                        // Restaurar las colecciones que teníamos antes del Update
-                        this.model.planAnos = planAnos;
-                        this.model.perspectiva = perspectivas;
-                        this.model.aspiraciones = aspiraciones;
-
-                        // Asegurar que los IDs estén correctamente asignados
-                        if (this.model.planAnos && this.model.planAnos.length > 0) {
-                            this.model.planAnos.forEach(element => {
-                                element.planExtrategicoId = modelId;
-                            });
-                            this.insertanos(this.model.planAnos).subscribe({
-                                next: (result) => {
-                                    console.log('Años guardados correctamente:', result);
-                                },
-                                error: (error) => {
-                                    console.error('Error guardando años:', error);
-                                }
-                            });
-                        }
-
-                        if (this.model.perspectiva && this.model.perspectiva.length > 0) {
-                            this.model.perspectiva.forEach(p => {
-                                p.planExtrategicoModelId = modelId;
-                            });
-                            this.insertperperspectiva(this.model.perspectiva).subscribe({
-                                next: (result) => {
-                                    console.log('Perspectivas guardadas correctamente:', result);
-                                },
-                                error: (error) => {
-                                    console.error('Error guardando perspectivas:', error);
-                                    this.datos.showMessage('Error guardando perspectivas: ' + error.message, this.titulomensage, 'error');
-                                }
-                            });
-                        }
-
-                        if (this.model.aspiraciones && this.model.aspiraciones.length > 0) {
-                            this.model.aspiraciones.forEach(p => {
-                                p.planExtrategicoModelId = modelId;
-                            });
-                            this.insertAspiracion(this.model.aspiraciones).subscribe({
-                                next: (result) => {
-                                    console.log('Aspiraciones guardadas correctamente:', result);
-                                },
-                                error: (error) => {
-                                    console.error('Error guardando aspiraciones:', error);
-                                    this.datos.showMessage('Error guardando aspiraciones: ' + error.message, this.titulomensage, 'error');
-                                }
-                            });
-                        }
-
+                // Enviar TODO en una sola llamada PUT
+                await firstValueFrom(this.Update(this.model)).then(
+                    () => {
                         this.datos.showMessage('Registro Actualizado Correctamente', this.titulomensage, "success");
-                        this.TRegistros.emit(this.totalregistros)
+                        this.TRegistros.emit(this.totalregistros);
                         resolve(true);
                     },
                     (err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+                        this.datos.showMessage('Error: ' + err.message, this.titulomensage, 'error');
                         resolve(false);
                     }
                 );

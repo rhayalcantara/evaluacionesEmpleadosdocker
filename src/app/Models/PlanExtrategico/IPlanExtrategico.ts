@@ -21,11 +21,12 @@ export interface IPlan_Anos{
 }
 
 export interface IAspiracion{
-    id: number; 
+    id: number;
+    planExtrategicoId: number;
     planExtrategicoModelId: number;
-    descripcion: string; 
+    descripcion: string;
     porcientovalor: string;
-    valor:number
+    valor: number;
 }
 
 export interface IObjetivoEstrategico {

@@ -44,6 +44,7 @@ export class Aspiracion {
     public inicializamodelo():IAspiracion {
         return {
             id: 0,
+            planExtrategicoId: 0,
             planExtrategicoModelId: 0,
             descripcion: "",
             porcientovalor: "",
@@ -116,6 +117,7 @@ export class Aspiracion {
                         let m = this.arraymodel.find(x => x.id == this.model.id)
                         if (m != undefined) {
                             m.id = this.model.id
+                            m.planExtrategicoId = this.model.planExtrategicoId
                             m.planExtrategicoModelId = this.model.planExtrategicoModelId
                             m.descripcion = this.model.descripcion
                             m.porcientovalor = this.model.porcientovalor

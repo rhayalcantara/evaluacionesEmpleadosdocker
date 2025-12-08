@@ -103,6 +103,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
   agregarAspiracion() {
     const nuevaAspiracion: IAspiracion = {
       id: 0,
+      planExtrategicoId: this.model.id,
       planExtrategicoModelId: this.model.id,
       descripcion: '',
       porcientovalor: '',
@@ -178,9 +179,10 @@ export class FormPlanEstrategicoComponent implements OnInit {
     console.log('  Model ID que se va a asignar:', this.model.id);
 
     this.aspiraciones.forEach((a, index) => {
-      console.log(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      console.log(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      a.planExtrategicoId = this.model.id;
       a.planExtrategicoModelId = this.model.id;
-      console.log(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      console.log(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
     });
 
     this.perspectivas.forEach((p, index) => {
