@@ -345,6 +345,11 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
    * Obtiene la clase CSS según el estado de la evaluación
    */
   getEstadoClass(estado: string): string {
+    // Validar que el estado no sea null o undefined
+    if (!estado) {
+      return 'estado-default';
+    }
+
     const estadoLower = estado.toLowerCase();
     if (estadoLower.includes('completada') || estadoLower.includes('aprobada')) {
       return 'estado-completada';
