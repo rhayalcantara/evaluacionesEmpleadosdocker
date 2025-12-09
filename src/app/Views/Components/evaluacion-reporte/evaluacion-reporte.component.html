@@ -12,7 +12,16 @@
   <div *ngIf="!loading && !error">
     <!-- Filters -->
     <div class="row mb-3">
-      <div class="col-md-4">
+      <div class="col-md-3">
+        <label for="periodo">Periodo:</label>
+        <select id="periodo" class="form-control" [(ngModel)]="currentPeriodId" (change)="onPeriodoChange()">
+          <option *ngFor="let per of periodos" [value]="per.id">
+            {{ per.descripcion }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
         <label for="departamento">Filtrar por Departamento:</label>
         <select id="departamento" class="form-control" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()">
           <option value="">Todos los departamentos</option>
@@ -22,7 +31,7 @@
         </select>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="estado">Filtrar por Estado:</label>
         <select id="estado" class="form-control" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
           <option value="">Todos</option>
@@ -34,24 +43,30 @@
         </select>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label>Buscar:</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar..." 
+          <input type="text" class="form-control" placeholder="Buscar..."
                 [(ngModel)]="term" (change)="filtrar()">
           <button class="btn btn-primary" type="button">
             <i class="fa fa-search"></i>
           </button>
-          <button class="btn btn-success ms-2" type="button" (click)="downloadExcel()">
-            <i class="fas fa-file-excel"></i> Exportar Excel
-          </button>
-          <button class="btn btn-success ms-2" type="button" (click)="downloadExce2()">
-            <i class="fas fa-file-excel"></i> Exportar Excel Detallado
-          </button>
-          <button class="btn btn-danger ms-2" type="button" (click)="generateAllPdfs()">
-            <i class="fas fa-file-archive"></i> Descargar ZIP con PDFs
-          </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Botones de Exportación -->
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <button class="btn btn-success me-2" type="button" (click)="downloadExcel()">
+          <i class="fas fa-file-excel"></i> Exportar Excel
+        </button>
+        <button class="btn btn-success me-2" type="button" (click)="downloadExce2()">
+          <i class="fas fa-file-excel"></i> Exportar Excel Detallado
+        </button>
+        <button class="btn btn-danger" type="button" (click)="generateAllPdfs()">
+          <i class="fas fa-file-archive"></i> Descargar ZIP con PDFs
+        </button>
       </div>
     </div>
 

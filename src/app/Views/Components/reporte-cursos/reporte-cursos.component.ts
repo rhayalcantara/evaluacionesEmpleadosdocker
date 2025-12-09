@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 import { PeriodosEvaluacion } from 'src/app/Controllers/PeriodosEvaluacion';
+import { Periodos } from 'src/app/Controllers/Periodos';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { IReporteCursos } from 'src/app/Models/Capacitacion/Cursos';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
@@ -29,6 +30,7 @@ export class ReporteCursosComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
   periodo: IPeriodo = {} as IPeriodo;
+  periodos: IPeriodo[] = [];
   // Pagination config
   config: any = {
     id: 'evaluacion-reporte',
@@ -48,18 +50,48 @@ export class ReporteCursosComponent implements OnInit {
   constructor(
       private evaluacionService: CursoCapacitacionController,
       private periodosService: PeriodosEvaluacion,
+      private periodosController: Periodos,
       private datosService: DatosServiceService,
       private comunicacionService: ComunicacionService,
       private excelService: ExcelService
     ) {}
     ngOnInit() {
+      this.loadPeriodos();
       this.loadCurrentPeriod();
     }
   
+    loadPeriodos() {
+      this.periodosController.Gets().subscribe({
+        next: (response: ModelResponse) => {
+          if (response && response.data) {
+            this.periodos = response.data;
+          }
+        },
+        error: (error: Error) => {
+          this.datosService.showMessage(
+            'Error al cargar los periodos: ' + error.message,
+            'Periodos',
+            'error'
+          );
+        }
+      });
+    }
+
+    onPeriodoChange() {
+      if (this.currentPeriodId) {
+        const periodoSeleccionado = this.periodos.find(p => p.id === Number(this.currentPeriodId));
+        if (periodoSeleccionado) {
+          this.periodo = periodoSeleccionado;
+          this.nombredelperiodo = periodoSeleccionado.descripcion;
+          this.loadReportData();
+        }
+      }
+    }
+
     loadCurrentPeriod() {
       this.loading = true;
       this.error = null;
-      
+
       // Get the most recent period as active
       this.periodo = JSON.parse(localStorage.getItem('periodo') ?? "")
       this.currentPeriodId = this.periodo.id;

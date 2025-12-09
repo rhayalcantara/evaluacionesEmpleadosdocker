@@ -16,6 +16,7 @@ import { UtilsService } from 'src/app/Helpers/utils.service';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { LoadingComponent } from '../loading/loading.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { Periodos } from 'src/app/Controllers/Periodos';
 import { firstValueFrom } from 'rxjs'; // New import
 
 @Component({
@@ -33,7 +34,8 @@ export class EvaluacionReporteComponent implements OnInit {
   currentPeriodId: number = 0;
   loading: boolean = false;
   error: string | null = null;
-  periodo: IPeriodo = {} as IPeriodo; 
+  periodo: IPeriodo = {} as IPeriodo;
+  periodos: IPeriodo[] = []; 
   
   // Pagination config
   config: any = {
@@ -54,6 +56,7 @@ export class EvaluacionReporteComponent implements OnInit {
   constructor(
     private evaluacionService: Evaluacion,
     private periodosService: PeriodosEvaluacion,
+    private periodosController: Periodos,
     private datosService: DatosServiceService,
     private comunicacionService: ComunicacionService,
     private excelService: ExcelService,
@@ -63,6 +66,7 @@ export class EvaluacionReporteComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadPeriodos();
     this.loadCurrentPeriod();
   }
 
@@ -72,6 +76,16 @@ export class EvaluacionReporteComponent implements OnInit {
 
   onDepartmentChange() {
     this.applyFilters();
+  }
+
+  onPeriodoChange() {
+    if (this.currentPeriodId) {
+      const periodoSeleccionado = this.periodos.find(p => p.id === Number(this.currentPeriodId));
+      if (periodoSeleccionado) {
+        this.periodo = periodoSeleccionado;
+        this.loadReportData();
+      }
+    }
   }
 
   applyFilters() {
@@ -187,6 +201,24 @@ export class EvaluacionReporteComponent implements OnInit {
     });
    // this.excelService.exportAsExcelFile(data, 'Reporte_Evaluaciones');
   }
+
+  loadPeriodos() {
+    this.periodosController.Gets().subscribe({
+      next: (response: ModelResponse) => {
+        if (response && response.data) {
+          this.periodos = response.data;
+        }
+      },
+      error: (error: Error) => {
+        this.datosService.showMessage(
+          'Error al cargar los periodos: ' + error.message,
+          'Periodos',
+          'error'
+        );
+      }
+    });
+  }
+
   loadCurrentPeriod() {
     this.loading = true;
     this.error = null;
