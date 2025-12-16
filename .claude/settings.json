@@ -1,0 +1,12 @@
+{
+  "mcpservers": {
+    "sqlserver-local": {
+      "command": "C:\\Users\\ralcantara\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "args": ["c:/tools/sqlserver-mcp/server.py"],
+      "cwd": "c:/tools/sqlserver-mcp",
+      "env": {
+        "PYTHONPATH": "c:/tools/sqlserver-mcp"
+      }
+    }
+  }
+}

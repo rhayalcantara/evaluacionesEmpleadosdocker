@@ -1,0 +1,239 @@
+════════════════════════════════════════════════════════════
+🔍 BUSCADOR DE ARCHIVOS GRANDES
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+🔍 ESCANEANDO: C:\
+   Buscando archivos >= 500.00 MB
+════════════════════════════════════════════════════════════
+
+   ✓ Encontrado:    1.15 GB | backup-wsl.tar
+   ✓ Encontrado:    6.29 GB | hiberfil.sys
+   ✓ Encontrado:   32.41 GB | pagefile.sys
+   ✓ Encontrado:  662.16 MB | docker-desktop.isograndes...
+   ✓ Encontrado:  608.39 MB | docker-wsl-cli.iso
+   ✓ Encontrado:    1.13 GB | AcrobatDCx64Upd2500120813.msp
+   ✓ Encontrado:    1.35 GB | Acrobat_2500120813_Intermediate_MUI.msi
+   ✓ Encontrado:    2.07 GB | payload.vsixdos: 7 grandes...
+   ✓ Encontrado:  513.87 MB | cublasLt64_12.dll8 grandes...
+   ✓ Encontrado:  569.95 MB | studio_voice_low_latency_48k.trtpkg
+   ✓ Encontrado:  667.28 MB | edb_pem_server.exe0 grandes...
+   ✓ Encontrado:  944.47 MB | model.safetensors
+   ✓ Encontrado:    4.07 GB | mixtral_ai_multitoken.Q4_K_M.gguf
+   ✓ Encontrado:    2.00 GB | gemma-2-9b-it-Q4_K_M.part1.rar
+   ✓ Encontrado:    2.00 GB | gemma-2-9b-it-Q4_K_M.part2.rar
+   ✓ Encontrado:    1.29 GB | gemma-2-9b-it-Q4_K_M.part3.rar
+   ✓ Encontrado:    4.58 GB | Meta-Llama-3.1-8B-Instruct-Q4_K_M-take2.gguf
+   ✓ Encontrado:  596.51 MB | mmproj-hermes.gguf
+   ✓ Encontrado:  623.27 MB | dnnl.libntrados: 18 grandes...
+   ✓ Encontrado:  623.27 MB | dnnl.libntrados: 19 grandes...
+   ✓ Encontrado:    1.27 GB | sha256-3d0b790534fe4b79525fc3692950408dca41171676e
+   ✓ Encontrado:    1.12 GB | OllamaSetup.exe: 21 grandes...
+   ✓ Encontrado:    3.26 GB | padron_sin_immagen.bakandes...
+   ✓ Encontrado:  644.27 MB | 30112019 catera.rpt
+   ✓ Encontrado:    1.40 GB | CORE BANCARIO.zip
+   ✓ Encontrado:  996.57 MB | IDEA_10_4_1AD1ES32.exe
+   ✓ Encontrado:    7.56 GB | grabar pantalla windows 10 - Google Search - Googl
+   ✓ Encontrado:    1.12 GB | 124b7f.msprados: 27 grandes...
+   ✓ Encontrado:  637.79 MB | 136f2c2a.msp
+   ✓ Encontrado:  719.27 MB | 15af9fa3.msp
+   ✓ Encontrado:  719.27 MB | 15afa115.msp
+   ✓ Encontrado:  610.76 MB | 18e8f9d.msp
+   ✓ Encontrado:  608.73 MB | 1f570129.msp
+   ✓ Encontrado:  710.52 MB | 959ccfd.msp
+   ✓ Encontrado:  710.52 MB | 959ce92.msp
+   ✓ Encontrado:    1.13 GB | ac04d7b.msp
+   ✓ Encontrado:  705.27 MB | c9bf55c.msp
+   Escaneados: 800,000 archivos | Encontrados: 37 grandes...
+   ──────────────────────────────────────────────────
+   Archivos escaneados: 804,377
+   Archivos grandes encontrados: 37
+   Errores de acceso: 3
+======================================================================
+📊 REPORTE DE ARCHIVOS GRANDES
+   Generado: 2025-12-10 09:22:50
+======================================================================
+
+📈 RESUMEN GENERAL:
+   • Total de archivos grandes: 37
+   • Espacio total ocupado: 87.76 GB
+
+📁 RESUMEN POR TIPO DE ARCHIVO:
+   Extensión         Cantidad    Tamaño Total
+   ------------------------------------------
+   .sys                     2        38.70 GB
+   .gguf                    3         9.23 GB
+   .msp                    11         8.67 GB
+   .mp4                     1         7.56 GB
+   .rar                     3         5.29 GB
+   .bak                     1         3.26 GB
+   .exe                     3         2.75 GB
+   .vsix                    1         2.07 GB
+   .zip                     1         1.40 GB
+   .msi                     1         1.35 GB
+   (sin extensión)          1         1.27 GB
+   .iso                     2         1.24 GB
+   .lib                     2         1.22 GB
+   .tar                     1         1.15 GB
+   .safetensors             1       944.47 MB
+
+──────────────────────────────────────────────────────────────────────
+📋 TOP 37 ARCHIVOS MÁS GRANDES:
+──────────────────────────────────────────────────────────────────────
+
+  1.     32.41 GB | .sys
+     📍 C:\pagefile.sys
+     📅 Modificado: 2025-12-09 10:55
+
+  2.      7.56 GB | .mp4
+     📍 C:\Users\ralcantara\Videos\Captures\grabar pantalla windows 10 - Google Search - Google Chrome 2022-08-01 12-01-13.mp4
+     📅 Modificado: 2022-08-01 13:48
+
+  3.      6.29 GB | .sys
+     📍 C:\hiberfil.sys
+     📅 Modificado: 2025-12-10 08:02
+
+  4.      4.58 GB | .gguf
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\Meta-Llama-3.1-8B-Instruct-GGUF\Meta-Llama-3.1-8B-Instruct-Q4_K_M-take2.gguf
+     📅 Modificado: 2024-07-27 21:58
+
+  5.      4.07 GB | .gguf
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\LeroyDyer\Language_VisionModel_GGUF\mixtral_ai_multitoken.Q4_K_M.gguf
+     📅 Modificado: 2024-08-02 16:25
+
+  6.      3.26 GB | .bak
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\del desktop\padron_sin_immagen.bak
+     📅 Modificado: 2015-03-05 07:39
+
+  7.      2.07 GB | .vsix
+     📍 C:\ProgramData\Microsoft\VisualStudio\Packages\Microsoft.VisualStudio.VC.Llvm.Clang,version=17.14.36203.27,productarch=neutral\payload.vsix
+     📅 Modificado: 2025-07-31 09:36
+
+  8.      2.00 GB | .rar
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\gemma-2-9b-it-GGUF\gemma-2-9b-it-Q4_K_M.part1.rar
+     📅 Modificado: 2024-08-05 11:09
+
+  9.      2.00 GB | .rar
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\gemma-2-9b-it-GGUF\gemma-2-9b-it-Q4_K_M.part2.rar
+     📅 Modificado: 2024-08-05 11:13
+
+ 10.      1.40 GB | .zip
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\CORE BANCARIO.zip
+     📅 Modificado: 2019-12-19 15:50
+
+ 11.      1.35 GB | .msi
+     📍 C:\ProgramData\Adobe\ARM\OnDemand\Acrobat_SCA_Mini_Inter_LOC\Acrobat_2500120813_Intermediate_MUI.msi
+     📅 Modificado: 2025-10-17 06:44
+
+ 12.      1.29 GB | .rar
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\gemma-2-9b-it-GGUF\gemma-2-9b-it-Q4_K_M.part3.rar
+     📅 Modificado: 2024-08-05 11:18
+
+ 13.      1.27 GB | (sin extensión)
+     📍 C:\Users\ralcantara\.ollama\models\blobs\sha256-3d0b790534fe4b79525fc3692950408dca41171676ed7e21db57af5c65ef6ab6
+     📅 Modificado: 2025-10-17 14:35
+
+ 14.      1.15 GB | .tar
+     📍 C:\backup-wsl.tar
+     📅 Modificado: 2025-10-17 09:07
+
+ 15.      1.13 GB | .msp
+     📍 C:\Program Files (x86)\Common Files\Adobe\ARM\Extract\DiskImages\AcrobatDCx64Upd2500120813.msp
+     📅 Modificado: 2025-10-17 00:35
+
+ 16.      1.13 GB | .msp
+     📍 C:\Windows\Installer\ac04d7b.msp
+     📅 Modificado: 2025-10-17 00:35
+
+ 17.      1.12 GB | .exe
+     📍 C:\Users\ralcantara\Downloads\OllamaSetup.exe
+     📅 Modificado: 2025-10-17 14:28
+
+ 18.      1.12 GB | .msp
+     📍 C:\Windows\Installer\124b7f.msp
+     📅 Modificado: 2025-09-30 01:20
+
+ 19.    996.57 MB | .exe
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\IDEA_10_4_1AD1ES32.exe
+     📅 Modificado: 2019-08-09 16:43
+
+ 20.    944.47 MB | .safetensors
+     📍 C:\Users\ralcantara\.cache\huggingface\hub\models--google--flan-t5-base\snapshots\7bcac572ce56db69c1ea7c8af255c5d7c9672fc2\model.safetensors
+     📅 Modificado: 2025-03-20 13:44
+
+ 21.    719.27 MB | .msp
+     📍 C:\Windows\Installer\15af9fa3.msp
+     📅 Modificado: 2025-11-03 08:17
+
+ 22.    719.27 MB | .msp
+     📍 C:\Windows\Installer\15afa115.msp
+     📅 Modificado: 2025-11-03 08:17
+
+ 23.    710.52 MB | .msp
+     📍 C:\Windows\Installer\959ccfd.msp
+     📅 Modificado: 2025-11-19 11:34
+
+ 24.    710.52 MB | .msp
+     📍 C:\Windows\Installer\959ce92.msp
+     📅 Modificado: 2025-11-19 11:34
+
+ 25.    705.27 MB | .msp
+     📍 C:\Windows\Installer\c9bf55c.msp
+     📅 Modificado: 2025-09-29 23:54
+
+ 26.    667.28 MB | .exe
+     📍 C:\Users\ralcantara\edb_pem_server.exe
+     📅 Modificado: 2025-03-10 14:33
+
+ 27.    662.16 MB | .iso
+     📍 C:\Program Files\Docker\Docker\resources\docker-desktop.iso
+     📅 Modificado: 2025-10-17 09:50
+
+ 28.    644.27 MB | .rpt
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\30112019 catera.rpt
+     📅 Modificado: 2020-01-30 09:14
+
+ 29.    637.79 MB | .msp
+     📍 C:\Windows\Installer\136f2c2a.msp
+     📅 Modificado: 2025-08-15 02:51
+
+ 30.    623.27 MB | .lib
+     📍 C:\Users\ralcantara\.conda\envs\a0\Lib\site-packages\torch\lib\dnnl.lib
+     📅 Modificado: 2024-12-24 10:23
+
+ 31.    623.27 MB | .lib
+     📍 C:\Users\ralcantara\.conda\envs\a1\Lib\site-packages\torch\lib\dnnl.lib
+     📅 Modificado: 2024-12-26 14:31
+
+ 32.    610.76 MB | .msp
+     📍 C:\Windows\Installer\18e8f9d.msp
+     📅 Modificado: 2025-07-15 23:15
+
+ 33.    608.73 MB | .msp
+     📍 C:\Windows\Installer\1f570129.msp
+     📅 Modificado: 2025-06-06 14:24
+
+ 34.    608.39 MB | .iso
+     📍 C:\Program Files\Docker\Docker\resources\wsl\docker-wsl-cli.iso
+     📅 Modificado: 2025-10-17 09:50
+
+ 35.    596.51 MB | .gguf
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\userzyzz\hermes-vision-gguf\mmproj-hermes.gguf
+     📅 Modificado: 2024-08-02 14:01
+
+ 36.    569.95 MB | .trtpkg
+     📍 C:\ProgramData\NVIDIA\NGX\models\nvbcast_afx_stdvoice_v0_8\versions\2049\files\170_E658703\studio_voice_low_latency_48k.trtpkg
+     📅 Modificado: 2025-02-26 09:10
+
+ 37.    513.87 MB | .dll
+     📍 C:\ProgramData\NVIDIA\NGX\models\nvbcast\versions\2049\files\170_E658703\cublasLt64_12.dll
+     📅 Modificado: 2025-02-26 09:08
+
+══════════════════════════════════════════════════════════════════════
+💡 RECOMENDACIONES:
+══════════════════════════════════════════════════════════════════════
+   • Imágenes ISO: 1.24 GB - ¿Ya no necesitas estos instaladores?
+   • Archivos comprimidos: 6.69 GB - ¿Ya extrajiste el contenido?
+   • Archivos de respaldo: 3.26 GB - Considera eliminar backups antiguos
+   • Videos: 7.56 GB - ¿Podrías moverlos a un disco externo?
+======================================================================

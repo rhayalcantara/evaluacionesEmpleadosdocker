@@ -16,6 +16,7 @@ import { IRolCategoriaPuesto, IRolCategoriaPuestoDet } from 'src/app/Models/RolC
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class CardEmpleadoComponent implements OnInit {
               private rolcategoriapuestodet:RolCategoriaPuestoDet,
               private rolcategoriapuestocontroller:RolCategoriaPuesto,
               private evaluacion:Evaluacion,
-              private toastr: MatDialog,) {}
+              private toastr: MatDialog,
+              private logger: LoggerService) {}
 
   @Input() empleado: IEmpleado = {
     secuencial: 0,
@@ -75,35 +77,106 @@ export class CardEmpleadoComponent implements OnInit {
     this.foto = "https://randomuser.me/api/portraits/men/" + this.nfoto.toString() + ".jpg";
     this.cdr.detectChanges();
 
+    // Validar que el empleado tiene un puesto asignado antes de hacer la llamada API
+    if (this.empleado.scargo && this.empleado.scargo > 0) {
+      this.cargarRolCategoriaPuesto();
+    } else {
+      this.logger.debug('Empleado sin puesto asignado', { secuencial: this.empleado.secuencial });
+      this.rolcategoriapuesto = 'Sin asignar';
+      this.cdr.detectChanges();
+    }
+
+    // buscar el estado de la evaluacion
+    if (this.periodo && this.empleado && this.periodo.id && this.empleado.secuencial){
+      this.cargarEstadoEvaluacionReal();
+    }
+  }
+
+  /**
+   * Carga el rol categoría puesto del empleado con manejo de errores
+   */
+  private cargarRolCategoriaPuesto(): void {
     //buscar el rolcategoriapuesto
     //1) encontrar la categoria puesto con el puestos del empleado
     this.puestocontroller.Get(this.empleado.scargo.toString()).subscribe({
       next:(rep:IPuesto)=>{
+        if (!rep || !rep.categoriaPuestoId) {
+          this.logger.warn('Puesto sin categoría asignada', { scargo: this.empleado.scargo });
+          this.rolcategoriapuesto = 'No disponible';
+          this.cdr.detectChanges();
+          return;
+        }
+
         // al retornar el puesto busca la categoria
         this.categoriapuestocontroller.Get(rep.categoriaPuestoId.toString()).subscribe({
           next:(cp:ICategoriaPuesto)=>{
+            if (!cp || !cp.id) {
+              this.logger.warn('Categoría de puesto no encontrada', { categoriaPuestoId: rep.categoriaPuestoId });
+              this.rolcategoriapuesto = 'No disponible';
+              this.cdr.detectChanges();
+              return;
+            }
+
             // al retornar la categoria busco el rolcategoriapuestodet
             this.rolcategoriapuestodet.Gets().subscribe({
               next:(rep:ModelResponse)=>{
-                  let t:IRolCategoriaPuestoDet[] = rep.data
-                  let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId==cp.id)[0]
-                  // buscar el rolcategoriapuesto
-                  this.rolcategoriapuestocontroller.Get(tx.rolCategoriaPuestoId.toString()).subscribe({
-                    next:(rep:IRolCategoriaPuesto)=>{
-                      this.rolcategoriapuesto = rep.descripcion
-                      this.cdr.detectChanges();
-                    }
-                  })
-              }
-            })
-          }
-        })
-      }
-    })
+                if (!rep || !rep.data || !Array.isArray(rep.data)) {
+                  this.logger.warn('No se encontraron roles categoría puesto det');
+                  this.rolcategoriapuesto = 'No disponible';
+                  this.cdr.detectChanges();
+                  return;
+                }
 
-    // buscar el estado de la evaluacion
-    if (this.periodo && this.empleado){
-    this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id,this.empleado.secuencial).subscribe({
+                let t:IRolCategoriaPuestoDet[] = rep.data;
+                let tx:IRolCategoriaPuestoDet = t.filter(x=>x.categoriaPuestoId==cp.id)[0];
+
+                if (!tx || !tx.rolCategoriaPuestoId) {
+                  this.logger.debug('No hay rol categoría puesto det para esta categoría', { categoriaPuestoId: cp.id });
+                  this.rolcategoriapuesto = 'No asignado';
+                  this.cdr.detectChanges();
+                  return;
+                }
+
+                // buscar el rolcategoriapuesto
+                this.rolcategoriapuestocontroller.Get(tx.rolCategoriaPuestoId.toString()).subscribe({
+                  next:(rep:IRolCategoriaPuesto)=>{
+                    this.rolcategoriapuesto = rep.descripcion || 'Sin descripción';
+                    this.cdr.detectChanges();
+                  },
+                  error:(err)=>{
+                    this.logger.warn('Error al obtener rol categoría puesto', { rolCategoriaPuestoId: tx.rolCategoriaPuestoId, error: err });
+                    this.rolcategoriapuesto = 'No disponible';
+                    this.cdr.detectChanges();
+                  }
+                });
+              },
+              error:(err)=>{
+                this.logger.warn('Error al obtener roles categoría puesto det', err);
+                this.rolcategoriapuesto = 'No disponible';
+                this.cdr.detectChanges();
+              }
+            });
+          },
+          error:(err)=>{
+            this.logger.warn('Error al obtener categoría de puesto', { categoriaPuestoId: rep.categoriaPuestoId, error: err });
+            this.rolcategoriapuesto = 'No disponible';
+            this.cdr.detectChanges();
+          }
+        });
+      },
+      error:(err)=>{
+        this.logger.warn('Error al obtener puesto del empleado', { scargo: this.empleado.scargo, error: err });
+        this.rolcategoriapuesto = 'No disponible';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Carga el estado de evaluación del empleado con manejo de errores
+   */
+  private cargarEstadoEvaluacionReal(): void {
+    this.evaluacion.GetEvaluacionEstadoDts(this.periodo.id, this.empleado.secuencial).subscribe({
       next:(rep:ModelResponse)=>{
         // Validar que rep.data existe y tiene al menos un elemento
         if (rep && rep.data && Array.isArray(rep.data) && rep.data.length > 0 && rep.data[0]) {
@@ -113,15 +186,15 @@ export class CardEmpleadoComponent implements OnInit {
               this.estadoAutoevaluacion == 'Completado' ||
               this.estadoAutoevaluacion == 'Enviado'
             ){
-            this.llamarevaluacion = false
+            this.llamarevaluacion = false;
           }else{
-            this.llamarevaluacion = true
+            this.llamarevaluacion = true;
           }
 
           if(this.estadoAutoevaluacion == 'EvaluadoPorSupervisor'){
-            this.mostarenviar=true
+            this.mostarenviar=true;
           }else{
-            this.mostarenviar=false
+            this.mostarenviar=false;
           }
         } else {
           // Si no hay datos, usar valores por defecto
@@ -130,11 +203,21 @@ export class CardEmpleadoComponent implements OnInit {
           this.mostarenviar = false;
         }
 
-        //this.estadoEvaluacionSupervisor = rep.data[1].EstadoEvaluacion
+        this.cdr.detectChanges();
+      },
+      error:(err)=>{
+        this.logger.warn('Error al obtener estado de evaluación', {
+          periodoId: this.periodo.id,
+          empleadoSecuencial: this.empleado.secuencial,
+          error: err
+        });
+        // Usar valores por defecto en caso de error
+        this.estadoAutoevaluacion = 'Pendiente';
+        this.llamarevaluacion = true;
+        this.mostarenviar = false;
         this.cdr.detectChanges();
       }
-    })
-    }
+    });
   }
   cargarEstadoEvaluacion(): void {
 /*     this.evaluacionService.obtenerEstadoEvaluacion(this.empleado.secuencial, this.periodo.id).subscribe(
