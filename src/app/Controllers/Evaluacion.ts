@@ -171,6 +171,8 @@ export class Evaluacion implements OnInit {
         this.pdclocal=this.pdclocal.filter(x=>x.periodId==this.model.periodId)
            // verificar si tiene desempeño en caso de que no se cambia la proporcion de la pdclocal
             // poniendo el valor para desepeño en 0 y para competencia en 100
+            console.log('pdclocal',this.pdclocal)
+
             if (this.model.evaluacionDesempenoMetas.length==0){
                 this.pdclocal = this.pdclocal.map((x)=>{
                   if (x.descripcion==='Desempeño'){

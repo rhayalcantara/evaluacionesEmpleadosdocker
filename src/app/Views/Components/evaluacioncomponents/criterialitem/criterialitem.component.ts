@@ -68,7 +68,7 @@ export class CriterialitemComponent implements OnInit {
     this.periodo = this.PeriodoModel.inicializamodelo()
     this.PorCientoDC.Gets().subscribe({
       next:(rep)=>{
-        ////console.log('porcientodesempenocompetencia',rep)
+        console.log('porcientodesempenocompetencia',rep)
         let pdc:IPorcientoDesempenoCompetencia[]=rep.data
         this.pdclocal = pdc.filter(x=>x.periodId==this.periodo.id)
 
@@ -94,7 +94,7 @@ export class CriterialitemComponent implements OnInit {
             // verificar si tiene desempeño en caso de que no se cambia la proporcion de la pdclocal
             // poniendo el valor para desepeño en 0 y para competencia en 100
             
-            if (this.desempeno.length==0){
+            if (this.totalPeso==0){
               this.pdclocal = this.pdclocal.map((x)=>{
                 if (x.descripcion==='Desempeño'){
                   x.valor = 0
