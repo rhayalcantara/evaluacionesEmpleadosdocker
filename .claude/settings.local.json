@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gemini:*)",
+      "SlashCommand(/fork-bash abre Chrome DevTools con la URL http://localhost:4200/evaluacionempleado)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

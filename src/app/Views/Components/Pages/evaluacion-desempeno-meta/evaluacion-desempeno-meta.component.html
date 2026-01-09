@@ -8,6 +8,24 @@
   </div>
 
   <div class="search-container">
+    <!-- Filtro de Periodo -->
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filtrar por Periodo</mat-label>
+      <mat-select [(ngModel)]="periodoSeleccionado" (selectionChange)="onPeriodoChange($event.value)">
+        <mat-option [value]="null">Todos los periodos</mat-option>
+        <mat-option *ngFor="let periodo of periodos" [value]="periodo.id">
+          {{ periodo.descripcion }}
+          <span class="periodo-status" [class.activo]="periodo.activa">
+            ({{ periodo.activa ? 'Activo' : 'Inactivo' }})
+          </span>
+        </mat-option>
+      </mat-select>
+      <button mat-icon-button matSuffix *ngIf="periodoSeleccionado" (click)="limpiarFiltroPeriodo()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Búsqueda de Texto -->
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Buscar</mat-label>
       <input matInput [(ngModel)]="searchTerm" (keyup.enter)="buscar()" placeholder="Buscar metas...">

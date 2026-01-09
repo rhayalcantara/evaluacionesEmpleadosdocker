@@ -61,13 +61,11 @@ export class Usuario implements OnInit{
     
 
      this.Gets().subscribe({next:(rep:ModelResponse)=>{
-        console.log('datos',rep)
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
         this.arraymodel=[]
         this.arraymodel=rep.data    
-        console.log('datos',this.arraymodel)     
         this.TRegistros.emit(this.totalregistros)        
         
 

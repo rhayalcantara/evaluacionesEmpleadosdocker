@@ -43,7 +43,6 @@ export class FormKriAnoComponent implements OnInit {
   ngOnInit(): void {
     this.Anos = this.data.anos
     this.model = this.data.model;
-    console.log({model: this.model});
     this.kriAnoController.titulos.map((x: string|any) => {
       let nx: string = x[Object.keys(x)[0]];
       this.campos.push(...Object.keys(x));
@@ -59,7 +58,6 @@ export class FormKriAnoComponent implements OnInit {
     this.model.inverso = this.fg.controls["inverso"].value;
     this.model.logro = this.fg.controls["logro"].value;
 
-    console.log({modelo: this.model});
     this.kriAnoController.model = this.model
     this.kriAnoController.grabar().then((result) => {
       if(result){

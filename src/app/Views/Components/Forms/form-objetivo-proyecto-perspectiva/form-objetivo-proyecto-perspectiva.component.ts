@@ -40,13 +40,11 @@ export class FormObjetivoProyectoPerspectivaComponent implements OnInit {
       this.titulo = 'Editar ';+this.objetivoService.model.tipo            
     }
     this.fg.patchValue(this.data.model);
-    console.log(this.fg.value);
   }
 
   grabar(): void {
     if (this.fg.valid) {
       const objetivo: IObjetivoProyectoPerspectiva = this.fg.value;      
-      console.log(objetivo, this.fg.value);
       this.objetivoService.model = objetivo;
       this.objetivoService.grabar().then(() => {
         this.datosService.showMessage('Objetivo/Proyecto guardado exitosamente', 'Éxito', 'success');

@@ -94,7 +94,6 @@ export class FormEvaluationEmployeComponent {
           this.evaluacionempleado = rep;
           this.EvaluacionController.model = rep;
 
-          console.log('Evaluación cargada:', this.evaluacionempleado);
 
           if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
             this.mostarAceptar = true;
@@ -158,7 +157,6 @@ export class FormEvaluationEmployeComponent {
   }
 
   onPuntacionChange(event: number) {
-    console.log('Puntuación total recalculada por hijo:', event);
      if (this.evaluacionempleado) {
        this.evaluacionempleado.totalCalculo = event;
        this.puntuacion.emit(event);
@@ -168,17 +166,14 @@ export class FormEvaluationEmployeComponent {
   onEvaluacionChange(evaluacionActualizada: IEvaluacion): void {
     this.evaluacionempleado = evaluacionActualizada;
     this.EvaluacionController.model = evaluacionActualizada;
-    console.log('Evaluación actualizada desde criterialitem:', this.EvaluacionController.model);
     this.puntuacion.emit(evaluacionActualizada.totalCalculo);
   }
 
   // --- Getters para cálculos (devuelven number) ---
   get porcentajeDesempeno(): number {
-    console.log('porcentajeDesempeno', this.EvaluacionController.porcentajeDesempeno)
     return Number(this.EvaluacionController.porcentajeDesempeno) || 30;
   }
   get porcentajeCompetencia(): number {
-    console.log('porcentajeCompetencia', this.EvaluacionController.porcentajeCompetencia)
     return Number(this.EvaluacionController.porcentajeCompetencia) || 70;
   }
   get promedioDesempeno(): number {
@@ -385,7 +380,6 @@ export class FormEvaluationEmployeComponent {
         defaultStyle: { alignment: 'justify', fontSize: 10 }
       };
 
-      //console.log("Definición del documento PDF:", JSON.stringify(docDefinition, null, 2));
       pdfMake.createPdf(docDefinition).download(`evaluacion_${this.empleado?.nombreunido ?? 'empleado'}_${this.periodo?.descripcion ?? 'periodo'}.pdf`);
     } catch (error) {
       console.error('Error detallado al generar el PDF:', error);
@@ -441,7 +435,6 @@ export class FormEvaluationEmployeComponent {
       }
     });
 
-    //console.log('Puede continuar (competencias)?', puede);
 
     (this.evaluacionempleado.evaluacionDesempenoMetas || []).forEach((item) => {
       item.evaluacion = undefined;
@@ -451,7 +444,6 @@ export class FormEvaluationEmployeComponent {
       }
     });
 
-    //console.log('Puede continuar (objetivos)?', puede);
 
     if (puede) {
 
@@ -475,8 +467,6 @@ export class FormEvaluationEmployeComponent {
      // this.evaluacionempleado.totalCalculo = this.totalCalculo;
       this.EvaluacionController.model = this.evaluacionempleado;
 
-      //console.log('Enviando a grabar:', JSON.stringify(this.EvaluacionController.model, null, 2));
-      console.log('enviado a grabar',this.EvaluacionController.model.totalCalculo)
 
       this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 
@@ -523,7 +513,6 @@ export class FormEvaluationEmployeComponent {
     //this.evaluacionempleado.totalCalculo = this.totalCalculo;
 
     this.EvaluacionController.model = this.evaluacionempleado;
-    console.log('Enviando a aceptar:', JSON.stringify(this.EvaluacionController.model, null, 2));
 
     this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IObjetivoEstrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
+import { IObjetivoEstrategico, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 import { TablesComponent } from '../../tables/tables.component';
 import { CommonModule } from '@angular/common';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
@@ -8,13 +8,15 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ObjetivoEstrategico } from 'src/app/Controllers/ObjetivoEstrategico';
+import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
 import { FromObjetivoExtrategicoComponent } from '../../Forms/from-objetivo-extrategico/from-objetivo-extrategico.component';
 import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
+import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
 
 @Component({
   selector: 'app-objetivo-estrategico',
   standalone: true,
-  imports: [FormsModule, TablesComponent, 
+  imports: [FormsModule, TablesComponent,
     CommonModule, MatDialogModule, FromObjetivoExtrategicoComponent],
   templateUrl: './objetivo-estrategico.component.html',
   styleUrls: ['./objetivo-estrategico.component.css']
@@ -25,8 +27,13 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   public campos: string[] = [];
   public tituloslocal: string[] = [];
 
+  // Filtro por plan estratégico
+  public planEstrategicoIdFiltro: number = 0;
+  public planesEstrategicos: IPlanExtrategico[] = [];
+
   constructor(
     public objetivoEstrategicoService: ObjetivoEstrategico,
+    public planEstrategicoService: PlanExtrategico,
     private ServiceComunicacion: ComunicacionService,
     private datos: DatosServiceService,
     private dialog: MatDialog
@@ -34,16 +41,22 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
         console.table(mensaje);
-        console.log('objetivoEstrategicoService Constructor: ' + mensaje);
       }
     });
   }
 
   ngOnInit(): void {
+    // Cargar planes estratégicos
+    this.planEstrategicoService.Gets().subscribe({
+      next: (rep: ModelResponse) => {
+        this.planesEstrategicos = rep.data;
+      }
+    });
+
+    // Cargar objetivos estratégicos
     this.objetivoEstrategicoService.getdatos();
     this.objetivoEstrategicoService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         console.table(this.objetivoEstrategicoService.arraymodel);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
@@ -65,7 +78,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
 
     const acct: any = {
       edit: this.edita,
@@ -83,7 +95,6 @@ export class ObjetivoEstrategicoComponent implements OnInit {
   edita(objetivo: IObjetivoEstrategico, p: ObjetivoEstrategico, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = objetivo;
-      console.log('objetivoEstrategicoService edit', p.model);
 
       const dialogRef = t.open(FromObjetivoExtrategicoComponent, {
         width: '90%', data: { model: p.model }
@@ -118,20 +129,51 @@ export class ObjetivoEstrategicoComponent implements OnInit {
 
   paginacambio(event: number) {
     this.objetivoEstrategicoService.actualpage = event;
-    console.log(this.objetivoEstrategicoService.actualpage);
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event);
     this.config.id = event;
   }
 
   filtro() {
-    if (this.term != '') {
-      this.objetivoEstrategicoService.arraymodel = this.objetivoEstrategicoService.arraymodel.filter(x => x.descripcion.includes((this.term.toUpperCase())));
-    } else {
+    // Aplicar filtros combinados: búsqueda por texto y plan estratégico
+    this.aplicarFiltros();
+  }
+
+  filtroPorPlan() {
+    // Aplicar filtros cuando cambia el plan estratégico
+    this.aplicarFiltros();
+  }
+
+  private aplicarFiltros() {
+    // Recargar todos los datos primero
+    if (this.term === '' && this.planEstrategicoIdFiltro === 0) {
+      // Si no hay filtros, recargar todos los datos
       this.objetivoEstrategicoService.getdatos();
+      return;
     }
+
+    // Partir del array total
+    let resultados = [...this.objetivoEstrategicoService.arraytotal];
+
+    // Filtrar por plan estratégico si se seleccionó uno
+    if (this.planEstrategicoIdFiltro > 0) {
+      resultados = resultados.filter(x =>
+        x.perspectiva && x.perspectiva.planExtrategicoModelId === this.planEstrategicoIdFiltro
+      );
+    }
+
+    // Filtrar por término de búsqueda si existe
+    if (this.term !== '') {
+      resultados = resultados.filter(x =>
+        x.descripcion.toUpperCase().includes(this.term.toUpperCase())
+      );
+    }
+
+    // Actualizar el array de visualización
+    this.objetivoEstrategicoService.arraymodel = resultados;
+    this.objetivoEstrategicoService.totalregistros = resultados.length;
+    this.config.totalItems = resultados.length;
   }
 
   excel() { }

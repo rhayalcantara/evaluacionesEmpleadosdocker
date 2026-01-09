@@ -31,7 +31,6 @@ export class PerspectivasComponent implements OnInit {
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.log('perspectivaServices Constructor: ' + mensaje);
       }
     });
   }
@@ -40,7 +39,6 @@ export class PerspectivasComponent implements OnInit {
     this.perspectivaService.getdatos();
     this.perspectivaService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }
@@ -61,7 +59,6 @@ export class PerspectivasComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
 
     const acct: any = {
       edit: this.edita,
@@ -79,7 +76,6 @@ export class PerspectivasComponent implements OnInit {
   edita(perspectiva: IPerspectiva, p: Perspectiva, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = perspectiva;
-      console.log('perspectivaService edit', p.model);
 
       const dialogRef = t.open(FormPerspectivaComponent, {
         width: '800px', data: { model: p.model }
@@ -114,11 +110,9 @@ export class PerspectivasComponent implements OnInit {
 
   paginacambio(event: number) {
     this.perspectivaService.actualpage = event;
-    console.log(this.perspectivaService.actualpage);
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event);
     this.config.id = event;
   }
 

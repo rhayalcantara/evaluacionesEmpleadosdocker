@@ -1,6 +1,7 @@
 export interface IPerspectiva{
-    id: number; 
+    id: number;
     planExtrategicoModelId: number;
-    nombre: string; 
+    nombre: string;
     peso: number;
+    planExtrategicoModel?: any; // Propiedad de navegación EF Core - siempre null en requests
 }

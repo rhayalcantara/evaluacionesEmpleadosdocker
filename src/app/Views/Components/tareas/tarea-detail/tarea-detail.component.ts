@@ -64,7 +64,6 @@ export class TareaDetailComponent implements OnInit {
       const tarea: ITarea = { ...this.tareaForm.value, id: this.tareaId };
       this.tareaService.updateTarea(this.tareaId, tarea).subscribe(
         (response: ITarea) => {
-          console.log('Tarea actualizada:', response);
           this.router.navigate(['/tareas']);
         },
         (error: any) => {

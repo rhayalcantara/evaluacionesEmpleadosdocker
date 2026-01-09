@@ -133,7 +133,6 @@ static  generaNss() {
           titulos2.push({text:''})
           conwhit.push(`auto`);      
         }
-        //console.log(Object.keys(x)[0])
        titulos3.push({text: x[Object.keys(x)[0]],style: 'tableHeader', alignment: 'center' })
         
       })
@@ -206,7 +205,6 @@ static  generaNss() {
 	}
     };
  
-    console.log(documentDefinition)
     const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
     // return null
     return pdfDocGenerator
@@ -214,10 +212,8 @@ static  generaNss() {
       // pdfMake.createPdf(documentDefinition).open();
       //.download(); 
       // pdfMake.createPdf(documentDefinition).getDataUrl().then((dataUrl) => {
-      //   console.log(dataUrl);
       //   const dialogRef = this.toastr.open(VisorpdfComponent,{width:"85%" ,height:"70%" ,data:{url:dataUrl}}); 
       //   dialogRef.afterClosed().subscribe(result => {
-      //     console.log(result);
       //   })
       // }, err => {
       //   console.error(err);
@@ -250,7 +246,6 @@ static  generaNss() {
           console.error('Error al obtener la evaluación:', err);
          }
       });*/
-     console.log(this.evaluacionempleado)
      
      // Obtener valores calculados como números
      const currentPromedioDesempeno = this.promedioDesempeno(this.evaluacionempleado);
@@ -303,7 +298,6 @@ static  generaNss() {
       ] : [];
 
       // --- Contenido Objetivos ---
-      console.log('desempenoMetas',this.evaluacionempleado.evaluacionDesempenoMetas);
   
       let objetivosTableBody: any[] = [];
       if (this.evaluacionempleado.evaluacionDesempenoMetas && this.evaluacionempleado.evaluacionDesempenoMetas.length > 0) {
@@ -421,7 +415,6 @@ static  generaNss() {
         defaultStyle: { alignment: 'justify', fontSize: 10 }
       };
 
-      //console.log("Definición del documento PDF:", JSON.stringify(docDefinition, null, 2));
       pdfMake.createPdf(docDefinition).download(`evaluacion_${empleado?.nombreunido ?? 'empleado'}_${periodo?.descripcion ?? 'periodo'}.pdf`);
     } catch (error) {
       console.error('Error detallado al generar el PDF:', error);
@@ -755,7 +748,6 @@ static  generaNss() {
           }
         }
       };
-      console.log(docDefinition)
       if(action==='download'|| action ==='print' || action ==='open){
         // pdfMake.createPdf(docDefinition)[action]();
       }

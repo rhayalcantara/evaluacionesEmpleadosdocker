@@ -59,7 +59,6 @@ export class PlanExtrategico implements OnInit {
          this.Gets()
             .subscribe({
                 next: (rep: ModelResponse) => {
-                    console.log('los planes',rep)
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
@@ -92,18 +91,51 @@ export class PlanExtrategico implements OnInit {
     }
 
     public insert(obj: IPlanExtrategicoCreate): Observable<IPlanExtrategicoCreate> {
-        console.log(obj)
         return this.datos.insertardatos<IPlanExtrategicoCreate>(this.rutaapi, obj);
     }
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/plan_anos/grabararray
+     */
     public insertanos(obj:IPlan_Anos[]):Observable<IPlan_Anos[]>{
         return this.datos.insertardatos<IPlan_Anos[]>(this.datos.URL + `/api/plan_anos/grabararray`, obj);
     }
-    public insertperperspectiva(obj: IPerspectiva[]): Observable<IPerspectiva[]> {
-        return this.datos.insertardatos<IPerspectiva[]>(this.datos.URL + `/api/perspertiva/grabararray`, obj);
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/Perspectivas/grabararray
+     * @param planExtrategicoModelId - ID del plan estratégico al que pertenecen las perspectivas
+     * @param obj - Array de perspectivas a guardar
+     */
+    public insertperperspectiva(planExtrategicoModelId: number, obj: IPerspectiva[]): Observable<IPerspectiva[]> {
+        // Enviar como body object (Opción 1 recomendada en el informe de cambios del backend)
+        const requestBody = {
+            planExtrategicoModelId: planExtrategicoModelId,
+            perspectivas: obj
+        };
+        return this.datos.insertardatos<any>(this.datos.URL + `/api/Perspectivas/grabararray`, requestBody) as Observable<IPerspectiva[]>;
     }
+
+    /**
+     * @deprecated Método legacy. Se mantiene para compatibilidad.
+     * El enfoque recomendado es usar Update() con el objeto completo (según documentación oficial de la API).
+     * Este método hace una llamada separada al endpoint /api/Aspiracions/grabararray
+     */
     public insertAspiracion(obj: IAspiracion[]): Observable<IAspiracion[]> {
-        return this.datos.insertardatos<IAspiracion[]>(this.datos.URL + `/api/Aspiracion/grabararray`, obj);
+        return this.datos.insertardatos<IAspiracion[]>(this.datos.URL + `/api/Aspiracions/grabararray`, obj);
     }
+
+    /**
+     * Actualiza un plan estratégico completo con todas sus relaciones en una sola llamada.
+     * Implementa el patrón "Replace Collection" de la API:
+     * - Elimina registros no enviados
+     * - Actualiza registros existentes (id > 0)
+     * - Crea registros nuevos (id = 0)
+     * @param obj - Objeto completo del plan con sus relaciones (años, perspectivas, aspiraciones)
+     */
     public Update(obj: IPlanExtrategico): Observable<IPlanExtrategico> {
         return this.datos.updatedatos<IPlanExtrategico>(this.rutaapi + `/${obj.id}`, obj);
     }
@@ -119,46 +151,87 @@ export class PlanExtrategico implements OnInit {
 
     public async grabar(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
+            // Validación defensiva: asegurar que model no sea null o undefined
+            if (!this.model) {
+                this.datos.showMessage('Error: No hay datos para grabar', this.titulomensage, 'error');
+                resolve(false);
+                return;
+            }
+
             if (this.model.id == 0) {
-                // inserta el registro
-                this.modelcreate.descripcion= this.model.descripcion;
+                // CREAR: Primero crear el plan base, luego actualizar con relaciones usando PUT
+                this.modelcreate.descripcion = this.model.descripcion;
                 this.modelcreate.cantidad_anos = this.model.cantidad_anos;
+
                 await firstValueFrom(this.insert(this.modelcreate)).then(
-                    (rep: IPlanExtrategicoCreate) => 
-                    {
-                        firstValueFrom(this.Get(rep.id.toString())).then(t => 
-                        {
-                            this.model.id = t.id
-                            this.model.planAnos.forEach(element => {
-                                element.planExtrategicoId= this.model.id;
-                                this.insertanos(this.model.planAnos) 
-                            });
-                            this.model.perspectiva.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id
-                                this.insertperperspectiva(this.model.perspectiva)
-                            })
-                            this.model.aspiraciones.forEach(p => {
-                                p.planExtrategicoModelId = this.model.id
-                                this.insertperperspectiva(this.model.perspectiva)
-                            })
-                        this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
-                        resolve(true);
-                        },(err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+                    async (rep: IPlanExtrategicoCreate) => {
+                        // Asignar el ID generado al modelo
+                        this.model.id = rep.id;
+
+                        // Preparar IDs de relaciones
+                        this.model.planAnos = this.model.planAnos || [];
+                        this.model.planAnos.forEach(element => {
+                            element.planExtrategicoId = this.model.id;
+                        });
+
+                        this.model.perspectiva = this.model.perspectiva || [];
+                        this.model.perspectiva.forEach(p => {
+                            p.planExtrategicoModelId = this.model.id;
+                        });
+
+                        this.model.aspiraciones = this.model.aspiraciones || [];
+                        this.model.aspiraciones.forEach(a => {
+                            a.planExtrategicoId = this.model.id;
+                            a.planExtrategicoModelId = this.model.id;
+                        });
+
+                        // Ahora usar PUT para agregar las relaciones en una sola llamada
+                        await firstValueFrom(this.Update(this.model)).then(
+                            () => {
+                                this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
+                                resolve(true);
+                            },
+                            (err: Error) => {
+                                this.datos.showMessage('Error al guardar relaciones: ' + err.message, this.titulomensage, 'error');
+                                resolve(false);
+                            }
+                        );
+                    },
+                    (err: Error) => {
+                        this.datos.showMessage('Error: ' + err.message, this.titulomensage, 'error');
                         resolve(false);
-                        })
                     }
                 );
             } else {
-                // actualiza el registro            
+                // ACTUALIZAR: Usar PUT con el objeto completo (incluye relaciones)
+                // Asegurar que los IDs de las relaciones estén correctamente asignados
+                this.model.planAnos = this.model.planAnos || [];
+                this.model.planAnos.forEach(element => {
+                    element.planExtrategicoId = this.model.id;
+                });
+
+                this.model.perspectiva = this.model.perspectiva || [];
+                this.model.perspectiva.forEach(p => {
+                    p.planExtrategicoModelId = this.model.id;
+                    // Eliminar referencia circular para evitar problemas de serialización
+                    p.planExtrategicoModel = null as any;
+                });
+
+                this.model.aspiraciones = this.model.aspiraciones || [];
+                this.model.aspiraciones.forEach(a => {
+                    a.planExtrategicoId = this.model.id;
+                    a.planExtrategicoModelId = this.model.id;
+                });
+
+                // Enviar TODO en una sola llamada PUT
                 await firstValueFrom(this.Update(this.model)).then(
-                    (rep: IPlanExtrategico) => {
-                        this.model = rep;
-                        this.TRegistros.emit(this.totalregistros)
+                    () => {
+                        this.datos.showMessage('Registro Actualizado Correctamente', this.titulomensage, "success");
+                        this.TRegistros.emit(this.totalregistros);
                         resolve(true);
                     },
                     (err: Error) => {
-                        this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+                        this.datos.showMessage('Error: ' + err.message, this.titulomensage, 'error');
                         resolve(false);
                     }
                 );

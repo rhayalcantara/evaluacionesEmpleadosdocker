@@ -39,13 +39,11 @@ export class FormKriComponent implements OnInit {
       this.titulo = 'Editar KRI';            
     }
     this.fg.patchValue(this.data.model);
-    console.log(this.fg.value)
   }
 
   grabar(): void {
     if (this.fg.valid) {
       const kri: IKri = this.fg.value;      
-      console.log(kri,this.fg.value);
       this.kriservice.model = kri;
       this.kriservice.grabar().then(() => {
                this.datosService.showMessage('KRI guardado exitosamente', 'Éxito', 'success');

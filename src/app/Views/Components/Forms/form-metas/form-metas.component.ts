@@ -52,7 +52,6 @@ export class FormMetasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data.model);
     this.meta = this.data.model;
     this.metadts=this.data.model;
     // si se esta agregando se le pone el periodo activo
@@ -76,7 +75,6 @@ export class FormMetasComponent implements OnInit {
     this.fg = this.datService.llenarFormGrup(this.meta);
     
     if (this.meta.positionSecuencial != 0){
-      console.log('llego',this.metadts.position)
       this.selectedPuesto=this.metadts.position
       /*this.puestoDatos.Get(this.meta.positionSecuencial.toString()).subscribe((rep:IPuesto)=>{        
         this.selectedPuesto = rep;
@@ -139,12 +137,10 @@ export class FormMetasComponent implements OnInit {
       this.meta = this.fg.value as IMeta;
       this.metasDatos.model = this.fg.value as IMeta  
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0
-      console.log('la meta a grabar',this.metasDatos.model)
       //this.metasDatos.model.tiposid = n
       let nn:number = this.selectedPuesto ? this.selectedPuesto.secuencial : 0
       this.metasDatos.model.positionSecuencial = nn
       this.meta.positionSecuencial = nn
-      console.log({meta:this.metasDatos.model},{fg:this.fg.value as IMeta}) 
       this.metasDatos.grabar();
       this.dialogRef.close(this.metasDatos.model);
     } else {

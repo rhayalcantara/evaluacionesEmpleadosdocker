@@ -30,7 +30,6 @@ export class PuestosComponent implements OnInit {
     ) { 
       // this.Puestos.getdatos()
       this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:string)=>{
-        console.log('Puestoss Construtor: '+mensaje)   
       
       }})
     }
@@ -48,7 +47,6 @@ export class PuestosComponent implements OnInit {
     this.cargarDepartamentos();
     this.Puestos.TRegistros.subscribe({
      next:(rep:number)=>{
-      console.log("evento#:",rep)
        this.config.totalItems=rep
        this.ServiceComunicacion.enviarMensaje(this.config)
      }
@@ -79,7 +77,6 @@ export class PuestosComponent implements OnInit {
     
   }
   filtrarPuestos() {
-    console.log("cambio a:",this.selectedDepartamento)
     this.Puestos.arraymodel=this.Puestos.arraytotal
     if (this.selectedDepartamento) {
       this.Puestos.arraymodel = this.Puestos.arraymodel.filter(
@@ -91,7 +88,6 @@ export class PuestosComponent implements OnInit {
     this.ServiceComunicacion.enviarMensaje(this.config)
   }
   opcion(event:TableResponse){
-    console.log(event)
     
     const acct:any ={
       edit:this.edita,
@@ -125,12 +121,10 @@ export class PuestosComponent implements OnInit {
       // p.getdatos()
       
       p.model = prod // p.arraymodel.find(x=>x.id=prod.id) as IPuesto
-      console.log('Puestos edit',p.model)
       
         const  dialogRef = t.open(FormPuestosComponent,{
           width: '800px',data:{model:p.model}})
           dialogRef.afterClosed().subscribe((result:IPuesto)=>{
-            //console.log('llego del formulario de Puestos',result)
             if (result){
               resolve(result);
             }else{
@@ -150,7 +144,6 @@ export class PuestosComponent implements OnInit {
     const  dialogRef = t.open(FormPuestosComponent,{
       width: '800px',data:{model:p.model}})
       dialogRef.afterClosed().subscribe((rep:IPuesto)=>{
-        //console.log('llego del formulario de Puestos',result)
         this.Puestos.arraymodel.push(rep)
         this.datos.showMessage("Registro Insertado Correctamente",this.Puestos.titulomensage,"sucess")
       }); 
@@ -161,11 +154,9 @@ export class PuestosComponent implements OnInit {
 
   paginacambio(event:number){
     this.Puestos.actualpage = event
-    console.log(this.Puestos.actualpage)
     //this.Puestos.filtrar()
   }
   actualizaelidtable(event:string){
-    console.log('se actualizo el config',event)
     this.config.id = event
   }
   filtro(){

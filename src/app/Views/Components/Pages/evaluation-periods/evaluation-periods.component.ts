@@ -128,7 +128,6 @@ export class EvaluationPeriodsComponent implements OnInit {
 
   }
   mostrarpantalla(rep:IPeriodo_Dts){
-    console.log(rep)
     this.period=rep
     this.config = {
       id:'',
@@ -136,11 +135,8 @@ export class EvaluationPeriodsComponent implements OnInit {
       currentPage: 1,
       totalItems: this.period.goals.length
     };
-    console.log('La Configuracion',this.config)
     this.ServiceComunicacion.enviarMensaje(this.config)
-    console.log('Metas del periodo',this.period.goals)
     const puestosUnicos = this.getUniquePositions(this.period.goals)
-    console.log('Puestos',puestosUnicos)
     // obtenar las metas
     this.metascontroller.getmetasperiodo(this.period.id).subscribe({
       next:((rep)=>{
@@ -187,7 +183,6 @@ export class EvaluationPeriodsComponent implements OnInit {
       next: (rep: IPeriodo_Dts) => {
         this.period = rep;
         this.updateConfig();
-        console.log('Active period refreshed:', this.period);
       },
       error: (error) => {
         console.error('Error refreshing active period:', error);
@@ -236,14 +231,11 @@ export class EvaluationPeriodsComponent implements OnInit {
     const  dialogRef = this.toastr.open(FormMetasComponent,{
       width: '800px',data:{model:$event.key}})
       dialogRef.afterClosed().subscribe((rep:IMetaDts )=>{
-        //console.log('llego del formulario de Meta ',result)
       }); 
   }
   fetchGoalsForPosition(positionId: number) {
-    console.log('buscando las metas',positionId,this.period)
     this.metascontroller.GetMetasPorPeriodoYPuesto(this.period.id,positionId)
       .subscribe((rep:IMeta[])=>{
-        console.log('las metas',rep)
         this.metas=rep
         this.config = {
           id:'',
@@ -265,7 +257,6 @@ export class EvaluationPeriodsComponent implements OnInit {
       // TODO: Update the period in the backend
       // Suggestion: Implement the backend update logic within the `activatePeriod` function.
       // This would likely involve calling a service method to send the updated period data to the server.
-      console.log(`Period ${period.descripcion} activated and set to Configurando state`);
     }
   }
 

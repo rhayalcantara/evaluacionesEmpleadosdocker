@@ -111,7 +111,6 @@ export class RolCategoriaPuestoComponent implements OnInit, OnDestroy {
 
   onDelete(rolCategoria: IRolCategoriaPuesto) {
     if (confirm('¿Está seguro que desea eliminar este Rol Categoría Puesto?')) {
-      console.log('Delete Rol Categoria:', rolCategoria);
       // codigo para eliminar el rol categoria
       this.rolCategoriaService.Delete(rolCategoria.id).subscribe({
         next: (response) => {

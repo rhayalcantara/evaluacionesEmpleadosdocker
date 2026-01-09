@@ -33,7 +33,6 @@ export class PeriodosComponent implements OnInit {
     this.periodo.getdatos();
     this.periodo.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }
@@ -61,7 +60,6 @@ export class PeriodosComponent implements OnInit {
   }
 
   opcion(event: TableResponse) {
-    console.log(event);
     const acct: any = {
       edit: this.edita,
       del: this.delete
@@ -98,7 +96,6 @@ export class PeriodosComponent implements OnInit {
   edita(prod: IPeriodo, p: Periodos, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = prod;
-      console.log('Periodo edit', p.model);
       
       const dialogRef = t.open(FormPeriodosComponent, {
         width: '800px',

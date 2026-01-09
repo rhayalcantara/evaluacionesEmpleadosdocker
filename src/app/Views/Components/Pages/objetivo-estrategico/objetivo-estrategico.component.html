@@ -12,9 +12,19 @@
         </div>
         <div class="card-body">
           <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label class="form-label">Plan Estratégico</label>
+              <select class="form-select" [(ngModel)]="planEstrategicoIdFiltro" (change)="filtroPorPlan()">
+                <option [value]="0">-- Todos los Planes --</option>
+                <option *ngFor="let plan of planesEstrategicos" [value]="plan.id">
+                  {{ plan.descripcion }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Búsqueda</label>
               <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="term" placeholder="Buscar...">
+                <input type="text" class="form-control" [(ngModel)]="term" placeholder="Buscar por descripción...">
                 <button class="btn btn-outline-secondary" type="button" (click)="filtro()">
                   Buscar
                 </button>

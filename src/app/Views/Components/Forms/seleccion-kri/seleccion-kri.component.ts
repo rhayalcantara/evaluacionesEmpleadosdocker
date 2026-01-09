@@ -46,7 +46,6 @@ export class SeleccionKriComponent implements OnInit {
         
         this.dataSource = new MatTableDataSource(this.kriService.arraymodel);
         this.dataSource.paginator = this.paginator;
-        console.log(this.dataSource);
       })
   }
 

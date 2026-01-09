@@ -45,13 +45,11 @@ export class KpisComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
   ) {
     this.subscription = this.kpiService.TRegistros.subscribe(() => {
-      console.log('KPIs updated', this.kpiService.arraymodel);
       this.kpis = this.kpiService.arraymodel;
       this.totalItems = this.displayedKpis.length;
         this.updateDisplayedKpis();
     });
     this.kriService.TRegistros.subscribe(() => {
-      console.log('KRIs updated', this.kriService.arraymodel);
       this.krises = this.kriService.arraymodel;
       this.cd.detectChanges();
     });
@@ -74,7 +72,6 @@ export class KpisComponent implements OnInit, OnDestroy {
   loadKpis() {
     this.kpiService.Gets().subscribe({
       next: (response) => {
-        console.log('los kpis', response);
         this.kpis = response.data;
         
         if (this.kriId != 0) {
@@ -111,7 +108,6 @@ export class KpisComponent implements OnInit, OnDestroy {
 
   onDelete(kpi: IKpi) {
     if (confirm('¿Está seguro que desea eliminar este KPI?')) {
-      console.log('Delete KPI:', kpi);
       this.loadKpis();
     }
   }

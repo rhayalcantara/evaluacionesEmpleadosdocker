@@ -1,89 +1,172 @@
 <div class="container">
   <h1 class="title">Objetivo Estratégico</h1>
-  
+
+  <!-- Indicador de Estado -->
+  <div class="estado-container" *ngIf="objetivoEstrategicoService.model.id > 0">
+    <span class="badge badge-success">
+      <i class="fas fa-check-circle"></i> {{ getEstadoObjetivo() }}
+    </span>
+    <span class="badge badge-info">
+      ID: {{ objetivoEstrategicoService.model.id }}
+    </span>
+  </div>
+
   <div class="form-container">
-    <form  [formGroup]="Formgrup">
-      <!-- Descripción -->
-      <div class="form-group">
-        <label for="descripcion" class="form-label">Descripción</label>
-        <textarea
-          formControlName="descripcion"
-          id="descripcion"
-          class="form-textarea"
-          placeholder="Ingrese la descripción del objetivo estratégico"
-        ></textarea>
-      </div>
-  
-      <!-- Plan Estratégico -->
-      <div class="form-group">
-        <label for="planExtrategicoModelId" class="form-label">Plan Estratégico</label>
-        <select 
-          id="planExtrategicoModelId" 
-          class="form-select"
-          formControlName="planExtrategicoModelId"  
-          (change)="onplanSelect($event)" 
-          required>
-          <option selected value="0">Selecione un plan</option>
-          <option *ngFor="let p of planesEstrategicos" [value]="p.id">{{ p.descripcion }}</option>          
-        </select>
+    <form [formGroup]="Formgrup">
+      <!-- Sección de Información Básica -->
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i> Información Básica
+        </h2>
       </div>
 
-      <!-- Perspectivas -->
-      <div class="form-group">
-        <label for="perspectivaId" class="form-label">Perspectivas</label>
-        <select 
-          id="perspectivaId" 
-          class="form-select" 
-          formControlName="perspectivaId">
-          <option selected value="0">Selecione una Perspectivas</option>
-          <option *ngFor="let p of perpectiva" [value]="p.id">{{ p.nombre }}</option>      
-        </select>
+      <!-- Layout optimizado: 40% descripción + 60% campos -->
+      <div class="form-layout-optimized">
+        <!-- Columna Izquierda: Descripción (40%) -->
+        <div class="form-column-left">
+          <div class="form-group">
+            <label for="descripcion" class="form-label">
+              Descripción <span class="required">*</span>
+            </label>
+            <textarea
+              formControlName="descripcion"
+              id="descripcion"
+              class="form-textarea form-textarea-full"
+              placeholder="Ingrese la descripción del objetivo estratégico"
+              [class.is-invalid]="Formgrup.get('descripcion')?.invalid && Formgrup.get('descripcion')?.touched"
+            ></textarea>
+            <div class="error-message" *ngIf="Formgrup.get('descripcion')?.invalid && Formgrup.get('descripcion')?.touched">
+              Este campo es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Plan y Perspectivas (60%) -->
+        <div class="form-column-right">
+          <!-- Plan Estratégico -->
+          <div class="form-group">
+            <label for="planExtrategicoModelId" class="form-label">
+              Plan Estratégico <span class="required">*</span>
+            </label>
+            <select
+              id="planExtrategicoModelId"
+              class="form-select"
+              formControlName="planExtrategicoModelId"
+              (change)="onplanSelect($event)"
+              [class.is-invalid]="Formgrup.get('planExtrategicoModelId')?.invalid && Formgrup.get('planExtrategicoModelId')?.touched"
+              required>
+              <option selected value="0">Seleccione un plan</option>
+              <option *ngFor="let p of planesEstrategicos" [value]="p.id">{{ p.descripcion }}</option>
+            </select>
+            <div class="error-message" *ngIf="Formgrup.get('planExtrategicoModelId')?.invalid && Formgrup.get('planExtrategicoModelId')?.touched">
+              Debe seleccionar un plan estratégico
+            </div>
+          </div>
+
+          <!-- Perspectivas -->
+          <div class="form-group">
+            <label for="perspectivaId" class="form-label">
+              Perspectivas <span class="required">*</span>
+            </label>
+            <select
+              id="perspectivaId"
+              class="form-select"
+              formControlName="perspectivaId"
+              [class.is-invalid]="Formgrup.get('perspectivaId')?.invalid && Formgrup.get('perspectivaId')?.touched">
+              <option selected value="0">Seleccione una perspectiva</option>
+              <option *ngFor="let p of perpectiva" [value]="p.id">{{ p.nombre }}</option>
+            </select>
+            <div class="error-message" *ngIf="Formgrup.get('perspectivaId')?.invalid && Formgrup.get('perspectivaId')?.touched">
+              Debe seleccionar una perspectiva
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Objetivo por Años -->
+      <!-- Mensaje informativo cuando no hay ID -->
+      <div class="info-message" *ngIf="!showChildComponents && !isSaved">
+        <i class="fas fa-info-circle"></i>
+        <strong>Importante:</strong> Guarda primero el objetivo estratégico para poder añadir KRIs, Objetivos y Proyectos.
+      </div>
 
-     <!-- <div class="table-section">
-        <div class="d-flex justify-content-between align-items-center">
-          <h2 class="subtitle">KRIs por Años</h2>
-          <button type="button" class="btn btn-primary" (click)="agregarFila()">
-            <i class="fas fa-plus"></i> Agregar
-          </button>
-        </div> -->
-        <div class="grid-container">
-          <!-- KRIs Column -->
-          <div class="column">
-            <h3 class="column-header">KRIS</h3>
-            <div class="column-content">
-        <app-kris 
-          [ObjectivoEstrategicoId]="objetivoEstrategicoService.model.id"
-          [anos]="plananos"
-        >
-      </app-kris>
-    </div>
-  </div>
-  <div class="column">
-    <h3 class="column-header">Objetivos</h3>
-    <div class="column-content">
-      <app-objetivos-proyecto-perspectiva 
-      [objetivoestrategicoId]="objetivoEstrategicoService.model.id"
-      [Tipo]="'Objetivos'">
-      </app-objetivos-proyecto-perspectiva>
-    </div>
-  </div>
-  <div class="column">
-    <h3 class="column-header">Proyecto</h3>
-    <div class="column-content">
-      <app-objetivos-proyecto-perspectiva 
-      [objetivoestrategicoId]="objetivoEstrategicoService.model.id"
-      [Tipo]="'Proyecto'">
-      </app-objetivos-proyecto-perspectiva>
-    </div>
-  </div>
-</div>
+      <!-- Sección de Componentes Hijos (KRIs, Objetivos, Proyectos) -->
+      <div *ngIf="showChildComponents">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-list"></i> Detalles del Objetivo
+          </h2>
+        </div>
+
+        <!-- Tabs para KRIs, Objetivos y Proyectos -->
+        <mat-tab-group class="custom-tabs" animationDuration="300ms">
+          <!-- Tab KRIs -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fas fa-chart-line tab-icon"></i>
+              KRIs
+            </ng-template>
+            <div class="tab-content">
+              <app-kris
+                [ObjectivoEstrategicoId]="objetivoEstrategicoService.model.id"
+                [anos]="plananos">
+              </app-kris>
+            </div>
+          </mat-tab>
+
+          <!-- Tab Objetivos -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fas fa-bullseye tab-icon"></i>
+              Objetivos
+            </ng-template>
+            <div class="tab-content">
+              <app-objetivos-proyecto-perspectiva
+                [objetivoestrategicoId]="objetivoEstrategicoService.model.id"
+                [Tipo]="'Objetivos'">
+              </app-objetivos-proyecto-perspectiva>
+            </div>
+          </mat-tab>
+
+          <!-- Tab Proyectos -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fas fa-project-diagram tab-icon"></i>
+              Proyectos
+            </ng-template>
+            <div class="tab-content">
+              <app-objetivos-proyecto-perspectiva
+                [objetivoestrategicoId]="objetivoEstrategicoService.model.id"
+                [Tipo]="'Proyecto'">
+              </app-objetivos-proyecto-perspectiva>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
       <!-- Botones -->
       <div class="button-container">
-        <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
-        <button type="submit" class="btn btn-primary" (click)="guardar()">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+
+        <!-- Botón "Guardar y Continuar" solo en modo creación -->
+        <button
+          *ngIf="!isSaved && !isEditMode"
+          type="button"
+          class="btn btn-success"
+          (click)="guardarParcial()"
+          [disabled]="!Formgrup.valid">
+          <i class="fas fa-save"></i> Guardar y Continuar Editando
+        </button>
+
+        <!-- Botón "Guardar y Cerrar" cuando ya está guardado o en modo edición -->
+        <button
+          *ngIf="isSaved || isEditMode"
+          type="submit"
+          class="btn btn-primary"
+          (click)="guardar()">
+          <i class="fas fa-check"></i> Guardar y Cerrar
+        </button>
       </div>
 
     </form>

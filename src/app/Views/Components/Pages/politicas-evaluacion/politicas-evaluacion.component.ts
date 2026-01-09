@@ -30,7 +30,6 @@ export class PoliticasEvaluacionComponent implements OnInit {
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.log('PoliticasEvaluacion Constructor: ' + mensaje)
       }
     })
   }
@@ -50,7 +49,6 @@ export class PoliticasEvaluacionComponent implements OnInit {
     
     this.politicaEvaluacion.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep)
         this.config.totalItems = rep
         this.ServiceComunicacion.enviarMensaje(this.config)
         dialogRef.close()
@@ -78,7 +76,6 @@ export class PoliticasEvaluacionComponent implements OnInit {
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event)
     this.config.id = event
   }
 
@@ -95,7 +92,6 @@ export class PoliticasEvaluacionComponent implements OnInit {
   pdf() { }
 
   opcion(event: TableResponse) {
-    console.log(event);
     const acct: any = {
       edit: this.edita,
       del: this.delete
@@ -112,7 +108,6 @@ export class PoliticasEvaluacionComponent implements OnInit {
   edita(prod: IPoliticaEvaluacion, p: PoliticaEvaluacion, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = prod;
-      console.log('Periodo edit', p.model);
       
       const dialogRef = t.open(FormPoliticaEvaluacionComponent, {
         width: '800px',

@@ -1,0 +1,50 @@
+======================================================================
+📊 REPORTE DE ARCHIVOS DUPLICADOS
+   Fecha: 2025-12-10 08:59:03
+======================================================================
+
+📈 RESUMEN:
+   • Grupos de duplicados: 6
+   • Total de archivos duplicados: 15
+   • Espacio desperdiciado: 534.73 MB
+
+----------------------------------------------------------------------
+📁 DETALLE DE DUPLICADOS:
+----------------------------------------------------------------------
+
+🔹 Grupo 1 | Tamaño: 177.44 MB | Hash: 364023ad702accc0...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\Apidog-windows-latest (1).zip
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Apidog-windows-latest (2).zip
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Apidog-windows-latest (3).zip
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Apidog-windows-latest.zip
+
+🔹 Grupo 2 | Tamaño: 2.04 MB | Hash: c2df31f5ab6f804f...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\Generated Image September 22, 2025 - 2_21PM.png
+     [DUPLICADO] C:\Users\ralcantara\Downloads\yo en el hotel.png
+
+🔹 Grupo 3 | Tamaño: 292.84 KB | Hash: 3d7dd4d4ce113719...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\Agosto_2025_4896253380558116_11082025_3331 (1).pdf
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Agosto_2025_4896253380558116_11082025_3331.pdf
+
+🔹 Grupo 4 | Tamaño: 25.09 KB | Hash: b6baa523028077c0...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\2025044_agosto_2025 (1).xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\2025044_agosto_2025.xlsx
+
+🔹 Grupo 5 | Tamaño: 15.80 KB | Hash: ca6acd024d3be1d4...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\Plantilla_Importar_Datos (1).xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Plantilla_Importar_Datos (2).xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Plantilla_Importar_Datos (3).xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Plantilla_Importar_Datos (5).xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\Plantilla_Importar_Datos.xlsx
+
+🔹 Grupo 6 | Tamaño: 165.00 B | Hash: 71f51b9e17f12c49...
+     [ORIGINAL] C:\Users\ralcantara\Downloads\~$estado inicial de cuentas al 20210801.xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\~$Plantilla_Importar_Datos  marzo2024.xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\~$Presupuesto para subir acumuladoxxx.xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\~$Presupuesto_Ingresos_export_1716215782435.xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\~$Reporte_Evaluaciones_2_export_1742322674769.xlsx
+     [DUPLICADO] C:\Users\ralcantara\Downloads\~$Reporte_Evaluaciones_export_1746808975488.xlsx
+
+======================================================================
+💡 CONSEJO: Revisa cuidadosamente antes de eliminar archivos.
+======================================================================

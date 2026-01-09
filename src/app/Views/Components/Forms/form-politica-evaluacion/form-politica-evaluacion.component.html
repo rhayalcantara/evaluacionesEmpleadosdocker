@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header">
        <!-- {{PE.model | json}}                               -->
-  <h2>{{ PE.model.id!=0 ? 'Editar' : 'Agregar' }} Politica</h2>
+  <h2>{{ (PE.model?.id || 0)!=0 ? 'Editar' : 'Agregar' }} Politica</h2>
   </div>
   <div class="card-body">
     <form [formGroup]="politicaEvaluacionForm" (ngSubmit)="onSubmit()">

@@ -31,7 +31,6 @@ export class TareaListComponent implements OnInit {
     this.tareaService.deleteTarea(id).subscribe(
       () => {
         this.tareas = this.tareas.filter(tarea => tarea.id !== id);
-        console.log('Tarea eliminada con éxito');
       },
       (error: any) => {
         console.error('Error al eliminar la tarea:', error);

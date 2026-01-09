@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { ReporteCursosComponent } from './Views/Components/reporte-cursos/report
 import { TareaListComponent } from './Views/Components/tareas/tarea-list/tarea-list.component';
 import { TareaFormComponent } from './Views/Components/tareas/tarea-form/tarea-form.component';
 import { TareaDetailComponent } from './Views/Components/tareas/tarea-detail/tarea-detail.component';
+import { ErrorInterceptorService } from './Services/error-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -37,9 +39,12 @@ import { TareaDetailComponent } from './Views/Components/tareas/tarea-detail/tar
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

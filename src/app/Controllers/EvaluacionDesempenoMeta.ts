@@ -60,7 +60,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     this.totalregistros = rep.count
                     this.arraymodel = []
                     this.arraymodel = rep.data
-                    //console.log('llegaron al controlador los datos',this.arraymodel)
                     this.TRegistros.emit(this.totalregistros)
                 }
             })
@@ -87,8 +86,27 @@ export class EvaluacionDesempenoMeta implements OnInit {
     }
 
     public Gets(): Observable<ModelResponse> {
-        
+
         return this.datos.getdatos<ModelResponse>(this.rutaapi)
+    }
+
+    public getEvaluacionesByPeriod(periodoId: number): Observable<ModelResponse> {
+        return this.datos.getdatos<ModelResponse>(this.rutaapi + `/ByPeriod/${periodoId}`)
+    }
+
+    public getDatosPorPeriodo(periodoId: number) {
+        this.getEvaluacionesByPeriod(periodoId)
+            .subscribe({
+                next: (rep: ModelResponse) => {
+                    this.totalregistros = rep.count
+                    this.arraymodel = []
+                    this.arraymodel = rep.data
+                    this.TRegistros.emit(this.totalregistros)
+                },
+                error: (err) => {
+                    console.error('Error al cargar evaluaciones por periodo:', err)
+                }
+            })
     }
 
     public Get(id: string): Observable<IEvaluacionDesempenoMeta> {
@@ -100,7 +118,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
     }
 
     public insert(obj: IEvaluacionDesempenoMeta): Observable<IEvaluacionDesempenoMeta> {
-        console.log('insertando', obj)
         return this.datos.insertardatos<IEvaluacionDesempenoMeta>(this.rutaapi, obj);
     }
 
@@ -131,7 +148,6 @@ export class EvaluacionDesempenoMeta implements OnInit {
                 );
             } else {
                 // actualiza el registro 
-                console.log('actualiza el registro', this.model)           
                 await firstValueFrom(this.Update(this.model)).then(
                     (rep: IEvaluacionDesempenoMeta) => {
                         this.model = rep;

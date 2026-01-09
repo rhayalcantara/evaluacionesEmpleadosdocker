@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { LoadingComponent } from '../Views/Components/loading/loading.component';
-import { CellObject, WorkSheet, Range, ColInfo } from 'xlsx'; // Importar tipos necesarios
+import { CellObject, WorkSheet, Range, ColInfo } from 'xlsx-js-style'; // Importar tipos necesarios
 import { IReporte01 } from '../Models/Evaluacion/IEvaluacion'; // Importar la interfaz necesaria
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';

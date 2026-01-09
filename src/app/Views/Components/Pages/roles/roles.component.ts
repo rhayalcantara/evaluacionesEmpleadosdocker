@@ -31,7 +31,6 @@ export class RolesComponent implements OnInit {
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.log('roleServices Construtor: ' + mensaje)
       }
     })
   }
@@ -40,7 +39,6 @@ export class RolesComponent implements OnInit {
     this.roleService.getdatos()
     this.roleService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.log("evento#:", rep)
         this.config.totalItems = rep
         this.ServiceComunicacion.enviarMensaje(this.config)
       }
@@ -62,7 +60,6 @@ export class RolesComponent implements OnInit {
 
   opcion(event: TableResponse) {
 
-    console.log(event)
 
     const acct: any = {
       edit: this.edita,
@@ -81,7 +78,6 @@ export class RolesComponent implements OnInit {
   edita(prod: IRol, p: Roles, t: MatDialog): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       p.model = prod
-      console.log('roleService edit', p.model)
 
       const dialogRef = t.open(FormRolesComponent, {
         width: '800px', data: { model: p.model }
@@ -116,11 +112,9 @@ export class RolesComponent implements OnInit {
 
   paginacambio(event: number) {
     this.roleService.actualpage = event
-    console.log(this.roleService.actualpage)
   }
 
   actualizaelidtable(event: string) {
-    console.log('se actualizo el config', event)
     this.config.id = event
   }
 

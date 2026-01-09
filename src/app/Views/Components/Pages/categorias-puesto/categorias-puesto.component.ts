@@ -83,7 +83,6 @@ export class CategoriasPuestoComponent implements OnInit, OnDestroy {
   onDelete(categoria: ICategoriaPuesto) {
     if (confirm('¿Está seguro que desea eliminar esta categoría de puesto?')) {
       // Since there's no delete method in the service, we might need to implement it
-      console.log('Delete Categoría:', categoria);
       this.loadCategorias();
     }
   }

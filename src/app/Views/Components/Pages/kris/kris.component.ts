@@ -56,7 +56,6 @@ export class KrisComponent implements OnInit, OnDestroy {
   loadKris() {
     this.kriService.Gets().subscribe({
       next: (response) => {
-        console.log('los kris', response);
         this.kris = response.data;
         
         if (this.ObjectivoEstrategicoId != 0) {
@@ -95,7 +94,6 @@ export class KrisComponent implements OnInit, OnDestroy {
   onDelete(kri: IKri) {
     if (confirm('¿Está seguro que desea eliminar este KRI?')) {
       // Since there's no delete method in the service, we might need to implement it
-      console.log('Delete KRI:', kri);
       this.loadKris();
     }
   }
@@ -121,7 +119,6 @@ export class KrisComponent implements OnInit, OnDestroy {
 
   onViewYears(kri: IKri) {
     // This functionality will be implemented later
-    console.log('View years for KRI:', kri);
     const dialogRef = this.dialogmat.open(KrisanosComponent, {
       width: '800px',
       data: { model: kri,anos:this.anos}

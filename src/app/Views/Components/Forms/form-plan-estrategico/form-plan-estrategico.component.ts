@@ -35,8 +35,13 @@ export class FormPlanEstrategicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('🔵 FormPlanEstrategico ngOnInit ejecutado');
+    console.log('📋 Data recibida:', this.data);
+    console.log('🆔 Model ID:', this.data.model?.id);
+
     if (this.data.model.id) {
-      
+      console.log('✅ Entrando a cargar datos - ID válido:', this.data.model.id);
+
       this.model = this.data.model
       // obtener los datos complementarios
       // obtener los anos
@@ -44,36 +49,61 @@ export class FormPlanEstrategicoComponent implements OnInit {
         {
           next:(data) => {
             this.model.planAnos = data;
-            // obtener el ano inicial
-            this.anoInicio = this.data.model.planAnos[0].ano
+            // obtener el ano inicial - con validación defensiva
+            if (data && data.length > 0) {
+              this.anoInicio = data[0].ano;
+            }
+          },
+          error: (error) => {
+            console.error('Error cargando años del plan:', error);
+            this.datosService.showMessage('Error cargando años del plan', 'Error', 'error');
           }
         })
 
-      this.AspirecionesController.GetsPlan(this.model.id).subscribe( 
+      this.AspirecionesController.GetsPlan(this.model.id).subscribe(
         {
           next:(data: IAspiracion[]) => {
-            console.log(data);
+            console.log('Aspiraciones cargadas:', data);
+            console.log('Verificando IDs de aspiraciones cargadas:');
+            data.forEach((a, index) => {
+              console.log(`  Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+            });
             this.aspiraciones = data;
             this.model.aspiraciones = data;
+          },
+          error: (error) => {
+            console.error('Error cargando aspiraciones:', error);
+            this.datosService.showMessage('Error cargando aspiraciones', 'Error', 'error');
           }
-
         })
 
         this.PerspectivasController.GetsPlan(this.model.id).subscribe(
           {
             next: (data: IPerspectiva[]) => {
+              console.log('Perspectivas cargadas:', data);
+              console.log('Verificando IDs de perspectivas cargadas:');
+              data.forEach((p, index) => {
+                console.log(`  Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+              });
               this.perspectivas = data;
               this.model.perspectiva = data;
-          }
+            },
+            error: (error) => {
+              console.error('Error cargando perspectivas:', error);
+              this.datosService.showMessage('Error cargando perspectivas', 'Error', 'error');
+            }
           }
         )
 
+    } else {
+      console.log('⚠️ No hay ID - Modo creación nuevo Plan Estratégico');
     }
   }
 
   agregarAspiracion() {
     const nuevaAspiracion: IAspiracion = {
       id: 0,
+      planExtrategicoId: this.model.id,
       planExtrategicoModelId: this.model.id,
       descripcion: '',
       porcientovalor: '',
@@ -90,7 +120,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
     const nuevaPerspectiva: IPerspectiva = {
       id: 0,
       nombre: '',
-      planExtrategicoModelId:0,
+      planExtrategicoModelId: this.model.id, // Usar el ID del plan actual
       peso: 0
     };
     this.perspectivas.push(nuevaPerspectiva);
@@ -101,43 +131,90 @@ export class FormPlanEstrategicoComponent implements OnInit {
   }
 
   async onSubmit() {
+    console.log('📤 Iniciando onSubmit');
+    console.log('📊 Estado actual - Model ID:', this.model.id);
+    console.log('📊 Aspiraciones en memoria:', this.aspiraciones);
+    console.log('📊 Perspectivas en memoria:', this.perspectivas);
+
     if (this.anoInicio) {
-      this.model.planAnos = [{
-        id: 0,
-        planExtrategicoId: this.model.id,
-        ano: this.anoInicio
-      }];
-      // si estas agregando hay que generar los anos
-      if(this.model.id==0){
-        // agegar los anos faltantes
-        for (let i = 2; i < this.model.cantidad_anos; i++) {
+      // MODO CREACIÓN - Generar años desde cero
+      if(this.model.id == 0){
+        console.log('🆕 Modo creación - Generando años');
+        this.model.planAnos = [{
+          id: 0,
+          planExtrategicoId: this.model.id,
+          ano: this.anoInicio
+        }];
+        // Agregar los años faltantes
+        for (let i = 2; i <= this.model.cantidad_anos; i++) {
           this.model.planAnos.push({
-            id: 0, 
-            planExtrategicoId: this.model.id, 
-            ano: (parseInt(this.anoInicio) + i-1 ).toString()          
+            id: 0,
+            planExtrategicoId: this.model.id,
+            ano: (parseInt(this.anoInicio) + i - 1).toString()
           });
         }
-      }else{
-        // encaso de que sea actulizando hay que verificar si el año cambio
-        if (this.model.planAnos[0].ano !== this.anoInicio) {
-          //this.model.planAnos[0].ano = this.anoInicio;
-          // hay que modificar los demas anos segun el primero y la cantiada de años
-          this.model.planAnos.forEach((ano, index) => {
-               ano.ano = (parseInt(this.anoInicio) + index).toString();            
-          })                        
+        console.log('✅ Años generados:', this.model.planAnos);
+      } else {
+        // MODO EDICIÓN - Solo actualizar años si cambió el año inicial
+        console.log('✏️ Modo edición - Verificando si cambió año inicial');
+        console.log('Año actual en BD:', this.model.planAnos[0]?.ano);
+        console.log('Año nuevo:', this.anoInicio);
+
+        if (this.model.planAnos && this.model.planAnos.length > 0) {
+          if (this.model.planAnos[0].ano !== this.anoInicio) {
+            console.log('⚠️ Año inicial cambió - Actualizando años');
+            // Actualizar todos los años según el nuevo año inicial
+            this.model.planAnos.forEach((ano, index) => {
+              ano.ano = (parseInt(this.anoInicio) + index).toString();
+            });
+            console.log('✅ Años actualizados:', this.model.planAnos);
+          } else {
+            console.log('ℹ️ Año inicial no cambió - Manteniendo años existentes');
+          }
         }
       }
     }
-    // se actualiza las aspiraciones y las perspectivas
+    // Asegurar que todas las aspiraciones tengan el ID correcto del plan
+    console.log('🔧 Asignando IDs a aspiraciones y perspectivas');
+    console.log('  Model ID que se va a asignar:', this.model.id);
+
+    this.aspiraciones.forEach((a, index) => {
+      console.log(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      a.planExtrategicoId = this.model.id;
+      a.planExtrategicoModelId = this.model.id;
+      console.log(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+    });
+
+    this.perspectivas.forEach((p, index) => {
+      console.log(`  ANTES - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+      p.planExtrategicoModelId = this.model.id;
+      console.log(`  DESPUÉS - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+    });
+
+    // Asignar los arrays al modelo
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
+
+    console.log('📦 Datos finales antes de grabar:');
+    console.log('  - Descripción:', this.model.descripcion);
+    console.log('  - Cantidad años:', this.model.cantidad_anos);
+    console.log('  - PlanAnos:', this.model.planAnos);
+    console.log('  - Aspiraciones:', this.model.aspiraciones);
+    console.log('  - Perspectivas:', this.model.perspectiva);
+
+    // Asignar el model del componente al service antes de grabar
+    this.planExtrategicoService.model = this.model;
+
     // se envia a grabar
+    console.log('💾 Llamando a grabar()...');
     const success = await this.planExtrategicoService.grabar();
     if (success) {
       this.model = this.planExtrategicoService.inicializamodelo();
       this.aspiraciones = [];
       this.perspectivas = [];
       this.anoInicio = '';
+      // Cerrar el modal después de guardar exitosamente
+      this.dialogRef.close(true);
     }
   }
 
@@ -146,5 +223,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
     this.aspiraciones = [];
     this.perspectivas = [];
     this.anoInicio = '';
+    // Cerrar el modal sin enviar datos
+    this.dialogRef.close();
   }
 }

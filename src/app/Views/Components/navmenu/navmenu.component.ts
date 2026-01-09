@@ -44,7 +44,6 @@ export class NavmenuComponent implements OnInit {
           let tipousario = localStorage.getItem('tipodeusuario')      
           if (tipousario=='consejal'){
             let consejal:IConsejal = JSON.parse(localStorage.getItem('consejal') ?? "")
-            // console.log('consejal',consejal)
                       //busca el periodo activo
           this.peri.GetActivo().subscribe((rep:IPeriodo)=>{           
             this.periodo=rep;
@@ -57,7 +56,6 @@ export class NavmenuComponent implements OnInit {
             this.router.navigate(['/consejal/evaluacion/', JSON.stringify(consejal)]);
            })
           }else{
-              //// console.log(localStorage.getItem('usuario'))
               this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))         
               //busca el periodo activo
               this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
@@ -91,7 +89,6 @@ export class NavmenuComponent implements OnInit {
         }
       }
         if (mess=='nologuiado'){
-          //// console.log('entro en nologiado')
           this.mostramenu=false
           this.logg='Login'
           this.router.navigate(['login'])
@@ -146,39 +143,29 @@ export class NavmenuComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    //// console.log('entro al navbar')
       this.mostramenu=false
       this.router.navigate(['login']);
  
     
   }
   log():void{
-   // // console.log(this.logg)
-  /*  if (this.logg!='LogOut'){
-              
-        this.logg= 'LogOut'
+        // Usar el servicio centralizado de seguridad para el logout
+        this.logg = 'Login';
+        this.mostramenu = false;
 
-        this.mostramenu=true
-        this.router.navigate(['login'])
-    }else{
-      */
-        this.logg= 'Login'
-        localStorage.removeItem('empleado');
-        localStorage.removeItem('periodo');
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('tipodeusuario')
-        let tipodeusuario = localStorage.getItem('tipodeusuario')
-        if (tipodeusuario=='consejal'){
-          localStorage.removeItem('consejal')          
-        }else{
-          localStorage.removeItem('rol');       
+        // Limpiar items específicos del tipo de usuario antes del logout
+        let tipodeusuario = localStorage.getItem('tipodeusuario');
+        if (tipodeusuario === 'consejal'){
+          localStorage.removeItem('consejal');
+        } else {
+          localStorage.removeItem('rol');
         }
-        this.mostramenu=false        
-        this.router.navigate(['login']);
-        this.cd.detectChanges();
-   // }
-}
+
+        // Llamar al método centralizado de logout
+        this.usuarioservicio.logout().subscribe(() => {
+          this.cd.detectChanges();
+        });
+  }
 
 
 }

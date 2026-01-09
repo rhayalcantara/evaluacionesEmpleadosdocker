@@ -110,7 +110,6 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
             this.totalregistros =  rep.count
             this.arraymodel=[]
             this.arraymodel=rep.data    
-            console.log(rep.data)
             this.TRegistros.emit(this.totalregistros)        
           }
         }

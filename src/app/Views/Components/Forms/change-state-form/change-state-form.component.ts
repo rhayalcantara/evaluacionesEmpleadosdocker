@@ -66,7 +66,6 @@ export class ChangeStateFormComponent implements OnInit {
         }
         try {
           await firstValueFrom(this.periodosController.Update(pp))
-          // console.log('State changed successfully');
           
           this.closeForm();
         } catch (error) {

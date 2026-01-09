@@ -59,7 +59,6 @@ export class FormKpiComponent implements OnInit {
   }
     this.kriservice.TRegistros.subscribe(() => {
       // al momento de terminar de recibir los kri en el servicio se actualiza aqui el array
-      console.log(this.kpiservice.arraymodel)
       this.kris = this.kriservice.arraymodel;
       this.kri = this.kris.find((kri) => kri.id === data.model.kriId) ?? this.kri;
     })
@@ -71,7 +70,6 @@ export class FormKpiComponent implements OnInit {
       this.titulo = 'Editar KPI';            
     }
     this.fg.patchValue(this.data.model);
-    console.log(this.fg.value)
     this.kriservice.getdatos()
   }
   // funcion para devolver el descripcion del kri
@@ -101,7 +99,6 @@ export class FormKpiComponent implements OnInit {
   grabar(): void {
     if (this.fg.valid) {
       const kpi: IKpi = this.fg.value;      
-      console.log(kpi, this.fg.value);
       this.kpiservice.model = kpi;
       this.kpiservice.grabar().then(() => {
         this.datosService.showMessage('KPI guardado exitosamente', 'Éxito', 'success');

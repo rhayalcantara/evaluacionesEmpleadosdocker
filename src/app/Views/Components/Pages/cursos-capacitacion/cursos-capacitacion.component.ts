@@ -87,7 +87,6 @@ export class CursosCapacitacionComponent implements OnInit, OnDestroy {
   onDelete(curso: ICursoCapacitacion) {
     if (confirm('¿Está seguro que desea eliminar este curso?')) {
       // Implement delete functionality when available in the service
-      console.log('Delete curso:', curso);
       this.loadCursos();
     }
   }

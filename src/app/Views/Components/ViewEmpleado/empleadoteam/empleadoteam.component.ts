@@ -41,7 +41,6 @@ export class EmpleadoTeamComponent implements OnInit {
     this.filteredSubordinados = this.empl.arraymodelsubordinados; 
     this.empl.model = this.empleado
     //this.empl.getsubordinados(this.periodo);
-    //console.log(this.empl.arraymodelsubordinados);
        
     this.changeDetectorRef.detectChanges();
   }
@@ -60,7 +59,6 @@ export class EmpleadoTeamComponent implements OnInit {
   }
 
   agregametasub() {
-    console.log('Agregar metas para subordinados');
     const dialogRef = this.dialog.open(SupervisorGoalsComponent, {
       width: '1200px', data: { empl: this.empl, periodo: this.periodo }
     });
@@ -70,7 +68,6 @@ export class EmpleadoTeamComponent implements OnInit {
   }
 
   objetivoscall() {
-    console.log('Agregar metas para subordinados');
     const dialogRef = this.dialog.open(ObjetivosComponent, {
       width: '100%', height: '80%', data: { empl: this.empl, periodo: this.periodo }
     });
@@ -79,7 +76,6 @@ export class EmpleadoTeamComponent implements OnInit {
     });
   }
   competenciascall() {
-    console.log('Agregar competencias para subordinados');
     const dialogRef = this.dialog.open(GrupoCompetenciasComponent, {
       width: '600px', data: { empl: this.empl, periodo: this.periodo }
     });

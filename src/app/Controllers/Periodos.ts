@@ -81,7 +81,6 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
          this.Gets()        
            .subscribe({        
           next:(rep:ModelResponse)=>{
-            console.log('zonas',rep)
             this.totalregistros =  rep.count
             this.arraymodel=[]
             this.arraymodel=rep.data    
@@ -100,7 +99,6 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
     public filtrar(){
         this.Gets().subscribe(
                         (m:ModelResponse)=>{
-                          console.log(m)
                           this.totalregistros =  m.count
                           this.TRegistros.emit(this.totalregistros)        
                           
@@ -130,11 +128,9 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
       }
   
       public insert(obj:IPeriodo):Observable<IPeriodo>{  
-        console.log("el objeto",obj)
         return this.datos.insertardatos<IPeriodo>(this.rutaapi, obj ); 
       }
       public Update(obj:IPeriodo):Observable<IPeriodo>{
-        console.log('llego a grabar',obj)
         return this.datos.updatedatos<IPeriodo>(this.rutaapi+`/${obj.id}`,obj); 
       }
   
@@ -144,7 +140,6 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
               
       public async grabar(): Promise<boolean> {
         // Envuelve el código en una nueva Promise
-        //console.log('llego producto a grabar',this.model,this.zs.arraymodel)
         return new Promise<boolean>(async (resolve) => {
           if (this.model.id == 0) {
             // inserta el registro
@@ -162,7 +157,6 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
             );
           } else {
             // actualiza el registro
-            console.log(this.model)
             await firstValueFrom(this.Update(this.model)).then(
               (rep: IPeriodo) => {
                 
