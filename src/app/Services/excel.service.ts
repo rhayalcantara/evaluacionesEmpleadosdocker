@@ -51,7 +51,7 @@ public exportReporte1AsExcelFile(jsonData: IReporte01[], excelFileName: string):
         item.supervisor || '', 
         item.estatus_evaluacion || '',
         item.puntuaciondesempenocolaborador ?? '', // 'Total Puntuación Objetivo'
-        item.objetivo30 ?? '',                     // 'Resultado Objetivo %' (30%)
+        item.objetivo30 != null ? Math.min(item.objetivo30, 110) : '', // 'Resultado Objetivo %' (30%) - máximo 110
         item.puntuacioncompetenciacolaborador ?? '', // 'Autoevaluación Competencias'
         item.autocompetencia70 ?? '',              // 'Autoevaluación Competencias (70%)'
         item.autoevaluacion ?? '',                 // 'Resultado Final Autoevaluación (30%+70%)'
@@ -149,8 +149,6 @@ public exportReporte1AsExcelFile(jsonData: IReporte01[], excelFileName: string):
 
   } catch (error) {
     console.error("Error al generar el archivo Excel:", error);
-    // Aquí podrías mostrar un mensaje de error al usuario si lo deseas
-    // Ejemplo: this.toastr.open(ErrorComponent, { data: { message: 'Error al generar Excel' } });
   } finally {
     dialogRef.close();
   }

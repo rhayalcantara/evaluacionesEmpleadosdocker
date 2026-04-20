@@ -181,28 +181,28 @@ static  generaNss() {
           }
         }
    ], 	styles: {
-		header: {
-			fontSize: 18,
-			bold: true,
-			margin: [0, 0, 0, 10]
-		},
-		subheader: {
-			fontSize: 16,
-			bold: true,
-			margin: [0, 10, 0, 5]
-		},
-		tableExample: {
-			margin: [10, 5, 10, 15]
-		},
-		tableHeader: {
-			bold: true,
-			fontSize: 13,
-			color: 'black'
-		}
-	},
-	defaultStyle: {
-		// alignment: 'justify'
-	}
+        header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+        },
+        subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+        },
+        tableExample: {
+            margin: [10, 5, 10, 15]
+        },
+        tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+        }
+    },
+    defaultStyle: {
+        // alignment: 'justify'
+    }
     };
  
     const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
@@ -224,8 +224,16 @@ static  generaNss() {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
-
-  
+  private ajustarPorcentajesParaPDF(evaluacion: IEvaluacion): void {
+    if (!evaluacion.evaluacionDesempenoMetas || evaluacion.evaluacionDesempenoMetas.length === 0) {
+      this.EvaluacionController.porcentajeDesempeno = 0;
+      this.EvaluacionController.porcentajeCompetencia = 100;
+    } else {
+      const pdc = this.EvaluacionController.pdclocal.filter(x => x.periodId === evaluacion.periodId);
+      this.EvaluacionController.porcentajeDesempeno = pdc.find(x => x.descripcion === 'Desempeño')?.valor ?? 30;
+      this.EvaluacionController.porcentajeCompetencia = pdc.find(x => x.descripcion === 'Competencia')?.valor ?? 70;
+    }
+  }
 
    async generatePDFEvaluacion(evaluacionempleado: IEvaluacion,
                                empleado: IEmpleado, 
@@ -239,14 +247,15 @@ static  generaNss() {
       /*
       .subscribe({
         next: (rep: IEvaluacion) => {
-          evaluacionempleado = rep;     
-             
+          evaluacionempleado = rep;
         },
         error: (err: Error) => {
           console.error('Error al obtener la evaluación:', err);
          }
       });*/
-     
+
+     this.ajustarPorcentajesParaPDF(this.evaluacionempleado);
+
      // Obtener valores calculados como números
      const currentPromedioDesempeno = this.promedioDesempeno(this.evaluacionempleado);
      const currentDesempenoFinal = this.desempenoFinal(this.evaluacionempleado);
@@ -254,7 +263,7 @@ static  generaNss() {
      const currentPromedioCompSup = this.promedioCompetenciasSupervisor(this.evaluacionempleado);
      const currentCompFinalColab = this.competenciaFinalColaborador(this.evaluacionempleado);
      const currentCompFinalSup = this.competenciaFinalSupervisor(this.evaluacionempleado);
-     const currentTotalCalculo = this.totalCalculo(this.evaluacionempleado, this.supervisor);
+     const currentPuntuacionFinal = (((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2);
 
     try {
       // --- Contenido Competencias ---
@@ -373,7 +382,7 @@ static  generaNss() {
         // --- Firmas ---
         {
           columns: [
-            { qr: `Empleado: ${empleado?.nombreunido ?? 'N/A'}\nPeriodo: ${periodo?.descripcion ?? 'N/A'}\nFecha: ${new Date().toLocaleDateString()}\nPuntaje: ${currentTotalCalculo.toFixed(2)}`, fit: '80' },
+            { qr: `Empleado: ${empleado?.nombreunido ?? 'N/A'}\nPeriodo: ${periodo?.descripcion ?? 'N/A'}\nFecha: ${new Date().toLocaleDateString()}\nPuntaje: ${currentPuntuacionFinal.toFixed(2)}`, fit: '80' },
             { text: '', width: '*' },
             {
               stack: [
@@ -431,6 +440,8 @@ static  generaNss() {
 
     this.evaluacionempleado = await firstValueFrom(this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(empleado.secuencial, periodo.id));
 
+    this.ajustarPorcentajesParaPDF(this.evaluacionempleado);
+
     // Obtener valores calculados como números
     const currentPromedioDesempeno = this.promedioDesempeno(this.evaluacionempleado);
     const currentDesempenoFinal = this.desempenoFinal(this.evaluacionempleado);
@@ -438,7 +449,7 @@ static  generaNss() {
     const currentPromedioCompSup = this.promedioCompetenciasSupervisor(this.evaluacionempleado);
     const currentCompFinalColab = this.competenciaFinalColaborador(this.evaluacionempleado);
     const currentCompFinalSup = this.competenciaFinalSupervisor(this.evaluacionempleado);
-    const currentTotalCalculo = this.totalCalculo(this.evaluacionempleado, this.supervisor);
+    const currentPuntuacionFinal = (((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2);
 
     try {
       // --- Contenido Competencias ---
@@ -555,7 +566,7 @@ static  generaNss() {
         // --- Firmas ---
         {
           columns: [
-            { qr: `Empleado: ${empleado?.nombreunido ?? 'N/A'}\nPeriodo: ${periodo?.descripcion ?? 'N/A'}\nFecha: ${new Date().toLocaleDateString()}\nPuntaje: ${currentTotalCalculo.toFixed(2)}`, fit: '80' },
+            { qr: `Empleado: ${empleado?.nombreunido ?? 'N/A'}\nPeriodo: ${periodo?.descripcion ?? 'N/A'}\nFecha: ${new Date().toLocaleDateString()}\nPuntaje: ${currentPuntuacionFinal.toFixed(2)}`, fit: '80' },
             { text: '', width: '*' },
             {
               stack: [

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "muninn": {
+      "type": "sse",
+      "url": "http://localhost:8750/mcp",
+      "headers": {
+        "Authorization": "Bearer mdb_6777b6787fd504e8a738e89d78305a0901b4cd9373ac03aa"
+      }
+    }
+  }
+}

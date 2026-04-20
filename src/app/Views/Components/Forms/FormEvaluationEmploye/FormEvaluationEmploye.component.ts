@@ -120,10 +120,34 @@ export class FormEvaluationEmployeComponent {
 
           this.dialogRef.close();
         },
-        error: (err: Error) => {
-          console.error('Error al obtener la evaluación:', err);
-          this.dialogRef.close();
-          this.datos.showMessage("Error al cargar la evaluación", this.titulo, "error");
+        error: (err: any) => {
+          // Si es 404, la evaluación no existe - crear una nueva
+          if (err.status === 404) {
+            this.evaluacionempleado = this.EvaluacionController.inicializamodelo();
+            this.evaluacionempleado.periodId = this.periodo.id;
+            this.evaluacionempleado.empleadoSecuencial = this.empleado.secuencial;
+            this.evaluacionempleado.estadoevaluacion = 'Borrador';
+            this.EvaluacionController.model = this.evaluacionempleado;
+
+            this.mostarAceptar = false;
+            this.mostarAceptarBoton = false;
+            this.mostargrabar = true;
+
+            this.ServiceComunicacion.enviarMensaje({ mensaje: 'buscar', id: 0, model: this.evaluacionempleado });
+            this.cd.detectChanges();
+            this.dialogRef.close();
+
+            this.datos.showMessage(
+              `No se encontró evaluación previa. Se creará una nueva evaluación para el periodo ${this.periodo.descripcion}.`,
+              this.titulo,
+              "info"
+            );
+          } else {
+            // Otros errores (500, 401, etc.)
+            console.error('Error al obtener la evaluación:', err);
+            this.dialogRef.close();
+            this.datos.showMessage("Error al cargar la evaluación", this.titulo, "error");
+          }
         }
       });
 
@@ -154,6 +178,10 @@ export class FormEvaluationEmployeComponent {
 
   onCursoRemovido(curso: IEvaluacionCursoCapacitacion): void {
     this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.cursoCapacitacionId !== curso.cursoCapacitacionId);
+  }
+
+  onJustificacionChange(): void {
+    this.cd.detectChanges();
   }
 
   onPuntacionChange(event: number) {
@@ -411,6 +439,28 @@ export class FormEvaluationEmployeComponent {
         this.datos.showMessage("Error: No se ha cargado la evaluación.", this.titulo, "error");
         return;
     }
+
+    // Validar longitud de justificaciones de cursos
+    const MAX_JUSTIFICACION_LENGTH = 500;
+    for (const curso of this.cursosSeleccionados) {
+      if (curso.porque && curso.porque.length > MAX_JUSTIFICACION_LENGTH) {
+        this.datos.showMessage(
+          `La justificación del curso "${curso.cursoCapacitacion?.descripcion}" excede los ${MAX_JUSTIFICACION_LENGTH} caracteres permitidos.`,
+          this.titulo,
+          "error"
+        );
+        return;
+      }
+      if (curso.porque && !curso.porque.trim()) {
+        this.datos.showMessage(
+          `Debe proporcionar una justificación para el curso "${curso.cursoCapacitacion?.descripcion}".`,
+          this.titulo,
+          "warning"
+        );
+        return;
+      }
+    }
+
     this.evaluacionempleado.observacion = this.comentarioAdicional;
 
     const fechaActual = new Date();

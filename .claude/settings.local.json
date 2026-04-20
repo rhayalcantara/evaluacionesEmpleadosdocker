@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(gemini:*)",
-      "SlashCommand(/fork-bash abre Chrome DevTools con la URL http://localhost:4200/evaluacionempleado)"
+      "SlashCommand(/fork-bash abre Chrome DevTools con la URL http://localhost:4200/evaluacionempleado)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "mcp__muninn__muninn_status",
+      "mcp__muninn__muninn_recall",
+      "mcp__muninn__muninn_guide",
+      "mcp__muninn__muninn_remember_batch",
+      "mcp__muninn__muninn_link",
+      "Bash(for file in *.ts)",
+      "Bash(do echo \"=== $file ===\")",
+      "Read(//c/Proyectos/evaluacionesEmpleadosdocker/**)",
+      "Bash(done)",
+      "Bash(/tmp/components_analysis.txt:*)",
+      "Read(//tmp/**)",
+      "mcp__muninn__muninn_remember_tree",
+      "Bash(npx ng:*)",
+      "Bash(npm run *)"
     ],
     "deny": [],
     "ask": []

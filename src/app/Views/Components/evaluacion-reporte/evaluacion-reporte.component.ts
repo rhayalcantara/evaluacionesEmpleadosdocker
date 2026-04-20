@@ -178,8 +178,10 @@ export class EvaluacionReporteComponent implements OnInit {
     }
   }
   downloadExcel() {
-    // El mapeo manual ha sido eliminado.
-    // Llamar a la nueva función pasando los datos filtrados directamente
+    if (!this.filteredData || this.filteredData.length === 0) {
+      this.datosService.showMessage('No hay datos para exportar. Seleccione un periodo con evaluaciones.', 'Excel', 'warning');
+      return;
+    }
     this.excelService.exportReporte1AsExcelFile(this.filteredData, 'Reporte_Evaluaciones');
   }
   downloadExce2() {
@@ -187,7 +189,9 @@ export class EvaluacionReporteComponent implements OnInit {
     //obtener los datos de reporte2
     this.evaluacionService.GetEvaluacionReporte02(this.currentPeriodId).subscribe({
       next: (response: ModelResponse) => {
+        console.log(response.data);
         if (response && response.data) {
+          
           this.excelService.exportAsExcelFile(response.data, 'Reporte_Evaluaciones_2');
         }
       },

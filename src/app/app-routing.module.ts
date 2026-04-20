@@ -167,6 +167,11 @@ const routes: Routes = [
     .then((m)=> m.ReporteCursosComponent),
     canActivate: [AuthGuard]
   },
+  { path: 'ReporteGrupos',
+    loadComponent:()=> import('./Views/Components/Pages/reporte-grupos/reporte-grupos.component')
+    .then((m)=> m.ReporteGruposComponent),
+    canActivate: [AuthGuard]
+  },
   { path: 'historial-evaluaciones',
     loadComponent:()=> import('./Views/Components/Pages/historial-evaluaciones/historial-evaluaciones.component')
     .then((m)=> m.HistorialEvaluacionesComponent),

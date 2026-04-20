@@ -1,0 +1,2165 @@
+
+============================================================
+  AUDITORIA DE EVALUACIONES - Periodo 7
+  API: http://192.168.7.222:7070  |  Tolerancia: +/-0.01
+============================================================
+
+[1/3] Cargando tablas de referencia...
+  Cargando tabla ValoresEvaluacion... 5 registros
+  Cargando PorcientoDesempenoCompetencia... 2 registros para el periodo 7
+  Verificando periodo... 'Evaluación de Desempeño Final 2025'
+
+[2/3] Cargando evaluaciones del periodo 'Evaluación de Desempeño Final 2025'...
+  Descargando lista de evaluaciones... 898 en total
+  Del periodo 7: 437 evaluaciones
+  Cargando nombres de empleados... 461 cargados
+  Evaluaciones a auditar: 437 principales + 0 duplicadas (estado Pendiente/sin datos)
+  Descargando detalle de 437 evaluaciones (10 en paralelo)...
+    [  1/437]       [  2/437]       [  3/437]       [  4/437]       [  5/437]       [  6/437]       [  7/437]       [  8/437]       [  9/437]       [ 10/437]       [ 11/437]       [ 12/437]       [ 13/437]       [ 14/437]       [ 15/437]       [ 16/437]       [ 17/437]       [ 18/437]       [ 19/437]       [ 20/437]       [ 21/437]       [ 22/437]       [ 23/437]       [ 24/437]       [ 25/437]       [ 26/437]       [ 27/437]       [ 28/437]       [ 29/437]       [ 30/437]       [ 31/437]       [ 32/437]       [ 33/437]       [ 34/437]       [ 35/437]       [ 36/437]       [ 37/437]       [ 38/437]       [ 39/437]       [ 40/437]       [ 41/437]       [ 42/437]       [ 43/437]       [ 44/437]       [ 45/437]       [ 46/437]       [ 47/437]       [ 48/437]       [ 49/437]       [ 50/437]       [ 51/437]       [ 52/437]       [ 53/437]       [ 54/437]       [ 55/437]       [ 56/437]       [ 57/437]       [ 58/437]       [ 59/437]       [ 60/437]       [ 61/437]       [ 62/437]       [ 63/437]       [ 64/437]       [ 65/437]       [ 66/437]       [ 67/437]       [ 68/437]       [ 69/437]       [ 70/437]       [ 71/437]       [ 72/437]       [ 73/437]       [ 74/437]       [ 75/437]       [ 76/437]       [ 77/437]       [ 78/437]       [ 79/437]       [ 80/437]       [ 81/437]       [ 82/437]       [ 83/437]       [ 84/437]       [ 85/437]       [ 86/437]       [ 87/437]       [ 88/437]       [ 89/437]       [ 90/437]       [ 91/437]       [ 92/437]       [ 93/437]       [ 94/437]       [ 95/437]       [ 96/437]       [ 97/437]       [ 98/437]       [ 99/437]       [100/437]       [101/437]       [102/437]       [103/437]       [104/437]       [105/437]       [106/437]       [107/437]       [108/437]       [109/437]       [110/437]       [111/437]       [112/437]       [113/437]       [114/437]       [115/437]       [116/437]       [117/437]       [118/437]       [119/437]       [120/437]       [121/437]       [122/437]       [123/437]       [124/437]       [125/437]       [126/437]       [127/437]       [128/437]       [129/437]       [130/437]       [131/437]       [132/437]       [133/437]       [134/437]       [135/437]       [136/437]       [137/437]       [138/437]       [139/437]       [140/437]       [141/437]       [142/437]       [143/437]       [144/437]       [145/437]       [146/437]       [147/437]       [148/437]       [149/437]       [150/437]       [151/437]       [152/437]       [153/437]       [154/437]       [155/437]       [156/437]       [157/437]       [158/437]       [159/437]       [160/437]       [161/437]       [162/437]       [163/437]       [164/437]       [165/437]       [166/437]       [167/437]       [168/437]       [169/437]       [170/437]       [171/437]       [172/437]       [173/437]       [174/437]       [175/437]       [176/437]       [177/437]       [178/437]       [179/437]       [180/437]       [181/437]       [182/437]       [183/437]       [184/437]       [185/437]       [186/437]       [187/437]       [188/437]       [189/437]       [190/437]       [191/437]       [192/437]       [193/437]       [194/437]       [195/437]       [196/437]       [197/437]       [198/437]       [199/437]       [200/437]       [201/437]       [202/437]       [203/437]       [204/437]       [205/437]       [206/437]       [207/437]       [208/437]       [209/437]       [210/437]       [211/437]       [212/437]       [213/437]       [214/437]       [215/437]       [216/437]       [217/437]       [218/437]       [219/437]       [220/437]       [221/437]       [222/437]       [223/437]       [224/437]       [225/437]       [226/437]       [227/437]       [228/437]       [229/437]       [230/437]       [231/437]       [232/437]       [233/437]       [234/437]       [235/437]       [236/437]       [237/437]       [238/437]       [239/437]       [240/437]       [241/437]       [242/437]       [243/437]       [244/437]       [245/437]       [246/437]       [247/437]       [248/437]       [249/437]       [250/437]       [251/437]       [252/437]       [253/437]       [254/437]       [255/437]       [256/437]       [257/437]       [258/437]       [259/437]       [260/437]       [261/437]       [262/437]       [263/437]       [264/437]       [265/437]       [266/437]       [267/437]       [268/437]       [269/437]       [270/437]       [271/437]       [272/437]       [273/437]       [274/437]       [275/437]       [276/437]       [277/437]       [278/437]       [279/437]       [280/437]       [281/437]       [282/437]       [283/437]       [284/437]       [285/437]       [286/437]       [287/437]       [288/437]       [289/437]       [290/437]       [291/437]       [292/437]       [293/437]       [294/437]       [295/437]       [296/437]       [297/437]       [298/437]       [299/437]       [300/437]       [301/437]       [302/437]       [303/437]       [304/437]       [305/437]       [306/437]       [307/437]       [308/437]       [309/437]       [310/437]       [311/437]       [312/437]       [313/437]       [314/437]       [315/437]       [316/437]       [317/437]       [318/437]       [319/437]       [320/437]       [321/437]       [322/437]       [323/437]       [324/437]       [325/437]       [326/437]       [327/437]       [328/437]       [329/437]       [330/437]       [331/437]       [332/437]       [333/437]       [334/437]       [335/437]       [336/437]       [337/437]       [338/437]       [339/437]       [340/437]       [341/437]       [342/437]       [343/437]       [344/437]       [345/437]       [346/437]       [347/437]       [348/437]       [349/437]       [350/437]       [351/437]       [352/437]       [353/437]       [354/437]       [355/437]       [356/437]       [357/437]       [358/437]       [359/437]       [360/437]       [361/437]       [362/437]       [363/437]       [364/437]       [365/437]       [366/437]       [367/437]       [368/437]       [369/437]       [370/437]       [371/437]       [372/437]       [373/437]       [374/437]       [375/437]       [376/437]       [377/437]       [378/437]       [379/437]       [380/437]       [381/437]       [382/437]       [383/437]       [384/437]       [385/437]       [386/437]       [387/437]       [388/437]       [389/437]       [390/437]       [391/437]       [392/437]       [393/437]       [394/437]       [395/437]       [396/437]       [397/437]       [398/437]       [399/437]       [400/437]       [401/437]       [402/437]       [403/437]       [404/437]       [405/437]       [406/437]       [407/437]       [408/437]       [409/437]       [410/437]       [411/437]       [412/437]       [413/437]       [414/437]       [415/437]       [416/437]       [417/437]       [418/437]       [419/437]       [420/437]       [421/437]       [422/437]       [423/437]       [424/437]       [425/437]       [426/437]       [427/437]       [428/437]       [429/437]       [430/437]       [431/437]       [432/437]       [433/437]       [434/437]       [435/437]       [436/437]       [437/437]       Total contabilizado: 425/437 evaluaciones                    
+    [AVISO] 12 evaluaciones no pudieron cargarse (endpoint devolvio 404).
+
+[3/3] Recalculando 425 evaluaciones...
+
+================================================================================
+  RESULTADO AUDITORIA - Periodo: Evaluación de Desempeño Final 2025
+================================================================================
+  Total BD                : 437
+  Procesadas              : 425  (12 sin acceso via API)
+  Evaluaciones auditadas  : 425
+  Correctas (d<=0.01)    : 335
+  Divergen                : 90
+--------------------------------------------------------------------------------
+
+    #  Colaborador                          BD Total      Calc      Dif  Estado
+  ---  ----------------------------------- --------- --------- --------  --------------------
+    1  LUIS EDUARDO ROSARIO ESPINAL            99.92     99.22  -0.7044  [DIVERGE]
+   10  FREDDY WILLIAM DE LOS SANTOS MACEA      98.53    107.35  +8.8188  [DIVERGE]
+   14  DIORELIS TERESA PUJOLS PUJOLS          100.90    100.90  -0.0027  [DIVERGE]
+   29  ERICA MARTINEZ MORONTA                 100.89    100.84  -0.0524  [DIVERGE]
+   37  NAIROBY BRITO DE DE LA CRUZ            102.68    103.19  +0.5074  [DIVERGE]
+   56  JUNIOR ALMONTE MINAYA                   93.75     89.92  -3.8254  [DIVERGE]
+   64  GELMANIA GARCIA VIÑA                    97.59     96.70  -0.8935  [DIVERGE]
+   68  YASMIN LUCIANO LUCAS DE DE LA ROSA      95.88     94.32  -1.5555  [DIVERGE]
+   70  NURIS YANERIS HERNANDEZ DE PEREZ       101.69     95.55  -6.1431  [DIVERGE]
+   71  MAIRELI RODRIGUEZ SANTANA               91.46     96.62  +5.1625  [DIVERGE]
+   78  ALEXANDRA CHARLES DE UREÑA              94.63     98.45  +3.8183  [DIVERGE]
+   82  RUTH ESTHER MARTINEZ DE SAINT EUSTA     87.34     84.67  -2.6708  [DIVERGE]
+   85  YIRILENNY RODRIGUEZ CORDERO             84.87     87.90  +3.0283  [DIVERGE]
+   94  WENDY MASSIEL FORTUNA VALMO             87.55     93.45  +5.8959  [DIVERGE]
+   95  MELISSA SANTANA FEBRILLET               97.18     95.18  -2.0003  [DIVERGE]
+  107  HEIDY SILVERIO ROSARIO                  95.70     95.77  +0.0655  [DIVERGE]
+  115  CAROLINA MACIEL HERRERA BRITO           91.35     96.99  +5.6436  [DIVERGE]
+  117  JUAN MANUEL RODRIGUEZ SANCHEZ           89.20     85.27  -3.9260  [DIVERGE]
+  122  KIRSI LOPEZ DE PEREZ                    94.95     98.77  +3.8249  [DIVERGE]
+  130  JOSE FELIPE BERROA BERROA                0.00     33.00 +33.0000  [DIVERGE]
+  131  ELSIRA CAROLINA ABREU                    0.00     24.42 +24.4213  [DIVERGE]
+  138  DEISY ALTAGRACIA CURIEL SANCHEZ         93.53     91.64  -1.8862  [DIVERGE]
+  159  NOELIA PEGUERO DE LA ROSA               84.00     83.86  -0.1377  [DIVERGE]
+  164  ARIANNA CAROLINA APOLINARIO SANCHEZ     83.92     77.85  -6.0728  [DIVERGE]
+  176  FELIX ECHAVARRIA RAMIREZ                92.40     91.77  -0.6324  [DIVERGE]
+  184  STEPHANIE ARNO                          95.27     90.76  -4.5099  [DIVERGE]
+  197  YISSEL RODRIGUEZ DE LEON                 0.00     33.00 +33.0000  [DIVERGE]
+  202  STEPHANIE CASTILLO SILVESTRE            33.00     15.72 -17.2789  [DIVERGE]
+  206  BRAULIO HENRIQUEZ                       98.53    101.97  +3.4433  [DIVERGE]
+  208  WILKIN HERNANDEZ GUZMAN                108.00    108.60  +0.6000  [DIVERGE]
+  220  ANDY ESPINOSA PEREZ                      0.00     14.03 +14.0330  [DIVERGE]
+  222  LEYDI ANA SANCHEZ                       91.85     82.09  -9.7588  [DIVERGE]
+  225  SIXTO ARIAS ALMENGO                     90.87     79.68 -11.1931  [DIVERGE]
+  274  OMAR SANCHEZ MEJIA                      97.25    103.47  +6.2167  [DIVERGE]
+  275  RICHARD LUCIANO MORA                   102.08     93.88  -8.2020  [DIVERGE]
+  277  SUGELYS RODRIGUEZ BATISTA DE YORRO      98.17    101.72  +3.5467  [DIVERGE]
+  279  VICTOR EMILIO SUERO NOVA                 0.00     33.00 +33.0000  [DIVERGE]
+  280  YOHANNY VALERIA AMPARO NUÑEZ            97.87     96.58  -1.2879  [DIVERGE]
+  283  MARTHA DISLA DE ESPEJO                 106.00    100.00  -6.0016  [DIVERGE]
+  290  MARINO CESPEDES DE LOS SANTOS           93.52     89.60  -3.9203  [DIVERGE]
+  295  RUDY ALBERTO NOLASCO LAUREANO           91.20     96.84  +5.6400  [DIVERGE]
+  297  ANGELA RIVERA REYES                     84.58     86.86  +2.2783  [DIVERGE]
+  298  IRIS LORA MOREL                         99.03     95.12  -3.9083  [DIVERGE]
+  299  RAQUEL NOEMI NUÑEZ BAUTISTA             98.74     96.10  -2.6358  [DIVERGE]
+  301  CARILYN BETHEL PAULINO DE ALCANTARA     89.69     82.88  -6.8137  [DIVERGE]
+  302  ISMAEL MARTINEZ DE LA ROSA             101.87    104.31  +2.4367  [DIVERGE]
+  308  MARTHA LISSETT PUELLO ESPINAL           96.78     94.14  -2.6358  [DIVERGE]
+  309  INMACULADA DEL CARMEN DOMINGUEZ MAR     97.46     96.15  -1.3108  [DIVERGE]
+  311  VICTOR MANUEL ZABALA GUERRERO           93.80     98.66  +4.8600  [DIVERGE]
+  312  YRMA FAMILIA DE OLEO                    97.59    101.41  +3.8198  [DIVERGE]
+  313  KAREN MASSIEL GARCIA MARTINEZ           99.15    102.97  +3.8249  [DIVERGE]
+  314  ANDREINA NOLASCO ASTACIO                82.48     87.64  +5.1591  [DIVERGE]
+  316  SANDRA RAMON                            93.68     99.33  +5.6469  [DIVERGE]
+  323  BETZAIDA HIDALGO RODRIGUEZ             101.49    101.93  +0.4437  [DIVERGE]
+  324  DELFINA MARRERO                         96.35     95.44  -0.9141  [DIVERGE]
+  325  YOHANNA ADELAIDA SANTANA JIMENEZ        89.15     94.31  +5.1625  [DIVERGE]
+  330  SURELYS ESTHEFANIN RAMIREZ SANCHEZ     107.03    105.33  -1.7020  [DIVERGE]
+  331  KENNY SHAMIR BELTRE DE LA CRUZ          97.60     95.82  -1.7763  [DIVERGE]
+  334  MASSIEL PUENTE ACOSTA                   84.19     94.05  +9.8636  [DIVERGE]
+  338  ALICIA VALERA OLMOS                     84.61     86.88  +2.2716  [DIVERGE]
+  340  ESTHER VALLEJO HEREDIA                  97.61     96.33  -1.2846  [DIVERGE]
+  342  REBECA ELIZABETH CUETO ECHAVARRIA       91.17     98.36  +7.1930  [DIVERGE]
+  349  SELENY ISABEL ANTIGUA DE MEJIA          99.70     98.31  -1.3933  [DIVERGE]
+  350  CARLINA ASENCIO ESPIRITUSANTO           91.37     94.23  +2.8624  [DIVERGE]
+  351  AMBAR LORA ROMERO                       94.38    100.03  +5.6469  [DIVERGE]
+  352  HERIANNY MASSIEL MERCEDES CALCAÑO       86.57     89.60  +3.0316  [DIVERGE]
+  354  EMELY SOSA PERALTA                      94.87     91.16  -3.7137  [DIVERGE]
+  355  LARAINE RAMIREZ                        101.14    100.13  -1.0081  [DIVERGE]
+  356  ALBA IRIS DE JESUS ALMANZAR RODRIGU     98.80     97.77  -1.0337  [DIVERGE]
+  358  YAZMIN MONTERO VASQUEZ                 100.56    101.00  +0.4403  [DIVERGE]
+  360  WILKIN TEJADA MEJIA                     80.45     85.07  +4.6209  [DIVERGE]
+  364  ROSSANNA BAEZ FELIX                     96.55     95.88  -0.6715  [DIVERGE]
+  365  ELADIA MARIA TAVERAS MARTINEZ           89.22     88.99  -0.2270  [DIVERGE]
+  366  MARIANNY ALCANTARA DE LOS SANTOS       102.00    101.05  -0.9527  [DIVERGE]
+  369  DEYANIRA MARTES FELICIANO               74.67     96.38 +21.7135  [DIVERGE]
+  371  ESTEFANIE VASQUEZ PAYANO                85.64     88.67  +3.0283  [DIVERGE]
+  380  ESTHER MANCEBO OVIEDO                   91.11     92.46  +1.3531  [DIVERGE]
+  382  ELIZABETH ULERIO DIAZ                   93.08     91.80  -1.2813  [DIVERGE]
+  388  ALTAGRACIA GISELLE ESTEVEZ GONZALEZ     95.31    100.96  +5.6502  [DIVERGE]
+  392  JUANA ONELIS LOZALA DE ORTEGA           90.21     93.62  +3.4105  [DIVERGE]
+  394  LUISANNE RODRIGUEZ JACINTO              90.19     94.43  +4.2375  [DIVERGE]
+  396  PERLA NAIROBI MEDINA BONILLA            93.90     93.97  +0.0688  [DIVERGE]
+  398  ROSA MARIA RODRIGUEZ ALTAGRACIA         86.96     85.46  -1.4999  [DIVERGE]
+  399  BETTY MARIA SENCION                     93.13     94.15  +1.0193  [DIVERGE]
+  402  LEIDY LIS MARIEL ACOSTA RODRIGUEZ       86.32     93.71  +7.3910  [DIVERGE]
+  412  MARIEDITH ALEXANDRA VALVERDE DEL RO     87.81     93.97  +6.1552  [DIVERGE]
+  413  GRELVI DANIEL ROQUE HERNANDEZ           98.98     96.20  -2.7835  [DIVERGE]
+  414  IAMDRA ABIGAIL ALCANTARA DE LOS SAN     90.09     92.95  +2.8612  [DIVERGE]
+  417  CAMIL NICOLE MARMOLEJOS MUÑOZ           96.84     96.89  +0.0480  [DIVERGE]
+  421  ANDREINA BAEZ DE PEREZ                  89.31     93.54  +4.2329  [DIVERGE]
+
+--------------------------------------------------------------------------------
+  DETALLE DE DIVERGENCIAS (90 evaluaciones)
+--------------------------------------------------------------------------------
+
+  >> LUIS EDUARDO ROSARIO ESPINAL
+    - totalCalculo(BD=99.92 CALC=99.22 d=0.7044)
+    - totalColab(BD=99.92 CALC=99.22 d=0.7044)
+
+    +- Desglose: LUIS EDUARDO ROSARIO ESPINAL
+    |  Estado: AutoEvaluado | Metas: 16 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 97.5798
+    |  desempenoFinal    = 29.2739
+    |  avgCompColab      = 99.9167  -> totalColab = 99.2156
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            99.9200    99.2156    -0.7044 <--
+    |  totalColab              99.9200    99.2156    -0.7044 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab               99.9200    99.9167    -0.0033
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> FREDDY WILLIAM DE LOS SANTOS MACEA
+    - totalCalculo(BD=98.53 CALC=107.35 d=8.8188)
+    - totalSup(BD=96.32 CALC=0.00 d=96.3200)
+    - puntSup(BD=92.58 CALC=0.00 d=92.5800)
+
+    +- Desglose: FREDDY WILLIAM DE LOS SANTOS MACEA
+    |  Estado: AutoEvaluado | Metas: 12 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 105.0516
+    |  desempenoFinal    = 31.5155
+    |  avgCompColab      = 108.3333  -> totalColab = 107.3488
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.5300   107.3488    +8.8188 <--
+    |  totalColab             107.3500   107.3488    -0.0012
+    |  totalSup                96.3200     0.0000   -96.3200 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                 92.5800     0.0000   -92.5800 <--
+    +-------------------------------------------------------
+
+  >> DIORELIS TERESA PUJOLS PUJOLS
+    - totalSup(BD=30.90 CALC=0.00 d=30.9000)
+
+    +- Desglose: DIORELIS TERESA PUJOLS PUJOLS
+    |  Estado: AutoEvaluado | Metas: 4 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 102.9911
+    |  desempenoFinal    = 30.8973
+    |  avgCompColab      = 100.0000  -> totalColab = 100.8973
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           100.9000   100.8973    -0.0027
+    |  totalColab             100.9000   100.8973    -0.0027
+    |  totalSup                30.9000     0.0000   -30.9000 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ERICA MARTINEZ MORONTA
+    - totalCalculo(BD=100.89 CALC=100.84 d=0.0524)
+    - totalSup(BD=99.88 CALC=100.82 d=0.9449)
+
+    +- Desglose: ERICA MARTINEZ MORONTA
+    |  Estado: EvaluadoPorSupervisor | Metas: 1 | Competencias: 11
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 101.0526
+    |  desempenoFinal    = 30.3158
+    |  avgCompColab      = 100.8182  -> totalColab = 100.8885
+    |  avgCompSup        = 100.7273  -> totalSup   = 100.8249
+    |  totalCalculo = colab*0.2 + sup*0.8 = 100.8885*0.2 + 100.8249*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           100.8900   100.8376    -0.0524 <--
+    |  totalColab             100.8900   100.8885    -0.0015
+    |  totalSup                99.8800   100.8249    +0.9449 <--
+    |  puntColab              100.8200   100.8182    -0.0018
+    |  puntSup                100.7300   100.7273    -0.0027
+    +-------------------------------------------------------
+
+  >> NAIROBY BRITO DE DE LA CRUZ
+    - totalCalculo(BD=102.68 CALC=103.19 d=0.5074)
+    - totalSup(BD=101.53 CALC=102.16 d=0.6265)
+
+    +- Desglose: NAIROBY BRITO DE DE LA CRUZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 1 | Competencias: 11
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 103.1579
+    |  desempenoFinal    = 30.9474
+    |  avgCompColab      = 109.0909  -> totalColab = 107.3110
+    |  avgCompSup        = 101.7273  -> totalSup   = 102.1565
+    |  totalCalculo = colab*0.2 + sup*0.8 = 107.3110*0.2 + 102.1565*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           102.6800   103.1874    +0.5074 <--
+    |  totalColab             107.3100   107.3110    +0.0010
+    |  totalSup               101.5300   102.1565    +0.6265 <--
+    |  puntColab              109.0900   109.0909    +0.0009
+    |  puntSup                101.7300   101.7273    -0.0027
+    +-------------------------------------------------------
+
+  >> JUNIOR ALMONTE MINAYA
+    - totalCalculo(BD=93.75 CALC=89.92 d=3.8254)
+    - totalSup(BD=68.72 CALC=88.97 d=20.2479)
+
+    +- Desglose: JUNIOR ALMONTE MINAYA
+    |  Estado: AutoEvaluado | Metas: 9 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 67.5042
+    |  desempenoFinal    = 20.2513
+    |  avgCompColab      = 105.0000  -> totalColab = 93.7513
+    |  avgCompSup        = 98.1667  -> totalSup   = 88.9679
+    |  totalCalculo = colab*0.2 + sup*0.8 = 93.7513*0.2 + 88.9679*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.7500    89.9246    -3.8254 <--
+    |  totalColab              93.7500    93.7513    +0.0013
+    |  totalSup                68.7200    88.9679   +20.2479 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> GELMANIA GARCIA VIÑA
+    - totalCalculo(BD=97.59 CALC=96.70 d=0.8935)
+    - totalColab(BD=104.21 CALC=103.32 d=0.8868)
+    - totalSup(BD=95.93 CALC=95.04 d=0.8901)
+
+    +- Desglose: GELMANIA GARCIA VIÑA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.7440
+    |  desempenoFinal    = 26.3232
+    |  avgCompColab      = 110.0000  -> totalColab = 103.3232
+    |  avgCompSup        = 98.1667  -> totalSup   = 95.0399
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.3232*0.2 + 95.0399*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.5900    96.6965    -0.8935 <--
+    |  totalColab             104.2100   103.3232    -0.8868 <--
+    |  totalSup                95.9300    95.0399    -0.8901 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> YASMIN LUCIANO LUCAS DE DE LA ROSA
+    - totalCalculo(BD=95.88 CALC=94.32 d=1.5555)
+    - totalColab(BD=99.71 CALC=98.15 d=1.5588)
+    - totalSup(BD=94.92 CALC=93.37 d=1.5522)
+
+    +- Desglose: YASMIN LUCIANO LUCAS DE DE LA ROSA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.4483
+    |  desempenoFinal    = 25.9345
+    |  avgCompColab      = 103.1667  -> totalColab = 98.1512
+    |  avgCompSup        = 96.3333  -> totalSup   = 93.3678
+    |  totalCalculo = colab*0.2 + sup*0.8 = 98.1512*0.2 + 93.3678*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            95.8800    94.3245    -1.5555 <--
+    |  totalColab              99.7100    98.1512    -1.5588 <--
+    |  totalSup                94.9200    93.3678    -1.5522 <--
+    |  puntColab              103.1700   103.1667    -0.0033
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> NURIS YANERIS HERNANDEZ DE PEREZ
+    - totalCalculo(BD=101.69 CALC=95.55 d=6.1431)
+    - totalColab(BD=101.60 CALC=95.45 d=6.1464)
+    - totalSup(BD=101.72 CALC=95.57 d=6.1498)
+
+    +- Desglose: NURIS YANERIS HERNANDEZ DE PEREZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 89.5118
+    |  desempenoFinal    = 26.8536
+    |  avgCompColab      = 98.0000  -> totalColab = 95.4536
+    |  avgCompSup        = 98.1667  -> totalSup   = 95.5702
+    |  totalCalculo = colab*0.2 + sup*0.8 = 95.4536*0.2 + 95.5702*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           101.6900    95.5469    -6.1431 <--
+    |  totalColab             101.6000    95.4536    -6.1464 <--
+    |  totalSup               101.7200    95.5702    -6.1498 <--
+    |  puntColab               98.0000    98.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> MAIRELI RODRIGUEZ SANTANA
+    - totalCalculo(BD=91.46 CALC=96.62 d=5.1625)
+    - totalColab(BD=91.46 CALC=96.62 d=5.1625)
+    - totalSup(BD=91.46 CALC=96.62 d=5.1625)
+
+    +- Desglose: MAIRELI RODRIGUEZ SANTANA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 84.8527
+    |  desempenoFinal    = 25.4558
+    |  avgCompColab      = 101.6667  -> totalColab = 96.6225
+    |  avgCompSup        = 101.6667  -> totalSup   = 96.6225
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.6225*0.2 + 96.6225*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.4600    96.6225    +5.1625 <--
+    |  totalColab              91.4600    96.6225    +5.1625 <--
+    |  totalSup                91.4600    96.6225    +5.1625 <--
+    |  puntColab              101.6700   101.6667    -0.0033
+    |  puntSup                101.6700   101.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> ALEXANDRA CHARLES DE UREÑA
+    - totalCalculo(BD=94.63 CALC=98.45 d=3.8183)
+    - totalColab(BD=101.25 CALC=105.07 d=3.8249)
+    - totalSup(BD=92.97 CALC=96.79 d=3.8216)
+
+    +- Desglose: ALEXANDRA CHARLES DE UREÑA
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 93.5832
+    |  desempenoFinal    = 28.0749
+    |  avgCompColab      = 110.0000  -> totalColab = 105.0749
+    |  avgCompSup        = 98.1667  -> totalSup   = 96.7916
+    |  totalCalculo = colab*0.2 + sup*0.8 = 105.0749*0.2 + 96.7916*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            94.6300    98.4483    +3.8183 <--
+    |  totalColab             101.2500   105.0749    +3.8249 <--
+    |  totalSup                92.9700    96.7916    +3.8216 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> RUTH ESTHER MARTINEZ DE SAINT EUSTACHE
+    - totalCalculo(BD=87.34 CALC=84.67 d=2.6708)
+    - totalColab(BD=92.28 CALC=89.62 d=2.6641)
+    - totalSup(BD=86.10 CALC=83.43 d=2.6674)
+
+    +- Desglose: RUTH ESTHER MARTINEZ DE SAINT EUSTACHE
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.1086
+    |  desempenoFinal    = 24.6326
+    |  avgCompColab      = 92.8333  -> totalColab = 89.6159
+    |  avgCompSup        = 84.0000  -> totalSup   = 83.4326
+    |  totalCalculo = colab*0.2 + sup*0.8 = 89.6159*0.2 + 83.4326*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            87.3400    84.6692    -2.6708 <--
+    |  totalColab              92.2800    89.6159    -2.6641 <--
+    |  totalSup                86.1000    83.4326    -2.6674 <--
+    |  puntColab               92.8300    92.8333    +0.0033
+    |  puntSup                 84.0000    84.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> YIRILENNY RODRIGUEZ CORDERO
+    - totalCalculo(BD=84.87 CALC=87.90 d=3.0283)
+    - totalColab(BD=85.89 CALC=88.92 d=3.0349)
+    - totalSup(BD=84.61 CALC=87.64 d=3.0316)
+
+    +- Desglose: YIRILENNY RODRIGUEZ CORDERO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.1942
+    |  desempenoFinal    = 24.0583
+    |  avgCompColab      = 92.6667  -> totalColab = 88.9249
+    |  avgCompSup        = 90.8333  -> totalSup   = 87.6416
+    |  totalCalculo = colab*0.2 + sup*0.8 = 88.9249*0.2 + 87.6416*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            84.8700    87.8983    +3.0283 <--
+    |  totalColab              85.8900    88.9249    +3.0349 <--
+    |  totalSup                84.6100    87.6416    +3.0316 <--
+    |  puntColab               92.6700    92.6667    -0.0033
+    |  puntSup                 90.8300    90.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> WENDY MASSIEL FORTUNA VALMO
+    - totalCalculo(BD=87.55 CALC=93.45 d=5.8959)
+    - totalColab(BD=87.55 CALC=93.45 d=5.8959)
+    - totalSup(BD=87.29 CALC=93.45 d=6.1559)
+
+    +- Desglose: WENDY MASSIEL FORTUNA VALMO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.4307
+    |  desempenoFinal    = 24.7292
+    |  avgCompColab      = 98.1667  -> totalColab = 93.4459
+    |  avgCompSup        = 98.1667  -> totalSup   = 93.4459
+    |  totalCalculo = colab*0.2 + sup*0.8 = 93.4459*0.2 + 93.4459*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            87.5500    93.4459    +5.8959 <--
+    |  totalColab              87.5500    93.4459    +5.8959 <--
+    |  totalSup                87.2900    93.4459    +6.1559 <--
+    |  puntColab               98.1700    98.1667    -0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> MELISSA SANTANA FEBRILLET
+    - totalCalculo(BD=97.18 CALC=95.18 d=2.0003)
+    - totalColab(BD=98.12 CALC=96.11 d=2.0070)
+    - totalSup(BD=96.95 CALC=94.95 d=2.0037)
+
+    +- Desglose: MELISSA SANTANA FEBRILLET
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.4323
+    |  desempenoFinal    = 26.2297
+    |  avgCompColab      = 99.8333  -> totalColab = 96.1130
+    |  avgCompSup        = 98.1667  -> totalSup   = 94.9463
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.1130*0.2 + 94.9463*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.1800    95.1797    -2.0003 <--
+    |  totalColab              98.1200    96.1130    -2.0070 <--
+    |  totalSup                96.9500    94.9463    -2.0037 <--
+    |  puntColab               99.8300    99.8333    +0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> HEIDY SILVERIO ROSARIO
+    - totalCalculo(BD=95.70 CALC=95.77 d=0.0655)
+    - totalColab(BD=93.65 CALC=93.71 d=0.0621)
+    - totalSup(BD=96.21 CALC=96.28 d=0.0688)
+
+    +- Desglose: HEIDY SILVERIO ROSARIO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.5960
+    |  desempenoFinal    = 26.2788
+    |  avgCompColab      = 96.3333  -> totalColab = 93.7121
+    |  avgCompSup        = 100.0000  -> totalSup   = 96.2788
+    |  totalCalculo = colab*0.2 + sup*0.8 = 93.7121*0.2 + 96.2788*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            95.7000    95.7655    +0.0655 <--
+    |  totalColab              93.6500    93.7121    +0.0621 <--
+    |  totalSup                96.2100    96.2788    +0.0688 <--
+    |  puntColab               96.3300    96.3333    +0.0033
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> CAROLINA MACIEL HERRERA BRITO
+    - totalCalculo(BD=91.35 CALC=96.99 d=5.6436)
+    - totalColab(BD=96.95 CALC=102.59 d=5.6436)
+    - totalSup(BD=89.95 CALC=95.59 d=5.6436)
+
+    +- Desglose: CAROLINA MACIEL HERRERA BRITO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.3119
+    |  desempenoFinal    = 25.5936
+    |  avgCompColab      = 110.0000  -> totalColab = 102.5936
+    |  avgCompSup        = 100.0000  -> totalSup   = 95.5936
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.5936*0.2 + 95.5936*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.3500    96.9936    +5.6436 <--
+    |  totalColab              96.9500   102.5936    +5.6436 <--
+    |  totalSup                89.9500    95.5936    +5.6436 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> JUAN MANUEL RODRIGUEZ SANCHEZ
+    - totalCalculo(BD=89.20 CALC=85.27 d=3.9260)
+    - totalColab(BD=89.33 CALC=85.37 d=3.9627)
+    - totalSup(BD=89.17 CALC=85.25 d=3.9194)
+
+    +- Desglose: JUAN MANUEL RODRIGUEZ SANCHEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 76.1133
+    |  desempenoFinal    = 22.8340
+    |  avgCompColab      = 89.3333  -> totalColab = 85.3673
+    |  avgCompSup        = 89.1667  -> totalSup   = 85.2506
+    |  totalCalculo = colab*0.2 + sup*0.8 = 85.3673*0.2 + 85.2506*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            89.2000    85.2740    -3.9260 <--
+    |  totalColab              89.3300    85.3673    -3.9627 <--
+    |  totalSup                89.1700    85.2506    -3.9194 <--
+    |  puntColab               89.3300    89.3333    +0.0033
+    |  puntSup                 89.1700    89.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> KIRSI LOPEZ DE PEREZ
+    - totalCalculo(BD=94.95 CALC=98.77 d=3.8249)
+    - totalColab(BD=97.75 CALC=101.57 d=3.8249)
+    - totalSup(BD=94.25 CALC=98.07 d=3.8249)
+
+    +- Desglose: KIRSI LOPEZ DE PEREZ
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 93.5832
+    |  desempenoFinal    = 28.0749
+    |  avgCompColab      = 105.0000  -> totalColab = 101.5749
+    |  avgCompSup        = 100.0000  -> totalSup   = 98.0749
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.5749*0.2 + 98.0749*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            94.9500    98.7749    +3.8249 <--
+    |  totalColab              97.7500   101.5749    +3.8249 <--
+    |  totalSup                94.2500    98.0749    +3.8249 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> JOSE FELIPE BERROA BERROA
+    - totalCalculo(BD=0.00 CALC=33.00 d=33.0000)
+    - totalColab(BD=0.00 CALC=33.00 d=33.0000)
+
+    +- Desglose: JOSE FELIPE BERROA BERROA
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 0.0000  -> totalColab = 33.0000
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo             0.0000    33.0000   +33.0000 <--
+    |  totalColab               0.0000    33.0000   +33.0000 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ELSIRA CAROLINA ABREU
+    - totalCalculo(BD=0.00 CALC=24.42 d=24.4213)
+    - totalColab(BD=0.00 CALC=24.42 d=24.4213)
+
+    +- Desglose: ELSIRA CAROLINA ABREU
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 81.4043
+    |  desempenoFinal    = 24.4213
+    |  avgCompColab      = 0.0000  -> totalColab = 24.4213
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo             0.0000    24.4213   +24.4213 <--
+    |  totalColab               0.0000    24.4213   +24.4213 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> DEISY ALTAGRACIA CURIEL SANCHEZ
+    - totalCalculo(BD=93.53 CALC=91.64 d=1.8862)
+    - totalColab(BD=96.33 CALC=93.60 d=2.7262)
+    - totalSup(BD=92.83 CALC=91.15 d=1.6762)
+
+    +- Desglose: DEISY ALTAGRACIA CURIEL SANCHEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.2349
+    |  desempenoFinal    = 26.1705
+    |  avgCompColab      = 96.3333  -> totalColab = 93.6038
+    |  avgCompSup        = 92.8333  -> totalSup   = 91.1538
+    |  totalCalculo = colab*0.2 + sup*0.8 = 93.6038*0.2 + 91.1538*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.5300    91.6438    -1.8862 <--
+    |  totalColab              96.3300    93.6038    -2.7262 <--
+    |  totalSup                92.8300    91.1538    -1.6762 <--
+    |  puntColab               96.3300    96.3333    +0.0033
+    |  puntSup                 92.8300    92.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> NOELIA PEGUERO DE LA ROSA
+    - totalCalculo(BD=84.00 CALC=83.86 d=0.1377)
+    - totalColab(BD=84.00 CALC=83.86 d=0.1377)
+    - totalSup(BD=84.00 CALC=83.86 d=0.1377)
+
+    +- Desglose: NOELIA PEGUERO DE LA ROSA
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.5408
+    |  desempenoFinal    = 25.0623
+    |  avgCompColab      = 84.0000  -> totalColab = 83.8623
+    |  avgCompSup        = 84.0000  -> totalSup   = 83.8623
+    |  totalCalculo = colab*0.2 + sup*0.8 = 83.8623*0.2 + 83.8623*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            84.0000    83.8623    -0.1377 <--
+    |  totalColab              84.0000    83.8623    -0.1377 <--
+    |  totalSup                84.0000    83.8623    -0.1377 <--
+    |  puntColab               84.0000    84.0000    +0.0000
+    |  puntSup                 84.0000    84.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ARIANNA CAROLINA APOLINARIO SANCHEZ
+    - totalCalculo(BD=83.92 CALC=77.85 d=6.0728)
+    - totalSup(BD=85.44 CALC=77.85 d=7.5928)
+
+    +- Desglose: ARIANNA CAROLINA APOLINARIO SANCHEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 59.6016
+    |  desempenoFinal    = 17.8805
+    |  avgCompColab      = 85.6667  -> totalColab = 77.8472
+    |  avgCompSup        = 85.6667  -> totalSup   = 77.8472
+    |  totalCalculo = colab*0.2 + sup*0.8 = 77.8472*0.2 + 77.8472*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            83.9200    77.8472    -6.0728 <--
+    |  totalColab              77.8500    77.8472    -0.0028
+    |  totalSup                85.4400    77.8472    -7.5928 <--
+    |  puntColab               85.6700    85.6667    -0.0033
+    |  puntSup                 85.6700    85.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> FELIX ECHAVARRIA RAMIREZ
+    - totalCalculo(BD=92.40 CALC=91.77 d=0.6324)
+    - totalColab(BD=92.22 CALC=91.58 d=0.6391)
+    - totalSup(BD=92.45 CALC=91.81 d=0.6358)
+
+    +- Desglose: FELIX ECHAVARRIA RAMIREZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 76.9919
+    |  desempenoFinal    = 23.0976
+    |  avgCompColab      = 97.8333  -> totalColab = 91.5809
+    |  avgCompSup        = 98.1667  -> totalSup   = 91.8142
+    |  totalCalculo = colab*0.2 + sup*0.8 = 91.5809*0.2 + 91.8142*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            92.4000    91.7676    -0.6324 <--
+    |  totalColab              92.2200    91.5809    -0.6391 <--
+    |  totalSup                92.4500    91.8142    -0.6358 <--
+    |  puntColab               97.8300    97.8333    +0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> STEPHANIE ARNO
+    - totalCalculo(BD=95.27 CALC=90.76 d=4.5099)
+    - totalColab(BD=91.00 CALC=87.77 d=3.2266)
+    - totalSup(BD=96.33 CALC=91.51 d=4.8232)
+
+    +- Desglose: STEPHANIE ARNO
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.2448
+    |  desempenoFinal    = 24.0734
+    |  avgCompColab      = 91.0000  -> totalColab = 87.7734
+    |  avgCompSup        = 96.3333  -> totalSup   = 91.5068
+    |  totalCalculo = colab*0.2 + sup*0.8 = 87.7734*0.2 + 91.5068*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            95.2700    90.7601    -4.5099 <--
+    |  totalColab              91.0000    87.7734    -3.2266 <--
+    |  totalSup                96.3300    91.5068    -4.8232 <--
+    |  puntColab               91.0000    91.0000    +0.0000
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> YISSEL RODRIGUEZ DE LEON
+    - totalCalculo(BD=0.00 CALC=33.00 d=33.0000)
+    - totalColab(BD=0.00 CALC=33.00 d=33.0000)
+
+    +- Desglose: YISSEL RODRIGUEZ DE LEON
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 0.0000  -> totalColab = 33.0000
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo             0.0000    33.0000   +33.0000 <--
+    |  totalColab               0.0000    33.0000   +33.0000 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> STEPHANIE CASTILLO SILVESTRE
+    - totalCalculo(BD=33.00 CALC=15.72 d=17.2789)
+    - totalColab(BD=33.00 CALC=15.72 d=17.2789)
+
+    +- Desglose: STEPHANIE CASTILLO SILVESTRE
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 52.4036
+    |  desempenoFinal    = 15.7211
+    |  avgCompColab      = 0.0000  -> totalColab = 15.7211
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            33.0000    15.7211   -17.2789 <--
+    |  totalColab              33.0000    15.7211   -17.2789 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> BRAULIO HENRIQUEZ
+    - totalCalculo(BD=98.53 CALC=101.97 d=3.4433)
+    - totalColab(BD=100.00 CALC=103.00 d=3.0000)
+    - totalSup(BD=98.17 CALC=101.72 d=3.5467)
+
+    +- Desglose: BRAULIO HENRIQUEZ
+    |  Estado: Enviado | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 100.0000  -> totalColab = 103.0000
+    |  avgCompSup        = 98.1667  -> totalSup   = 101.7167
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.0000*0.2 + 101.7167*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.5300   101.9733    +3.4433 <--
+    |  totalColab             100.0000   103.0000    +3.0000 <--
+    |  totalSup                98.1700   101.7167    +3.5467 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> WILKIN HERNANDEZ GUZMAN
+    - totalCalculo(BD=108.00 CALC=108.60 d=0.6000)
+    - totalColab(BD=106.67 CALC=107.67 d=0.9967)
+    - totalSup(BD=108.33 CALC=108.83 d=0.5033)
+
+    +- Desglose: WILKIN HERNANDEZ GUZMAN
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 106.6667  -> totalColab = 107.6667
+    |  avgCompSup        = 108.3333  -> totalSup   = 108.8333
+    |  totalCalculo = colab*0.2 + sup*0.8 = 107.6667*0.2 + 108.8333*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           108.0000   108.6000    +0.6000 <--
+    |  totalColab             106.6700   107.6667    +0.9967 <--
+    |  totalSup               108.3300   108.8333    +0.5033 <--
+    |  puntColab              106.6700   106.6667    -0.0033
+    |  puntSup                108.3300   108.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> ANDY ESPINOSA PEREZ
+    - totalCalculo(BD=0.00 CALC=14.03 d=14.0330)
+    - totalColab(BD=0.00 CALC=14.03 d=14.0330)
+
+    +- Desglose: ANDY ESPINOSA PEREZ
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 46.7767
+    |  desempenoFinal    = 14.0330
+    |  avgCompColab      = 0.0000  -> totalColab = 14.0330
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo             0.0000    14.0330   +14.0330 <--
+    |  totalColab               0.0000    14.0330   +14.0330 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> LEYDI ANA SANCHEZ
+    - totalCalculo(BD=91.85 CALC=82.09 d=9.7588)
+    - totalColab(BD=94.84 CALC=85.08 d=9.7621)
+    - totalSup(BD=91.11 CALC=81.34 d=9.7655)
+
+    +- Desglose: LEYDI ANA SANCHEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 63.4818
+    |  desempenoFinal    = 19.0445
+    |  avgCompColab      = 94.3333  -> totalColab = 85.0779
+    |  avgCompSup        = 89.0000  -> totalSup   = 81.3445
+    |  totalCalculo = colab*0.2 + sup*0.8 = 85.0779*0.2 + 81.3445*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.8500    82.0912    -9.7588 <--
+    |  totalColab              94.8400    85.0779    -9.7621 <--
+    |  totalSup                91.1100    81.3445    -9.7655 <--
+    |  puntColab               94.3300    94.3333    +0.0033
+    |  puntSup                 89.0000    89.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> SIXTO ARIAS ALMENGO
+    - totalCalculo(BD=90.87 CALC=79.68 d=11.1931)
+    - totalColab(BD=89.94 CALC=78.74 d=11.1964)
+    - totalSup(BD=91.11 CALC=79.91 d=11.1998)
+
+    +- Desglose: SIXTO ARIAS ALMENGO
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 58.7008
+    |  desempenoFinal    = 17.6102
+    |  avgCompColab      = 87.3333  -> totalColab = 78.7436
+    |  avgCompSup        = 89.0000  -> totalSup   = 79.9102
+    |  totalCalculo = colab*0.2 + sup*0.8 = 78.7436*0.2 + 79.9102*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            90.8700    79.6769   -11.1931 <--
+    |  totalColab              89.9400    78.7436   -11.1964 <--
+    |  totalSup                91.1100    79.9102   -11.1998 <--
+    |  puntColab               87.3300    87.3333    +0.0033
+    |  puntSup                 89.0000    89.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> OMAR SANCHEZ MEJIA
+    - totalCalculo(BD=97.25 CALC=103.47 d=6.2167)
+    - totalSup(BD=95.23 CALC=103.00 d=7.7700)
+    - puntColab(BD=206.67 CALC=103.33 d=103.3367)
+
+    +- Desglose: OMAR SANCHEZ MEJIA
+    |  Estado: EvaluadoPorSupervisor | Metas: 9 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 103.3333  -> totalColab = 105.3333
+    |  avgCompSup        = 100.0000  -> totalSup   = 103.0000
+    |  totalCalculo = colab*0.2 + sup*0.8 = 105.3333*0.2 + 103.0000*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.2500   103.4667    +6.2167 <--
+    |  totalColab             105.3300   105.3333    +0.0033
+    |  totalSup                95.2300   103.0000    +7.7700 <--
+    |  puntColab              206.6700   103.3333  -103.3367 <--
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> RICHARD LUCIANO MORA
+    - totalCalculo(BD=102.08 CALC=93.88 d=8.2020)
+    - totalColab(BD=106.00 CALC=97.80 d=8.2020)
+    - totalSup(BD=101.10 CALC=92.90 d=8.2020)
+
+    +- Desglose: RICHARD LUCIANO MORA
+    |  Estado: EvaluadoPorSupervisor | Metas: 9 | Competencias: 12
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 79.0490
+    |  desempenoFinal    = 23.7147
+    |  avgCompColab      = 105.8333  -> totalColab = 97.7980
+    |  avgCompSup        = 98.8333  -> totalSup   = 92.8980
+    |  totalCalculo = colab*0.2 + sup*0.8 = 97.7980*0.2 + 92.8980*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           102.0800    93.8780    -8.2020 <--
+    |  totalColab             106.0000    97.7980    -8.2020 <--
+    |  totalSup               101.1000    92.8980    -8.2020 <--
+    |  puntColab              105.8300   105.8333    +0.0033
+    |  puntSup                 98.8300    98.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> SUGELYS RODRIGUEZ BATISTA DE YORRO
+    - totalCalculo(BD=98.17 CALC=101.72 d=3.5467)
+    - totalColab(BD=90.83 CALC=96.58 d=5.7533)
+    - totalSup(BD=100.00 CALC=103.00 d=3.0000)
+
+    +- Desglose: SUGELYS RODRIGUEZ BATISTA DE YORRO
+    |  Estado: Enviado | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 90.8333  -> totalColab = 96.5833
+    |  avgCompSup        = 100.0000  -> totalSup   = 103.0000
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.5833*0.2 + 103.0000*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.1700   101.7167    +3.5467 <--
+    |  totalColab              90.8300    96.5833    +5.7533 <--
+    |  totalSup               100.0000   103.0000    +3.0000 <--
+    |  puntColab               90.8300    90.8333    +0.0033
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> VICTOR EMILIO SUERO NOVA
+    - totalCalculo(BD=0.00 CALC=33.00 d=33.0000)
+    - totalColab(BD=0.00 CALC=33.00 d=33.0000)
+
+    +- Desglose: VICTOR EMILIO SUERO NOVA
+    |  Estado: Pendiente | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 0.0000  -> totalColab = 33.0000
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo             0.0000    33.0000   +33.0000 <--
+    |  totalColab               0.0000    33.0000   +33.0000 <--
+    |  totalSup                 0.0000     0.0000    +0.0000
+    |  puntColab                0.0000     0.0000    +0.0000
+    |  puntSup                  0.0000     0.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> YOHANNY VALERIA AMPARO NUÑEZ
+    - totalCalculo(BD=97.87 CALC=96.58 d=1.2879)
+    - totalColab(BD=102.53 CALC=101.25 d=1.2813)
+    - totalSup(BD=96.70 CALC=95.42 d=1.2846)
+
+    +- Desglose: YOHANNY VALERIA AMPARO NUÑEZ
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 92.8846
+    |  desempenoFinal    = 27.8654
+    |  avgCompColab      = 104.8333  -> totalColab = 101.2487
+    |  avgCompSup        = 96.5000  -> totalSup   = 95.4154
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.2487*0.2 + 95.4154*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.8700    96.5821    -1.2879 <--
+    |  totalColab             102.5300   101.2487    -1.2813 <--
+    |  totalSup                96.7000    95.4154    -1.2846 <--
+    |  puntColab              104.8300   104.8333    +0.0033
+    |  puntSup                 96.5000    96.5000    +0.0000
+    +-------------------------------------------------------
+
+  >> MARTHA DISLA DE ESPEJO
+    - totalCalculo(BD=106.00 CALC=100.00 d=6.0016)
+    - totalColab(BD=110.00 CALC=102.80 d=7.2016)
+    - totalSup(BD=105.00 CALC=99.30 d=5.7016)
+
+    +- Desglose: MARTHA DISLA DE ESPEJO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.9945
+    |  desempenoFinal    = 25.7984
+    |  avgCompColab      = 110.0000  -> totalColab = 102.7984
+    |  avgCompSup        = 105.0000  -> totalSup   = 99.2984
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.7984*0.2 + 99.2984*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           106.0000    99.9984    -6.0016 <--
+    |  totalColab             110.0000   102.7984    -7.2016 <--
+    |  totalSup               105.0000    99.2984    -5.7016 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                105.0000   105.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> MARINO CESPEDES DE LOS SANTOS
+    - totalCalculo(BD=93.52 CALC=89.60 d=3.9203)
+
+    +- Desglose: MARINO CESPEDES DE LOS SANTOS
+    |  Estado: AutoEvaluado | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 74.8990
+    |  desempenoFinal    = 22.4697
+    |  avgCompColab      = 101.5000  -> totalColab = 93.5197
+    |  avgCompSup        = 94.5000  -> totalSup   = 88.6197
+    |  totalCalculo = colab*0.2 + sup*0.8 = 93.5197*0.2 + 88.6197*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.5200    89.5997    -3.9203 <--
+    |  totalColab              93.5200    93.5197    -0.0003
+    |  totalSup                88.6200    88.6197    -0.0003
+    |  puntColab              101.5000   101.5000    +0.0000
+    |  puntSup                 94.5000    94.5000    +0.0000
+    +-------------------------------------------------------
+
+  >> RUDY ALBERTO NOLASCO LAUREANO
+    - totalCalculo(BD=91.20 CALC=96.84 d=5.6400)
+    - totalColab(BD=100.00 CALC=103.00 d=3.0000)
+    - totalSup(BD=89.00 CALC=95.30 d=6.3000)
+
+    +- Desglose: RUDY ALBERTO NOLASCO LAUREANO
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 100.0000  -> totalColab = 103.0000
+    |  avgCompSup        = 89.0000  -> totalSup   = 95.3000
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.0000*0.2 + 95.3000*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.2000    96.8400    +5.6400 <--
+    |  totalColab             100.0000   103.0000    +3.0000 <--
+    |  totalSup                89.0000    95.3000    +6.3000 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                 89.0000    89.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ANGELA RIVERA REYES
+    - totalCalculo(BD=84.58 CALC=86.86 d=2.2783)
+    - totalColab(BD=86.54 CALC=88.82 d=2.2783)
+    - totalSup(BD=84.09 CALC=86.37 d=2.2783)
+
+    +- Desglose: ANGELA RIVERA REYES
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.2276
+    |  desempenoFinal    = 24.0683
+    |  avgCompColab      = 92.5000  -> totalColab = 88.8183
+    |  avgCompSup        = 89.0000  -> totalSup   = 86.3683
+    |  totalCalculo = colab*0.2 + sup*0.8 = 88.8183*0.2 + 86.3683*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            84.5800    86.8583    +2.2783 <--
+    |  totalColab              86.5400    88.8183    +2.2783 <--
+    |  totalSup                84.0900    86.3683    +2.2783 <--
+    |  puntColab               92.5000    92.5000    +0.0000
+    |  puntSup                 89.0000    89.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> IRIS LORA MOREL
+    - totalCalculo(BD=99.03 CALC=95.12 d=3.9083)
+    - totalColab(BD=103.17 CALC=98.02 d=5.1550)
+    - totalSup(BD=98.00 CALC=94.40 d=3.6016)
+
+    +- Desglose: IRIS LORA MOREL
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.9945
+    |  desempenoFinal    = 25.7984
+    |  avgCompColab      = 103.1667  -> totalColab = 98.0150
+    |  avgCompSup        = 98.0000  -> totalSup   = 94.3984
+    |  totalCalculo = colab*0.2 + sup*0.8 = 98.0150*0.2 + 94.3984*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            99.0300    95.1217    -3.9083 <--
+    |  totalColab             103.1700    98.0150    -5.1550 <--
+    |  totalSup                98.0000    94.3984    -3.6016 <--
+    |  puntColab              103.1700   103.1667    -0.0033
+    |  puntSup                 98.0000    98.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> RAQUEL NOEMI NUÑEZ BAUTISTA
+    - totalCalculo(BD=98.74 CALC=96.10 d=2.6358)
+    - totalColab(BD=104.34 CALC=101.70 d=2.6358)
+    - totalSup(BD=97.34 CALC=94.70 d=2.6358)
+
+    +- Desglose: RAQUEL NOEMI NUÑEZ BAUTISTA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.3474
+    |  desempenoFinal    = 24.7042
+    |  avgCompColab      = 110.0000  -> totalColab = 101.7042
+    |  avgCompSup        = 100.0000  -> totalSup   = 94.7042
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.7042*0.2 + 94.7042*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.7400    96.1042    -2.6358 <--
+    |  totalColab             104.3400   101.7042    -2.6358 <--
+    |  totalSup                97.3400    94.7042    -2.6358 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> CARILYN BETHEL PAULINO DE ALCANTARA
+    - totalCalculo(BD=89.69 CALC=82.88 d=6.8137)
+    - totalSup(BD=82.33 CALC=81.17 d=1.1570)
+
+    +- Desglose: CARILYN BETHEL PAULINO DE ALCANTARA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 78.4654
+    |  desempenoFinal    = 23.5396
+    |  avgCompColab      = 94.5000  -> totalColab = 89.6896
+    |  avgCompSup        = 82.3333  -> totalSup   = 81.1730
+    |  totalCalculo = colab*0.2 + sup*0.8 = 89.6896*0.2 + 81.1730*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            89.6900    82.8763    -6.8137 <--
+    |  totalColab              89.6900    89.6896    -0.0004
+    |  totalSup                82.3300    81.1730    -1.1570 <--
+    |  puntColab               94.5000    94.5000    +0.0000
+    |  puntSup                 82.3300    82.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> ISMAEL MARTINEZ DE LA ROSA
+    - totalCalculo(BD=101.87 CALC=104.31 d=2.4367)
+    - totalSup(BD=99.83 CALC=102.88 d=3.0533)
+
+    +- Desglose: ISMAEL MARTINEZ DE LA ROSA
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 110.0000  -> totalColab = 110.0000
+    |  avgCompSup        = 99.8333  -> totalSup   = 102.8833
+    |  totalCalculo = colab*0.2 + sup*0.8 = 110.0000*0.2 + 102.8833*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           101.8700   104.3067    +2.4367 <--
+    |  totalColab             110.0000   110.0000    +0.0000
+    |  totalSup                99.8300   102.8833    +3.0533 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 99.8300    99.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> MARTHA LISSETT PUELLO ESPINAL
+    - totalCalculo(BD=96.78 CALC=94.14 d=2.6358)
+    - totalColab(BD=99.67 CALC=97.04 d=2.6324)
+    - totalSup(BD=96.06 CALC=93.42 d=2.6391)
+
+    +- Desglose: MARTHA LISSETT PUELLO ESPINAL
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.3474
+    |  desempenoFinal    = 24.7042
+    |  avgCompColab      = 103.3333  -> totalColab = 97.0376
+    |  avgCompSup        = 98.1667  -> totalSup   = 93.4209
+    |  totalCalculo = colab*0.2 + sup*0.8 = 97.0376*0.2 + 93.4209*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            96.7800    94.1442    -2.6358 <--
+    |  totalColab              99.6700    97.0376    -2.6324 <--
+    |  totalSup                96.0600    93.4209    -2.6391 <--
+    |  puntColab              103.3300   103.3333    +0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> INMACULADA DEL CARMEN DOMINGUEZ MARTINEZ
+    - totalCalculo(BD=97.46 CALC=96.15 d=1.3108)
+    - totalColab(BD=103.34 CALC=102.03 d=1.3108)
+    - totalSup(BD=95.99 CALC=94.68 d=1.3108)
+
+    +- Desglose: INMACULADA DEL CARMEN DOMINGUEZ MARTINEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.3196
+    |  desempenoFinal    = 26.1959
+    |  avgCompColab      = 108.3333  -> totalColab = 102.0292
+    |  avgCompSup        = 97.8333  -> totalSup   = 94.6792
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.0292*0.2 + 94.6792*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.4600    96.1492    -1.3108 <--
+    |  totalColab             103.3400   102.0292    -1.3108 <--
+    |  totalSup                95.9900    94.6792    -1.3108 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                 97.8300    97.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> VICTOR MANUEL ZABALA GUERRERO
+    - totalCalculo(BD=93.80 CALC=98.66 d=4.8600)
+    - totalColab(BD=91.00 CALC=96.70 d=5.7000)
+    - totalSup(BD=94.50 CALC=99.15 d=4.6500)
+
+    +- Desglose: VICTOR MANUEL ZABALA GUERRERO
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 110.0000
+    |  desempenoFinal    = 33.0000
+    |  avgCompColab      = 91.0000  -> totalColab = 96.7000
+    |  avgCompSup        = 94.5000  -> totalSup   = 99.1500
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.7000*0.2 + 99.1500*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.8000    98.6600    +4.8600 <--
+    |  totalColab              91.0000    96.7000    +5.7000 <--
+    |  totalSup                94.5000    99.1500    +4.6500 <--
+    |  puntColab               91.0000    91.0000    +0.0000
+    |  puntSup                 94.5000    94.5000    +0.0000
+    +-------------------------------------------------------
+
+  >> YRMA FAMILIA DE OLEO
+    - totalCalculo(BD=97.59 CALC=101.41 d=3.8198)
+    - totalColab(BD=101.32 CALC=105.14 d=3.8231)
+    - totalSup(BD=96.66 CALC=100.48 d=3.8165)
+
+    +- Desglose: YRMA FAMILIA DE OLEO
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 93.8104
+    |  desempenoFinal    = 28.1431
+    |  avgCompColab      = 110.0000  -> totalColab = 105.1431
+    |  avgCompSup        = 103.3333  -> totalSup   = 100.4765
+    |  totalCalculo = colab*0.2 + sup*0.8 = 105.1431*0.2 + 100.4765*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.5900   101.4098    +3.8198 <--
+    |  totalColab             101.3200   105.1431    +3.8231 <--
+    |  totalSup                96.6600   100.4765    +3.8165 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                103.3300   103.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> KAREN MASSIEL GARCIA MARTINEZ
+    - totalCalculo(BD=99.15 CALC=102.97 d=3.8249)
+    - totalColab(BD=100.09 CALC=103.91 d=3.8183)
+    - totalSup(BD=98.92 CALC=102.74 d=3.8216)
+
+    +- Desglose: KAREN MASSIEL GARCIA MARTINEZ
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 93.5832
+    |  desempenoFinal    = 28.0749
+    |  avgCompColab      = 108.3333  -> totalColab = 103.9083
+    |  avgCompSup        = 106.6667  -> totalSup   = 102.7416
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.9083*0.2 + 102.7416*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            99.1500   102.9749    +3.8249 <--
+    |  totalColab             100.0900   103.9083    +3.8183 <--
+    |  totalSup                98.9200   102.7416    +3.8216 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> ANDREINA NOLASCO ASTACIO
+    - totalCalculo(BD=82.48 CALC=87.64 d=5.1591)
+    - totalColab(BD=91.34 CALC=96.51 d=5.1658)
+    - totalSup(BD=80.26 CALC=85.42 d=5.1625)
+
+    +- Desglose: ANDREINA NOLASCO ASTACIO
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 84.8527
+    |  desempenoFinal    = 25.4558
+    |  avgCompColab      = 101.5000  -> totalColab = 96.5058
+    |  avgCompSup        = 85.6667  -> totalSup   = 85.4225
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.5058*0.2 + 85.4225*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            82.4800    87.6391    +5.1591 <--
+    |  totalColab              91.3400    96.5058    +5.1658 <--
+    |  totalSup                80.2600    85.4225    +5.1625 <--
+    |  puntColab              101.5000   101.5000    +0.0000
+    |  puntSup                 85.6700    85.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> SANDRA RAMON
+    - totalCalculo(BD=93.68 CALC=99.33 d=5.6469)
+    - totalColab(BD=94.61 CALC=100.26 d=5.6502)
+    - totalSup(BD=93.45 CALC=99.09 d=5.6436)
+
+    +- Desglose: SANDRA RAMON
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.3119
+    |  desempenoFinal    = 25.5936
+    |  avgCompColab      = 106.6667  -> totalColab = 100.2602
+    |  avgCompSup        = 105.0000  -> totalSup   = 99.0936
+    |  totalCalculo = colab*0.2 + sup*0.8 = 100.2602*0.2 + 99.0936*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.6800    99.3269    +5.6469 <--
+    |  totalColab              94.6100   100.2602    +5.6502 <--
+    |  totalSup                93.4500    99.0936    +5.6436 <--
+    |  puntColab              106.6700   106.6667    -0.0033
+    |  puntSup                105.0000   105.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> BETZAIDA HIDALGO RODRIGUEZ
+    - totalCalculo(BD=101.49 CALC=101.93 d=0.4437)
+    - totalColab(BD=102.43 CALC=102.87 d=0.4370)
+    - totalSup(BD=101.26 CALC=101.70 d=0.4403)
+
+    +- Desglose: BETZAIDA HIDALGO RODRIGUEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.2234
+    |  desempenoFinal    = 25.8670
+    |  avgCompColab      = 110.0000  -> totalColab = 102.8670
+    |  avgCompSup        = 108.3333  -> totalSup   = 101.7003
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.8670*0.2 + 101.7003*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           101.4900   101.9337    +0.4437 <--
+    |  totalColab             102.4300   102.8670    +0.4370 <--
+    |  totalSup               101.2600   101.7003    +0.4403 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                108.3300   108.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> DELFINA MARRERO
+    - totalCalculo(BD=96.35 CALC=95.44 d=0.9141)
+    - totalColab(BD=104.00 CALC=103.09 d=0.9108)
+    - totalSup(BD=94.43 CALC=93.52 d=0.9075)
+
+    +- Desglose: DELFINA MARRERO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.9639
+    |  desempenoFinal    = 26.0892
+    |  avgCompColab      = 110.0000  -> totalColab = 103.0892
+    |  avgCompSup        = 96.3333  -> totalSup   = 93.5225
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.0892*0.2 + 93.5225*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            96.3500    95.4359    -0.9141 <--
+    |  totalColab             104.0000   103.0892    -0.9108 <--
+    |  totalSup                94.4300    93.5225    -0.9075 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> YOHANNA ADELAIDA SANTANA JIMENEZ
+    - totalCalculo(BD=89.15 CALC=94.31 d=5.1625)
+    - totalColab(BD=90.18 CALC=95.34 d=5.1591)
+    - totalSup(BD=88.89 CALC=94.06 d=5.1658)
+
+    +- Desglose: YOHANNA ADELAIDA SANTANA JIMENEZ
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 84.8527
+    |  desempenoFinal    = 25.4558
+    |  avgCompColab      = 99.8333  -> totalColab = 95.3391
+    |  avgCompSup        = 98.0000  -> totalSup   = 94.0558
+    |  totalCalculo = colab*0.2 + sup*0.8 = 95.3391*0.2 + 94.0558*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            89.1500    94.3125    +5.1625 <--
+    |  totalColab              90.1800    95.3391    +5.1591 <--
+    |  totalSup                88.8900    94.0558    +5.1658 <--
+    |  puntColab               99.8300    99.8333    +0.0033
+    |  puntSup                 98.0000    98.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> SURELYS ESTHEFANIN RAMIREZ SANCHEZ
+    - totalCalculo(BD=107.03 CALC=105.33 d=1.7020)
+    - totalColab(BD=108.89 CALC=107.19 d=1.6953)
+    - totalSup(BD=106.56 CALC=104.86 d=1.6987)
+
+    +- Desglose: SURELYS ESTHEFANIN RAMIREZ SANCHEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 100.6489
+    |  desempenoFinal    = 30.1947
+    |  avgCompColab      = 110.0000  -> totalColab = 107.1947
+    |  avgCompSup        = 106.6667  -> totalSup   = 104.8613
+    |  totalCalculo = colab*0.2 + sup*0.8 = 107.1947*0.2 + 104.8613*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           107.0300   105.3280    -1.7020 <--
+    |  totalColab             108.8900   107.1947    -1.6953 <--
+    |  totalSup               106.5600   104.8613    -1.6987 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> KENNY SHAMIR BELTRE DE LA CRUZ
+    - totalCalculo(BD=97.60 CALC=95.82 d=1.7763)
+    - totalColab(BD=110.00 CALC=104.50 d=5.4963)
+    - totalSup(BD=94.50 CALC=93.65 d=0.8463)
+
+    +- Desglose: KENNY SHAMIR BELTRE DE LA CRUZ
+    |  Estado: Enviado | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 91.6790
+    |  desempenoFinal    = 27.5037
+    |  avgCompColab      = 110.0000  -> totalColab = 104.5037
+    |  avgCompSup        = 94.5000  -> totalSup   = 93.6537
+    |  totalCalculo = colab*0.2 + sup*0.8 = 104.5037*0.2 + 93.6537*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.6000    95.8237    -1.7763 <--
+    |  totalColab             110.0000   104.5037    -5.4963 <--
+    |  totalSup                94.5000    93.6537    -0.8463 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 94.5000    94.5000    +0.0000
+    +-------------------------------------------------------
+
+  >> MASSIEL PUENTE ACOSTA
+    - totalCalculo(BD=84.19 CALC=94.05 d=9.8636)
+    - totalColab(BD=91.94 CALC=101.80 d=9.8602)
+    - totalSup(BD=82.26 CALC=92.12 d=9.8569)
+
+    +- Desglose: MASSIEL PUENTE ACOSTA
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.6674
+    |  desempenoFinal    = 24.8002
+    |  avgCompColab      = 110.0000  -> totalColab = 101.8002
+    |  avgCompSup        = 96.1667  -> totalSup   = 92.1169
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.8002*0.2 + 92.1169*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            84.1900    94.0536    +9.8636 <--
+    |  totalColab              91.9400   101.8002    +9.8602 <--
+    |  totalSup                82.2600    92.1169    +9.8569 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 96.1700    96.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> ALICIA VALERA OLMOS
+    - totalCalculo(BD=84.61 CALC=86.88 d=2.2716)
+    - totalColab(BD=86.66 CALC=88.93 d=2.2749)
+    - totalSup(BD=84.09 CALC=86.37 d=2.2783)
+
+    +- Desglose: ALICIA VALERA OLMOS
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.2276
+    |  desempenoFinal    = 24.0683
+    |  avgCompColab      = 92.6667  -> totalColab = 88.9349
+    |  avgCompSup        = 89.0000  -> totalSup   = 86.3683
+    |  totalCalculo = colab*0.2 + sup*0.8 = 88.9349*0.2 + 86.3683*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            84.6100    86.8816    +2.2716 <--
+    |  totalColab              86.6600    88.9349    +2.2749 <--
+    |  totalSup                84.0900    86.3683    +2.2783 <--
+    |  puntColab               92.6700    92.6667    -0.0033
+    |  puntSup                 89.0000    89.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ESTHER VALLEJO HEREDIA
+    - totalCalculo(BD=97.61 CALC=96.33 d=1.2846)
+    - totalColab(BD=96.58 CALC=95.30 d=1.2813)
+    - totalSup(BD=97.87 CALC=96.58 d=1.2879)
+
+    +- Desglose: ESTHER VALLEJO HEREDIA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 92.8846
+    |  desempenoFinal    = 27.8654
+    |  avgCompColab      = 96.3333  -> totalColab = 95.2987
+    |  avgCompSup        = 98.1667  -> totalSup   = 96.5821
+    |  totalCalculo = colab*0.2 + sup*0.8 = 95.2987*0.2 + 96.5821*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            97.6100    96.3254    -1.2846 <--
+    |  totalColab              96.5800    95.2987    -1.2813 <--
+    |  totalSup                97.8700    96.5821    -1.2879 <--
+    |  puntColab               96.3300    96.3333    +0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> REBECA ELIZABETH CUETO ECHAVARRIA
+    - totalCalculo(BD=91.17 CALC=98.36 d=7.1930)
+    - totalColab(BD=91.17 CALC=98.36 d=7.1930)
+    - totalSup(BD=91.17 CALC=98.36 d=7.1930)
+
+    +- Desglose: REBECA ELIZABETH CUETO ECHAVARRIA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 78.9877
+    |  desempenoFinal    = 23.6963
+    |  avgCompColab      = 106.6667  -> totalColab = 98.3630
+    |  avgCompSup        = 106.6667  -> totalSup   = 98.3630
+    |  totalCalculo = colab*0.2 + sup*0.8 = 98.3630*0.2 + 98.3630*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.1700    98.3630    +7.1930 <--
+    |  totalColab              91.1700    98.3630    +7.1930 <--
+    |  totalSup                91.1700    98.3630    +7.1930 <--
+    |  puntColab              106.6700   106.6667    -0.0033
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> SELENY ISABEL ANTIGUA DE MEJIA
+    - totalCalculo(BD=99.70 CALC=98.31 d=1.3933)
+    - totalColab(BD=98.76 CALC=97.37 d=1.3866)
+    - totalSup(BD=99.93 CALC=98.54 d=1.3899)
+
+    +- Desglose: SELENY ISABEL ANTIGUA DE MEJIA
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.4669
+    |  desempenoFinal    = 25.0401
+    |  avgCompColab      = 103.3333  -> totalColab = 97.3734
+    |  avgCompSup        = 105.0000  -> totalSup   = 98.5401
+    |  totalCalculo = colab*0.2 + sup*0.8 = 97.3734*0.2 + 98.5401*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            99.7000    98.3067    -1.3933 <--
+    |  totalColab              98.7600    97.3734    -1.3866 <--
+    |  totalSup                99.9300    98.5401    -1.3899 <--
+    |  puntColab              103.3300   103.3333    +0.0033
+    |  puntSup                105.0000   105.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> CARLINA ASENCIO ESPIRITUSANTO
+    - totalCalculo(BD=91.37 CALC=94.23 d=2.8624)
+    - totalColab(BD=98.27 CALC=101.14 d=2.8691)
+    - totalSup(BD=89.64 CALC=92.51 d=2.8657)
+
+    +- Desglose: CARLINA ASENCIO ESPIRITUSANTO
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 92.1303
+    |  desempenoFinal    = 27.6391
+    |  avgCompColab      = 105.0000  -> totalColab = 101.1391
+    |  avgCompSup        = 92.6667  -> totalSup   = 92.5057
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.1391*0.2 + 92.5057*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.3700    94.2324    +2.8624 <--
+    |  totalColab              98.2700   101.1391    +2.8691 <--
+    |  totalSup                89.6400    92.5057    +2.8657 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                 92.6700    92.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> AMBAR LORA ROMERO
+    - totalCalculo(BD=94.38 CALC=100.03 d=5.6469)
+    - totalColab(BD=93.45 CALC=99.09 d=5.6436)
+    - totalSup(BD=94.61 CALC=100.26 d=5.6502)
+
+    +- Desglose: AMBAR LORA ROMERO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.3119
+    |  desempenoFinal    = 25.5936
+    |  avgCompColab      = 105.0000  -> totalColab = 99.0936
+    |  avgCompSup        = 106.6667  -> totalSup   = 100.2602
+    |  totalCalculo = colab*0.2 + sup*0.8 = 99.0936*0.2 + 100.2602*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            94.3800   100.0269    +5.6469 <--
+    |  totalColab              93.4500    99.0936    +5.6436 <--
+    |  totalSup                94.6100   100.2602    +5.6502 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> HERIANNY MASSIEL MERCEDES CALCAÑO
+    - totalCalculo(BD=86.57 CALC=89.60 d=3.0316)
+    - totalColab(BD=84.61 CALC=87.64 d=3.0316)
+    - totalSup(BD=87.06 CALC=90.09 d=3.0316)
+
+    +- Desglose: HERIANNY MASSIEL MERCEDES CALCAÑO
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.1942
+    |  desempenoFinal    = 24.0583
+    |  avgCompColab      = 90.8333  -> totalColab = 87.6416
+    |  avgCompSup        = 94.3333  -> totalSup   = 90.0916
+    |  totalCalculo = colab*0.2 + sup*0.8 = 87.6416*0.2 + 90.0916*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            86.5700    89.6016    +3.0316 <--
+    |  totalColab              84.6100    87.6416    +3.0316 <--
+    |  totalSup                87.0600    90.0916    +3.0316 <--
+    |  puntColab               90.8300    90.8333    +0.0033
+    |  puntSup                 94.3300    94.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> EMELY SOSA PERALTA
+    - totalCalculo(BD=94.87 CALC=91.16 d=3.7137)
+    - totalColab(BD=96.33 CALC=92.18 d=4.1470)
+    - totalSup(BD=94.50 CALC=90.90 d=3.6003)
+
+    +- Desglose: EMELY SOSA PERALTA
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.4989
+    |  desempenoFinal    = 24.7497
+    |  avgCompColab      = 96.3333  -> totalColab = 92.1830
+    |  avgCompSup        = 94.5000  -> totalSup   = 90.8997
+    |  totalCalculo = colab*0.2 + sup*0.8 = 92.1830*0.2 + 90.8997*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            94.8700    91.1563    -3.7137 <--
+    |  totalColab              96.3300    92.1830    -4.1470 <--
+    |  totalSup                94.5000    90.8997    -3.6003 <--
+    |  puntColab               96.3300    96.3333    +0.0033
+    |  puntSup                 94.5000    94.5000    +0.0000
+    +-------------------------------------------------------
+
+  >> LARAINE RAMIREZ
+    - totalCalculo(BD=101.14 CALC=100.13 d=1.0081)
+    - totalColab(BD=106.83 CALC=105.83 d=1.0047)
+    - totalSup(BD=99.71 CALC=98.71 d=1.0014)
+
+    +- Desglose: LARAINE RAMIREZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 99.9732
+    |  desempenoFinal    = 29.9919
+    |  avgCompColab      = 108.3333  -> totalColab = 105.8253
+    |  avgCompSup        = 98.1667  -> totalSup   = 98.7086
+    |  totalCalculo = colab*0.2 + sup*0.8 = 105.8253*0.2 + 98.7086*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           101.1400   100.1319    -1.0081 <--
+    |  totalColab             106.8300   105.8253    -1.0047 <--
+    |  totalSup                99.7100    98.7086    -1.0014 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> ALBA IRIS DE JESUS ALMANZAR RODRIGUEZ
+    - totalCalculo(BD=98.80 CALC=97.77 d=1.0337)
+    - totalColab(BD=104.40 CALC=103.37 d=1.0337)
+    - totalSup(BD=97.40 CALC=96.37 d=1.0337)
+
+    +- Desglose: ALBA IRIS DE JESUS ALMANZAR RODRIGUEZ
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.8877
+    |  desempenoFinal    = 26.3663
+    |  avgCompColab      = 110.0000  -> totalColab = 103.3663
+    |  avgCompSup        = 100.0000  -> totalSup   = 96.3663
+    |  totalCalculo = colab*0.2 + sup*0.8 = 103.3663*0.2 + 96.3663*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.8000    97.7663    -1.0337 <--
+    |  totalColab             104.4000   103.3663    -1.0337 <--
+    |  totalSup                97.4000    96.3663    -1.0337 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> YAZMIN MONTERO VASQUEZ
+    - totalCalculo(BD=100.56 CALC=101.00 d=0.4403)
+    - totalColab(BD=102.43 CALC=102.87 d=0.4370)
+    - totalSup(BD=100.09 CALC=100.53 d=0.4437)
+
+    +- Desglose: YAZMIN MONTERO VASQUEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.2234
+    |  desempenoFinal    = 25.8670
+    |  avgCompColab      = 110.0000  -> totalColab = 102.8670
+    |  avgCompSup        = 106.6667  -> totalSup   = 100.5337
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.8670*0.2 + 100.5337*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           100.5600   101.0003    +0.4403 <--
+    |  totalColab             102.4300   102.8670    +0.4370 <--
+    |  totalSup               100.0900   100.5337    +0.4437 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> WILKIN TEJADA MEJIA
+    - totalCalculo(BD=80.45 CALC=85.07 d=4.6209)
+    - totalColab(BD=80.45 CALC=85.07 d=4.6209)
+    - totalSup(BD=80.45 CALC=85.07 d=4.6209)
+
+    +- Desglose: WILKIN TEJADA MEJIA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.6808
+    |  desempenoFinal    = 25.1043
+    |  avgCompColab      = 85.6667  -> totalColab = 85.0709
+    |  avgCompSup        = 85.6667  -> totalSup   = 85.0709
+    |  totalCalculo = colab*0.2 + sup*0.8 = 85.0709*0.2 + 85.0709*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            80.4500    85.0709    +4.6209 <--
+    |  totalColab              80.4500    85.0709    +4.6209 <--
+    |  totalSup                80.4500    85.0709    +4.6209 <--
+    |  puntColab               85.6700    85.6667    -0.0033
+    |  puntSup                 85.6700    85.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> ROSSANNA BAEZ FELIX
+    - totalCalculo(BD=96.55 CALC=95.88 d=0.6715)
+    - totalColab(BD=102.33 CALC=101.67 d=0.6648)
+    - totalSup(BD=95.10 CALC=94.43 d=0.6681)
+
+    +- Desglose: ROSSANNA BAEZ FELIX
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.1062
+    |  desempenoFinal    = 25.8319
+    |  avgCompColab      = 108.3333  -> totalColab = 101.6652
+    |  avgCompSup        = 98.0000  -> totalSup   = 94.4319
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.6652*0.2 + 94.4319*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            96.5500    95.8785    -0.6715 <--
+    |  totalColab             102.3300   101.6652    -0.6648 <--
+    |  totalSup                95.1000    94.4319    -0.6681 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                 98.0000    98.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ELADIA MARIA TAVERAS MARTINEZ
+    - totalCalculo(BD=89.22 CALC=88.99 d=0.2270)
+    - totalColab(BD=92.11 CALC=91.89 d=0.2237)
+    - totalSup(BD=88.50 CALC=88.27 d=0.2304)
+
+    +- Desglose: ELADIA MARIA TAVERAS MARTINEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.7877
+    |  desempenoFinal    = 25.7363
+    |  avgCompColab      = 94.5000  -> totalColab = 91.8863
+    |  avgCompSup        = 89.3333  -> totalSup   = 88.2696
+    |  totalCalculo = colab*0.2 + sup*0.8 = 91.8863*0.2 + 88.2696*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            89.2200    88.9930    -0.2270 <--
+    |  totalColab              92.1100    91.8863    -0.2237 <--
+    |  totalSup                88.5000    88.2696    -0.2304 <--
+    |  puntColab               94.5000    94.5000    +0.0000
+    |  puntSup                 89.3300    89.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> MARIANNY ALCANTARA DE LOS SANTOS
+    - totalCalculo(BD=102.00 CALC=101.05 d=0.9527)
+    - totalColab(BD=110.00 CALC=106.65 d=3.3527)
+    - totalSup(BD=100.00 CALC=99.65 d=0.3527)
+
+    +- Desglose: MARIANNY ALCANTARA DE LOS SANTOS
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 98.8244
+    |  desempenoFinal    = 29.6473
+    |  avgCompColab      = 110.0000  -> totalColab = 106.6473
+    |  avgCompSup        = 100.0000  -> totalSup   = 99.6473
+    |  totalCalculo = colab*0.2 + sup*0.8 = 106.6473*0.2 + 99.6473*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo           102.0000   101.0473    -0.9527 <--
+    |  totalColab             110.0000   106.6473    -3.3527 <--
+    |  totalSup               100.0000    99.6473    -0.3527 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> DEYANIRA MARTES FELICIANO
+    - totalCalculo(BD=74.67 CALC=96.38 d=21.7135)
+    - totalColab(BD=74.67 CALC=96.38 d=21.7135)
+    - totalSup(BD=74.67 CALC=96.38 d=21.7135)
+
+    +- Desglose: DEYANIRA MARTES FELICIANO
+    |  Estado: EvaluadoPorSupervisor | Metas: 7 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 72.3895
+    |  desempenoFinal    = 21.7168
+    |  avgCompColab      = 106.6667  -> totalColab = 96.3835
+    |  avgCompSup        = 106.6667  -> totalSup   = 96.3835
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.3835*0.2 + 96.3835*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            74.6700    96.3835   +21.7135 <--
+    |  totalColab              74.6700    96.3835   +21.7135 <--
+    |  totalSup                74.6700    96.3835   +21.7135 <--
+    |  puntColab              106.6700   106.6667    -0.0033
+    |  puntSup                106.6700   106.6667    -0.0033
+    +-------------------------------------------------------
+
+  >> ESTEFANIE VASQUEZ PAYANO
+    - totalCalculo(BD=85.64 CALC=88.67 d=3.0283)
+    - totalColab(BD=89.74 CALC=92.77 d=3.0349)
+    - totalSup(BD=84.61 CALC=87.64 d=3.0316)
+
+    +- Desglose: ESTEFANIE VASQUEZ PAYANO
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 80.1942
+    |  desempenoFinal    = 24.0583
+    |  avgCompColab      = 98.1667  -> totalColab = 92.7749
+    |  avgCompSup        = 90.8333  -> totalSup   = 87.6416
+    |  totalCalculo = colab*0.2 + sup*0.8 = 92.7749*0.2 + 87.6416*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            85.6400    88.6683    +3.0283 <--
+    |  totalColab              89.7400    92.7749    +3.0349 <--
+    |  totalSup                84.6100    87.6416    +3.0316 <--
+    |  puntColab               98.1700    98.1667    -0.0033
+    |  puntSup                 90.8300    90.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> ESTHER MANCEBO OVIEDO
+    - totalCalculo(BD=91.11 CALC=92.46 d=1.3531)
+    - totalColab(BD=95.12 CALC=96.48 d=1.3564)
+    - totalSup(BD=90.11 CALC=91.46 d=1.3498)
+
+    +- Desglose: ESTHER MANCEBO OVIEDO
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 88.2548
+    |  desempenoFinal    = 26.4764
+    |  avgCompColab      = 100.0000  -> totalColab = 96.4764
+    |  avgCompSup        = 92.8333  -> totalSup   = 91.4598
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.4764*0.2 + 91.4598*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            91.1100    92.4631    +1.3531 <--
+    |  totalColab              95.1200    96.4764    +1.3564 <--
+    |  totalSup                90.1100    91.4598    +1.3498 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                 92.8300    92.8333    +0.0033
+    +-------------------------------------------------------
+
+  >> ELIZABETH ULERIO DIAZ
+    - totalCalculo(BD=93.08 CALC=91.80 d=1.2813)
+    - totalColab(BD=94.02 CALC=92.73 d=1.2879)
+    - totalSup(BD=92.85 CALC=91.57 d=1.2846)
+
+    +- Desglose: ELIZABETH ULERIO DIAZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 92.8846
+    |  desempenoFinal    = 27.8654
+    |  avgCompColab      = 92.6667  -> totalColab = 92.7321
+    |  avgCompSup        = 91.0000  -> totalSup   = 91.5654
+    |  totalCalculo = colab*0.2 + sup*0.8 = 92.7321*0.2 + 91.5654*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.0800    91.7987    -1.2813 <--
+    |  totalColab              94.0200    92.7321    -1.2879 <--
+    |  totalSup                92.8500    91.5654    -1.2846 <--
+    |  puntColab               92.6700    92.6667    -0.0033
+    |  puntSup                 91.0000    91.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ALTAGRACIA GISELLE ESTEVEZ GONZALEZ
+    - totalCalculo(BD=95.31 CALC=100.96 d=5.6502)
+    - totalColab(BD=93.45 CALC=99.09 d=5.6436)
+    - totalSup(BD=95.78 CALC=101.43 d=5.6469)
+
+    +- Desglose: ALTAGRACIA GISELLE ESTEVEZ GONZALEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.3119
+    |  desempenoFinal    = 25.5936
+    |  avgCompColab      = 105.0000  -> totalColab = 99.0936
+    |  avgCompSup        = 108.3333  -> totalSup   = 101.4269
+    |  totalCalculo = colab*0.2 + sup*0.8 = 99.0936*0.2 + 101.4269*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            95.3100   100.9602    +5.6502 <--
+    |  totalColab              93.4500    99.0936    +5.6436 <--
+    |  totalSup                95.7800   101.4269    +5.6469 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                108.3300   108.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> JUANA ONELIS LOZALA DE ORTEGA
+    - totalCalculo(BD=90.21 CALC=93.62 d=3.4105)
+    - totalColab(BD=92.08 CALC=95.49 d=3.4072)
+    - totalSup(BD=89.74 CALC=93.15 d=3.4139)
+
+    +- Desglose: JUANA ONELIS LOZALA DE ORTEGA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 81.4573
+    |  desempenoFinal    = 24.4372
+    |  avgCompColab      = 101.5000  -> totalColab = 95.4872
+    |  avgCompSup        = 98.1667  -> totalSup   = 93.1539
+    |  totalCalculo = colab*0.2 + sup*0.8 = 95.4872*0.2 + 93.1539*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            90.2100    93.6205    +3.4105 <--
+    |  totalColab              92.0800    95.4872    +3.4072 <--
+    |  totalSup                89.7400    93.1539    +3.4139 <--
+    |  puntColab              101.5000   101.5000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> LUISANNE RODRIGUEZ JACINTO
+    - totalCalculo(BD=90.19 CALC=94.43 d=4.2375)
+    - totalColab(BD=97.85 CALC=102.08 d=4.2308)
+    - totalSup(BD=88.28 CALC=92.51 d=4.2342)
+
+    +- Desglose: LUISANNE RODRIGUEZ JACINTO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.6028
+    |  desempenoFinal    = 25.0808
+    |  avgCompColab      = 110.0000  -> totalColab = 102.0808
+    |  avgCompSup        = 96.3333  -> totalSup   = 92.5142
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.0808*0.2 + 92.5142*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            90.1900    94.4275    +4.2375 <--
+    |  totalColab              97.8500   102.0808    +4.2308 <--
+    |  totalSup                88.2800    92.5142    +4.2342 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> PERLA NAIROBI MEDINA BONILLA
+    - totalCalculo(BD=93.90 CALC=93.97 d=0.0688)
+    - totalColab(BD=94.93 CALC=95.00 d=0.0655)
+    - totalSup(BD=93.65 CALC=93.71 d=0.0621)
+
+    +- Desglose: PERLA NAIROBI MEDINA BONILLA
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.5960
+    |  desempenoFinal    = 26.2788
+    |  avgCompColab      = 98.1667  -> totalColab = 94.9955
+    |  avgCompSup        = 96.3333  -> totalSup   = 93.7121
+    |  totalCalculo = colab*0.2 + sup*0.8 = 94.9955*0.2 + 93.7121*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.9000    93.9688    +0.0688 <--
+    |  totalColab              94.9300    94.9955    +0.0655 <--
+    |  totalSup                93.6500    93.7121    +0.0621 <--
+    |  puntColab               98.1700    98.1667    -0.0033
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> ROSA MARIA RODRIGUEZ ALTAGRACIA
+    - totalCalculo(BD=86.96 CALC=85.46 d=1.4999)
+    - totalColab(BD=89.76 CALC=88.26 d=1.4999)
+    - totalSup(BD=86.26 CALC=84.76 d=1.4999)
+
+    +- Desglose: ROSA MARIA RODRIGUEZ ALTAGRACIA
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 86.5336
+    |  desempenoFinal    = 25.9601
+    |  avgCompColab      = 89.0000  -> totalColab = 88.2601
+    |  avgCompSup        = 84.0000  -> totalSup   = 84.7601
+    |  totalCalculo = colab*0.2 + sup*0.8 = 88.2601*0.2 + 84.7601*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            86.9600    85.4601    -1.4999 <--
+    |  totalColab              89.7600    88.2601    -1.4999 <--
+    |  totalSup                86.2600    84.7601    -1.4999 <--
+    |  puntColab               89.0000    89.0000    +0.0000
+    |  puntSup                 84.0000    84.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> BETTY MARIA SENCION
+    - totalCalculo(BD=93.13 CALC=94.15 d=1.0193)
+    - totalColab(BD=95.19 CALC=96.20 d=1.0126)
+    - totalSup(BD=92.62 CALC=93.64 d=1.0159)
+
+    +- Desglose: BETTY MARIA SENCION
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 87.3420
+    |  desempenoFinal    = 26.2026
+    |  avgCompColab      = 100.0000  -> totalColab = 96.2026
+    |  avgCompSup        = 96.3333  -> totalSup   = 93.6359
+    |  totalCalculo = colab*0.2 + sup*0.8 = 96.2026*0.2 + 93.6359*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            93.1300    94.1493    +1.0193 <--
+    |  totalColab              95.1900    96.2026    +1.0126 <--
+    |  totalSup                92.6200    93.6359    +1.0159 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> LEIDY LIS MARIEL ACOSTA RODRIGUEZ
+    - totalCalculo(BD=86.32 CALC=93.71 d=7.3910)
+    - totalColab(BD=91.17 CALC=98.56 d=7.3944)
+    - totalSup(BD=85.10 CALC=92.50 d=7.3977)
+
+    +- Desglose: LEIDY LIS MARIEL ACOSTA RODRIGUEZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.5479
+    |  desempenoFinal    = 25.0644
+    |  avgCompColab      = 105.0000  -> totalColab = 98.5644
+    |  avgCompSup        = 96.3333  -> totalSup   = 92.4977
+    |  totalCalculo = colab*0.2 + sup*0.8 = 98.5644*0.2 + 92.4977*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            86.3200    93.7110    +7.3910 <--
+    |  totalColab              91.1700    98.5644    +7.3944 <--
+    |  totalSup                85.1000    92.4977    +7.3977 <--
+    |  puntColab              105.0000   105.0000    +0.0000
+    |  puntSup                 96.3300    96.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> MARIEDITH ALEXANDRA VALVERDE DEL ROSARIO
+    - totalCalculo(BD=87.81 CALC=93.97 d=6.1552)
+    - totalColab(BD=88.83 CALC=94.99 d=6.1619)
+    - totalSup(BD=87.55 CALC=93.71 d=6.1586)
+
+    +- Desglose: MARIEDITH ALEXANDRA VALVERDE DEL ROSARIO
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 83.3063
+    |  desempenoFinal    = 24.9919
+    |  avgCompColab      = 100.0000  -> totalColab = 94.9919
+    |  avgCompSup        = 98.1667  -> totalSup   = 93.7086
+    |  totalCalculo = colab*0.2 + sup*0.8 = 94.9919*0.2 + 93.7086*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            87.8100    93.9652    +6.1552 <--
+    |  totalColab              88.8300    94.9919    +6.1619 <--
+    |  totalSup                87.5500    93.7086    +6.1586 <--
+    |  puntColab              100.0000   100.0000    +0.0000
+    |  puntSup                 98.1700    98.1667    -0.0033
+    +-------------------------------------------------------
+
+  >> GRELVI DANIEL ROQUE HERNANDEZ
+    - totalCalculo(BD=98.98 CALC=96.20 d=2.7835)
+    - totalColab(BD=94.96 CALC=92.18 d=2.7769)
+    - totalSup(BD=99.98 CALC=97.20 d=2.7802)
+
+    +- Desglose: GRELVI DANIEL ROQUE HERNANDEZ
+    |  Estado: Enviado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 82.8883
+    |  desempenoFinal    = 24.8665
+    |  avgCompColab      = 96.1667  -> totalColab = 92.1831
+    |  avgCompSup        = 103.3333  -> totalSup   = 97.1998
+    |  totalCalculo = colab*0.2 + sup*0.8 = 92.1831*0.2 + 97.1998*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            98.9800    96.1965    -2.7835 <--
+    |  totalColab              94.9600    92.1831    -2.7769 <--
+    |  totalSup                99.9800    97.1998    -2.7802 <--
+    |  puntColab               96.1700    96.1667    -0.0033
+    |  puntSup                103.3300   103.3333    +0.0033
+    +-------------------------------------------------------
+
+  >> IAMDRA ABIGAIL ALCANTARA DE LOS SANTOS
+    - totalCalculo(BD=90.09 CALC=92.95 d=2.8612)
+    - totalColab(BD=95.97 CALC=98.83 d=2.8612)
+    - totalSup(BD=88.62 CALC=91.48 d=2.8612)
+
+    +- Desglose: IAMDRA ABIGAIL ALCANTARA DE LOS SANTOS
+    |  Estado: Completado | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 92.6039
+    |  desempenoFinal    = 27.7812
+    |  avgCompColab      = 101.5000  -> totalColab = 98.8312
+    |  avgCompSup        = 91.0000  -> totalSup   = 91.4812
+    |  totalCalculo = colab*0.2 + sup*0.8 = 98.8312*0.2 + 91.4812*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            90.0900    92.9512    +2.8612 <--
+    |  totalColab              95.9700    98.8312    +2.8612 <--
+    |  totalSup                88.6200    91.4812    +2.8612 <--
+    |  puntColab              101.5000   101.5000    +0.0000
+    |  puntSup                 91.0000    91.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> CAMIL NICOLE MARMOLEJOS MUÑOZ
+    - totalCalculo(BD=96.84 CALC=96.89 d=0.0480)
+    - totalColab(BD=101.50 CALC=101.55 d=0.0546)
+    - totalSup(BD=95.67 CALC=95.72 d=0.0513)
+
+    +- Desglose: CAMIL NICOLE MARMOLEJOS MUÑOZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 85.7376
+    |  desempenoFinal    = 25.7213
+    |  avgCompColab      = 108.3333  -> totalColab = 101.5546
+    |  avgCompSup        = 100.0000  -> totalSup   = 95.7213
+    |  totalCalculo = colab*0.2 + sup*0.8 = 101.5546*0.2 + 95.7213*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            96.8400    96.8880    +0.0480 <--
+    |  totalColab             101.5000   101.5546    +0.0546 <--
+    |  totalSup                95.6700    95.7213    +0.0513 <--
+    |  puntColab              108.3300   108.3333    +0.0033
+    |  puntSup                100.0000   100.0000    +0.0000
+    +-------------------------------------------------------
+
+  >> ANDREINA BAEZ DE PEREZ
+    - totalCalculo(BD=89.31 CALC=93.54 d=4.2329)
+    - totalColab(BD=97.99 CALC=102.22 d=4.2329)
+    - totalSup(BD=87.14 CALC=91.37 d=4.2329)
+
+    +- Desglose: ANDREINA BAEZ DE PEREZ
+    |  Estado: EvaluadoPorSupervisor | Metas: 6 | Competencias: 6
+    |  PDC: Desempeno=30%  Competencia=70%
+    |  promedioDesempeno = 84.0765
+    |  desempenoFinal    = 25.2229
+    |  avgCompColab      = 110.0000  -> totalColab = 102.2229
+    |  avgCompSup        = 94.5000  -> totalSup   = 91.3729
+    |  totalCalculo = colab*0.2 + sup*0.8 = 102.2229*0.2 + 91.3729*0.8
+    |
+    |  Campo                        BD  Calculado Diferencia
+    |  -------------------------------------------------------
+    |  totalCalculo            89.3100    93.5429    +4.2329 <--
+    |  totalColab              97.9900   102.2229    +4.2329 <--
+    |  totalSup                87.1400    91.3729    +4.2329 <--
+    |  puntColab              110.0000   110.0000    +0.0000
+    |  puntSup                 94.5000    94.5000    +0.0000
+    +-------------------------------------------------------
+
+================================================================================

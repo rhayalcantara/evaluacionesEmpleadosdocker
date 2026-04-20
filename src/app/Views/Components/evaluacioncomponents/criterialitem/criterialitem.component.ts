@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EmojiratingComponent } from '../emojirating/emojirating.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,7 @@ import { LoadingComponent } from '../../loading/loading.component';
   templateUrl: './criterialitem.component.html',
   styleUrls: ['./criterialitem.component.css']
 })
-export class CriterialitemComponent implements OnInit {
+export class CriterialitemComponent implements OnInit, OnChanges {
    @Input() empleado:IEmpleado 
    @Input() periodo:IPeriodo
    @Input() supervisor:Boolean=false  
@@ -131,14 +131,31 @@ export class CriterialitemComponent implements OnInit {
         this.EvaluacionControler.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
         .subscribe({
           next: (rep: IEvaluacion) => {
-            this.evaluacion = rep;            
+            this.evaluacion = rep;
+            // Ensure goalEmpleadoRespuestas has an entry for each evaluacionGoal (aligned by index)
+            this.evaluacion.evaluacionGoals.forEach((goal, i) => {
+              if (!this.evaluacion.goalEmpleadoRespuestas[i]) {
+                this.evaluacion.goalEmpleadoRespuestas.splice(i, 0, {
+                  id: 0,
+                  evaluacionId: rep.id,
+                  goalId: goal.goalId,
+                  repuesta: 0,
+                  repuestasupervisor: 0,
+                  weight: 0,
+                  observacion: '',
+                  observacionsupervisor: ''
+                });
+              }
+            });
             this.EvaluacionControler.model = this.evaluacion
 
-            if (this.evaluacion.estadoevaluacion == "Enviado") {
+            if (this.evaluacion.estadoevaluacion == "Enviado" ||
+                this.evaluacion.estadoevaluacion == "Completado" ||
+                this.evaluacion.estadoevaluacion == "EvaluadoPorSupervisor") {
               this.supervisor = true;
               this.sololectura = true;
 
-              this.cd.detectChanges(); 
+              this.cd.detectChanges();
             }
 
 
@@ -324,6 +341,29 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
 
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['evaluacion'] && this.evaluacion) {
+      this.alinearRespuestasConGoals();
+    }
+  }
+
+  private alinearRespuestasConGoals(): void {
+    this.evaluacion.evaluacionGoals.forEach((goal, i) => {
+      if (!this.evaluacion.goalEmpleadoRespuestas[i]) {
+        this.evaluacion.goalEmpleadoRespuestas.splice(i, 0, {
+          id: 0,
+          evaluacionId: this.evaluacion.id,
+          goalId: goal.goalId,
+          repuesta: 0,
+          repuestasupervisor: 0,
+          weight: 0,
+          observacion: '',
+          observacionsupervisor: ''
+        });
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.logro=Array.from({length:this.evaluacion.evaluacionDesempenoMetas.length},(v,k)=>k+1)
     //inicialiar el array de logros a cero
@@ -346,7 +386,7 @@ public  GetNumerico(valor:string | number, defaultValue: number = 0):number{
 
      this.resultadologro[index].porcientologro=this.evaluacion.evaluacionDesempenoMetas[index].meta
      this.resultadologro[index]=this.calcularresultadologro(this.resultadologro[index],this.evaluacion.evaluacionDesempenoMetas[index])
-     this.EvaluacionControler.calculaelpromediodesempeno(false,this.resultadologro)
+     this.EvaluacionControler.calculaelpromediodesempeno(this.supervisor,this.resultadologro)
 
 
      this.onEvaluacionChange.emit(this.evaluacion)

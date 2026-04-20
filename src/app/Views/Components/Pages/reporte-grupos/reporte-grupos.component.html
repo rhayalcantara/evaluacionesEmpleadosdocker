@@ -1,0 +1,172 @@
+<div class="container-fluid py-4">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h4 class="mb-0 fw-bold">Evaluaciones por Grupo de Desempeño</h4>
+      <small class="text-muted">Agrupación por puntaje total de evaluación</small>
+    </div>
+
+    <!-- Selector de período -->
+    <div class="d-flex align-items-center gap-2">
+      <label class="mb-0 fw-semibold text-nowrap">Período:</label>
+      <select class="form-select form-select-sm" style="min-width:180px"
+              [(ngModel)]="periodoSeleccionado" (change)="cargarReporte()">
+        <option *ngFor="let p of periodos" [value]="p.id">{{ p.descripcion }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Cargando evaluaciones...</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- Resumen superior -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-md-4 col-xl-2" *ngFor="let grupo of grupos; let i = index">
+        <div class="card shadow-sm h-100 border-0 grupo-card"
+             [style.border-left]="'4px solid ' + grupo.color"
+             (click)="toggleGrupo(i)" style="cursor:pointer; border-left-width:4px !important">
+          <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="text-muted small">{{ grupo.nombre }}</div>
+                <div class="fw-bold fs-4" [style.color]="grupo.color">{{ grupo.empleados.length }}</div>
+                <div class="text-muted" style="font-size:0.75rem">{{ grupo.rango }} pts</div>
+              </div>
+              <span class="badge rounded-pill {{ grupo.badgeClass }} opacity-75">
+                {{ porcentajeGrupo(grupo) | number:'1.1-1' }}%
+              </span>
+            </div>
+            <div class="mt-2 progress" style="height:4px">
+              <div class="progress-bar" [style.width]="porcentajeGrupo(grupo) + '%'"
+                   [style.background-color]="grupo.color"></div>
+            </div>
+            <div class="text-muted mt-1" style="font-size:0.7rem" *ngIf="grupo.empleados.length > 0">
+              Prom: {{ promedio(grupo) | number:'1.1-2' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total general -->
+      <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm h-100 border-0 bg-light">
+          <div class="card-body py-3">
+            <div class="text-muted small">Total Evaluaciones</div>
+            <div class="fw-bold fs-4 text-dark">{{ totalEvaluaciones }}</div>
+            <div class="text-muted" style="font-size:0.75rem">Período {{ periodoSeleccionado }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra visual de distribución -->
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h6 class="fw-semibold mb-2">Distribución por grupo</h6>
+        <div class="d-flex rounded overflow-hidden" style="height:28px">
+          <ng-container *ngFor="let grupo of grupos">
+            <div *ngIf="grupo.empleados.length > 0"
+                 [style.width]="porcentajeGrupo(grupo) + '%'"
+                 [style.background-color]="grupo.color"
+                 [title]="grupo.nombre + ': ' + grupo.empleados.length + ' (' + porcentajeGrupo(grupo) + '%)'"
+                 class="d-flex align-items-center justify-content-center text-white fw-semibold"
+                 style="font-size:0.75rem; transition:width 0.3s; min-width:30px">
+              {{ porcentajeGrupo(grupo) | number:'1.1-1' }}%
+            </div>
+          </ng-container>
+          <div *ngIf="totalEvaluaciones === 0" class="w-100 bg-secondary-subtle d-flex align-items-center justify-content-center text-muted" style="font-size:0.8rem">
+            Sin datos
+          </div>
+        </div>
+        <div class="d-flex gap-3 mt-2 flex-wrap">
+          <div *ngFor="let grupo of grupos" class="d-flex align-items-center gap-1">
+            <div class="rounded-circle" style="width:10px;height:10px" [style.background-color]="grupo.color"></div>
+            <span style="font-size:0.75rem" class="text-muted">{{ grupo.nombre }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalle por grupo (acordeón) -->
+    <div *ngFor="let grupo of grupos; let i = index" class="mb-3">
+      <div class="card shadow-sm border-0">
+        <!-- Cabecera del grupo -->
+        <div class="card-header d-flex align-items-center justify-content-between py-2"
+             [style.background-color]="grupo.color + '18'"
+             [style.border-left]="'4px solid ' + grupo.color"
+             (click)="toggleGrupo(i)" style="cursor:pointer">
+          <div class="d-flex align-items-center gap-3">
+            <span class="fw-bold" [style.color]="grupo.color">{{ grupo.nombre }}</span>
+            <span class="badge rounded-pill" [style.background-color]="grupo.color">{{ grupo.empleados.length }}</span>
+            <span class="text-muted small">{{ grupo.rango }} puntos</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span *ngIf="grupo.empleados.length > 0" class="text-muted small">
+              Promedio: <strong>{{ promedio(grupo) | number:'1.1-2' }}</strong>
+            </span>
+            <span class="text-muted">{{ grupoAbierto === i ? '▲' : '▼' }}</span>
+          </div>
+        </div>
+
+        <!-- Tabla de empleados -->
+        <div *ngIf="grupoAbierto === i" class="card-body p-0">
+          <div *ngIf="grupo.empleados.length === 0" class="text-center text-muted py-3">
+            No hay empleados en este grupo para el período seleccionado.
+          </div>
+          <div *ngIf="grupo.empleados.length > 0" class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Colaborador</th>
+                  <th>Identificación</th>
+                  <th>Departamento</th>
+                  <th>Posición</th>
+                  <th>Supervisor</th>
+                  <th class="text-center">Desempeño<br><small class="fw-normal">(Colab.)</small></th>
+                  <th class="text-center">Competencia<br><small class="fw-normal">(Colab.)</small></th>
+                  <th class="text-center">AutoEval.</th>
+                  <th class="text-center">SuperEval.</th>
+                  <th class="text-center fw-bold">Total</th>
+                  <th class="text-center">Estatus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let emp of grupo.empleados">
+                  <td class="fw-semibold">{{ emp.colaborador }}</td>
+                  <td>{{ emp.identificacion }}</td>
+                  <td>{{ emp.departamento }}</td>
+                  <td>{{ emp.posision }}</td>
+                  <td>{{ emp.supervisor }}</td>
+                  <td class="text-center">{{ emp.puntuaciondesempenocolaborador | number:'1.1-2' }}</td>
+                  <td class="text-center">{{ emp.puntuacioncompetenciacolaborador | number:'1.1-2' }}</td>
+                  <td class="text-center">{{ emp.autoevaluacion | number:'1.1-2' }}</td>
+                  <td class="text-center">{{ emp.superevaluacion | number:'1.1-2' }}</td>
+                  <td class="text-center">
+                    <span class="badge rounded-pill fw-bold" [style.background-color]="grupo.color">
+                      {{ emp.totalCalculo | number:'1.1-2' }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge rounded-pill bg-secondary">{{ emp.estatus_evaluacion }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje sin datos -->
+    <div *ngIf="totalEvaluaciones === 0 && !loading" class="text-center py-5 text-muted">
+      <p class="fs-5">No se encontraron evaluaciones para el período seleccionado.</p>
+    </div>
+
+  </ng-container>
+</div>

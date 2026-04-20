@@ -3,7 +3,7 @@ import { DatosServiceService } from '../Services/datos-service.service';
 import { IConsejalClave } from '../Models/Consejal/Iconsejal'; // Importar IConsejalClave
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { Observable } from 'rxjs';
-import { UtilsService } from '../Helpers/utils.service';
+
 
 @Injectable({
   providedIn: 'root'

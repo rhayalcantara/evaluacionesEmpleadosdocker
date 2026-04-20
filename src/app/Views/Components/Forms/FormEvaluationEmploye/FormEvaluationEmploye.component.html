@@ -35,7 +35,16 @@
           </div>
           <div class="curso-porque">
             <label>¿Por qué sugiere esta capacitación para el colaborador?</label>
-            <input type="text" [(ngModel)]="curso.porque" name="porque-{{curso.id}}" placeholder="Indique la razón">
+            <textarea
+              [(ngModel)]="curso.porque"
+              name="porque-{{curso.id}}"
+              placeholder="Indique la razón (máximo 500 caracteres)"
+              maxlength="500"
+              rows="3"
+              (input)="onJustificacionChange()"></textarea>
+            <div class="char-counter">
+              {{curso.porque.length || 0}}/500 caracteres
+            </div>
           </div>
         </div>
       </div>

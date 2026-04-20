@@ -61,7 +61,7 @@ export class Evaluacion implements OnInit {
             }
           })
     } 
-
+ 
     ngOnInit(): void {
         this.filtro = "";
         this.estado = "";

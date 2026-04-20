@@ -19,6 +19,7 @@ import { TareaListComponent } from './Views/Components/tareas/tarea-list/tarea-l
 import { TareaFormComponent } from './Views/Components/tareas/tarea-form/tarea-form.component';
 import { TareaDetailComponent } from './Views/Components/tareas/tarea-detail/tarea-detail.component';
 import { ErrorInterceptorService } from './Services/error-interceptor.service';
+import { TokenInterceptorService } from './Services/token-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ErrorInterceptorService } from './Services/error-interceptor.service';
     MatDialogModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })

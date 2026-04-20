@@ -1,0 +1,299 @@
+======================================================================
+📊 REPORTE DE ARCHIVOS GRANDES
+   Generado: 2026-04-20 11:10:57
+======================================================================
+
+📈 RESUMEN GENERAL:
+   • Total de archivos grandes: 53
+   • Espacio total ocupado: 77.30 GB
+
+📁 RESUMEN POR TIPO DE ARCHIVO:
+   Extensión         Cantidad    Tamaño Total
+   ------------------------------------------
+   .msp                    27        22.08 GB
+   .sys                     1        19.72 GB
+   .gguf                    3         9.23 GB
+   .msu                     2         4.42 GB
+   .bak                     1         3.26 GB
+   .pt                      1         2.88 GB
+   .vsix                    1         2.07 GB
+   .dll                     3         1.62 GB
+   .zip                     1         1.40 GB
+   .msi                     1         1.35 GB
+   .dmp                     1         1.30 GB
+   (sin extensión)          1         1.27 GB
+   .iso                     2         1.24 GB
+   .lib                     2         1.22 GB
+   .exe                     1       996.57 MB
+
+──────────────────────────────────────────────────────────────────────
+📋 TOP 50 ARCHIVOS MÁS GRANDES:
+──────────────────────────────────────────────────────────────────────
+
+  1.     19.72 GB | .sys      
+     📍 C:\pagefile.sys
+     📅 Modificado: 2026-04-20 09:55
+
+  2.      4.58 GB | .gguf     
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\Meta-Llama-3.1-8B-Instruct-GGUF\Meta-Llama-3.1-8B-Instruct-Q4_K_M-take2.gguf
+     📅 Modificado: 2024-07-27 21:58
+
+  3.      4.07 GB | .gguf     
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\LeroyDyer\Language_VisionModel_GGUF\mixtral_ai_multitoken.Q4_K_M.gguf
+     📅 Modificado: 2024-08-02 16:25
+
+  4.      3.92 GB | .msu      
+     📍 C:\Program Files (x86)\ManageEngine\UEMS_Agent\patches\43586-windows11.0-kb5079473-x64-25H2_win11.msu
+     📅 Modificado: 2026-03-20 13:08
+
+  5.      3.26 GB | .bak      
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\del desktop\padron_sin_immagen.bak
+     📅 Modificado: 2015-03-05 07:39
+
+  6.      2.88 GB | .pt       
+     📍 C:\Users\ralcantara\.cache\whisper\large-v3.pt
+     📅 Modificado: 2026-01-08 12:54
+
+  7.      2.07 GB | .vsix     
+     📍 C:\ProgramData\Microsoft\VisualStudio\Packages\Microsoft.VisualStudio.VC.Llvm.Clang,version=17.14.36203.27,productarch=neutral\payload.vsix
+     📅 Modificado: 2025-07-31 09:36
+
+  8.      1.40 GB | .zip      
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\CORE BANCARIO.zip
+     📅 Modificado: 2019-12-19 15:50
+
+  9.      1.35 GB | .msi      
+     📍 C:\ProgramData\Adobe\ARM\OnDemand\Acrobat_SCA_Mini_Inter_LOC\Acrobat_2500120813_Intermediate_MUI.msi
+     📅 Modificado: 2025-10-17 06:44
+
+ 10.      1.30 GB | .dmp      
+     📍 C:\ProgramData\Kaspersky Lab\KES.12.11\Traces\KES.21.23.8.637_02.09_08.24_4240.SRV0.full.dmp
+     📅 Modificado: 2026-02-09 08:25
+
+ 11.      1.27 GB | (sin extensión)
+     📍 C:\Users\ralcantara\.ollama\models\blobs\sha256-3d0b790534fe4b79525fc3692950408dca41171676ed7e21db57af5c65ef6ab6
+     📅 Modificado: 2025-10-17 14:35
+
+ 12.      1.17 GB | .msp      
+     📍 C:\Windows\Installer\d05f04.msp
+     📅 Modificado: 2025-12-08 07:38
+
+ 13.      1.17 GB | .msp      
+     📍 C:\Windows\Installer\d06506.msp
+     📅 Modificado: 2025-12-08 07:38
+
+ 14.      1.13 GB | .msp      
+     📍 C:\Program Files (x86)\Common Files\Adobe\ARM\Extract\DiskImages\AcrobatDCx64Upd2500120813.msp
+     📅 Modificado: 2025-10-17 00:35
+
+ 15.      1.13 GB | .msp      
+     📍 C:\Windows\Installer\ac04d7b.msp
+     📅 Modificado: 2025-10-17 00:35
+
+ 16.      1.12 GB | .msp      
+     📍 C:\Windows\Installer\124b7f.msp
+     📅 Modificado: 2025-09-30 01:20
+
+ 17.      1.05 GB | .msp      
+     📍 C:\Windows\Installer\a2d00d.msp
+     📅 Modificado: 2026-02-18 04:44
+
+ 18.      1.05 GB | .msp      
+     📍 C:\Windows\Installer\a2d66c.msp
+     📅 Modificado: 2026-02-18 04:44
+
+ 19.    996.57 MB | .exe      
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\IDEA_10_4_1AD1ES32.exe
+     📅 Modificado: 2019-08-09 16:43
+
+ 20.    944.47 MB | .safetensors
+     📍 C:\Users\ralcantara\.cache\huggingface\hub\models--google--flan-t5-base\snapshots\7bcac572ce56db69c1ea7c8af255c5d7c9672fc2\model.safetensors
+     📅 Modificado: 2025-03-20 13:44
+
+ 21.    838.95 MB | .msp      
+     📍 C:\ProgramData\Adobe\ARM\Acrobat_26.001.21411\AcrobatDCx64Upd2600121431.msp
+     📅 Modificado: 2026-04-13 07:39
+
+ 22.    838.95 MB | .msp      
+     📍 C:\Windows\Installer\13f80a11.msp
+     📅 Modificado: 2026-04-13 07:39
+
+ 23.    838.82 MB | .msp      
+     📍 C:\Windows\Installer\2009ace.msp
+     📅 Modificado: 2026-04-10 06:25
+
+ 24.    838.82 MB | .msp      
+     📍 C:\Windows\Installer\200a08a.msp
+     📅 Modificado: 2026-04-10 06:25
+
+ 25.    779.55 MB | .msp      
+     📍 C:\Windows\Installer\92d1f.msp
+     📅 Modificado: 2026-01-20 02:55
+
+ 26.    779.55 MB | .msp      
+     📍 C:\Windows\Installer\92edd.msp
+     📅 Modificado: 2026-01-20 02:55
+
+ 27.    769.32 MB | .msp      
+     📍 C:\Windows\Installer\dd0ae.msp
+     📅 Modificado: 2025-12-08 07:38
+
+ 28.    769.32 MB | .msp      
+     📍 C:\Windows\Installer\dd0b1.msp
+     📅 Modificado: 2025-12-08 07:38
+
+ 29.    747.15 MB | .msp      
+     📍 C:\Windows\Installer\19b06eb6.msp
+     📅 Modificado: 2026-02-06 04:46
+
+ 30.    747.15 MB | .msp      
+     📍 C:\Windows\Installer\19b06eb9.msp
+     📅 Modificado: 2026-02-06 04:46
+
+ 31.    719.27 MB | .msp      
+     📍 C:\Windows\Installer\15af9fa3.msp
+     📅 Modificado: 2025-11-03 08:17
+
+ 32.    719.27 MB | .msp      
+     📍 C:\Windows\Installer\15afa115.msp
+     📅 Modificado: 2025-11-03 08:17
+
+ 33.    710.52 MB | .msp      
+     📍 C:\Windows\Installer\959ccfd.msp
+     📅 Modificado: 2025-11-19 11:34
+
+ 34.    710.52 MB | .msp      
+     📍 C:\Windows\Installer\959ce92.msp
+     📅 Modificado: 2025-11-19 11:34
+
+ 35.    705.27 MB | .msp      
+     📍 C:\Windows\Installer\c9bf55c.msp
+     📅 Modificado: 2025-09-29 23:54
+
+ 36.    662.16 MB | .iso      
+     📍 C:\Program Files\Docker\Docker\resources\docker-desktop.iso
+     📅 Modificado: 2025-10-17 09:50
+
+ 37.    644.27 MB | .rpt      
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\30112019 catera.rpt
+     📅 Modificado: 2020-01-30 09:14
+
+ 38.    643.41 MB | .dll      
+     📍 C:\Users\ralcantara\.cache\lm-studio\extensions\backends\vendor\win-llama-cuda12-vendor-v2\cublasLt64_12.dll
+     📅 Modificado: 2025-02-26 03:51
+
+ 39.    637.79 MB | .msp      
+     📍 C:\Windows\Installer\136f2c2a.msp
+     📅 Modificado: 2025-08-15 02:51
+
+ 40.    623.27 MB | .lib      
+     📍 C:\Users\ralcantara\.conda\envs\a0\Lib\site-packages\torch\lib\dnnl.lib
+     📅 Modificado: 2024-12-24 10:23
+
+ 41.    623.27 MB | .lib      
+     📍 C:\Users\ralcantara\.conda\envs\a1\Lib\site-packages\torch\lib\dnnl.lib
+     📅 Modificado: 2024-12-26 14:31
+
+ 42.    613.82 MB | .msp      
+     📍 C:\Windows\Installer\126058.msp
+     📅 Modificado: 2026-03-10 03:16
+
+ 43.    613.82 MB | .msp      
+     📍 C:\Windows\Installer\12619f.msp
+     📅 Modificado: 2026-03-10 03:16
+
+ 44.    610.76 MB | .msp      
+     📍 C:\Windows\Installer\18e8f9d.msp
+     📅 Modificado: 2025-07-15 23:15
+
+ 45.    610.48 MB | .pack     
+     📍 C:\Proyectos\evaluacionesEmpleadosdocker\.angular\cache\16.2.16\angular-webpack\6af2d8da37516490e86c26d487b073f9f7d54878\0.pack
+     📅 Modificado: 2026-02-11 09:38
+
+ 46.    608.73 MB | .msp      
+     📍 C:\Windows\Installer\1f570129.msp
+     📅 Modificado: 2025-06-06 14:24
+
+ 47.    608.39 MB | .iso      
+     📍 C:\Program Files\Docker\Docker\resources\wsl\docker-wsl-cli.iso
+     📅 Modificado: 2025-10-17 09:50
+
+ 48.    596.51 MB | .gguf     
+     📍 C:\Users\ralcantara\.cache\lm-studio\models\userzyzz\hermes-vision-gguf\mmproj-hermes.gguf
+     📅 Modificado: 2024-08-02 14:01
+
+ 49.    580.22 MB | .csv      
+     📍 C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Documentos\mov contables por documentos desde 2021-08-01 al 2022-10-31.csv
+     📅 Modificado: 2022-11-09 12:09
+
+ 50.    569.95 MB | .trtpkg   
+     📍 C:\ProgramData\NVIDIA\NGX\models\nvbcast_afx_stdvoice_v0_8\versions\2049\files\170_E658703\studio_voice_low_latency_48k.trtpkg
+     📅 Modificado: 2025-02-26 09:10
+
+──────────────────────────────────────────────────────────────────────
+📋 LISTA COMPLETA (53 archivos):
+──────────────────────────────────────────────────────────────────────
+
+   #       Tamaño Extensión  Ruta
+----------------------------------------------------------------------
+   1     19.72 GB .sys       C:\pagefile.sys
+   2      4.58 GB .gguf      C:\Users\ralcantara\.cache\lm-studio\models\lmstudio-community\Meta-Llama-3.1-8B-Instruct-GGUF\Meta-Llama-3.1-8B-Instruct-Q4_K_M-take2.gguf
+   3      4.07 GB .gguf      C:\Users\ralcantara\.cache\lm-studio\models\LeroyDyer\Language_VisionModel_GGUF\mixtral_ai_multitoken.Q4_K_M.gguf
+   4      3.92 GB .msu       C:\Program Files (x86)\ManageEngine\UEMS_Agent\patches\43586-windows11.0-kb5079473-x64-25H2_win11.msu
+   5      3.26 GB .bak       C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\del desktop\padron_sin_immagen.bak
+   6      2.88 GB .pt        C:\Users\ralcantara\.cache\whisper\large-v3.pt
+   7      2.07 GB .vsix      C:\ProgramData\Microsoft\VisualStudio\Packages\Microsoft.VisualStudio.VC.Llvm.Clang,version=17.14.36203.27,productarch=neutral\payload.vsix
+   8      1.40 GB .zip       C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\CORE BANCARIO.zip
+   9      1.35 GB .msi       C:\ProgramData\Adobe\ARM\OnDemand\Acrobat_SCA_Mini_Inter_LOC\Acrobat_2500120813_Intermediate_MUI.msi
+  10      1.30 GB .dmp       C:\ProgramData\Kaspersky Lab\KES.12.11\Traces\KES.21.23.8.637_02.09_08.24_4240.SRV0.full.dmp
+  11      1.27 GB (sin extensión) C:\Users\ralcantara\.ollama\models\blobs\sha256-3d0b790534fe4b79525fc3692950408dca41171676ed7e21db57af5c65ef6ab6
+  12      1.17 GB .msp       C:\Windows\Installer\d05f04.msp
+  13      1.17 GB .msp       C:\Windows\Installer\d06506.msp
+  14      1.13 GB .msp       C:\Program Files (x86)\Common Files\Adobe\ARM\Extract\DiskImages\AcrobatDCx64Upd2500120813.msp
+  15      1.13 GB .msp       C:\Windows\Installer\ac04d7b.msp
+  16      1.12 GB .msp       C:\Windows\Installer\124b7f.msp
+  17      1.05 GB .msp       C:\Windows\Installer\a2d00d.msp
+  18      1.05 GB .msp       C:\Windows\Installer\a2d66c.msp
+  19    996.57 MB .exe       C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\IDEA_10_4_1AD1ES32.exe
+  20    944.47 MB .safetensors C:\Users\ralcantara\.cache\huggingface\hub\models--google--flan-t5-base\snapshots\7bcac572ce56db69c1ea7c8af255c5d7c9672fc2\model.safetensors
+  21    838.95 MB .msp       C:\ProgramData\Adobe\ARM\Acrobat_26.001.21411\AcrobatDCx64Upd2600121431.msp
+  22    838.95 MB .msp       C:\Windows\Installer\13f80a11.msp
+  23    838.82 MB .msp       C:\Windows\Installer\2009ace.msp
+  24    838.82 MB .msp       C:\Windows\Installer\200a08a.msp
+  25    779.55 MB .msp       C:\Windows\Installer\92d1f.msp
+  26    779.55 MB .msp       C:\Windows\Installer\92edd.msp
+  27    769.32 MB .msp       C:\Windows\Installer\dd0ae.msp
+  28    769.32 MB .msp       C:\Windows\Installer\dd0b1.msp
+  29    747.15 MB .msp       C:\Windows\Installer\19b06eb6.msp
+  30    747.15 MB .msp       C:\Windows\Installer\19b06eb9.msp
+  31    719.27 MB .msp       C:\Windows\Installer\15af9fa3.msp
+  32    719.27 MB .msp       C:\Windows\Installer\15afa115.msp
+  33    710.52 MB .msp       C:\Windows\Installer\959ccfd.msp
+  34    710.52 MB .msp       C:\Windows\Installer\959ce92.msp
+  35    705.27 MB .msp       C:\Windows\Installer\c9bf55c.msp
+  36    662.16 MB .iso       C:\Program Files\Docker\Docker\resources\docker-desktop.iso
+  37    644.27 MB .rpt       C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Escritorio\New folder (2)\30112019 catera.rpt
+  38    643.41 MB .dll       C:\Users\ralcantara\.cache\lm-studio\extensions\backends\vendor\win-llama-cuda12-vendor-v2\cublasLt64_12.dll
+  39    637.79 MB .msp       C:\Windows\Installer\136f2c2a.msp
+  40    623.27 MB .lib       C:\Users\ralcantara\.conda\envs\a0\Lib\site-packages\torch\lib\dnnl.lib
+  41    623.27 MB .lib       C:\Users\ralcantara\.conda\envs\a1\Lib\site-packages\torch\lib\dnnl.lib
+  42    613.82 MB .msp       C:\Windows\Installer\126058.msp
+  43    613.82 MB .msp       C:\Windows\Installer\12619f.msp
+  44    610.76 MB .msp       C:\Windows\Installer\18e8f9d.msp
+  45    610.48 MB .pack      C:\Proyectos\evaluacionesEmpleadosdocker\.angular\cache\16.2.16\angular-webpack\6af2d8da37516490e86c26d487b073f9f7d54878\0.pack
+  46    608.73 MB .msp       C:\Windows\Installer\1f570129.msp
+  47    608.39 MB .iso       C:\Program Files\Docker\Docker\resources\wsl\docker-wsl-cli.iso
+  48    596.51 MB .gguf      C:\Users\ralcantara\.cache\lm-studio\models\userzyzz\hermes-vision-gguf\mmproj-hermes.gguf
+  49    580.22 MB .csv       C:\Users\ralcantara\OneDrive - COOPERATIVA COOPASPIRE\Documentos\mov contables por documentos desde 2021-08-01 al 2022-10-31.csv
+  50    569.95 MB .trtpkg    C:\ProgramData\NVIDIA\NGX\models\nvbcast_afx_stdvoice_v0_8\versions\2049\files\170_E658703\studio_voice_low_latency_48k.trtpkg
+  51    513.87 MB .dll       C:\ProgramData\NVIDIA\NGX\models\nvbcast\versions\2049\files\170_E658703\cublasLt64_12.dll
+  52    509.03 MB .msu       C:\Program Files (x86)\ManageEngine\UEMS_Agent\patches\40379-windows11.0-kb5043080-x64_953449672073f8fb99badb4cc6d5d7849b9c83e8.msu
+  53    505.15 MB .dll       C:\Users\ralcantara\.cache\lm-studio\extensions\backends\llama.cpp-win-x86_64-nvidia-cuda-avx2-2.4.0\ggml-cuda.dll
+
+══════════════════════════════════════════════════════════════════════
+💡 RECOMENDACIONES:
+══════════════════════════════════════════════════════════════════════
+   • Imágenes ISO: 1.24 GB - ¿Ya no necesitas estos instaladores?
+   • Archivos comprimidos: 1.40 GB - ¿Ya extrajiste el contenido?
+   • Archivos de respaldo: 3.26 GB - Considera eliminar backups antiguos
+======================================================================

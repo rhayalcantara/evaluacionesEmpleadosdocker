@@ -41,8 +41,8 @@ npm test
 
 ## Development Conventions
 
-*   The project uses the Angular CLI for code generation and other development tasks.
+*   The project uses the Angular CLI (version 16.2.12) for code generation and other development tasks.
 *   The code is written in TypeScript and follows the official Angular style guide.
-*   The project uses a custom webpack configuration for both development and production builds.
-*   The project uses module federation to share code between different applications.
+*   The project uses a custom webpack configuration via `ngx-build-plus` for both development and production builds.
+*   The project uses module federation to share code between different applications, with remotes like `loginapp` and shared mappings like `@commons-lib`.
 *   The project uses server-side rendering (SSR) to improve performance and SEO.
