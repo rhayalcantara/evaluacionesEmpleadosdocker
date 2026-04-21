@@ -25,9 +25,7 @@
         <label for="departamento">Filtrar por Departamento:</label>
         <select id="departamento" class="form-control" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()">
           <option value="">Todos los departamentos</option>
-          <option *ngFor="let dept of departments" [value]="dept">
-            {{ dept }}
-          </option>
+          <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
         </select>
       </div>
 
@@ -46,8 +44,8 @@
       <div class="col-md-3">
         <label>Buscar:</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar..."
-                [(ngModel)]="term" (change)="filtrar()">
+          <input type="text" class="form-control" placeholder="Buscar colaborador..."
+                 [(ngModel)]="term" (input)="filtrar()">
           <button class="btn btn-primary" type="button">
             <i class="fa fa-search"></i>
           </button>
@@ -57,33 +55,125 @@
 
     <!-- Botones de Exportación -->
     <div class="row mb-3">
-      <div class="col-md-12">
-        <button class="btn btn-success me-2" type="button" (click)="downloadExcel()">
+      <div class="col-md-12 d-flex align-items-center gap-2 flex-wrap">
+        <button class="btn btn-success btn-sm" type="button" (click)="downloadExcel()">
           <i class="fas fa-file-excel"></i> Exportar Excel
         </button>
-        <button class="btn btn-success me-2" type="button" (click)="downloadExce2()">
+        <button class="btn btn-success btn-sm" type="button" (click)="downloadExce2()">
           <i class="fas fa-file-excel"></i> Exportar Excel Detallado
         </button>
-        <button class="btn btn-danger" type="button" (click)="generateAllPdfs()">
+        <button class="btn btn-danger btn-sm" type="button" (click)="generateAllPdfs()">
           <i class="fas fa-file-archive"></i> Descargar ZIP con PDFs
+        </button>
+        <span class="ms-auto text-muted small">
+          {{ filteredData.length }} registro(s)
+        </span>
+      </div>
+    </div>
+
+    <!-- Tabla personalizada -->
+    <div class="table-wrapper">
+      <table class="reporte-table">
+        <thead>
+          <!-- Fila de grupos -->
+          <tr class="group-row">
+            <th colspan="4" class="group-empleado">Empleado</th>
+            <th colspan="6" class="group-auto">Autoevaluación</th>
+            <th colspan="4" class="group-super">Evaluación Supervisor</th>
+            <th colspan="1" class="group-total">Resultado</th>
+          </tr>
+          <!-- Fila de columnas -->
+          <tr class="col-row">
+            <!-- Empleado -->
+            <th class="col-sticky col-0">Colaborador</th>
+            <th class="col-sticky col-1">Departamento</th>
+            <th>Posición</th>
+            <th>Estatus</th>
+            <!-- Autoevaluación -->
+            <th title="Total Puntuación Objetivos (Promedio)">Promedio<br>Obj.</th>
+            <th title="Resultado Objetivos 30%">Obj.<br>30%</th>
+            <th title="AutoEvaluación Competencia">Comp.<br>Auto</th>
+            <th title="AutoEvaluación Competencia 70%">Comp.<br>70%</th>
+            <th title="Resultado Final AutoEvaluación (30%+70%)">Total<br>Auto</th>
+            <th title="20% Resultado AutoEvaluación">20%<br>Auto</th>
+            <!-- Supervisor -->
+            <th title="Competencia Supervisor">Comp.<br>Sup.</th>
+            <th title="Evaluación Supervisor Competencia 70%">Comp.<br>Sup.70%</th>
+            <th title="Resultado Evaluación Supervisor (30%+70%)">Total<br>Sup.</th>
+            <th title="80% Resultado Evaluación Supervisor">80%<br>Sup.</th>
+            <!-- Total -->
+            <th title="Puntuación General (20%+80%)">Punt.<br>General</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of pagedData" class="data-row">
+            <!-- Empleado -->
+            <td class="col-sticky col-0 td-colaborador">
+              <span class="nombre">{{ item.colaborador }}</span>
+              <span class="cedula">{{ item.identificacion }}</span>
+            </td>
+            <td class="col-sticky col-1 td-dept">{{ item.departamento }}</td>
+            <td class="td-text">{{ item.posision }}</td>
+            <td>
+              <span class="badge-estatus" [ngClass]="getEstatus(item.estatus_evaluacion)">
+                {{ item.estatus_evaluacion }}
+              </span>
+            </td>
+            <!-- Autoevaluación -->
+            <td class="td-num">{{ item.puntuaciondesempenocolaborador | number:'1.2-2' }}</td>
+            <td class="td-num" [ngClass]="getScoreClass(item.objetivo30)">
+              {{ item.objetivo30 | number:'1.2-2' }}
+            </td>
+            <td class="td-num">{{ item.puntuacioncompetenciacolaborador | number:'1.2-2' }}</td>
+            <td class="td-num" [ngClass]="getScoreClass(item.autocompetencia70)">
+              {{ item.autocompetencia70 | number:'1.2-2' }}
+            </td>
+            <td class="td-num td-subtotal" [ngClass]="getScoreClass(item.autoevaluacion)">
+              {{ item.autoevaluacion | number:'1.2-2' }}
+            </td>
+            <td class="td-num">{{ item.autoevaluacion20 | number:'1.2-2' }}</td>
+            <!-- Supervisor -->
+            <td class="td-num">{{ item.puntuacioncompetenciasupervisor | number:'1.2-2' }}</td>
+            <td class="td-num" [ngClass]="getScoreClass(item.compSuper70)">
+              {{ item.compSuper70 | number:'1.2-2' }}
+            </td>
+            <td class="td-num td-subtotal" [ngClass]="getScoreClass(item.superevaluacion)">
+              {{ item.superevaluacion | number:'1.2-2' }}
+            </td>
+            <td class="td-num">{{ item.superevaluacion80 | number:'1.2-2' }}</td>
+            <!-- Total -->
+            <td class="td-num td-total" [ngClass]="getScoreClass(item.totalCalculo)">
+              {{ item.totalCalculo | number:'1.2-2' }}
+            </td>
+          </tr>
+          <tr *ngIf="filteredData.length === 0">
+            <td colspan="15" class="text-center py-4 text-muted">No hay datos para mostrar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination-bar mt-3" *ngIf="filteredData.length > config.itemsPerPage">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-outline-secondary btn-sm"
+                [disabled]="config.currentPage === 1"
+                (click)="paginaCambio(config.currentPage - 1)">
+          <i class="fa fa-chevron-left"></i> Anterior
+        </button>
+
+        <span class="text-muted small">
+          Página {{ config.currentPage }} de {{ totalPages }} &nbsp;|&nbsp;
+          {{ filteredData.length }} registros
+        </span>
+
+        <button class="btn btn-outline-secondary btn-sm"
+                [disabled]="config.currentPage >= totalPages"
+                (click)="paginaCambio(config.currentPage + 1)">
+          Siguiente <i class="fa fa-chevron-right"></i>
         </button>
       </div>
     </div>
 
-    <!-- Table Component -->
-    <app-tables 
-      [arraydatos]="filteredData"
-      [campos]="campos"
-      [titulos]="titulos"
-      [config]="config"
-      [deleted]="false"
-      [term]="term"
-      [totalregistros]="config.totalItems"
-      [currentPage]="config.currentPage"
-      (paginacambio)="paginaCambio($event)"
-      (idtable)="actualizarIdTable($event)"
-      (accion)="opcion($event)"
-      campokey="identificacion"
-    ></app-tables>
   </div>
 </div>

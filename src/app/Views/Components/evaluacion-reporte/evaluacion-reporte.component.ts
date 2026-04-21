@@ -119,6 +119,33 @@ export class EvaluacionReporteComponent implements OnInit {
     this.config.currentPage = event;
   }
 
+  get pagedData(): IReporte01[] {
+    const start = (this.config.currentPage - 1) * this.config.itemsPerPage;
+    return this.filteredData.slice(start, start + this.config.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredData.length / this.config.itemsPerPage) || 1;
+  }
+
+  getEstatus(estatus: string): string {
+    if (!estatus) return 'estatus-default';
+    const s = estatus.toLowerCase();
+    if (s === 'completado') return 'estatus-completado';
+    if (s === 'evaluadoporsupervisor') return 'estatus-evaluado';
+    if (s === 'autoevaluado') return 'estatus-autoevalado';
+    if (s === 'pendiente') return 'estatus-pendiente';
+    if (s === 'enviado') return 'estatus-enviado';
+    return 'estatus-default';
+  }
+
+  getScoreClass(value: number): string {
+    if (value == null) return '';
+    if (value >= 90) return 'score-high';
+    if (value >= 70) return 'score-mid';
+    return 'score-low';
+  }
+
   actualizarIdTable(event: string) {
     this.config.id = event;
   }
