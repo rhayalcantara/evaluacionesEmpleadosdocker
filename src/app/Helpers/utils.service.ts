@@ -621,101 +621,50 @@ static  generaNss() {
     }
   }
 
+  // --- Delegación al controlador (fuente única de verdad para cálculos) ---
   calculatePercentage(item: IEvaluacionDesempenoMeta): string {
-    if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
-    const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
-    const meta = item.meta || 1;
-    const inverso = item.inverso || false;
-    if (meta === 0 && !inverso) return '0.00';
-    if (logro === 0 && inverso) return '0.00';
-    if (logro === 0 && !inverso) return '0.00';
-    const percentage = inverso ? (meta / logro) * 100 : (logro / meta) * 100;
-    return percentage.toFixed(2);
+    return this.EvaluacionController.calculatePercentage(item);
   }
 
   calculateResult(item: IEvaluacionDesempenoMeta): string {
-    const percentage = parseFloat(this.calculatePercentage(item));
-    const peso = item.peso || 0;
-    return ((percentage * peso) / 100).toFixed(2);
+    return this.EvaluacionController.calculateResult(item);
   }
 
-// --- Getters para cálculos (devuelven number) ---
   get porcentajeDesempeno(): number {
     return Number(this.EvaluacionController.porcentajeDesempeno) || 30;
   }
+
   get porcentajeCompetencia(): number {
     return Number(this.EvaluacionController.porcentajeCompetencia) || 70;
   }
 
   promedioDesempeno(evaluacionempleado: IEvaluacion): number {
-     const metas = evaluacionempleado?.evaluacionDesempenoMetas || [];
-     if (metas.length === 0) return 0;
-     const sumaPorcentajes = metas.reduce((sum, item) => {
-        const perc = parseFloat(this.calculatePercentage(item));
-        return sum + (isNaN(perc) ? 0 : perc);
-     }, 0);
-     const avg = sumaPorcentajes / metas.length;
-     return isNaN(avg) ? 0 : avg;
+    return this.EvaluacionController.getPromedioDesempeno(evaluacionempleado);
   }
-   desempenoFinal(evaluacionempleado: IEvaluacion): number {
-     return (this.promedioDesempeno(evaluacionempleado) * this.porcentajeDesempeno) || 0;
-   }
-   promedioCompetenciasSupervisor(evaluacionempleado: IEvaluacion): number {
-      return Number(evaluacionempleado?.puntuacioncompetenciasupervisor) || 0;
-   }
-    promedioCompetenciasColaborador(evaluacionempleado: IEvaluacion): number {
-      return Number(evaluacionempleado?.puntuacioncompetenciacolaborador) || 0;
-   }
-   competenciaFinalSupervisor(evaluacionempleado: IEvaluacion): number {
-      return (this.promedioCompetenciasSupervisor(evaluacionempleado) * this.porcentajeCompetencia) || 0;
-   }
-    competenciaFinalColaborador(evaluacionempleado: IEvaluacion): number {
-      return (this.promedioCompetenciasColaborador(evaluacionempleado) * this.porcentajeCompetencia) || 0;
-   }
-   totalCalculo(evaluacionempleado: IEvaluacion, supervisor: boolean): number {
-      const compFinal = supervisor ? this.competenciaFinalSupervisor(evaluacionempleado) : this.competenciaFinalColaborador(evaluacionempleado);
-      const total = (Number(this.desempenoFinal(evaluacionempleado)) || 0) + (Number(compFinal) || 0);
-      return isNaN(total) ? 0 : total;
-   }
 
-/*
-  
-  porcentajeDesempeno(evaluacionempleado: IEvaluacion): number {
-    return Number(evaluacionempleado.porcentajeDesempeno) || 0.2;
+  desempenoFinal(evaluacionempleado: IEvaluacion): number {
+    return this.EvaluacionController.getDesempenoFinal(evaluacionempleado);
   }
-  porcentajeCompetencia(evaluacionempleado: IEvaluacion): number {
-    return Number(evaluacionempleado.porcentajeCompetencia) || 0.7;
+
+  promedioCompetenciasSupervisor(evaluacionempleado: IEvaluacion): number {
+    return this.EvaluacionController.getPromedioCompetenciasSupervisor(evaluacionempleado);
   }
-  promedioDesempeno(evaluacionempleado: IEvaluacion): number {
-     const metas = evaluacionempleado?.evaluacionDesempenoMetas || [];
-     if (metas.length === 0) return 0;
-     const sumaPorcentajes = metas.reduce((sum, item) => {
-        const perc = parseFloat(this.calculatePercentage(item));
-        return sum + (isNaN(perc) ? 0 : perc);
-     }, 0);
-     const avg = sumaPorcentajes / metas.length;
-     return isNaN(avg) ? 0 : avg;
+
+  promedioCompetenciasColaborador(evaluacionempleado: IEvaluacion): number {
+    return this.EvaluacionController.getPromedioCompetenciasColaborador(evaluacionempleado);
   }
-   desempenoFinal(evaluacionempleado: IEvaluacion): number {
-     return (this.promedioDesempeno(evaluacionempleado) * this.porcentajeDesempeno(evaluacionempleado)) || 0;
-   }
-   promedioCompetenciasSupervisor(evaluacionempleado: IEvaluacion): number {
-      return Number(evaluacionempleado?.puntuacioncompetenciasupervisor) || 0;
-   }
-    promedioCompetenciasColaborador(evaluacionempleado: IEvaluacion): number {
-      return Number(evaluacionempleado?.puntuacioncompetenciacolaborador) || 0;
-   }
-   competenciaFinalSupervisor(evaluacionempleado: IEvaluacion): number {
-      return (this.promedioCompetenciasSupervisor(evaluacionempleado) * this.porcentajeCompetencia) || 0;
-   }
-    competenciaFinalColaborador(evaluacionempleado: IEvaluacion): number {
-      return (this.promedioCompetenciasColaborador(evaluacionempleado) * this.porcentajeCompetencia(evaluacionempleado)) || 0;
-   }
-   totalCalculo(evaluacionempleado: IEvaluacion, supervisor: boolean): number {
-      const compFinal = supervisor ? this.competenciaFinalSupervisor(evaluacionempleado) : this.competenciaFinalColaborador(evaluacionempleado);
-      const total = (Number(this.desempenoFinal(evaluacionempleado)) || 0) + (Number(compFinal) || 0);
-      return isNaN(total) ? 0 : total;
-   }*/
+
+  competenciaFinalSupervisor(evaluacionempleado: IEvaluacion): number {
+    return this.EvaluacionController.getCompetenciaFinalSupervisor(evaluacionempleado);
+  }
+
+  competenciaFinalColaborador(evaluacionempleado: IEvaluacion): number {
+    return this.EvaluacionController.getCompetenciaFinalColaborador(evaluacionempleado);
+  }
+
+  totalCalculo(evaluacionempleado: IEvaluacion, supervisor: boolean): number {
+    return this.EvaluacionController.getTotalCalculo(supervisor, evaluacionempleado);
+  }
 
 /*
     static generatePDF(action = 'open',invoice:IProductDts[]) {

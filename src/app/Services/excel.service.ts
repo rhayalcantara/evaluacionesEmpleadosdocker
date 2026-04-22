@@ -36,8 +36,8 @@ public exportReporte1AsExcelFile(jsonData: IReporte01[], excelFileName: string):
     const headers = [
       'ID', 'Colaborador', 'OFICINA', 'INICIO CONTRATO', 'Departamento', 'Posición', 'Supervisor', 'Estatus',
       'Total Puntuación Objetivo', 'Resultado Objetivo %', 'Autoevaluación Competencias', 'Autoevaluación Competencias (70%)', // Ajustado 30% a 70% según componente
-      'Resultado Final Autoevaluación (30%+70%)', '20% Autoevaluación Resultados', 'Competencia Superior', 'Evaluación del Superior (70%)', // Ajustado según componente
-      'Resultado Final Evaluación', '80% Resultados Evaluación', 'Puntuación General (20%+80%)'
+      'Resultado Final Autoevaluación (30%+70%)', '20% Autoevaluación Resultados', 'Supervisor Competencia', 'Evaluación del Supevisor (70%)', // Ajustado según componente
+      'Competencia Supervisor (30%+70%)', '80% Resultados Evaluación', 'Puntuación General (20%+80%)'
     ];
 
     // Mapear jsonData (IReporte01[]) a un array de arrays para aoa_to_sheet

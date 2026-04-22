@@ -197,7 +197,7 @@ export class FormEvaluationEmployeComponent {
     this.puntuacion.emit(evaluacionActualizada.totalCalculo);
   }
 
-  // --- Getters para cálculos (devuelven number) ---
+  // --- Getters para cálculos — delegan al controlador (fuente única de verdad) ---
   get porcentajeDesempeno(): number {
     return Number(this.EvaluacionController.porcentajeDesempeno) || 30;
   }
@@ -205,35 +205,26 @@ export class FormEvaluationEmployeComponent {
     return Number(this.EvaluacionController.porcentajeCompetencia) || 70;
   }
   get promedioDesempeno(): number {
-     const metas = this.evaluacionempleado?.evaluacionDesempenoMetas || [];
-     if (metas.length === 0) return 0;
-     const sumaPorcentajes = metas.reduce((sum, item) => {
-        const perc = parseFloat(this.calculatePercentage(item));
-        return sum + (isNaN(perc) ? 0 : perc);
-     }, 0);
-     const avg = sumaPorcentajes / metas.length;
-     return isNaN(avg) ? 0 : avg;
+    return this.EvaluacionController.getPromedioDesempeno(this.evaluacionempleado);
   }
-   get desempenoFinal(): number {
-     return (this.promedioDesempeno * this.porcentajeDesempeno) || 0;
-   }
-   get promedioCompetenciasSupervisor(): number {
-      return Number(this.evaluacionempleado?.puntuacioncompetenciasupervisor) || 0;
-   }
-    get promedioCompetenciasColaborador(): number {
-      return Number(this.evaluacionempleado?.puntuacioncompetenciacolaborador) || 0;
-   }
-   get competenciaFinalSupervisor(): number {
-      return (this.promedioCompetenciasSupervisor * this.porcentajeCompetencia) || 0;
-   }
-    get competenciaFinalColaborador(): number {
-      return (this.promedioCompetenciasColaborador * this.porcentajeCompetencia) || 0;
-   }
-   get totalCalculo(): number {
-      const compFinal = this.supervisor ? this.competenciaFinalSupervisor : this.competenciaFinalColaborador;
-      const total = (Number(this.desempenoFinal) || 0) + (Number(compFinal) || 0);
-      return isNaN(total) ? 0 : total;
-   }
+  get desempenoFinal(): number {
+    return this.EvaluacionController.getDesempenoFinal(this.evaluacionempleado);
+  }
+  get promedioCompetenciasSupervisor(): number {
+    return this.EvaluacionController.getPromedioCompetenciasSupervisor(this.evaluacionempleado);
+  }
+  get promedioCompetenciasColaborador(): number {
+    return this.EvaluacionController.getPromedioCompetenciasColaborador(this.evaluacionempleado);
+  }
+  get competenciaFinalSupervisor(): number {
+    return this.EvaluacionController.getCompetenciaFinalSupervisor(this.evaluacionempleado);
+  }
+  get competenciaFinalColaborador(): number {
+    return this.EvaluacionController.getCompetenciaFinalColaborador(this.evaluacionempleado);
+  }
+  get totalCalculo(): number {
+    return this.EvaluacionController.getTotalCalculo(this.supervisor as boolean, this.evaluacionempleado);
+  }
 
 
   generatePDF(): void {
@@ -416,21 +407,11 @@ export class FormEvaluationEmployeComponent {
   }
 
   calculatePercentage(item: IEvaluacionDesempenoMeta): string {
-    if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
-    const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
-    const meta = item.meta || 1;
-    const inverso = item.inverso || false;
-    if (meta === 0 && !inverso) return '0.00';
-    if (logro === 0 && inverso) return '0.00';
-    if (logro === 0 && !inverso) return '0.00';
-    const percentage = inverso ? (meta / logro) * 100 : (logro / meta) * 100;
-    return percentage.toFixed(2);
+    return this.EvaluacionController.calculatePercentage(item);
   }
 
   calculateResult(item: IEvaluacionDesempenoMeta): string {
-    const percentage = parseFloat(this.calculatePercentage(item));
-    const peso = item.peso || 0;
-    return ((percentage * peso) / 100).toFixed(2);
+    return this.EvaluacionController.calculateResult(item);
   }
 
   onSubmit(): void {

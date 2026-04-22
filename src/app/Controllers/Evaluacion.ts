@@ -5,7 +5,7 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 import { IEvaluacion, IEvaluacionDto, IEvaluacionGoal, IEvalucionResultDto, IGoalEmpleadoRespuesta, IReporte01 } from "../Models/Evaluacion/IEvaluacion";
 import { ValoresEvaluacion } from "./ValoresEvaluacion";
 import { IValoresEvaluacion } from "../Models/ValoresEvaluacion/IValoresEvaluacion";
-import { IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+import { IEvaluacionDesempenoMeta, IResultadoLogro } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
 import { PorcientoDesempenoCompetencia } from "./PorcientoDesempenoCompetencia";
 import { IPorcientoDesempenoCompetencia } from "../Models/PorcientoDesempenoCompetencia/IPorcientoDesempenoCompetencia";
 import { ComunicacionService } from "../Services/comunicacion.service";
@@ -275,6 +275,62 @@ export class Evaluacion implements OnInit {
 
     public estaEnRango(rango: { RangoDesde: number; RangoHasta: number }, valor: number): boolean {
         return rango.RangoDesde <= valor && valor <= rango.RangoHasta;
+    }
+
+    public calculatePercentage(item: IEvaluacionDesempenoMeta): string {
+        if (!item.evaluacioneDesempenoMetaRespuestas) return '0.00';
+        const logro = item.evaluacioneDesempenoMetaRespuestas.logro || 0;
+        const meta = item.meta || 1;
+        const inverso = item.inverso || false;
+        if (meta === 0 && !inverso) return '0.00';
+        if (logro === 0) return '0.00';
+        const percentage = inverso ? (meta / logro) * 100 : (logro / meta) * 100;
+        return percentage.toFixed(2);
+    }
+
+    public calculateResult(item: IEvaluacionDesempenoMeta): string {
+        const percentage = parseFloat(this.calculatePercentage(item));
+        const peso = item.peso || 0;
+        return ((percentage * peso) / 100).toFixed(2);
+    }
+
+    public getPromedioDesempeno(evaluacion?: IEvaluacion): number {
+        const metas = (evaluacion ?? this.model).evaluacionDesempenoMetas || [];
+        if (metas.length === 0) return 0;
+        const suma = metas.reduce((sum, item) => {
+            const perc = parseFloat(this.calculatePercentage(item));
+            return sum + (isNaN(perc) ? 0 : perc);
+        }, 0);
+        const avg = suma / metas.length;
+        return isNaN(avg) ? 0 : avg;
+    }
+
+    public getDesempenoFinal(evaluacion?: IEvaluacion): number {
+        return (this.getPromedioDesempeno(evaluacion) * (Number(this.porcentajeDesempeno) || 0)) / 100 || 0;
+    }
+
+    public getPromedioCompetenciasColaborador(evaluacion?: IEvaluacion): number {
+        return Number((evaluacion ?? this.model).puntuacioncompetenciacolaborador) || 0;
+    }
+
+    public getPromedioCompetenciasSupervisor(evaluacion?: IEvaluacion): number {
+        return Number((evaluacion ?? this.model).puntuacioncompetenciasupervisor) || 0;
+    }
+
+    public getCompetenciaFinalColaborador(evaluacion?: IEvaluacion): number {
+        return (this.getPromedioCompetenciasColaborador(evaluacion) * (Number(this.porcentajeCompetencia) || 0)) / 100 || 0;
+    }
+
+    public getCompetenciaFinalSupervisor(evaluacion?: IEvaluacion): number {
+        return (this.getPromedioCompetenciasSupervisor(evaluacion) * (Number(this.porcentajeCompetencia) || 0)) / 100 || 0;
+    }
+
+    public getTotalCalculo(supervisor: boolean, evaluacion?: IEvaluacion): number {
+        const compFinal = supervisor
+            ? this.getCompetenciaFinalSupervisor(evaluacion)
+            : this.getCompetenciaFinalColaborador(evaluacion);
+        const total = (this.getDesempenoFinal(evaluacion) || 0) + (compFinal || 0);
+        return isNaN(total) ? 0 : total;
     }
 
     public getdatos() {
