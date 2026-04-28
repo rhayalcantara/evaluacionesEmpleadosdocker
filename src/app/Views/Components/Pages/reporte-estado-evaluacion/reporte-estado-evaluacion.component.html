@@ -1,0 +1,177 @@
+<div class="container-fluid py-4">
+
+  <!-- Encabezado -->
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+    <div>
+      <h4 class="mb-0 fw-bold">Estado de Evaluaciones por Período</h4>
+      <small class="text-muted">Distribución por estado del proceso de evaluación</small>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="mb-0 fw-semibold text-nowrap">Período:</label>
+      <select class="form-select form-select-sm" style="min-width:220px"
+              [(ngModel)]="periodoSeleccionado" (change)="onPeriodoChange()">
+        <option *ngFor="let p of periodos" [value]="p.id">{{ p.descripcion }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Cargando evaluaciones...</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- Cards por estado + Total -->
+    <div class="row g-3 mb-4">
+
+      <div class="col-12 col-sm-6 col-md-4 col-xl-2"
+           *ngFor="let estado of estados; let i = index">
+        <div class="card shadow-sm h-100 border-0 estado-card"
+             [style.border-left]="'4px solid ' + estado.color"
+             (click)="toggleEstado(i)" style="cursor:pointer">
+          <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="text-muted small">{{ estado.etiqueta }}</div>
+                <div class="fw-bold fs-4" [style.color]="estado.color">
+                  {{ estado.empleados.length }}
+                </div>
+                <div class="text-muted" style="font-size:0.75rem">evaluaciones</div>
+              </div>
+              <span class="badge rounded-pill"
+                    [style.background-color]="estado.color">
+                {{ porcentajeEstado(estado) | number:'1.1-1' }}%
+              </span>
+            </div>
+            <div class="mt-2 progress" style="height:4px">
+              <div class="progress-bar"
+                   [style.width]="porcentajeEstado(estado) + '%'"
+                   [style.background-color]="estado.color"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta total -->
+      <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm h-100 border-0 bg-light">
+          <div class="card-body py-3">
+            <div class="text-muted small">Total Evaluaciones</div>
+            <div class="fw-bold fs-4 text-dark">{{ totalEvaluaciones }}</div>
+            <div class="text-muted" style="font-size:0.75rem">{{ periodoDescripcion }}</div>
+            <div class="mt-1" style="font-size:0.75rem">
+              <span class="text-success fw-semibold">{{ porcentajeCompletado }}% completado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Barra de distribución -->
+    <div class="card shadow-sm border-0 mb-4" *ngIf="totalEvaluaciones > 0">
+      <div class="card-body">
+        <h6 class="fw-semibold mb-2">Distribución por estado</h6>
+        <div class="d-flex rounded overflow-hidden" style="height:28px">
+          <div *ngFor="let estado of estados"
+               [style.width]="porcentajeEstado(estado) + '%'"
+               [style.background-color]="estado.color"
+               [title]="estado.etiqueta + ': ' + estado.empleados.length + ' (' + porcentajeEstado(estado) + '%)'"
+               class="d-flex align-items-center justify-content-center text-white fw-semibold"
+               style="font-size:0.75rem; transition:width 0.3s; min-width:28px; overflow:hidden">
+            {{ porcentajeEstado(estado) | number:'1.1-1' }}%
+          </div>
+        </div>
+        <div class="d-flex gap-3 mt-2 flex-wrap">
+          <div *ngFor="let estado of estados" class="d-flex align-items-center gap-1">
+            <div class="rounded-circle" style="width:10px;height:10px"
+                 [style.background-color]="estado.color"></div>
+            <span style="font-size:0.75rem" class="text-muted">{{ estado.etiqueta }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico de barras -->
+    <div class="card shadow-sm border-0 mb-4" *ngIf="estados.length > 0">
+      <div class="card-body">
+        <h6 class="fw-semibold mb-3">Gráfico por Estado</h6>
+        <div style="position:relative; height:300px">
+          <canvas #chartCanvas></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acordeón detalle por estado -->
+    <div *ngFor="let estado of estados; let i = index" class="mb-3">
+      <div class="card shadow-sm border-0">
+
+        <div class="card-header d-flex align-items-center justify-content-between py-2"
+             [style.background-color]="estado.color + '18'"
+             [style.border-left]="'4px solid ' + estado.color"
+             (click)="toggleEstado(i)" style="cursor:pointer">
+          <div class="d-flex align-items-center gap-3">
+            <span class="fw-bold" [style.color]="estado.color">{{ estado.etiqueta }}</span>
+            <span class="badge rounded-pill"
+                  [style.background-color]="estado.color">{{ estado.empleados.length }}</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small">
+              {{ porcentajeEstado(estado) | number:'1.1-1' }}% del total
+            </span>
+            <span class="text-muted">{{ estadoAbierto === i ? '▲' : '▼' }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="estadoAbierto === i" class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Colaborador</th>
+                  <th>Identificación</th>
+                  <th>Departamento</th>
+                  <th>Posición</th>
+                  <th>Supervisor</th>
+                  <th class="text-center">AutoEval.</th>
+                  <th class="text-center">SuperEval.</th>
+                  <th class="text-center fw-bold">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let emp of estado.empleados">
+                  <td class="fw-semibold">{{ emp.colaborador }}</td>
+                  <td>{{ emp.identificacion }}</td>
+                  <td>{{ emp.departamento }}</td>
+                  <td>{{ emp.posision }}</td>
+                  <td>{{ emp.supervisor }}</td>
+                  <td class="text-center">{{ emp.autoevaluacion | number:'1.1-2' }}</td>
+                  <td class="text-center">{{ emp.superevaluacion | number:'1.1-2' }}</td>
+                  <td class="text-center">
+                    <span class="badge rounded-pill fw-bold"
+                          [style.background-color]="estado.color">
+                      {{ emp.totalCalculo | number:'1.1-2' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sin datos -->
+    <div *ngIf="totalEvaluaciones === 0" class="text-center py-5 text-muted">
+      <svg width="64" height="64" fill="currentColor" class="mb-3 opacity-25"
+           viewBox="0 0 16 16">
+        <path d="M4 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm-2-4a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm-2-4a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM8 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      </svg>
+      <p class="fs-5">No se encontraron evaluaciones para el período seleccionado.</p>
+    </div>
+
+  </ng-container>
+</div>
