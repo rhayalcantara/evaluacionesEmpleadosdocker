@@ -263,7 +263,8 @@ static  generaNss() {
      const currentPromedioCompSup = this.promedioCompetenciasSupervisor(this.evaluacionempleado);
      const currentCompFinalColab = this.competenciaFinalColaborador(this.evaluacionempleado);
      const currentCompFinalSup = this.competenciaFinalSupervisor(this.evaluacionempleado);
-     const currentPuntuacionFinal = (((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2);
+     const currentPuntuacionFinal = this.evaluacionempleado.totalCalculo ||
+        ((currentDesempenoFinal + currentCompFinalSup) * 0.8) + ((currentDesempenoFinal + currentCompFinalColab) * 0.2);
 
     try {
       // --- Contenido Competencias ---
@@ -279,8 +280,8 @@ static  generaNss() {
               let observacion = respuesta?.observacion ?? 'Sin observación';
               let observacionSupervisor = respuesta?.observacionsupervisor ?? 'Sin observación';
               const observacionempleado = `Comentario Empleado : ${observacion}`;
-              const observacionsupervisor = `Comentario Supervisor : ${observacionSupervisor}`;	
-             
+              const observacionsupervisor = `Comentario Supervisor : ${observacionSupervisor}`;
+
               return [
                   { text: nombre, style: 'goalHeader' },
                   { text: descripcion, style: 'goalDescription' },
@@ -307,7 +308,7 @@ static  generaNss() {
       ] : [];
 
       // --- Contenido Objetivos ---
-  
+
       let objetivosTableBody: any[] = [];
       if (this.evaluacionempleado.evaluacionDesempenoMetas && this.evaluacionempleado.evaluacionDesempenoMetas.length > 0) {
           objetivosTableBody = [
@@ -363,14 +364,14 @@ static  generaNss() {
               [{ text: `RESULTADOS OBJETIVOS (${(this.porcentajeDesempeno).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
               [{ text: 'Total Peso:', bold: true }, {}, { text: '100%', alignment: 'right' }],
               [{ text: 'Promedio Objetivos:', bold: true }, {}, { text: `${currentPromedioDesempeno.toFixed(2)}%`, alignment: 'right' }],
-              [{ text: `Desempeño Objetivo (${(this.porcentajeDesempeno ).toFixed(0)}%):`, bold: true }, {}, { text: (currentDesempenoFinal/100).toFixed(2), alignment: 'right' }],
+              [{ text: `Desempeño Objetivo (${(this.porcentajeDesempeno ).toFixed(0)}%):`, bold: true }, {}, { text: currentDesempenoFinal.toFixed(2), alignment: 'right' }],
               [{ text: `RESULTADOS COMPETENCIAS (${(this.porcentajeCompetencia ).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
               [{ text: `COMPETENCIAS (${(this.porcentajeCompetencia).toFixed(0)}%)`, style: 'resultsSubHeader', fillColor: '#EAECEE' },  { text: 'Evaluación Supervisor', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' } , { text: 'Autoevaluación', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' }],
               [{ text: 'Promedio Desempeño de las Competencias' },  { text: currentPromedioCompSup.toFixed(2), alignment: 'right' } , { text: currentPromedioCompColab.toFixed(2), alignment: 'right' }],
-              [{ text: `Desempeño Final (${(this.porcentajeCompetencia ).toFixed(0)}%):` },  { text: (currentCompFinalSup/100).toFixed(2), alignment: 'right' } , { text: (currentCompFinalColab/100).toFixed(2), alignment: 'right' }],
-              [{ text: 'Total Evaluación (Objetivos + Competencias)' }, { text: ((currentDesempenoFinal + currentCompFinalSup)/100).toFixed(2), alignment: 'right' } , { text: ((currentDesempenoFinal + currentCompFinalColab)/100).toFixed(2), alignment: 'right' }],
-              [{ text: 'Ponderación Evaluación ( 80% Eva Supervisor+20% Autoeva )' }, { text: (((currentDesempenoFinal + currentCompFinalSup)/100)*.8).toFixed(2), alignment: 'right' } , { text: (((currentDesempenoFinal + currentCompFinalColab)/100)*.2).toFixed(2), alignment: 'right' }],
-              [{ text: 'Puntuación Final', style: 'resultsTotal',colSpan: 2, bold: true, fillColor: '#D5F5E3' }, {}, { text: ((((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2)).toFixed(2), style: 'resultsTotal', bold: true, alignment: 'right', fillColor: '#D5F5E3' }]
+              [{ text: `Desempeño Final (${(this.porcentajeCompetencia ).toFixed(0)}%):` },  { text: currentCompFinalSup.toFixed(2), alignment: 'right' } , { text: currentCompFinalColab.toFixed(2), alignment: 'right' }],
+              [{ text: 'Total Evaluación (Objetivos + Competencias)' }, { text: (currentDesempenoFinal + currentCompFinalSup).toFixed(2), alignment: 'right' } , { text: (currentDesempenoFinal + currentCompFinalColab).toFixed(2), alignment: 'right' }],
+              [{ text: 'Ponderación Evaluación ( 80% Eva Supervisor+20% Autoeva )' }, { text: ((currentDesempenoFinal + currentCompFinalSup)*.8).toFixed(2), alignment: 'right' } , { text: ((currentDesempenoFinal + currentCompFinalColab)*.2).toFixed(2), alignment: 'right' }],
+              [{ text: 'Puntuación Final', style: 'resultsTotal',colSpan: 2, bold: true, fillColor: '#D5F5E3' }, {}, { text: currentPuntuacionFinal.toFixed(2), style: 'resultsTotal', bold: true, alignment: 'right', fillColor: '#D5F5E3' }]
             ]
           },
           layout: 'lightHorizontalLines', style: 'resultsTable'
@@ -449,7 +450,8 @@ static  generaNss() {
     const currentPromedioCompSup = this.promedioCompetenciasSupervisor(this.evaluacionempleado);
     const currentCompFinalColab = this.competenciaFinalColaborador(this.evaluacionempleado);
     const currentCompFinalSup = this.competenciaFinalSupervisor(this.evaluacionempleado);
-    const currentPuntuacionFinal = (((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2);
+    const currentPuntuacionFinal = this.evaluacionempleado.totalCalculo ||
+        ((currentDesempenoFinal + currentCompFinalSup) * 0.8) + ((currentDesempenoFinal + currentCompFinalColab) * 0.2);
 
     try {
       // --- Contenido Competencias ---
@@ -547,14 +549,14 @@ static  generaNss() {
               [{ text: `RESULTADOS OBJETIVOS (${(this.porcentajeDesempeno).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
               [{ text: 'Total Peso:', bold: true }, {}, { text: '100%', alignment: 'right' }],
               [{ text: 'Promedio Objetivos:', bold: true }, {}, { text: `${currentPromedioDesempeno.toFixed(2)}%`, alignment: 'right' }],
-              [{ text: `Desempeño Objetivo (${(this.porcentajeDesempeno ).toFixed(0)}%):`, bold: true }, {}, { text: (currentDesempenoFinal/100).toFixed(2), alignment: 'right' }],
+              [{ text: `Desempeño Objetivo (${(this.porcentajeDesempeno ).toFixed(0)}%):`, bold: true }, {}, { text: currentDesempenoFinal.toFixed(2), alignment: 'right' }],
               [{ text: `RESULTADOS COMPETENCIAS (${(this.porcentajeCompetencia ).toFixed(0)}%)`, style: 'resultsHeader', colSpan: 3, alignment: 'center', fillColor: '#3498DB', color: 'white' }, {}, {}],
               [{ text: `COMPETENCIAS (${(this.porcentajeCompetencia).toFixed(0)}%)`, style: 'resultsSubHeader', fillColor: '#EAECEE' },  { text: 'Evaluación Supervisor', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' } , { text: 'Autoevaluación', style: 'resultsSubHeader', alignment: 'right', fillColor: '#EAECEE' }],
               [{ text: 'Promedio Desempeño de las Competencias' },  { text: currentPromedioCompSup.toFixed(2), alignment: 'right' } , { text: currentPromedioCompColab.toFixed(2), alignment: 'right' }],
-              [{ text: `Desempeño Final (${(this.porcentajeCompetencia ).toFixed(0)}%):` },  { text: (currentCompFinalSup/100).toFixed(2), alignment: 'right' } , { text: (currentCompFinalColab/100).toFixed(2), alignment: 'right' }],
-              [{ text: 'Total Evaluación (Objetivos + Competencias)' }, { text: ((currentDesempenoFinal + currentCompFinalSup)/100).toFixed(2), alignment: 'right' } , { text: ((currentDesempenoFinal + currentCompFinalColab)/100).toFixed(2), alignment: 'right' }],
-              [{ text: 'Ponderación Evaluación ( 80% Eva Supervisor+20% Autoeva )' }, { text: (((currentDesempenoFinal + currentCompFinalSup)/100)*.8).toFixed(2), alignment: 'right' } , { text: (((currentDesempenoFinal + currentCompFinalColab)/100)*.2).toFixed(2), alignment: 'right' }],
-              [{ text: 'Puntuación Final', style: 'resultsTotal',colSpan: 2, bold: true, fillColor: '#D5F5E3' }, {}, { text: ((((currentDesempenoFinal + currentCompFinalSup)/100)*.8)+(((currentDesempenoFinal + currentCompFinalColab)/100)*.2)).toFixed(2), style: 'resultsTotal', bold: true, alignment: 'right', fillColor: '#D5F5E3' }]
+              [{ text: `Desempeño Final (${(this.porcentajeCompetencia ).toFixed(0)}%):` },  { text: currentCompFinalSup.toFixed(2), alignment: 'right' } , { text: currentCompFinalColab.toFixed(2), alignment: 'right' }],
+              [{ text: 'Total Evaluación (Objetivos + Competencias)' }, { text: (currentDesempenoFinal + currentCompFinalSup).toFixed(2), alignment: 'right' } , { text: (currentDesempenoFinal + currentCompFinalColab).toFixed(2), alignment: 'right' }],
+              [{ text: 'Ponderación Evaluación ( 80% Eva Supervisor+20% Autoeva )' }, { text: ((currentDesempenoFinal + currentCompFinalSup)*.8).toFixed(2), alignment: 'right' } , { text: ((currentDesempenoFinal + currentCompFinalColab)*.2).toFixed(2), alignment: 'right' }],
+              [{ text: 'Puntuación Final', style: 'resultsTotal',colSpan: 2, bold: true, fillColor: '#D5F5E3' }, {}, { text: currentPuntuacionFinal.toFixed(2), style: 'resultsTotal', bold: true, alignment: 'right', fillColor: '#D5F5E3' }]
             ]
           },
           layout: 'lightHorizontalLines', style: 'resultsTable'

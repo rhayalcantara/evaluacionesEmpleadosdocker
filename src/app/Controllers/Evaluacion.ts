@@ -299,10 +299,10 @@ export class Evaluacion implements OnInit {
         if (metas.length === 0) return 0;
         const suma = metas.reduce((sum, item) => {
             const perc = parseFloat(this.calculatePercentage(item));
-            return sum + (isNaN(perc) ? 0 : perc);
+            const peso = item.peso || 0;
+            return sum + ((isNaN(perc) ? 0 : perc) * peso / 100);
         }, 0);
-        const avg = suma / metas.length;
-        return isNaN(avg) ? 0 : avg;
+        return isNaN(suma) ? 0 : suma;
     }
 
     public getDesempenoFinal(evaluacion?: IEvaluacion): number {
@@ -326,10 +326,13 @@ export class Evaluacion implements OnInit {
     }
 
     public getTotalCalculo(supervisor: boolean, evaluacion?: IEvaluacion): number {
-        const compFinal = supervisor
-            ? this.getCompetenciaFinalSupervisor(evaluacion)
-            : this.getCompetenciaFinalColaborador(evaluacion);
-        const total = (this.getDesempenoFinal(evaluacion) || 0) + (compFinal || 0);
+        const desempeno = this.getDesempenoFinal(evaluacion) || 0;
+        const compColab = this.getCompetenciaFinalColaborador(evaluacion) || 0;
+        const totalColab = desempeno + compColab;
+        if (!supervisor) return isNaN(totalColab) ? 0 : totalColab;
+        const compSup = this.getCompetenciaFinalSupervisor(evaluacion) || 0;
+        const totalSup = desempeno + compSup;
+        const total = (totalColab * 0.2) + (totalSup * 0.8);
         return isNaN(total) ? 0 : total;
     }
 
