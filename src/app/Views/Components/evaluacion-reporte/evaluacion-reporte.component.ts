@@ -280,9 +280,10 @@ export class EvaluacionReporteComponent implements OnInit {
     this.evaluacionService.GetEvaluacionReporte01(this.currentPeriodId).subscribe({
       next: (response: ModelResponse) => {
         if (response && response.data) {
-          this.reportData = (response.data as IReporte01[]).filter(e =>
-            (e.codigoestado ?? '').toUpperCase() === 'A'
-          );
+          this.reportData = (response.data as IReporte01[]).filter(e => {
+            const c = ((e as any).codigoestado ?? (e as any).CODIGOESTADO ?? (e as any).CodigoEstado ?? '').toUpperCase();
+            return c === 'A';
+          });
           this.filteredData = [...this.reportData];
 
           // Extract unique departments for filter
