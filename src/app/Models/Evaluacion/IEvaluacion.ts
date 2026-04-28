@@ -116,9 +116,10 @@ export interface IEvaluacion {
   puntuacioncompetenciasupervisor: number;
   compSuper70: number;
   superevaluacion: number;
-  superevaluacion80: number;  
+  superevaluacion80: number;
   totalCalculo: number;
   secuencial_empleado: number;
+  codigoestado: string;
 }
 
 export interface IReporte02 {
@@ -248,8 +249,9 @@ export interface IReporte02 {
   puntuacioncompetenciasupervisor: number;
   compSuper70: number;
   superevaluacion: number;
-  superevaluacion80: number;  
+  superevaluacion80: number;
   totalCalculo: number;
+  codigoestado: string;
 }
 
 export interface IReporte02 {

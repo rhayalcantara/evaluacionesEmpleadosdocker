@@ -1,0 +1,86 @@
+<div class="container-fluid py-4">
+
+  <!-- Header -->
+  <div class="row mb-3 align-items-center">
+    <div class="col">
+      <h4 class="mb-0 fw-bold">Evaluaciones de Empleados Inactivos</h4>
+      <small class="text-muted">Empleados con estado <strong>Inactivo (I)</strong> que tienen evaluación en el período</small>
+    </div>
+    <div class="col-auto">
+      <select class="form-select" [(ngModel)]="periodoSeleccionado" (change)="onPeriodoChange()">
+        <option *ngFor="let p of periodos" [value]="p.id">{{ p.descripcion }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Resumen -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center py-3">
+        <div class="card-body">
+          <div class="fs-1 fw-bold text-warning">{{ registros.length }}</div>
+          <div class="text-muted small">Empleados inactivos con evaluación</div>
+          <div class="text-muted small">{{ periodoNombre }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Cargando datos...</p>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && registros.length === 0" class="text-center py-5 text-muted">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-check-circle mb-3 text-success" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+      <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+    </svg>
+    <p class="mb-1 fw-semibold">No hay empleados inactivos con evaluación en este período.</p>
+  </div>
+
+  <!-- Tabla -->
+  <div *ngIf="!loading && registros.length > 0" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Identificación</th>
+              <th>Colaborador</th>
+              <th>Departamento</th>
+              <th>Cargo</th>
+              <th>Estado Empleado</th>
+              <th>Estado Eval.</th>
+              <th>Puntuación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of registros; let i = index">
+              <td class="text-muted small">{{ i + 1 }}</td>
+              <td>{{ r.identificacion }}</td>
+              <td class="fw-semibold">{{ r.colaborador }}</td>
+              <td>{{ r.departamento }}</td>
+              <td>{{ r.posision }}</td>
+              <td>
+                <span [class]="getEstadoEmpleadoClass(r.codigoestado)">
+                  {{ getEstadoEmpleadoLabel(r.codigoestado) }}
+                </span>
+              </td>
+              <td>
+                <span [class]="getEstadoClass(r.estatus_evaluacion)">
+                  {{ r.estatus_evaluacion }}
+                </span>
+              </td>
+              <td>{{ r.totalCalculo | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -103,10 +103,7 @@ export class ReporteEstadoEvaluacionComponent implements OnInit, AfterViewInit, 
   }
 
   private procesarEstados(evaluaciones: IReporte01[]): void {
-    const activos = evaluaciones.filter(e => {
-      const c = ((e as any).codigoestado ?? (e as any).CODIGOESTADO ?? (e as any).CodigoEstado ?? '').toUpperCase();
-      return c === 'A';
-    });
+    const activos = evaluaciones.filter(e => !!e.colaborador);
     this.estados = ESTADOS_CONFIG.map(e => ({ ...e, empleados: [] }));
     let extraIdx = 0;
 

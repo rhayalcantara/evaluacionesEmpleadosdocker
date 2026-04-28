@@ -172,6 +172,16 @@ const routes: Routes = [
     .then((m)=> m.ReporteGruposComponent),
     canActivate: [AuthGuard]
   },
+  { path: 'ReporteEstadoEvaluacion',
+    loadComponent:()=> import('./Views/Components/Pages/reporte-estado-evaluacion/reporte-estado-evaluacion.component')
+    .then((m)=> m.ReporteEstadoEvaluacionComponent),
+    canActivate: [AuthGuard]
+  },
+  { path: 'ReporteEmpleadosSinDatos',
+    loadComponent:()=> import('./Views/Components/Pages/reporte-empleados-sin-datos/reporte-empleados-sin-datos.component')
+    .then((m)=> m.ReporteEmpleadosSinDatosComponent),
+    canActivate: [AuthGuard]
+  },
   { path: 'historial-evaluaciones',
     loadComponent:()=> import('./Views/Components/Pages/historial-evaluaciones/historial-evaluaciones.component')
     .then((m)=> m.HistorialEvaluacionesComponent),
