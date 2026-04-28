@@ -71,7 +71,9 @@ export class ReporteGruposComponent implements OnInit {
     this.evaluacionService.GetEvaluacionReporte01(this.periodoSeleccionado).subscribe({
       next: (res: ModelResponse) => {
         if (res?.data) {
-          this.reportData = res.data;
+          this.reportData = (res.data as IReporte01[]).filter(e =>
+            (e.codigoestado ?? '').toUpperCase() === 'A'
+          );
           this.agrupar();
         }
         this.loading = false;

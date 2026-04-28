@@ -103,10 +103,13 @@ export class ReporteEstadoEvaluacionComponent implements OnInit, AfterViewInit, 
   }
 
   private procesarEstados(evaluaciones: IReporte01[]): void {
+    const activos = evaluaciones.filter(e =>
+      (e.codigoestado ?? '').toUpperCase() === 'A'
+    );
     this.estados = ESTADOS_CONFIG.map(e => ({ ...e, empleados: [] }));
     let extraIdx = 0;
 
-    for (const ev of evaluaciones) {
+    for (const ev of activos) {
       const key = (ev.estatus_evaluacion ?? '').trim().toLowerCase();
       if (!key) continue;
 
