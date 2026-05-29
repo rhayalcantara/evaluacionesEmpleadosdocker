@@ -5,6 +5,7 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { FormEvaluationEmployeComponent } from '../../Forms/FormEvaluationEmploye/FormEvaluationEmploye.component';
 import { CardEmpleadoComponent } from '../../ViewEmpleado/card-empleado/card-empleado.component';
+import { FormEvaluationMedioAnoComponent } from '../../Forms/form-evaluation-medio-ano/form-evaluation-medio-ano.component';
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { EvaluacionDesempenoMeta } from 'src/app/Controllers/EvaluacionDesempenoMeta';
@@ -13,9 +14,13 @@ import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 @Component({
   selector: 'app-evaluacion',
   standalone: true,
-  imports: [CommonModule, FormsModule, 
+  imports: [
+    CommonModule,
+    FormsModule, 
     FormEvaluationEmployeComponent,
-    CardEmpleadoComponent],
+    FormEvaluationMedioAnoComponent,
+    CardEmpleadoComponent
+  ],
   templateUrl: './evaluacion.component.html',
   styleUrls: ['./evaluacion.component.css']
 })

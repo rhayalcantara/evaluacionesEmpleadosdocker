@@ -1,0 +1,463 @@
+<form id="midYearEvaluationForm" (keydown.enter)="$event.preventDefault()">
+  <h1>{{ titulo }}</h1>
+  <h3>Periodo: {{ periodo.descripcion }}</h3>
+  <p>Fecha: {{ fecha | date }}</p>
+
+  <!-- 1. INFORMACIÓN DEL COLABORADOR -->
+  <div class="card my-4 p-3 bg-light text-dark">
+    <h4>Información del Colaborador</h4>
+    <div class="row">
+      <div class="col-md-4"><strong>Nombre:</strong> {{ empleado.nombreunido || 'N/A' }}</div>
+      <div class="col-md-4"><strong>Cargo:</strong> {{ empleado.cargo || 'N/A' }}</div>
+      <div class="col-md-4"><strong>Fecha Ingreso:</strong> {{ empleado.fechapostulacion | date:'dd/MM/yyyy' }}</div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-4"><strong>Departamento:</strong> {{ empleado.departamento || 'N/A' }}</div>
+      <div class="col-md-4"><strong>Sucursal:</strong> {{ empleado.oficina || 'N/A' }}</div>
+      <div class="col-md-4"><strong>Supervisor:</strong> {{ empleado.jefeinmediato || 'N/A' }}</div>
+    </div>
+  </div>
+
+  <!-- 2. REVISIÓN DE OBJETIVOS DEL AÑO -->
+  <div class="my-4 text-dark" *ngIf="desempeno.length > 0">
+    <h2>Revisión de Objetivos del Año</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="bg-light">
+          <tr>
+            <th>Perspectiva</th>
+            <th>Objetivo</th>
+            <th>Medio Verificación</th>
+            <th>Tipo</th>
+            <th>Peso</th>
+            <th class="text-end">Meta</th>
+            <th class="text-end">Avance a la Fecha (Logro)</th>
+            <th class="text-end">% Logro</th>
+            <th>Comentarios del Colaborador</th>
+            <th *ngIf="supervisor">Comentarios del Supervisor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of desempeno; let index = index">
+            <td>{{ row.perspectiva }}</td>
+            <td>{{ row.objetivo }}</td>
+            <td>
+              <input 
+                type="text" 
+                class="form-control form-control-sm"
+                [(ngModel)]="resultadologro[index].medioverificacion"
+                name="medioverificacion-{{index}}"
+                [disabled]="supervisor || sololectura"
+                (change)="onMedioverificacionChange($event, index)">
+            </td>
+            <td>{{ row.tipo }}</td>
+            <td>{{ row.peso }}%</td>
+            <td class="text-end">{{ row.meta }}</td>
+            <td class="text-end">
+              <input 
+                type="number" 
+                class="form-control form-control-sm text-end"
+                [(ngModel)]="resultadologro[index].logro"
+                name="logro-{{index}}"
+                [disabled]="supervisor || sololectura"
+                (input)="onLogroChange($event, index)">
+            </td>
+            <td class="text-end">{{ resultadologro[index].porcientologro | number:'1.2-2' }}%</td>
+            <td>
+              <input 
+                type="text" 
+                class="form-control form-control-sm"
+                [(ngModel)]="resultadologro[index].comentario"
+                name="comentario-colab-{{index}}"
+                [disabled]="supervisor || sololectura"
+                (change)="onComentarioObjetivoChange($event, index)">
+            </td>
+            <td *ngIf="supervisor">
+              <input 
+                type="text" 
+                class="form-control form-control-sm"
+                [(ngModel)]="resultadologro[index].comentariosupervisor"
+                name="comentario-super-{{index}}"
+                [disabled]="sololectura"
+                (change)="onComentarioObjetivoSupervisorChange($event, index)">
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
+            <td><strong>{{ totalPeso }}%</strong></td>
+            <td colspan="5"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. EVALUACIÓN DE COMPETENCIAS -->
+  <div class="my-4 text-dark" *ngIf="evaluacionempleado?.evaluacionGoals && evaluacionempleado.evaluacionGoals.length > 0">
+    <h2>Evaluación de Competencias (Cualitativa)</h2>
+    <div *ngFor="let met of evaluacionempleado.evaluacionGoals; let index = index" class="card my-3 p-3">
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+        <h5 class="mb-0 text-primary">{{ met.goal.objetivo.grupoCompetencia.nombre }}</h5>
+        <span class="badge bg-secondary">Competencia {{ index + 1 }}</span>
+      </div>
+      <div class="mt-2 text-dark">
+        <strong>{{ met.goal.objetivo.nombre }}</strong>
+        <p class="text-muted font-italic mb-3">{{ met.goal.objetivo.descripcion }}</p>
+      </div>
+
+      <div class="row">
+        <!-- Observación Colaborador -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label><strong>Observación del Colaborador:</strong></label>
+            <textarea 
+              class="form-control" 
+              rows="3"
+              [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].observacion"
+              name="comp-obs-colab-{{index}}"
+              [disabled]="supervisor || sololectura"
+              placeholder="Describa su desempeño con respecto a esta competencia..."></textarea>
+          </div>
+        </div>
+        <!-- Observación Supervisor -->
+        <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+          <div class="form-group">
+            <label><strong>Observación del Supervisor:</strong></label>
+            <textarea 
+              class="form-control" 
+              rows="3"
+              [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].observacionsupervisor"
+              name="comp-obs-super-{{index}}"
+              [disabled]="sololectura"
+              placeholder="Escriba la retroalimentación para el colaborador..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. RETROALIMENTACIÓN DE DESEMPEÑO (Start-Stop-Continue-More) -->
+  <div class="my-4 card p-4 text-dark">
+    <h2>Retroalimentación de Desempeño (Modelo Start-Stop-Continue)</h2>
+    <p class="text-muted">Documentación estructurada vinculando las acciones recomendadas con hasta 3 competencias clave.</p>
+
+    <!-- BLOQUE COLABORADOR (AUTOEVALUACIÓN) -->
+    <div class="mt-3">
+      <h4>Retroalimentación del Colaborador</h4>
+      <div class="row">
+        <!-- Continuar Haciendo -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-success">
+            <h6 class="text-success">Continuar Haciendo (Fortalezas a mantener)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackColab.continuar.texto" 
+              name="colab-cont-txt"
+              [disabled]="supervisor || sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="!supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackColab.continuar, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackColab.continuar.competencias" class="badge bg-success d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.continuar, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hacer Más -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-primary">
+            <h6 class="text-primary">Hacer Más (Incrementar esfuerzo/frecuencia)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackColab.mas.texto" 
+              name="colab-mas-txt"
+              [disabled]="supervisor || sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="!supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackColab.mas, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackColab.mas.competencias" class="badge bg-primary d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.mas, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hacer Menos -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-warning">
+            <h6 class="text-warning">Hacer Menos (Reducir actividades ineficientes)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackColab.menos.texto" 
+              name="colab-menos-txt"
+              [disabled]="supervisor || sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="!supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackColab.menos, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackColab.menos.competencias" class="badge bg-warning text-dark d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.menos, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parar de Hacer -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-danger">
+            <h6 class="text-danger">Parar de Hacer (Hábitos nocivos/ineficientes)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackColab.parar.texto" 
+              name="colab-parar-txt"
+              [disabled]="supervisor || sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="!supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackColab.parar, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackColab.parar.competencias" class="badge bg-danger d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.parar, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOQUE SUPERVISOR (EVALUACIÓN EXTERNA) -->
+    <div class="mt-4" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+      <h4>Retroalimentación del Supervisor</h4>
+      <div class="row">
+        <!-- Continuar Haciendo -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-success">
+            <h6 class="text-success">Continuar Haciendo (Fortalezas a mantener)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackSuper.continuar.texto" 
+              name="super-cont-txt"
+              [disabled]="sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackSuper.continuar, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackSuper.continuar.competencias" class="badge bg-success d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.continuar, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hacer Más -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-primary">
+            <h6 class="text-primary">Hacer Más (Incrementar esfuerzo/frecuencia)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackSuper.mas.texto" 
+              name="super-mas-txt"
+              [disabled]="sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackSuper.mas, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackSuper.mas.competencias" class="badge bg-primary d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.mas, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hacer Menos -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-warning">
+            <h6 class="text-warning">Hacer Menos (Reducir actividades ineficientes)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackSuper.menos.texto" 
+              name="super-menos-txt"
+              [disabled]="sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackSuper.menos, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackSuper.menos.competencias" class="badge bg-warning text-dark d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.menos, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parar de Hacer -->
+        <div class="col-md-6 mb-3">
+          <div class="card p-3 border-danger">
+            <h6 class="text-danger">Parar de Hacer (Hábitos nocivos/ineficientes)</h6>
+            <textarea 
+              class="form-control" 
+              rows="3" 
+              [(ngModel)]="feedbackSuper.parar.texto" 
+              name="super-parar-txt"
+              [disabled]="sololectura"></textarea>
+            
+            <div class="mt-2" *ngIf="supervisor && !sololectura">
+              <label class="text-muted small">Vincular Competencia (Hasta 3):</label>
+              <select class="form-select form-select-sm" (change)="onCompetenciaSeleccionada(feedbackSuper.parar, $any($event.target).value)">
+                <option value="" disabled selected>Seleccionar...</option>
+                <option *ngFor="let met of evaluacionempleado?.evaluacionGoals" [value]="met.goalId">
+                  {{ met.goal.objetivo.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span *ngFor="let compId of feedbackSuper.parar.competencias" class="badge bg-danger d-flex align-items-center gap-1">
+                {{ getCompetenciaNombre(compId) }}
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.parar, compId)"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. COMPROMISOS Y PRÓXIMOS PASOS -->
+  <div class="my-4 card p-4 text-dark">
+    <h2>Compromisos y Próximos Pasos</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label><strong>Compromisos del Colaborador:</strong></label>
+          <textarea 
+            class="form-control" 
+            rows="4" 
+            [(ngModel)]="colaboradorCompromisos" 
+            name="colab-compromisos"
+            [disabled]="supervisor || sololectura"
+            placeholder="Escriba los compromisos que asume para el próximo periodo..."></textarea>
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+        <div class="form-group">
+          <label><strong>Compromisos del Supervisor / Próximos Pasos:</strong></label>
+          <textarea 
+            class="form-control" 
+            rows="4" 
+            [(ngModel)]="supervisorCompromisos" 
+            name="super-compromisos"
+            [disabled]="sololectura"
+            placeholder="Describa el plan de apoyo, capacitaciones y próximos pasos a seguir..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUGERENCIA DE CAPACITACIONES (Opcional) -->
+  <div class="cursos-capacitacion card my-4 p-4 text-dark">
+    <h4>Cursos de Capacitación Sugeridos (Seleccione hasta 3)</h4>
+    <div class="cursos-selector mb-3" *ngIf="!sololectura && !supervisor">
+      <select class="form-select" (change)="onCursoSeleccionado(cursos[$any($event.target).value])" [disabled]="cursosSeleccionados.length >= 3">
+        <option value="" disabled selected>Seleccione un curso...</option>
+        <option *ngFor="let curso of cursos; let i = index" [value]="i">{{ curso.descripcion }}</option>
+      </select>
+    </div>
+    
+    <div class="cursos-seleccionados">
+      <div *ngFor="let curso of cursosSeleccionados" class="card p-2 mb-2 bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong>{{ curso.cursoCapacitacion?.descripcion }}</strong>
+          <button type="button" class="btn btn-sm btn-danger" *ngIf="!sololectura && !supervisor" (click)="onCursoRemovido(curso)">Eliminar</button>
+        </div>
+        <div class="mt-2">
+          <label class="small text-muted">¿Por qué sugiere esta capacitación?</label>
+          <textarea 
+            class="form-control" 
+            rows="2" 
+            [(ngModel)]="curso.porque" 
+            name="porque-curso-{{curso.cursoCapacitacionId}}"
+            [disabled]="supervisor || sololectura"
+            maxlength="500"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3 text-dark">
+    <label for="comments">Comentario Adicional:</label>
+    <textarea id="comments" class="form-control" rows="3" [(ngModel)]="comentarioAdicional" name="comments" [disabled]="sololectura"></textarea>
+  </div>
+
+  <!-- ACCIONES -->
+  <div class="mt-4 pb-5 d-flex gap-2">
+    <button *ngIf="mostargrabar" class="btn btn-primary" type="submit" (click)="onSubmit()">Grabar Evaluación</button>
+    <button *ngIf="mostarAceptarBoton" class="btn btn-success" type="button" (click)="onAceptar()">Completar Evaluación</button>
+    <button class="btn btn-secondary" type="button" (click)="cancelar()">Regresar</button>
+  </div>
+</form>

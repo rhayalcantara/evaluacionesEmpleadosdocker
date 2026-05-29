@@ -93,7 +93,17 @@ export class Evaluacion implements OnInit {
             aceptaEnDisgusto: false,
             comentarioDisgusto: "",
             porcentajeDesempeno: 0,
-            porcentajeCompetencia: 0
+            porcentajeCompetencia: 0,
+            colaboradorContinuar: '',
+            colaboradorHacerMas: '',
+            colaboradorHacerMenos: '',
+            colaboradorParar: '',
+            supervisorContinuar: '',
+            supervisorHacerMas: '',
+            supervisorHacerMenos: '',
+            supervisorParar: '',
+            colaboradorCompromisos: '',
+            supervisorCompromisos: ''
         }
         
         return ee;
@@ -398,7 +408,17 @@ export class Evaluacion implements OnInit {
             estadoevaluacion:obj.estadoevaluacion,
             entrevistaConSupervisor:obj.entrevistaConSupervisor,
             aceptaEnDisgusto:obj.aceptaEnDisgusto,
-            comentarioDisgusto:obj.comentarioDisgusto
+            comentarioDisgusto:obj.comentarioDisgusto,
+            colaboradorContinuar: obj.colaboradorContinuar,
+            colaboradorHacerMas: obj.colaboradorHacerMas,
+            colaboradorHacerMenos: obj.colaboradorHacerMenos,
+            colaboradorParar: obj.colaboradorParar,
+            supervisorContinuar: obj.supervisorContinuar,
+            supervisorHacerMas: obj.supervisorHacerMas,
+            supervisorHacerMenos: obj.supervisorHacerMenos,
+            supervisorParar: obj.supervisorParar,
+            colaboradorCompromisos: obj.colaboradorCompromisos,
+            supervisorCompromisos: obj.supervisorCompromisos
         }
         return this.datos.updatedatos<IEvaluacionDto>(this.rutaapi + `/${evaluaciondto.id}`, evaluaciondto);
     }

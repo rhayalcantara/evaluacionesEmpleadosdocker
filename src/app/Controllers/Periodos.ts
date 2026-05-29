@@ -21,7 +21,7 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
       titulomensage:string='Periodos'
       
        public model:IPeriodo = this.inicializamodelo()
-       public titulos=[{descripcion:'Descripcion'},{fechaInicio:'Fechainicio'},{fechaFin:'Fechafin'},{activa:'Activa'}]
+       public titulos=[{descripcion:'Descripcion'},{fechaInicio:'Fechainicio'},{fechaFin:'Fechafin'},{activa:'Activa'},{tipo:'Tipo'}]
        public estado:string='`'
        public totalregistros:number=0
        public actualpage:number=1
@@ -54,7 +54,8 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
         fechaInicio:new Date(),
         fechaFin:new Date(),
         activa:true, 
-        estadoid:0
+        estadoid:0,
+        tipo:'final_ano'
       } 
       
     }
@@ -70,7 +71,8 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
         fechaInicio: new Date(),
         fechaFin: new Date(),
         activa: false,
-        estadoid: 0
+        estadoid: 0,
+        tipo: 'final_ano'
       }
       return p;
     } 

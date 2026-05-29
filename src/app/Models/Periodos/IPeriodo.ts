@@ -8,6 +8,7 @@ export interface IPeriodo{
     fechaFin:Date
     activa:boolean
     estadoid:number
+    tipo?: 'medio_ano' | 'final_ano';
 }
 
 export interface IPeriodo_Dts extends IPeriodo{

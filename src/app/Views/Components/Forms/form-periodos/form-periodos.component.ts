@@ -25,7 +25,8 @@ cancelar() {
     fechaInicio: new Date(),
     fechaFin: new Date(),
     activa: false,
-    estadoid: 0
+    estadoid: 0,
+    tipo: 'final_ano'
   };
   public fg: FormGroup = new FormGroup({});
   public campos: string[] = [];
@@ -65,7 +66,9 @@ cancelar() {
      this.model.descripcion = this.fg.controls["descripcion"].value
      this.model.fechaInicio = this.fg.controls["fechaInicio"].value
      this.model.fechaFin = this.fg.controls["fechaFin"].value
-     this.model.activa = false
+     const activaVal = this.fg.controls["activa"]?.value;
+     this.model.activa = activaVal === true || activaVal === 'true';
+     this.model.tipo = this.fg.controls["tipo"]?.value || 'final_ano';
     if (this.model.id === 0) {
       this.periodoController.insert(this.model).subscribe({
         next: (result) => {

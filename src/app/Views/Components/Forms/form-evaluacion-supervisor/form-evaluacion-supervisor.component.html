@@ -9,6 +9,7 @@
   
     <div class="forms-container">
           <app-form-evaluation-employe
+            *ngIf="periodo.tipo !== 'medio_ano'"
             [empleado]="empleado"
             [periodo]="periodo"
             [supervisor]="true"
@@ -16,5 +17,14 @@
             (dataEmitter)="cancelar()"
             (puntuacion)="onPuntuacion($event)">
         </app-form-evaluation-employe>      
+
+        <app-form-evaluation-medio-ano
+          *ngIf="periodo.tipo === 'medio_ano'"
+          [empleado]="empleado"
+          [periodo]="periodo"
+          [supervisor]="true"
+          titulo="Evaluación de Equipo (Medio Año)"
+          (dataEmitter)="cancelar()">
+        </app-form-evaluation-medio-ano>
     </div>
 </div>
