@@ -173,7 +173,9 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
           });
         },
         error: (err: any) => {
-          if (err.status === 404) {
+          // El interceptor re-lanza el error como string ("Not Found"), no como HttpErrorResponse
+          const is404 = err?.status === 404 || err === 'Not Found' || String(err).toLowerCase().includes('not found');
+          if (is404) {
             // Inicializar nueva evaluación para periodo de medio año
             this.evaluacionempleado = this.EvaluacionController.inicializamodelo();
             this.evaluacionempleado.periodId = this.periodo.id;
