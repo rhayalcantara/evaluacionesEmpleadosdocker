@@ -419,6 +419,41 @@
     </div>
   </div>
 
+  <!-- FIRMA Y FECHA DE ACUERDO -->
+  <div class="card mb-3">
+    <div class="card-header bg-light">
+      <h6 class="mb-0">Firmas y Fecha de Acuerdo</h6>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="text-muted small mb-1">Firma del Colaborador</p>
+          <div class="border rounded p-3 text-center bg-white">
+            <p class="fw-bold mb-0">{{ empleado.nombreunido }}</p>
+            <p class="text-muted small mb-0" *ngIf="evaluacionempleado.fechaRepuestas">
+              Firmado electrónicamente el {{ evaluacionempleado.fechaRepuestas | date:'dd/MM/yyyy' }}
+            </p>
+            <p class="text-muted small mb-0" *ngIf="!evaluacionempleado.fechaRepuestas">
+              Pendiente de firma
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p class="text-muted small mb-1">Firma del Supervisor</p>
+          <div class="border rounded p-3 text-center bg-white">
+            <p class="fw-bold mb-0">{{ empleado.jefeinmediato || 'Supervisor' }}</p>
+            <p class="text-muted small mb-0" *ngIf="supervisor && evaluacionempleado.fechaRepuestas">
+              Firmado electrónicamente el {{ evaluacionempleado.fechaRepuestas | date:'dd/MM/yyyy' }}
+            </p>
+            <p class="text-muted small mb-0" *ngIf="!supervisor">
+              Pendiente de firma del supervisor
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SUGERENCIA DE CAPACITACIONES (Opcional) -->
   <div class="cursos-capacitacion card my-4 p-4 text-dark">
     <h4>Cursos de Capacitación Sugeridos (Seleccione hasta 3)</h4>

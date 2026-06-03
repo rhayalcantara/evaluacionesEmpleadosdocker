@@ -78,14 +78,14 @@ export class NavmenuComponent implements OnInit {
                   localStorage.setItem("empleado", JSON.stringify(this.empleado))
                   //busca el rol del empleado
                   this.buscarEmpleadoRol()
+                  // navegar a Home DESPUÉS de que el empleado esté en localStorage
+                  this.mostramenu=true
+                  this.router.navigate(['Home'])
+                  this.logg='LogOut'
                 })
         }
-          
-        );
 
-          this.mostramenu=true
-          this.router.navigate(['Home'])
-          this.logg='LogOut'
+        );
         }
       }
         if (mess=='nologuiado'){

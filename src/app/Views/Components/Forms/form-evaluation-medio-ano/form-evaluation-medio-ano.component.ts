@@ -387,6 +387,11 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       this.calcularLogro(index);
     });
 
+    // Registrar firma electrónica con la fecha actual si aún no tiene valor
+    if (!this.evaluacionempleado.fechaRepuestas) {
+      this.evaluacionempleado.fechaRepuestas = new Date().toISOString().split('T')[0];
+    }
+
     this.EvaluacionController.model = this.evaluacionempleado;
     this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 
