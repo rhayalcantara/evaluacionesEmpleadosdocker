@@ -52,6 +52,7 @@ export class FormEvaluationEmployeComponent {
   public comentarioDisgusto: string = '';
   public entrevistaConSupervisor: boolean = false;
   public aceptaEnDisgusto: boolean = false;
+  public opcionAceptacion: string = 'conforme';
   public desempeno: IEvalucionResultDto[] = []
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
@@ -128,6 +129,16 @@ export class FormEvaluationEmployeComponent {
           this.entrevistaConSupervisor = this.evaluacionempleado.entrevistaConSupervisor ?? false;
           this.aceptaEnDisgusto = this.evaluacionempleado.aceptaEnDisgusto ?? false;
           this.comentarioDisgusto = this.evaluacionempleado.comentarioDisgusto || '';
+          // Restaurar opcionAceptacion desde los campos existentes al cargar una evaluación ya procesada
+          if (this.aceptaEnDisgusto) {
+            this.opcionAceptacion = 'inconforme';
+          } else if (this.comentarioDisgusto === 'De acuerdo') {
+            this.opcionAceptacion = 'de_acuerdo';
+          } else if (this.comentarioDisgusto === 'En conocimiento') {
+            this.opcionAceptacion = 'en_conocimiento';
+          } else {
+            this.opcionAceptacion = 'conforme';
+          }
 
           this.dialogRef.close();
         },
@@ -558,8 +569,27 @@ export class FormEvaluationEmployeComponent {
         this.datos.showMessage("Error: No se ha cargado la evaluación.", this.titulo, "error");
         return;
     }
-    if (this.aceptaEnDisgusto && !this.comentarioDisgusto) {
-      this.datos.showMessage("Debe proporcionar un comentario de No Conformidad.", this.titulo, "error");
+    // Mapear opcionAceptacion a los campos existentes del modelo
+    switch (this.opcionAceptacion) {
+      case 'inconforme':
+        this.aceptaEnDisgusto = true;
+        // comentarioDisgusto ya viene del textarea
+        break;
+      case 'en_conocimiento':
+        this.aceptaEnDisgusto = false;
+        this.comentarioDisgusto = 'En conocimiento';
+        break;
+      case 'de_acuerdo':
+        this.aceptaEnDisgusto = false;
+        this.comentarioDisgusto = 'De acuerdo';
+        break;
+      default: // conforme
+        this.aceptaEnDisgusto = false;
+        this.comentarioDisgusto = '';
+    }
+
+    if (this.opcionAceptacion === 'inconforme' && !this.comentarioDisgusto) {
+      this.datos.showMessage("Debe describir el motivo de su inconformidad.", this.titulo, "error");
       return;
     }
 

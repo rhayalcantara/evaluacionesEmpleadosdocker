@@ -153,23 +153,33 @@
         </div>
         
         <div class="acepta-disgusto">
-          <h4>Aceptación de Evaluación</h4>
-          <label>
-            
-            <input type="radio" [(ngModel)]="aceptaEnDisgusto" [value]="true"  (click)="ondes()" name="aceptaEnDisgusto">
-            Acepta en No Conformidad con la evaluación
-          </label>
-          <label>            
-            <input type="radio"  name="aceptaEnDisgusto" [value]="false" (click)="ondes()" [(ngModel)]="aceptaEnDisgusto"  >
-            Acepta en Conformidad con la evaluación
-          </label>
+          <div class="mb-3">
+            <h5>Resultado de la revisión</h5>
+            <div class="d-flex flex-column gap-2">
+              <label class="d-flex align-items-center gap-2 p-2 border rounded" style="cursor:pointer">
+                <input type="radio" [(ngModel)]="opcionAceptacion" value="conforme" name="opcionAceptacion">
+                <span>&#10004; <strong>Conforme</strong> — Acepta la evaluación completamente</span>
+              </label>
+              <label class="d-flex align-items-center gap-2 p-2 border rounded" style="cursor:pointer">
+                <input type="radio" [(ngModel)]="opcionAceptacion" value="de_acuerdo" name="opcionAceptacion">
+                <span>&#129309; <strong>De acuerdo</strong> — Está de acuerdo con los resultados</span>
+              </label>
+              <label class="d-flex align-items-center gap-2 p-2 border rounded" style="cursor:pointer">
+                <input type="radio" [(ngModel)]="opcionAceptacion" value="en_conocimiento" name="opcionAceptacion">
+                <span>&#128203; <strong>En conocimiento</strong> — Recibe la evaluación sin objeción formal</span>
+              </label>
+              <label class="d-flex align-items-center gap-2 p-2 border rounded border-danger" style="cursor:pointer">
+                <input type="radio" [(ngModel)]="opcionAceptacion" value="inconforme" name="opcionAceptacion">
+                <span>&#10007; <strong>Inconforme</strong> — No está de acuerdo con la evaluación</span>
+              </label>
+            </div>
+          </div>
         </div>
-       
 
-        <div *ngIf="aceptaEnDisgusto" class="comentario-disgusto">
-          <h4>Comentario de No Conformidad</h4>
-          <textarea id="comentarioDisgusto" [(ngModel)]="comentarioDisgusto" name="comentarioDisgusto" 
-                    placeholder="Por favor, explique su No Conformidad con la evaluación"></textarea>
+        <div *ngIf="opcionAceptacion === 'inconforme'" class="comentario-disgusto mb-3">
+          <label class="form-label"><strong>Motivo de inconformidad:</strong></label>
+          <textarea class="form-control" id="comentarioDisgusto" [(ngModel)]="comentarioDisgusto" name="comentarioDisgusto"
+                    placeholder="Describa el motivo de su inconformidad..." rows="4"></textarea>
         </div>
 
         <div class="aceptacion-final">
