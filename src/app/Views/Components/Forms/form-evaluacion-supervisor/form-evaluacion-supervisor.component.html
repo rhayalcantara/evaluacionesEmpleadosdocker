@@ -1,8 +1,13 @@
 <div class="container">
+    <div class="d-flex justify-content-start mb-3">
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        ← Inicio
+      </button>
+    </div>
     <div class="empleadotitulo">
-      <app-card-empleado2 
-        [empleado]="empleado" 
-        [puntuacionFinal]="puntuacionFinal"       
+      <app-card-empleado2
+        [empleado]="empleado"
+        [puntuacionFinal]="puntuacionFinal"
           ></app-card-empleado2>
 
     </div>
@@ -26,5 +31,10 @@
           titulo="Evaluación de Equipo (Medio Año)"
           (dataEmitter)="cancelar()">
         </app-form-evaluation-medio-ano>
+    </div>
+    <div class="d-flex justify-content-start mt-3">
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        ← Inicio
+      </button>
     </div>
 </div>

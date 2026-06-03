@@ -1,4 +1,9 @@
 <form id="midYearEvaluationForm" (keydown.enter)="$event.preventDefault()">
+  <div class="d-flex justify-content-start mb-3">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+      ← Inicio
+    </button>
+  </div>
   <h1>{{ titulo }}</h1>
   <h3>Periodo: {{ periodo.descripcion }}</h3>
   <p>Fecha: {{ fecha | date }}</p>
@@ -27,11 +32,11 @@
           <tr>
             <th>Perspectiva</th>
             <th>Objetivo</th>
-            <th>Medio Verificación</th>
+            <th>¿Cómo se Mide?</th>
             <th>Tipo</th>
             <th>Peso</th>
             <th class="text-end">Meta</th>
-            <th class="text-end">Avance a la Fecha (Logro)</th>
+            <th class="text-end">Avance a la Fecha (Resultado)</th>
             <th class="text-end">% Logro</th>
             <th>Comentarios del Colaborador</th>
             <th *ngIf="supervisor">Comentarios del Supervisor</th>

@@ -82,7 +82,13 @@
             <tbody>
               <tr *ngFor="let perspectiva of perspectivas; let i = index">
                 <td>
-                  <input type="text" class="form-control" [(ngModel)]="perspectiva.nombre" [name]="'perspectivaName' + i">
+                  <select class="form-control" [(ngModel)]="perspectiva.nombre" [name]="'perspectivaName' + i">
+                    <option value="">Seleccione una perspectiva...</option>
+                    <option value="Financiera">Financiera</option>
+                    <option value="Cliente">Cliente</option>
+                    <option value="Procesos Internos">Procesos Internos</option>
+                    <option value="Aprendizaje y Crecimiento">Aprendizaje y Crecimiento</option>
+                  </select>
                 </td>
                 <td>
                   <input type="number" class="form-control" [(ngModel)]="perspectiva.peso" [name]="'perspectivaPeso' + i">

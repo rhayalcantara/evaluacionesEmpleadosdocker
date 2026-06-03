@@ -17,6 +17,7 @@ import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { LoggerService } from 'src/app/Services/logger.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -66,6 +67,7 @@ export class CardEmpleadoComponent implements OnInit {
   @Output() evaluateEmployee = new EventEmitter<IEmpleado>();
 
   public mostarenviar:boolean = false
+  public mostrarDevolver:boolean = false
   public rolcategoriapuesto:string=''
   public estadoAutoevaluacion: string = 'Pendiente';
   public estadoEvaluacionSupervisor: string = 'Pendiente';
@@ -196,11 +198,21 @@ export class CardEmpleadoComponent implements OnInit {
           }else{
             this.mostarenviar=false;
           }
+
+          // Mostrar botón Devolver cuando el colaborador completó su autoevaluación
+          // o cuando el supervisor ya evaluó pero quiere solicitar cambios
+          if(this.estadoAutoevaluacion == 'AutoEvaluado' ||
+             this.estadoAutoevaluacion == 'EvaluadoPorSupervisor'){
+            this.mostrarDevolver = true;
+          }else{
+            this.mostrarDevolver = false;
+          }
         } else {
           // Si no hay datos, usar valores por defecto
           this.estadoAutoevaluacion = 'Pendiente';
           this.llamarevaluacion = true;
           this.mostarenviar = false;
+          this.mostrarDevolver = false;
         }
 
         this.cdr.detectChanges();
@@ -215,6 +227,7 @@ export class CardEmpleadoComponent implements OnInit {
         this.estadoAutoevaluacion = 'Pendiente';
         this.llamarevaluacion = true;
         this.mostarenviar = false;
+        this.mostrarDevolver = false;
         this.cdr.detectChanges();
       }
     });
@@ -251,21 +264,75 @@ export class CardEmpleadoComponent implements OnInit {
    }
    Enviar(emp:number){
     //buscar la evaluacion para modificar el estado
-    
+
     this.evaluacion.GetEvaluacionePorEmpleadoyPeriodo(emp,this.periodo.id).subscribe({
       next:(rep:IEvaluacion)=>{
-        let t:IEvaluacion  = rep       
-        t.estadoevaluacion = 'Enviado'        
+        let t:IEvaluacion  = rep
+        t.estadoevaluacion = 'Enviado'
         this.evaluacion.Update(t).subscribe({
           next:(repx)=>{
             this.datos.showMessage("Enviado","Envio de Evaluacion","success");
             this.mostarenviar=false
+            this.mostrarDevolver=false
             this.llamarevaluacion=false
-            this.cdr.detectChanges();   
-          }      
+            this.cdr.detectChanges();
+          }
       })
     }
   })
+  }
+
+  Devolver(emp:number){
+    Swal.fire({
+      title: 'Devolver evaluación al colaborador',
+      text: 'Indique el motivo o los cambios que solicita al colaborador:',
+      input: 'textarea',
+      inputPlaceholder: 'Escriba aquí las observaciones para el colaborador...',
+      inputAttributes: { 'aria-label': 'Nota para el colaborador' },
+      showCancelButton: true,
+      confirmButtonText: 'Devolver',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#e67e22',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return 'Debe escribir una nota para el colaborador';
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const nota: string = result.value.trim();
+        this.evaluacion.GetEvaluacionePorEmpleadoyPeriodo(emp, this.periodo.id).subscribe({
+          next: (rep: IEvaluacion) => {
+            let t: IEvaluacion = rep;
+            t.estadoevaluacion = 'Devuelta';
+            t.observacion = nota;
+            this.evaluacion.Update(t).subscribe({
+              next: () => {
+                this.datos.showMessage(
+                  'La evaluación fue devuelta al colaborador con las observaciones indicadas.',
+                  'Devolver Evaluación',
+                  'success'
+                );
+                this.mostrarDevolver = false;
+                this.mostarenviar = false;
+                this.llamarevaluacion = false;
+                this.estadoAutoevaluacion = 'Devuelta';
+                this.cdr.detectChanges();
+              },
+              error: (err: any) => {
+                this.logger.error('Error al devolver la evaluación', err);
+                this.datos.showMessage('Error al devolver la evaluación.', 'Devolver Evaluación', 'error');
+              }
+            });
+          },
+          error: (err: any) => {
+            this.logger.error('Error al obtener la evaluación para devolver', err);
+            this.datos.showMessage('Error al obtener la evaluación.', 'Devolver Evaluación', 'error');
+          }
+        });
+      }
+    });
   }
 
   openEvaluationForm(): void {
@@ -295,6 +362,19 @@ export class CardEmpleadoComponent implements OnInit {
     return {
       // background color verde
       'background-color': '#28a745',
+      'color': 'white',
+      'border': 'none',
+      'padding': '10px 20px',
+      'border-radius': '5px',
+      'cursor': 'pointer',
+      'font-weight': 'bold',
+      'transition': 'background-color 0.3s ease'
+    };
+  }
+
+  getButtonStyleDevolver(): { [key: string]: string } {
+    return {
+      'background-color': '#e67e22',
       'color': 'white',
       'border': 'none',
       'padding': '10px 20px',

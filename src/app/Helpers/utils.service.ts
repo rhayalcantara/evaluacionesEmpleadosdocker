@@ -349,6 +349,21 @@ static  generaNss() {
             },
         ] : [{ text: 'No hay objetivos de desempeño definidos.', italics: true, margin: [0, 10, 0, 10] }]), // Mensaje si no hay objetivos
 
+        // --- Resumen Resultados Objetivos (después de tabla de objetivos) ---
+        {
+          table: {
+            widths: ['*', 'auto'],
+            body: [
+              [{ text: 'RESULTADOS OBJETIVOS (Desempeño)', style: 'resultsHeader', colSpan: 2, alignment: 'center', fillColor: '#1a3a5c', color: 'white' }, {}],
+              [{ text: 'Puntuación de Desempeño', bold: true }, { text: `${currentPromedioDesempeno.toFixed(2)}%`, alignment: 'right', bold: true }],
+              [{ text: 'Peso Desempeño' }, { text: `${(this.porcentajeDesempeno).toFixed(0)}%`, alignment: 'right' }],
+              [{ text: 'Aporte al Total', bold: true, fillColor: '#e8f0f8' }, { text: currentDesempenoFinal.toFixed(2), alignment: 'right', bold: true, color: '#1a3a5c', fillColor: '#e8f0f8' }]
+            ]
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 8, 0, 12]
+        },
+
         // --- Tabla Competencias (Condicional) ---
          { table: { widths: ['*'], body: [[{ text: 'Competencias', style: 'categoryHeader' }]] }, layout: 'noBorders', margin: [0, 15, 0, 5] },
          ...competenciasContent, // Ya incluye mensaje si está vacío
@@ -533,6 +548,21 @@ static  generaNss() {
               layout: 'lightHorizontalLines'
             },
         ] : [{ text: 'No hay objetivos de desempeño definidos.', italics: true, margin: [0, 10, 0, 10] }]),
+
+        // --- Resumen Resultados Objetivos (después de tabla de objetivos) ---
+        {
+          table: {
+            widths: ['*', 'auto'],
+            body: [
+              [{ text: 'RESULTADOS OBJETIVOS (Desempeño)', style: 'resultsHeader', colSpan: 2, alignment: 'center', fillColor: '#1a3a5c', color: 'white' }, {}],
+              [{ text: 'Puntuación de Desempeño', bold: true }, { text: `${currentPromedioDesempeno.toFixed(2)}%`, alignment: 'right', bold: true }],
+              [{ text: 'Peso Desempeño' }, { text: `${(this.porcentajeDesempeno).toFixed(0)}%`, alignment: 'right' }],
+              [{ text: 'Aporte al Total', bold: true, fillColor: '#e8f0f8' }, { text: currentDesempenoFinal.toFixed(2), alignment: 'right', bold: true, color: '#1a3a5c', fillColor: '#e8f0f8' }]
+            ]
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 8, 0, 12]
+        },
 
         // --- Tabla Competencias (Condicional) ---
          { table: { widths: ['*'], body: [[{ text: 'Competencias', style: 'categoryHeader' }]] }, layout: 'noBorders', margin: [0, 15, 0, 5] },

@@ -1,27 +1,77 @@
 <div class="container mt-5">
   <h2 class="mb-4">Evaluación de Subordinados</h2>
 
-  <!-- Supervisor Card --> 
-<app-card-empleado [empleado]="empleado"></app-card-empleado>
-<!-- Seleciona al subordinado para evaluar -->
-<h2>Equipo</h2>
-<p>Total Integrantes en el Equipo {{this.empl.arraymodelsubordinados.length}}</p>
+  <!-- Supervisor Card -->
+  <app-card-empleado [empleado]="empleado"></app-card-empleado>
 
-<!-- Add search input -->
-<div class="search-container">
-  <input type="text" [(ngModel)]="searchTerm" (input)="searchSubordinados()" placeholder="Buscar por nombre, departamento o cargo">
+  <!-- Team header -->
+  <h2 class="mt-4">Equipo</h2>
+  <p>Total Integrantes en el Equipo {{this.empl.arraymodelsubordinados.length}}</p>
+
+  <!-- Search input -->
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchTerm" (input)="searchSubordinados()"
+      placeholder="Buscar por nombre, departamento o cargo">
+  </div>
+
+  <!-- Tabular team list -->
+  <div class="table-responsive mt-3">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Colaborador</th>
+          <th>Departamento</th>
+          <th>Posición</th>
+          <th>Estado</th>
+          <th>Puntuación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emple of empl.arraymodelsubordinados">
+          <td><strong>{{ emple.nombreunido }}</strong></td>
+          <td>{{ emple.departamento }}</td>
+          <td>{{ emple.cargo }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-secondary': getEstado(emple.secuencial).estadoAutoevaluacion === 'Pendiente' || getEstado(emple.secuencial).estadoAutoevaluacion === '...',
+              'bg-warning text-dark': getEstado(emple.secuencial).estadoAutoevaluacion === 'AutoEvaluado',
+              'bg-info text-dark': getEstado(emple.secuencial).estadoAutoevaluacion === 'EvaluadoPorSupervisor',
+              'bg-primary': getEstado(emple.secuencial).estadoAutoevaluacion === 'Enviado',
+              'bg-success': getEstado(emple.secuencial).estadoAutoevaluacion === 'Completado',
+              'bg-danger': getEstado(emple.secuencial).estadoAutoevaluacion === 'Devuelta'
+            }">{{ getEstado(emple.secuencial).estadoAutoevaluacion }}</span>
+          </td>
+          <td>
+            <span *ngIf="getEstado(emple.secuencial).totalCalculo !== null; else sinPuntuacion">
+              {{ getEstado(emple.secuencial).totalCalculo | number:'1.2-2' }}
+            </span>
+            <ng-template #sinPuntuacion><span class="text-muted">—</span></ng-template>
+          </td>
+          <td>
+            <button
+              *ngIf="getEstado(emple.secuencial).puedeEvaluar"
+              class="btn btn-sm btn-outline-primary me-1"
+              (click)="openEvaluationForm(emple)">
+              Evaluar
+            </button>
+            <button
+              *ngIf="getEstado(emple.secuencial).puedeEnviar"
+              class="btn btn-sm btn-outline-success"
+              (click)="enviarEvaluacion(emple)">
+              Enviar
+            </button>
+            <span
+              *ngIf="!getEstado(emple.secuencial).puedeEvaluar && !getEstado(emple.secuencial).puedeEnviar && getEstado(emple.secuencial).estadoAutoevaluacion !== '...'"
+              class="text-muted small">
+              Sin acción
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="empl.arraymodelsubordinados.length === 0">
+          <td colspan="6" class="text-center text-muted py-3">No hay subordinados registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<div class="Equipo">
-  <app-card-empleado 
-    [empleado]="emple" 
-    [llamarevaluacion]="true"
-    [periodo]="periodo"
-    [mostrarEstadoEvaluacion]="true"
-    *ngFor="let emple of empl.arraymodelsubordinados">
-  </app-card-empleado>
-</div>
-
-
-  
- 

@@ -47,6 +47,7 @@ export class FormEvaluationEmployeComponent {
   public fecha: Date = new Date()
   public evaluacionempleado!: IEvaluacion
   public comentarioAdicional: string = '';
+  public notaSupervisorDevolucion: string = '';
   public comentarioDisgusto: string = '';
   public entrevistaConSupervisor: boolean = false;
   public aceptaEnDisgusto: boolean = false;
@@ -103,6 +104,12 @@ export class FormEvaluationEmployeComponent {
             this.mostarAceptar = true;
             this.mostargrabar = false;
             this.mostarAceptarBoton = false;
+          } else if (this.evaluacionempleado.estadoevaluacion === "Devuelta") {
+            // El colaborador puede re-editar; mostramos la nota del supervisor
+            this.mostarAceptar = false;
+            this.mostarAceptarBoton = false;
+            this.mostargrabar = true;
+            this.notaSupervisorDevolucion = this.evaluacionempleado.observacion || '';
           } else {
              this.mostarAceptar = false;
              this.mostarAceptarBoton = false;
@@ -112,7 +119,10 @@ export class FormEvaluationEmployeComponent {
           this.ServiceComunicacion.enviarMensaje({ mensaje: 'buscar', id: this.evaluacionempleado.id, model: this.evaluacionempleado })
           this.cd.detectChanges();
 
-          this.comentarioAdicional = this.evaluacionempleado.observacion || '';
+          // Para estado Devuelta, observacion contiene la nota del supervisor — no la usamos como comentarioAdicional
+          this.comentarioAdicional = this.evaluacionempleado.estadoevaluacion === 'Devuelta'
+            ? ''
+            : (this.evaluacionempleado.observacion || '');
           this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
           this.entrevistaConSupervisor = this.evaluacionempleado.entrevistaConSupervisor ?? false;
           this.aceptaEnDisgusto = this.evaluacionempleado.aceptaEnDisgusto ?? false;

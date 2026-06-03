@@ -23,6 +23,9 @@
             <div class="evaluation-button" *ngIf="mostarenviar">
                 <button  (click)="Enviar(empleado.secuencial)" [ngStyle]="getButtonStyle2()">Enviar al Empleado</button>
             </div>
+            <div class="evaluation-button" *ngIf="mostrarDevolver">
+                <button (click)="Devolver(empleado.secuencial)" [ngStyle]="getButtonStyleDevolver()">Devolver al Colaborador</button>
+            </div>
         </div>
     </div>  
 </div>
