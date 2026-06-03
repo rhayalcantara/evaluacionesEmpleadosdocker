@@ -35,7 +35,7 @@
 
       <!-- Someter al Supervisor: solo cuando ya existe registro (id > 0) y no es supervisor -->
       <button type="button" class="btn btn-primary"
-              *ngIf="mostargrabar && !supervisor && evaluacionempleado?.id > 0"
+              *ngIf="mostargrabar && !supervisor && (evaluacionempleado?.id ?? 0) > 0"
               (click)="onSometer()">
         &#9993; Someter al Supervisor
       </button>
@@ -122,7 +122,7 @@
 
         <!-- Someter al Supervisor: solo cuando ya existe registro (id > 0) y no es supervisor -->
         <button type="button" class="btn btn-primary"
-                *ngIf="mostargrabar && !supervisor && evaluacionempleado?.id > 0"
+                *ngIf="mostargrabar && !supervisor && (evaluacionempleado?.id ?? 0) > 0"
                 (click)="onSometer()">
           &#9993; Someter al Supervisor
         </button>
