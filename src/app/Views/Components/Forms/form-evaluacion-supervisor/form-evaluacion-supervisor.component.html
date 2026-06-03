@@ -4,6 +4,26 @@
         ← Inicio
       </button>
     </div>
+
+    <!-- Barra de acciones superior del supervisor -->
+    <div class="d-flex gap-2 flex-wrap my-3">
+      <button type="button" class="btn btn-success"
+              (click)="onGuardarAvance()">
+        💾 Guardar Avance
+      </button>
+      <button type="button" class="btn btn-outline-success"
+              (click)="onAprobarAutoevaluacion()">
+        ✅ Aprobar Autoevaluación
+      </button>
+      <button type="button" class="btn btn-primary"
+              (click)="onSometerColaborador()">
+        ✉ Enviar al Colaborador
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        ✕ Cerrar
+      </button>
+    </div>
+
     <div class="empleadotitulo">
       <app-card-empleado2
         [empleado]="empleado"
@@ -11,7 +31,7 @@
           ></app-card-empleado2>
 
     </div>
-  
+
     <div class="forms-container">
           <app-form-evaluation-employe
             *ngIf="periodo.tipo !== 'medio_ano'"
@@ -21,7 +41,7 @@
             titulo="Evaluacion Equipo"
             (dataEmitter)="cancelar()"
             (puntuacion)="onPuntuacion($event)">
-        </app-form-evaluation-employe>      
+        </app-form-evaluation-employe>
 
         <app-form-evaluation-medio-ano
           *ngIf="periodo.tipo === 'medio_ano'"
@@ -32,6 +52,26 @@
           (dataEmitter)="cancelar()">
         </app-form-evaluation-medio-ano>
     </div>
+
+    <!-- Barra de acciones inferior del supervisor -->
+    <div class="d-flex gap-2 flex-wrap my-3">
+      <button type="button" class="btn btn-success"
+              (click)="onGuardarAvance()">
+        💾 Guardar Avance
+      </button>
+      <button type="button" class="btn btn-outline-success"
+              (click)="onAprobarAutoevaluacion()">
+        ✅ Aprobar Autoevaluación
+      </button>
+      <button type="button" class="btn btn-primary"
+              (click)="onSometerColaborador()">
+        ✉ Enviar al Colaborador
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        ✕ Cerrar
+      </button>
+    </div>
+
     <div class="d-flex justify-content-start mt-3">
       <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
         ← Inicio

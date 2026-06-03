@@ -15,9 +15,33 @@
       <p style="margin:6px 0 0 0;color:#856404;">{{notaSupervisorDevolucion}}</p>
     </div>
 
-    <button type="sm"  class="btn-aceptar" (click)="generatePDF()">Mostrar en PDF</button>
-    <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
-    <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
+    <!-- Bloque de acciones - INICIO del formulario -->
+    <div class="d-flex gap-2 flex-wrap my-3 align-items-center">
+      <button type="button" class="btn-aceptar" (click)="generatePDF()">Mostrar en PDF</button>
+
+      <!-- Iniciar Evaluacion: solo cuando estado=Borrador, Devuelta o nueva -->
+      <button type="button" class="btn btn-outline-primary"
+              *ngIf="mostargrabar && !supervisor && (evaluacionempleado?.estadoevaluacion === 'Borrador' || evaluacionempleado?.estadoevaluacion === 'Devuelta' || !evaluacionempleado?.estadoevaluacion)"
+              (click)="onSubmit()">
+        &#9654; Iniciar Evaluaci&oacute;n
+      </button>
+
+      <!-- Guardar Avance: siempre que mostargrabar (reemplaza el "Grabar" original) -->
+      <button type="button" class="btn btn-success"
+              *ngIf="mostargrabar"
+              (click)="onSubmit()">
+        &#128190; Guardar Avance
+      </button>
+
+      <!-- Someter al Supervisor: solo cuando ya existe registro (id > 0) y no es supervisor -->
+      <button type="button" class="btn btn-primary"
+              *ngIf="mostargrabar && !supervisor && evaluacionempleado?.id > 0"
+              (click)="onSometer()">
+        &#9993; Someter al Supervisor
+      </button>
+
+      <button *ngIf="mostargrabar" type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
     <div class="performance-criteria">
       <app-criterialitem 
         [empleado]="empleado"
@@ -80,9 +104,32 @@
       </div> 
     </div> -->
   
-      <button *ngIf="mostargrabar" type="submit" (click)="onSubmit()">Grabar</button>
-      <button *ngIf="mostargrabar" type="cancelar" (click)="cancelar()">Cancelar</button>
-       <!-- Botón añadido -->
+      <!-- Bloque de acciones - FINAL del formulario -->
+      <div class="d-flex gap-2 flex-wrap my-3 align-items-center">
+        <!-- Iniciar Evaluacion: solo cuando estado=Borrador, Devuelta o nueva -->
+        <button type="button" class="btn btn-outline-primary"
+                *ngIf="mostargrabar && !supervisor && (evaluacionempleado?.estadoevaluacion === 'Borrador' || evaluacionempleado?.estadoevaluacion === 'Devuelta' || !evaluacionempleado?.estadoevaluacion)"
+                (click)="onSubmit()">
+          &#9654; Iniciar Evaluaci&oacute;n
+        </button>
+
+        <!-- Guardar Avance: siempre que mostargrabar -->
+        <button type="button" class="btn btn-success"
+                *ngIf="mostargrabar"
+                (click)="onSubmit()">
+          &#128190; Guardar Avance
+        </button>
+
+        <!-- Someter al Supervisor: solo cuando ya existe registro (id > 0) y no es supervisor -->
+        <button type="button" class="btn btn-primary"
+                *ngIf="mostargrabar && !supervisor && evaluacionempleado?.id > 0"
+                (click)="onSometer()">
+          &#9993; Someter al Supervisor
+        </button>
+
+        <button *ngIf="mostargrabar" type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+      </div>
+      <!-- Botón añadido -->
     
     <div *ngIf="mostarAceptar" class="evaluacion-aceptacion">
       <div class="puntaje-final">

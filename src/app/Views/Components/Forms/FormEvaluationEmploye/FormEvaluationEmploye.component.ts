@@ -18,6 +18,7 @@ import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitaci
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
 import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 declare const pdfMake: any;
 
@@ -527,6 +528,21 @@ export class FormEvaluationEmployeComponent {
       });
 
     
+  }
+
+  onSometer(): void {
+    Swal.fire({
+      title: 'Someter Evaluación',
+      text: '¿Está seguro? Una vez sometida no podrá editar su evaluación hasta que el supervisor la devuelva.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, someter',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onSubmit();
+      }
+    });
   }
 
   cancelar(): void {
