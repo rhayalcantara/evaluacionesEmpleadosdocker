@@ -89,7 +89,8 @@ export class EvaluarSubordinadosComponent implements OnInit {
     private datos: DatosServiceService,
     private dialog: MatDialog
   ) {
-    this.usuario = JSON.parse(localStorage.getItem('usuario') ?? "")
+    const usuarioRaw = localStorage.getItem('usuario');
+    this.usuario = (usuarioRaw && usuarioRaw !== 'null') ? JSON.parse(usuarioRaw) : null as any;
   }
   public usuario: Usuario
 
@@ -100,6 +101,7 @@ export class EvaluarSubordinadosComponent implements OnInit {
       this.periodo = JSON.parse(storedPeriodo);
     }
 
+    if (!this.usuario?.codigo) return;
     this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
       this.empl.model = rep;
       this.empl.getsubordinados(this.periodo);

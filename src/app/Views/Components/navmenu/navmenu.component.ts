@@ -56,10 +56,12 @@ export class NavmenuComponent implements OnInit {
             this.router.navigate(['/consejal/evaluacion/', JSON.stringify(consejal)]);
            })
           }else{
-              this.usuarioservicio.agregarusuario(JSON.parse(localStorage.getItem('usuario') ?? ""))         
+              const usuarioRaw = localStorage.getItem('usuario');
+              const parsedUsuario = (usuarioRaw && usuarioRaw !== 'null') ? JSON.parse(usuarioRaw) : null;
+              this.usuarioservicio.agregarusuario(parsedUsuario)
               //busca el periodo activo
               this.peri.GetActivo().subscribe((rep:IPeriodo)=>{
-                
+
                 this.periodo=rep;
                 //actualiza el periodo activo en memoria
                 // Suggestion: Consider using HttpOnly cookies for storing sensitive information like authentication tokens.
@@ -67,6 +69,7 @@ export class NavmenuComponent implements OnInit {
                 // Consider using a dedicated state management library like NgRx or Akita for managing application state.
                 localStorage.setItem("periodo", JSON.stringify(this.periodo))
                 // busca el empleado
+                if (!this.usuario?.codigo) { this.router.navigate(['Home']); return; }
                 this.empl.GetByUsuario(this.usuario.codigo).subscribe((rep: IEmpleado) => {
                   this.empl.model = rep
                   this.empl.getsubordinados(this.periodo)
