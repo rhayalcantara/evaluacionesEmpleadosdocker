@@ -102,3 +102,25 @@ textarea.form-control {
 .competencias-table tbody tr:hover     { background-color: #e8eaf6; }
 
 .competencias-select { min-width: 140px; font-size: 0.8rem; }
+
+/* === Badge puntuación final en header del colaborador === */
+.puntuacion-badge {
+  background: #1a237e;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+.puntuacion-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  opacity: .85;
+  margin-bottom: 2px;
+}
+.puntuacion-valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}

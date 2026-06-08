@@ -24,14 +24,6 @@
       </button>
     </div>
 
-    <div class="empleadotitulo">
-      <app-card-empleado2
-        [empleado]="empleado"
-        [puntuacionFinal]="puntuacionFinal"
-          ></app-card-empleado2>
-
-    </div>
-
     <div class="forms-container">
           <app-form-evaluation-employe
             *ngIf="periodo.tipo !== 'medio_ano'"
@@ -48,6 +40,7 @@
           [empleado]="empleado"
           [periodo]="periodo"
           [supervisor]="true"
+          [puntuacionFinal]="puntuacionFinal"
           titulo="Evaluación de Equipo (Medio Año)"
           (dataEmitter)="cancelar()">
         </app-form-evaluation-medio-ano>

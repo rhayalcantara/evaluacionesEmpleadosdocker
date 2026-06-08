@@ -38,6 +38,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
   @Input() mostargrabar: boolean = true;
   @Input() mostarAceptar: boolean = false;
   @Input() mostarAceptarBoton: boolean = false;
+  @Input() puntuacionFinal: number = 0;
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter();
 
   public evaluacionempleado!: IEvaluacion;
