@@ -8,7 +8,7 @@ const path = require('path');
 
 const BASE    = 'http://192.168.7.222/evaluacionempleado-prueba';
 const USUARIO = process.env.EVAL_USERNAME || 'CHANGE_ME';
-const CLAVE   = process.env.EVAL_PASSWORD || '';
+const CLAVE   = process.env.EVAL_PASSWORD || (() => { throw new Error('Set EVAL_PASSWORD env var'); })();
 const OUT_DIR = path.join(__dirname, 'capturas-competencia');
 const ISSUES  = [];
 let   idx = 0;
