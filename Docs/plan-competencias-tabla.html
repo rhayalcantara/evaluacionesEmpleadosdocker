@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan: Tabla Evaluación de Competencias</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #222; min-height: 100vh; }
+
+  /* ── Header ── */
+  header {
+    background: #1a237e;
+    color: #fff;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header h1 { font-size: 1.4rem; font-weight: 700; line-height: 1.3; }
+  header p  { font-size: 0.85rem; opacity: .75; margin-top: 4px; }
+  .badge-tag {
+    background: #fff2;
+    border: 1px solid #fff4;
+    color: #fff;
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* ── Context card ── */
+  .context-card {
+    background: #fff;
+    border-left: 4px solid #1a237e;
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 4px #0001;
+  }
+  .context-card h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .08em; color: #1a237e; margin-bottom: 8px; }
+  .context-card p  { font-size: 0.88rem; line-height: 1.6; color: #444; }
+
+  /* ── Preview table ── */
+  .preview-wrap { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 28px; box-shadow: 0 1px 4px #0001; }
+  .preview-wrap h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .08em; color: #666; margin-bottom: 14px; }
+  .preview-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .preview-table thead tr th { background: #1a237e; color: #fff; padding: 10px 16px; text-align: left; font-weight: 600; }
+  .preview-table thead tr th:not(:first-child) { text-align: center; }
+  .preview-table tbody tr:nth-child(even) { background: #f0f4ff; }
+  .preview-table tbody tr:hover { background: #e8eaf6; }
+  .preview-table td { padding: 9px 16px; border-bottom: 1px solid #e0e0e0; vertical-align: middle; }
+  .preview-table td:not(:first-child) { text-align: center; }
+  .preview-table select {
+    font-size: 0.78rem; padding: 4px 8px; border: 1px solid #c5cae9;
+    border-radius: 4px; background: #fff; min-width: 148px; cursor: pointer;
+  }
+  .preview-table select:disabled { background: #f5f5f5; color: #888; cursor: default; }
+  .legend { margin-top: 10px; font-size: 0.75rem; color: #777; display: flex; gap: 16px; flex-wrap: wrap; }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* ── Tasks ── */
+  .tasks-title { font-size: 1rem; font-weight: 700; color: #1a237e; margin-bottom: 16px; }
+  .task-card {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px #0001;
+    overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  .task-card:hover { box-shadow: 0 3px 10px #0002; }
+  .task-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .task-number {
+    background: #1a237e;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .task-title { font-weight: 600; font-size: 0.95rem; flex: 1; }
+  .task-file  { font-size: 0.72rem; color: #888; font-family: monospace; background: #f5f5f5; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .task-status {
+    font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 12px;
+    white-space: nowrap;
+  }
+  .status-pending  { background: #fff3e0; color: #e65100; }
+  .status-done     { background: #e8f5e9; color: #2e7d32; }
+  .chevron { font-size: 0.8rem; color: #aaa; transition: transform .2s; }
+  .task-body {
+    display: none;
+    padding: 0 18px 18px 60px;
+    border-top: 1px solid #f0f0f0;
+  }
+  .task-body.open { display: block; }
+  .chevron.open { transform: rotate(90deg); }
+
+  /* Code blocks */
+  pre {
+    background: #1a1a2e;
+    color: #e0e0ff;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    overflow-x: auto;
+    margin: 10px 0;
+    line-height: 1.55;
+  }
+  .kw  { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .cm  { color: #546e7a; font-style: italic; }
+  .attr{ color: #ffcb6b; }
+  .tag { color: #f07178; }
+  .val { color: #c3e88d; }
+  .num { color: #f78c6c; }
+
+  /* Notes */
+  .note {
+    background: #e8eaf6;
+    border-left: 3px solid #5c6bc0;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.82rem;
+    color: #333;
+    margin: 10px 0;
+  }
+  .note strong { color: #1a237e; }
+
+  /* Verification */
+  .verify-list { list-style: none; margin-top: 8px; }
+  .verify-list li {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 6px 0; font-size: 0.85rem; border-bottom: 1px dashed #eee;
+  }
+  .verify-list li:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px; height: 18px; border: 2px solid #c5cae9;
+    border-radius: 3px; flex-shrink: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; transition: all .15s;
+  }
+  .check-box.checked { background: #43a047; border-color: #43a047; color: #fff; }
+
+  /* Progress */
+  .progress-bar-wrap { background: #e0e0e0; border-radius: 6px; height: 8px; margin: 6px 0 14px; }
+  .progress-bar-fill { background: linear-gradient(90deg, #1a237e, #5c6bc0); height: 8px; border-radius: 6px; transition: width .4s; width: 0%; }
+  .progress-label { font-size: 0.75rem; color: #888; text-align: right; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+      <span class="badge-tag">Angular 16</span>
+      <span class="badge-tag">form-evaluation-medio-ano</span>
+      <span class="badge-tag">3 archivos</span>
+    </div>
+    <h1>Tabla de Evaluación de Competencias — Medio Año</h1>
+    <p>Reemplazar tarjetas por tabla con dropdowns Colaborador / Supervisor</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Context -->
+  <div class="context-card">
+    <h2>¿Por qué este cambio?</h2>
+    <p>
+      La sección "Evaluación de Competencias" en <code>form-evaluation-medio-ano</code> muestra actualmente
+      una tarjeta por competencia con textareas de observación, pero <strong>no tiene dropdown de calificación</strong>,
+      aunque los campos <code>repuesta</code> y <code>repuestasupervisor</code> ya existen en el modelo
+      <code>IGoalEmpleadoRespuesta</code> y son procesados por el controller.
+      El formulario de referencia (Excel + imagen) requiere una tabla simple:
+      nombre de competencia · calificación colaborador · calificación supervisor.
+    </p>
+  </div>
+
+  <!-- Preview -->
+  <div class="preview-wrap">
+    <h2>Vista objetivo — Evaluación de Competencias</h2>
+    <table class="preview-table">
+      <thead>
+        <tr>
+          <th>Competencia</th>
+          <th>Colaborador</th>
+          <th>Supervisor</th>
+        </tr>
+      </thead>
+      <tbody id="preview-body"></tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#1a237e"></span> Colaborador edita su columna</span>
+      <span><span class="dot" style="background:#c5cae9"></span> Supervisor edita su columna</span>
+      <span><span class="dot" style="background:#f0f4ff"></span> Filas alternas</span>
+    </div>
+  </div>
+
+  <!-- Tasks -->
+  <div class="tasks-title">Tareas de implementación</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pbar"></div></div>
+  <div class="progress-label" id="plabel">0 / 3 completadas</div>
+
+  <!-- Task 1 -->
+  <div class="task-card" id="task1">
+    <div class="task-header" onclick="toggle(1)">
+      <div class="task-number">1</div>
+      <div class="task-title">TypeScript — Agregar array <code>calificaciones[]</code></div>
+      <div class="task-file">form-evaluation-medio-ano.component.ts</div>
+      <div class="task-status status-pending" id="s1">Pendiente</div>
+      <div class="chevron" id="c1">▶</div>
+    </div>
+    <div class="task-body" id="b1">
+      <p style="font-size:.85rem;margin:10px 0 4px;">Insertar después de <code>public cursosSeleccionados</code> (~línea 75):</p>
+      <pre><span class="cm">// Opciones de calificación para tabla de competencias</span>
+<span class="kw">public readonly</span> calificaciones: { valor: <span class="kw">number</span>; etiqueta: <span class="kw">string</span> }[] = [
+  { valor: <span class="num">0</span>, etiqueta: <span class="str">'— Seleccione —'</span> },
+  { valor: <span class="num">1</span>, etiqueta: <span class="str">'(1) Deficiente'</span> },
+  { valor: <span class="num">2</span>, etiqueta: <span class="str">'(2) Necesita Mejorar'</span> },
+  { valor: <span class="num">3</span>, etiqueta: <span class="str">'(3) Cumple'</span> },
+  { valor: <span class="num">4</span>, etiqueta: <span class="str">'(4) Muy Efectivo'</span> },
+  { valor: <span class="num">5</span>, etiqueta: <span class="str">'(5) Excelente'</span> },
+];</pre>
+      <div class="note"><strong>Por qué <code>[ngValue]</code>:</strong> <code>repuesta</code> es <code>number</code>. Con <code>[value]</code> Angular convierte a string y el binding pierde el tipo. <code>[ngValue]</code> preserva el número exacto.</div>
+      <button onclick="markDone(1)" style="margin-top:8px;padding:5px 14px;background:#1a237e;color:#fff;border:none;border-radius:4px;font-size:.8rem;cursor:pointer;">✓ Marcar completada</button>
+    </div>
+  </div>
+
+  <!-- Task 2 -->
+  <div class="task-card" id="task2">
+    <div class="task-header" onclick="toggle(2)">
+      <div class="task-number">2</div>
+      <div class="task-title">HTML — Reemplazar bloque competencias (líneas 102–144)</div>
+      <div class="task-file">form-evaluation-medio-ano.component.html</div>
+      <div class="task-status status-pending" id="s2">Pendiente</div>
+      <div class="chevron" id="c2">▶</div>
+    </div>
+    <div class="task-body" id="b2">
+      <p style="font-size:.85rem;margin:10px 0 4px;">Eliminar el bloque completo de tarjetas y sustituir por:</p>
+      <pre><span class="cm">&lt;!-- 3. EVALUACIÓN DE COMPETENCIAS --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"my-4 text-dark"</span>
+     <span class="attr">*ngIf</span>=<span class="str">"evaluacionempleado?.evaluacionGoals?.length > 0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Evaluación de Competencias<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"table-responsive"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;table</span> <span class="attr">class</span>=<span class="str">"table table-bordered competencias-table"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;thead&gt;&lt;tr&gt;</span>
+        <span class="tag">&lt;th</span> <span class="attr">class</span>=<span class="str">"col-competencia"</span><span class="tag">&gt;</span>Competencia<span class="tag">&lt;/th&gt;</span>
+        <span class="tag">&lt;th</span> <span class="attr">class</span>=<span class="str">"col-calificacion text-center"</span><span class="tag">&gt;</span>Colaborador<span class="tag">&lt;/th&gt;</span>
+        <span class="tag">&lt;th</span> <span class="attr">class</span>=<span class="str">"col-calificacion text-center"</span>
+            <span class="attr">*ngIf</span>=<span class="str">"supervisor || evaluacionempleado.estadoevaluacion === 'Completado'"</span><span class="tag">&gt;</span>
+          Supervisor
+        <span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;/tr&gt;&lt;/thead&gt;</span>
+      <span class="tag">&lt;tbody&gt;</span>
+        <span class="tag">&lt;tr</span> <span class="attr">*ngFor</span>=<span class="str">"let met of evaluacionempleado.evaluacionGoals; let index = index"</span>
+            <span class="attr">[class.fila-alt]</span>=<span class="str">"index % 2 !== 0"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;td</span> <span class="attr">class</span>=<span class="str">"align-middle"</span><span class="tag">&gt;</span>{{ met.goal.objetivo.nombre }}<span class="tag">&lt;/td&gt;</span>
+          <span class="tag">&lt;td</span> <span class="attr">class</span>=<span class="str">"text-center align-middle"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;select</span> <span class="attr">class</span>=<span class="str">"form-select form-select-sm competencias-select"</span>
+                    <span class="attr">[(ngModel)]</span>=<span class="str">"evaluacionempleado.goalEmpleadoRespuestas[index].repuesta"</span>
+                    <span class="attr">name</span>=<span class="str">"comp-rating-colab-{{index}}"</span>
+                    <span class="attr">[disabled]</span>=<span class="str">"supervisor || sololectura"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;option</span> <span class="attr">*ngFor</span>=<span class="str">"let op of calificaciones"</span> <span class="attr">[ngValue]</span>=<span class="str">"op.valor"</span><span class="tag">&gt;</span>{{ op.etiqueta }}<span class="tag">&lt;/option&gt;</span>
+            <span class="tag">&lt;/select&gt;</span>
+          <span class="tag">&lt;/td&gt;</span>
+          <span class="tag">&lt;td</span> <span class="attr">class</span>=<span class="str">"text-center align-middle"</span>
+              <span class="attr">*ngIf</span>=<span class="str">"supervisor || evaluacionempleado.estadoevaluacion === 'Completado'"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;select</span> <span class="attr">class</span>=<span class="str">"form-select form-select-sm competencias-select"</span>
+                    <span class="attr">[(ngModel)]</span>=<span class="str">"evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor"</span>
+                    <span class="attr">name</span>=<span class="str">"comp-rating-super-{{index}}"</span>
+                    <span class="attr">[disabled]</span>=<span class="str">"!supervisor || sololectura"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;option</span> <span class="attr">*ngFor</span>=<span class="str">"let op of calificaciones"</span> <span class="attr">[ngValue]</span>=<span class="str">"op.valor"</span><span class="tag">&gt;</span>{{ op.etiqueta }}<span class="tag">&lt;/option&gt;</span>
+            <span class="tag">&lt;/select&gt;</span>
+          <span class="tag">&lt;/td&gt;</span>
+        <span class="tag">&lt;/tr&gt;</span>
+      <span class="tag">&lt;/tbody&gt;</span>
+    <span class="tag">&lt;/table&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre>
+      <div class="note">
+        La columna <strong>Supervisor</strong> usa la misma condición <code>*ngIf</code> que el resto del formulario (líneas 42, 130, 274…).
+        El <code>[disabled]="!supervisor || sololectura"</code> garantiza que un colaborador viendo una evaluación completada no pueda editar la columna del supervisor.
+      </div>
+      <button onclick="markDone(2)" style="margin-top:8px;padding:5px 14px;background:#1a237e;color:#fff;border:none;border-radius:4px;font-size:.8rem;cursor:pointer;">✓ Marcar completada</button>
+    </div>
+  </div>
+
+  <!-- Task 3 -->
+  <div class="task-card" id="task3">
+    <div class="task-header" onclick="toggle(3)">
+      <div class="task-number">3</div>
+      <div class="task-title">CSS — Estilos para <code>.competencias-table</code></div>
+      <div class="task-file">form-evaluation-medio-ano.component.css</div>
+      <div class="task-status status-pending" id="s3">Pendiente</div>
+      <div class="chevron" id="c3">▶</div>
+    </div>
+    <div class="task-body" id="b3">
+      <p style="font-size:.85rem;margin:10px 0 4px;">Agregar al final del archivo CSS:</p>
+      <pre><span class="cm">/* === Tabla Evaluación de Competencias === */</span>
+<span class="attr">.competencias-table thead th</span> {
+  background-color: <span class="val">#1a237e</span>;
+  color: <span class="val">#ffffff</span>;
+  font-weight: <span class="num">600</span>;
+  font-size: <span class="val">0.875rem</span>;
+  border-color: <span class="val">#303f9f</span>;
+}
+<span class="attr">.competencias-table .col-competencia</span>  { width: <span class="num">60%</span>; }
+<span class="attr">.competencias-table .col-calificacion</span> { width: <span class="num">20%</span>; min-width: <span class="num">160px</span>; }
+
+<span class="attr">.competencias-table tbody tr</span>           { background-color: <span class="val">#ffffff</span>; }
+<span class="attr">.competencias-table tbody tr.fila-alt</span>  { background-color: <span class="val">#f0f4ff</span>; }
+<span class="attr">.competencias-table tbody tr:hover</span>     { background-color: <span class="val">#e8eaf6</span>; }
+
+<span class="attr">.competencias-select</span> { min-width: <span class="num">140px</span>; font-size: <span class="val">0.8rem</span>; }</pre>
+      <div class="note"><strong>#1a237e</strong> (indigo) es el color primario ya usado en los <code>h1/h2</code> del mismo CSS — no se introduce paleta nueva.</div>
+      <button onclick="markDone(3)" style="margin-top:8px;padding:5px 14px;background:#1a237e;color:#fff;border:none;border-radius:4px;font-size:.8rem;cursor:pointer;">✓ Marcar completada</button>
+    </div>
+  </div>
+
+  <!-- Verification -->
+  <div class="task-card" id="task4">
+    <div class="task-header" onclick="toggle(4)" style="cursor:pointer">
+      <div class="task-number" style="background:#37474f">✓</div>
+      <div class="task-title">Verificación y deploy</div>
+      <div class="task-file">ng build + IIS</div>
+      <div class="chevron" id="c4">▶</div>
+    </div>
+    <div class="task-body" id="b4">
+      <ul class="verify-list" id="vlist">
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Build:</strong> <code>ng build --configuration=prueba</code> sin errores nuevos</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Vista colaborador</strong> (supervisor=false): 2 columnas, dropdown colaborador editable</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Vista supervisor</strong> (supervisor=true): 3 columnas, colaborador disabled, supervisor editable</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Persistencia:</strong> seleccionar valor → Guardar → recargar → valor reaparece</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Zero value:</strong> sin calificación muestra "— Seleccione —"</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Read-only:</strong> sololectura=true → ambos dropdowns disabled</span></li>
+        <li><div class="check-box" onclick="toggleCheck(this)"></div><span><strong>Deploy:</strong> copiar dist a <code>//192.168.7.222/c$/inetpub/wwwroot/evaluacionempleado-prueba/</code></span></li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  // ── Competencias de ejemplo para preview ──
+  const competencias = [
+    'Enfoque al Socio',
+    'Enfoque a Resultados',
+    'Flexibilidad y adaptación',
+    'Trabajo en Equipo, comunicación Interpersonal e Inteligencia Emocional',
+    'Desarrollo Personal y Auto Aprendizaje',
+    'Enfoque a los Sistemas Institucionales / Regulaciones y Cultura',
+    'Habilidades de comunicación y Presencia Profesional',
+    'Toma de Decisiones, Coraje Gerencial y Estilo de colaboración',
+    'Toma de Decisiones y solución Creativa de Problemas',
+    'Pensamiento analítico y Rigor Intelectual',
+    'Conocimiento del Negocio, Enfoque estratégico, Visión y Propósito',
+  ];
+  const opciones = [
+    { v: 0, l: '— Seleccione —' },
+    { v: 1, l: '(1) Deficiente' },
+    { v: 2, l: '(2) Necesita Mejorar' },
+    { v: 3, l: '(3) Cumple' },
+    { v: 4, l: '(4) Muy Efectivo' },
+    { v: 5, l: '(5) Excelente' },
+  ];
+
+  function buildOptions(disabled) {
+    return opciones.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+  }
+
+  const tbody = document.getElementById('preview-body');
+  competencias.forEach((name, i) => {
+    const tr = document.createElement('tr');
+    tr.style.background = i % 2 === 0 ? '#fff' : '#f0f4ff';
+    tr.innerHTML = `
+      <td style="padding:8px 16px;border-bottom:1px solid #e0e0e0;font-size:.84rem;">${name}</td>
+      <td style="padding:8px 16px;border-bottom:1px solid #e0e0e0;text-align:center;">
+        <select style="font-size:.78rem;padding:4px 8px;border:1px solid #c5cae9;border-radius:4px;min-width:148px;">${buildOptions(false)}</select>
+      </td>
+      <td style="padding:8px 16px;border-bottom:1px solid #e0e0e0;text-align:center;">
+        <select style="font-size:.78rem;padding:4px 8px;border:1px solid #c5cae9;border-radius:4px;min-width:148px;background:#f5f5f5;color:#888;" disabled>${buildOptions(true)}</select>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  // ── Task toggle ──
+  function toggle(n) {
+    const body = document.getElementById('b' + n);
+    const chev = document.getElementById('c' + n);
+    body.classList.toggle('open');
+    chev.classList.toggle('open');
+  }
+
+  // ── Mark done ──
+  let done = 0;
+  function markDone(n) {
+    const s = document.getElementById('s' + n);
+    if (s && !s.classList.contains('status-done')) {
+      s.textContent = 'Completada';
+      s.className = 'task-status status-done';
+      done++;
+      updateProgress();
+    }
+  }
+  function updateProgress() {
+    const total = 3;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('pbar').style.width = pct + '%';
+    document.getElementById('plabel').textContent = done + ' / ' + total + ' completadas';
+  }
+
+  // ── Verify checkboxes ──
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    el.textContent = el.classList.contains('checked') ? '✓' : '';
+  }
+</script>
+</body>
+</html>

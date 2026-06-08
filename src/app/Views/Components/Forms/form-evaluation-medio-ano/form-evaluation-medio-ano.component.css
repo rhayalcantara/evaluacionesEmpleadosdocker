@@ -84,3 +84,21 @@ textarea.form-control {
 .d-flex.flex-wrap {
   margin-top: 0.5rem;
 }
+
+/* === Tabla Evaluación de Competencias === */
+.competencias-table thead th {
+  background-color: #1a237e;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-color: #303f9f;
+}
+
+.competencias-table .col-competencia  { width: 60%; }
+.competencias-table .col-calificacion { width: 20%; min-width: 160px; }
+
+.competencias-table tbody tr           { background-color: #ffffff; }
+.competencias-table tbody tr.fila-alt  { background-color: #f0f4ff; }
+.competencias-table tbody tr:hover     { background-color: #e8eaf6; }
+
+.competencias-select { min-width: 140px; font-size: 0.8rem; }

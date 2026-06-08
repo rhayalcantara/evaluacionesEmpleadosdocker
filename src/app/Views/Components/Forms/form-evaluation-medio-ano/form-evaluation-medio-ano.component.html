@@ -101,45 +101,43 @@
 
   <!-- 3. EVALUACIÓN DE COMPETENCIAS -->
   <div class="my-4 text-dark" *ngIf="evaluacionempleado?.evaluacionGoals && evaluacionempleado.evaluacionGoals.length > 0">
-    <h2>Evaluación de Competencias (Cualitativa)</h2>
-    <div *ngFor="let met of evaluacionempleado.evaluacionGoals; let index = index" class="card my-3 p-3">
-      <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
-        <h5 class="mb-0 text-primary">{{ met.goal.objetivo.grupoCompetencia.nombre }}</h5>
-        <span class="badge bg-secondary">Competencia {{ index + 1 }}</span>
-      </div>
-      <div class="mt-2 text-dark">
-        <strong>{{ met.goal.objetivo.nombre }}</strong>
-        <p class="text-muted font-italic mb-3">{{ met.goal.objetivo.descripcion }}</p>
-      </div>
-
-      <div class="row">
-        <!-- Observación Colaborador -->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label><strong>Observación del Colaborador:</strong></label>
-            <textarea 
-              class="form-control" 
-              rows="3"
-              [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].observacion"
-              name="comp-obs-colab-{{index}}"
-              [disabled]="supervisor || sololectura"
-              placeholder="Describa su desempeño con respecto a esta competencia..."></textarea>
-          </div>
-        </div>
-        <!-- Observación Supervisor -->
-        <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
-          <div class="form-group">
-            <label><strong>Observación del Supervisor:</strong></label>
-            <textarea 
-              class="form-control" 
-              rows="3"
-              [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].observacionsupervisor"
-              name="comp-obs-super-{{index}}"
-              [disabled]="sololectura"
-              placeholder="Escriba la retroalimentación para el colaborador..."></textarea>
-          </div>
-        </div>
-      </div>
+    <h2>Evaluación de Competencias</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered competencias-table">
+        <thead>
+          <tr>
+            <th class="col-competencia">Competencia</th>
+            <th class="col-calificacion text-center">Colaborador</th>
+            <th class="col-calificacion text-center"
+                *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+              Supervisor
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let met of evaluacionempleado.evaluacionGoals; let index = index"
+              [class.fila-alt]="index % 2 !== 0">
+            <td class="align-middle">{{ met.goal.objetivo.nombre }}</td>
+            <td class="text-center align-middle">
+              <select class="form-select form-select-sm competencias-select"
+                      [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].repuesta"
+                      name="comp-rating-colab-{{index}}"
+                      [disabled]="supervisor || sololectura">
+                <option *ngFor="let op of calificaciones" [ngValue]="op.valor">{{ op.etiqueta }}</option>
+              </select>
+            </td>
+            <td class="text-center align-middle"
+                *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+              <select class="form-select form-select-sm competencias-select"
+                      [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor"
+                      name="comp-rating-super-{{index}}"
+                      [disabled]="!supervisor || sololectura">
+                <option *ngFor="let op of calificaciones" [ngValue]="op.valor">{{ op.etiqueta }}</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

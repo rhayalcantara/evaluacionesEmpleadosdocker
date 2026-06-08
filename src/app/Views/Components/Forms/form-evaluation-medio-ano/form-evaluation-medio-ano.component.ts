@@ -74,6 +74,16 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
   public cursos: ICursoCapacitacion[] = [];
   public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
 
+  // Opciones de calificación para tabla de competencias
+  public readonly calificaciones: { valor: number; etiqueta: string }[] = [
+    { valor: 0, etiqueta: '— Seleccione —' },
+    { valor: 1, etiqueta: '(1) Deficiente' },
+    { valor: 2, etiqueta: '(2) Necesita Mejorar' },
+    { valor: 3, etiqueta: '(3) Cumple' },
+    { valor: 4, etiqueta: '(4) Muy Efectivo' },
+    { valor: 5, etiqueta: '(5) Excelente' },
+  ];
+
   constructor(
     public EvaluacionController: Evaluacion,
     private datos: DatosServiceService,
