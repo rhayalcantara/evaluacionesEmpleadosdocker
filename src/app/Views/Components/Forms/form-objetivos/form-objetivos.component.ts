@@ -113,12 +113,9 @@ export class FormObjetivosComponent implements OnInit {
       this.objetivoController.grabar().then((rep) => {
         if (rep) {
           this.submitForm.emit(this.objetivoForm.value);
-          this.dat.showMessage("Grabado con éxito", "Objetivo", "success");
-        } else {
-          this.dat.showMessage("Error al grabar", "Objetivo", "error");
         }
+        this.dialogRef.close();
       });
     }
-    this.dialogRef.close();
   }
 }

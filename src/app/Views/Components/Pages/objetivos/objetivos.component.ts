@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Objetivo } from '../../../../Controllers/Objetivo';
-import { IObjetivo } from '../../../../Models/Objetivo/IObjetivo';
+import { IObjetivo, IObjetivoDts } from '../../../../Models/Objetivo/IObjetivo';
+import { IPeriodo } from '../../../../Models/Periodos/IPeriodo';
 import { TablesComponent } from '../../tables/tables.component';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { FormObjetivosComponent } from '../../Forms/form-objetivos/form-objetivos.component';
@@ -54,6 +55,13 @@ throw new Error('Method not implemented.');
   public campos: string[] = []
   public tituloslocal: string[] = []
 
+  periodos: IPeriodo[] = [];
+  periodoFiltroId: string = '0';
+  mostrarCopia: boolean = false;
+  periodoOrigenId: string = '0';
+  periodoDestinoId: string = '0';
+  copiando: boolean = false;
+
   constructor(
     private ServiceComunicacion:ComunicacionService,
     public objetivoController: Objetivo,
@@ -63,6 +71,9 @@ throw new Error('Method not implemented.');
 
   ngOnInit(): void {
     this.loadObjetivos();
+    this.objetivoController.getPeriodos().subscribe((p: IPeriodo[]) => {
+      this.periodos = p;
+    });
     this.objetivoController.TRegistros.subscribe({
       next: (rep: number) => {
         this.config.totalItems=rep
@@ -149,5 +160,44 @@ throw new Error('Method not implemented.');
     if($event.option == 'edit'){
       this.onSelect($event.key as IObjetivo)
     }
+  }
+
+  filtrarPorPeriodo(): void {
+    const id = +this.periodoFiltroId;
+    if (id === 0) {
+      this.loadObjetivos();
+    } else {
+      this.objetivoController.Gets().subscribe({
+        next: (rep: any) => {
+          this.objetivoController.arraymodel = (rep.data as IObjetivoDts[]).filter(
+            (x: IObjetivoDts) => x.periodoId === id
+          );
+          this.objetivoController.totalregistros = this.objetivoController.arraymodel.length;
+          this.cd.detectChanges();
+        }
+      });
+    }
+  }
+
+  iniciarCopia(): void {
+    this.mostrarCopia = true;
+    this.periodoOrigenId = '0';
+    this.periodoDestinoId = '0';
+  }
+
+  cancelarCopia(): void {
+    this.mostrarCopia = false;
+  }
+
+  async confirmarCopia(): Promise<void> {
+    const origen = +this.periodoOrigenId;
+    const destino = +this.periodoDestinoId;
+    if (!origen || !destino || origen === destino) return;
+    this.copiando = true;
+    await this.objetivoController.copiarDePeriodo(origen, destino);
+    this.copiando = false;
+    this.mostrarCopia = false;
+    this.periodoFiltroId = this.periodoDestinoId;
+    this.filtrarPorPeriodo();
   }
 }

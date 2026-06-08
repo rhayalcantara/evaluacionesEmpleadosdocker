@@ -96,24 +96,21 @@ export class EvaluationPeriodsComponent implements OnInit {
     
      this.Periodo.GetActivo().subscribe({
       next:(rep:IPeriodo_Dts)=>{
-
         if(rep.activa==true){
             this.mostrarpantalla(rep)
         }else{
-          //llama al formulario periodos
-           
-    
           const dialogRef = this.toastr.open(FormPeriodosComponent, {
             width: '800px',
             data: { model:rep }
           });
-          dialogRef.afterClosed().subscribe((repx: IPeriodo) => {            
+          dialogRef.afterClosed().subscribe((repx: IPeriodo) => {
             this.Dat.showMessage("Registro Insertado Correctamente", "Periodos Evaluacion", "success");
             this.mostrarpantalla(rep)
           });
         }
         dialogRef.close()
-      }
+      },
+      error:(err)=>{}
     })
   }
   filterPuestos() {

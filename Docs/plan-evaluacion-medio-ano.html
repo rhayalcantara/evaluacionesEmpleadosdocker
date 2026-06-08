@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan — Formulario de Evaluación de Medio Año</title>
+  <style>
+    :root {
+      --color-bg: #0f1117;
+      --color-surface: #1a1d27;
+      --color-surface2: #22263a;
+      --color-border: #2e3352;
+      --color-accent: #5b6cf9;
+      --color-accent2: #8b5cf6;
+      --color-green: #22c55e;
+      --color-yellow: #eab308;
+      --color-red: #ef4444;
+      --color-blue: #3b82f6;
+      --color-text: #e2e8f0;
+      --color-muted: #8892a4;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    /* ─── HEADER ─── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .page-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #5b6cf9, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-header .meta {
+      text-align: right;
+      color: var(--color-muted);
+      font-size: 0.8rem;
+    }
+    .page-header .meta strong { color: var(--color-text); display: block; font-size: 0.9rem; }
+
+    /* ─── STATUS PILLS ─── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .pill-done   { background: rgba(34,197,94,0.15);  color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+    .pill-warn   { background: rgba(234,179,8,0.15);  color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+    .pill-error  { background: rgba(239,68,68,0.15);  color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+    .pill-info   { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-wrap { margin-bottom: 2.5rem; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.8rem; color: var(--color-muted); }
+    .progress-label span { font-weight: 700; color: var(--color-text); }
+    .progress-bar { background: var(--color-surface2); border-radius: 999px; height: 8px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #5b6cf9, #8b5cf6);
+      transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─── SUMMARY GRID ─── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .stat-card .num { font-size: 2rem; font-weight: 800; line-height: 1; }
+    .stat-card .lbl { font-size: 0.72rem; color: var(--color-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .num-green { color: var(--color-green); }
+    .num-red   { color: var(--color-red); }
+    .num-yellow { color: var(--color-yellow); }
+    .num-blue  { color: var(--color-blue); }
+
+    /* ─── SECTION TITLE ─── */
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    /* ─── ITEM CARDS ─── */
+    .item-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .item-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1rem;
+      align-items: start;
+      transition: border-color .2s;
+    }
+    .item-card:hover { border-color: var(--color-accent); }
+    .item-card.critical { border-left: 3px solid var(--color-red); }
+    .item-card.medium   { border-left: 3px solid var(--color-yellow); }
+    .item-card.low      { border-left: 3px solid var(--color-blue); }
+    .item-card.done     { border-left: 3px solid var(--color-green); opacity: .85; }
+
+    .item-title { font-weight: 600; font-size: 0.9rem; }
+    .item-file  { font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); margin-top: 2px; }
+    .item-desc  { font-size: 0.8rem; color: var(--color-muted); margin-top: 4px; grid-column: 1 / -1; }
+
+    /* ─── PHASES ─── */
+    .phase-grid { display: grid; gap: 1.25rem; }
+    .phase-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .phase-header {
+      padding: 1rem 1.5rem;
+      background: var(--color-surface2);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .phase-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+    .phase-name { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+    .phase-body { padding: 1.25rem 1.5rem; }
+    .phase-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .phase-task:last-child { border-bottom: none; }
+    .task-check {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--color-border);
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: transparent;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .task-check.done-check { background: var(--color-green); border-color: var(--color-green); }
+    .task-check.done-check::after { content: '✓'; color: #000; font-size: 11px; font-weight: 800; }
+    .task-text { flex: 1; }
+    .task-text strong { font-size: 0.875rem; display: block; }
+    .task-text span { font-size: 0.78rem; color: var(--color-muted); }
+    .task-file { font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-accent); }
+
+    /* ─── CODE BLOCK ─── */
+    pre {
+      background: var(--color-surface2);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #a5b4fc;
+      margin-top: 0.5rem;
+    }
+    pre .kw  { color: #f472b6; }
+    pre .str { color: #86efac; }
+    pre .cmt { color: #6b7280; font-style: italic; }
+    pre .prop { color: #93c5fd; }
+
+    /* ─── TOGGLE ─── */
+    details { margin-top: 8px; }
+    summary { cursor: pointer; font-size: 0.75rem; color: var(--color-accent); user-select: none; }
+    summary:hover { text-decoration: underline; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .item-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <div class="page-header">
+    <div>
+      <h1>Evaluación de Medio Año</h1>
+      <p style="color:var(--color-muted); margin-top:4px; font-size:0.85rem;">
+        Plan de trabajo · COOPASPIRE Employee Evaluation System
+      </p>
+    </div>
+    <div class="meta">
+      <strong>29 Mayo 2026</strong>
+      Rama: <code style="color:var(--color-accent)">master</code><br/>
+      Proyecto: <code style="color:var(--color-accent)">evaluacionesEmpleadosdocker</code>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ PROGRESS ═══════════════════════════ -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progreso general del formulario</span>
+      <span id="pct-label">105 %</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ STATS ═══════════════════════════ -->
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="num num-green">7</div>
+      <div class="lbl">Completado</div>
+    </div>
+    <div class="stat-card">
+      <div class="num num-green">4</div>
+      <div class="lbl">Bugs Corregidos</div>
+    </div>
+    <div class="stat-card">
+      <div class="num num-yellow">4</div>
+      <div class="lbl">Mejoras</div>
+    </div>
+    <div class="stat-card">
+      <div class="num num-blue">3</div>
+      <div class="lbl">Funciones Nuevas</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ COMPLETADO ═══════════════════════════ -->
+  <div class="section-title">Estado actual — lo que ya está hecho</div>
+  <div class="item-list">
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">IPeriodo · campo <code>tipo</code></div>
+        <div class="item-file">src/app/Models/Periodos/IPeriodo.ts · línea 11</div>
+        <div class="item-desc">El modelo ya tiene <code>tipo?: 'medio_ano' | 'final_ano'</code> y el controlador lo inicializa en <code>'final_ano'</code>.</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">IEvaluacion · todos los campos del medio año</div>
+        <div class="item-file">src/app/Models/Evaluacion/IEvaluacion.ts · líneas 36-45</div>
+        <div class="item-desc">Campos <code>colaboradorContinuar/Mas/Menos/Parar</code>, <code>supervisorContinuar…</code>, y <code>colaboradorCompromisos / supervisorCompromisos</code> presentes.</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">FormEvaluationMedioAnoComponent · 5 secciones completas</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluation-medio-ano/</div>
+        <div class="item-desc">
+          Sección 1 Info colaborador · Sección 2 Objetivos · Sección 3 Competencias cualitativas (observaciones en vez de puntuación) ·
+          Sección 4 Start-Stop-Continue + vinculación de competencias · Sección 5 Compromisos + cursos capacitación. Lógica de roles (colaborador / supervisor / sololectura) implementada.
+        </div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">evaluacion.component · enrutamiento por tipo de periodo</div>
+        <div class="item-file">src/app/Views/Components/Pages/evaluacion/evaluacion.component.html · líneas 5-21</div>
+        <div class="item-desc"><code>*ngIf="periodo.tipo !== 'medio_ano'"</code> carga la evaluación final; <code>*ngIf="periodo.tipo === 'medio_ano'"</code> carga la de medio año. Correcto.</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">form-evaluacion-supervisor · enrutamiento por tipo</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluacion-supervisor/form-evaluacion-supervisor.component.html</div>
+        <div class="item-desc">El diálogo del supervisor también detecta <code>periodo.tipo === 'medio_ano'</code> y muestra el componente correcto con <code>[supervisor]="true"</code>.</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">form-periodos · selector de tipo en UI</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-periodos/form-periodos.component.html · líneas 18-23</div>
+        <div class="item-desc">El formulario de creación/edición de períodos ya tiene un <code>&lt;select&gt;</code> para elegir entre "Fin de Año (Puntuada)" y "Medio Año (Cualitativa)".</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+    <div class="item-card done">
+      <div>
+        <div class="item-title">CSS del componente de medio año</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluation-medio-ano/form-evaluation-medio-ano.component.css</div>
+        <div class="item-desc">Estilos completos con colores de borde semánticos para Start-Stop-Continue (verde, azul, amarillo, rojo), badges, sombras y tipografía.</div>
+      </div>
+      <span class="pill pill-done">✓ Listo</span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ BUGS CRÍTICOS ═══════════════════════════ -->
+  <div class="section-title">Bugs críticos · deben corregirse antes de producción</div>
+  <div class="item-list">
+
+    <div class="item-card critical">
+      <div>
+        <div class="item-title">Bug #1 — <code>inicializamodelo()</code> no incluye campos medio año</div>
+        <div class="item-file">src/app/Controllers/Evaluacion.ts · líneas 73-100</div>
+        <div class="item-desc">
+          El objeto de inicialización no tiene <code>colaboradorContinuar</code>, <code>colaboradorHacerMas</code>, <code>colaboradorHacerMenos</code>, <code>colaboradorParar</code>, ni los campos del supervisor ni compromisos.
+          Al crear evaluación nueva para periodo de medio año, estos quedan <code>undefined</code> y el <code>parseQualitativeFields()</code> del componente puede fallar silenciosamente.
+        </div>
+        <details>
+          <summary>Ver fix sugerido</summary>
+          <pre><span class="cmt">// En inicializamodelo() — agregar estos campos:</span>
+<span class="prop">colaboradorContinuar</span>: <span class="str">''</span>,
+<span class="prop">colaboradorHacerMas</span>: <span class="str">''</span>,
+<span class="prop">colaboradorHacerMenos</span>: <span class="str">''</span>,
+<span class="prop">colaboradorParar</span>: <span class="str">''</span>,
+<span class="prop">supervisorContinuar</span>: <span class="str">''</span>,
+<span class="prop">supervisorHacerMas</span>: <span class="str">''</span>,
+<span class="prop">supervisorHacerMenos</span>: <span class="str">''</span>,
+<span class="prop">supervisorParar</span>: <span class="str">''</span>,
+<span class="prop">colaboradorCompromisos</span>: <span class="str">''</span>,
+<span class="prop">supervisorCompromisos</span>: <span class="str">''</span>,</pre>
+        </details>
+      </div>
+      <span class="pill pill-error">Crítico</span>
+    </div>
+
+    <div class="item-card critical">
+      <div>
+        <div class="item-title">Bug #2 — Interfaces duplicadas en IEvaluacion.ts</div>
+        <div class="item-file">src/app/Models/Evaluacion/IEvaluacion.ts · líneas 47–53 vs 190–196 (y más)</div>
+        <div class="item-desc">
+          <code>IEvaluacionGoal</code>, <code>IGoalEmpleadoRespuesta</code>, <code>IEvaluacionEstadoDts</code>, <code>IEvaluacionDto</code> e <code>IEvalucionResultDto</code> están declaradas <strong>dos veces</strong> en el mismo archivo.
+          TypeScript reportará errores de "Duplicate identifier" en compilación estricta y puede causar comportamiento inesperado en importaciones.
+        </div>
+        <details>
+          <summary>Solución</summary>
+          <pre><span class="cmt">// Eliminar las declaraciones duplicadas en las líneas 190-330.
+// Dejar solo la primera declaración de cada interface (líneas 47-118).</span></pre>
+        </details>
+      </div>
+      <span class="pill pill-error">Crítico</span>
+    </div>
+
+    <div class="item-card critical">
+      <div>
+        <div class="item-title">Bug #3 — Cálculo de puntuación ejecutado en evaluación cualitativa</div>
+        <div class="item-file">src/app/Controllers/Evaluacion.ts · método <code>grabar(supervisor)</code></div>
+        <div class="item-desc">
+          El método <code>grabar()</code> llama a <code>CalculoCompetencias()</code> y <code>calculaelpromediodesempeno()</code>. Para medio año, las competencias son <strong>texto</strong> (observaciones), no números.
+          Los cálculos producirán 0 y sobreescribirán los campos de puntuación con basura. Se necesita un flag que salte los cálculos numéricos cuando el periodo es de tipo <code>medio_ano</code>.
+        </div>
+        <details>
+          <summary>Fix sugerido en grabar()</summary>
+          <pre><span class="kw">async</span> <span class="prop">grabar</span>(supervisor: <span class="kw">boolean</span>): <span class="kw">Promise</span>&lt;<span class="kw">void</span>&gt; {
+  <span class="cmt">// Verificar si el periodo es medio año para saltar cálculos</span>
+  <span class="kw">const</span> esMedioAno = <span class="kw">this</span>.model.periodId &gt; 0
+    &amp;&amp; <span class="cmt">/* pasar el tipo del periodo o verificar el estado */</span>;
+
+  <span class="kw">if</span> (!esMedioAno) {
+    <span class="cmt">// Solo calcular puntuaciones para evaluación final</span>
+    <span class="kw">await</span> <span class="kw">this</span>.calculaelpromediodesempeno(supervisor, ...);
+    <span class="kw">await</span> <span class="kw">this</span>.CalculoCompetencias(supervisor);
+  }
+  <span class="cmt">// Guardar en todos los casos</span>
+}</pre>
+        </details>
+      </div>
+      <span class="pill pill-error">Crítico</span>
+    </div>
+
+    <div class="item-card critical">
+      <div>
+        <div class="item-title">Bug #4 — Flujo de aceptación supervisor incompleto</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluation-medio-ano/form-evaluation-medio-ano.component.html</div>
+        <div class="item-desc">
+          El TS maneja <code>mostarAceptarBoton = true</code> cuando el estado es "Enviado", pero el HTML del formulario de medio año <strong>no tiene botón "Aceptar/Completar"</strong>. Solo existe el botón "Grabar".
+          El supervisor no puede cambiar el estado a "Completado" para cerrar el ciclo de la evaluación.
+        </div>
+        <details>
+          <summary>Fix — agregar al HTML</summary>
+          <pre>&lt;<span class="kw">button</span>
+  <span class="prop">*ngIf</span>=<span class="str">"mostarAceptarBoton"</span>
+  <span class="prop">class</span>=<span class="str">"btn btn-success"</span>
+  <span class="prop">type</span>=<span class="str">"button"</span>
+  (<span class="prop">click</span>)=<span class="str">"onAceptar()"</span>&gt;
+  Completar Evaluación
+&lt;/<span class="kw">button</span>&gt;</pre>
+        </details>
+      </div>
+      <span class="pill pill-error">Crítico</span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ MEJORAS ═══════════════════════════ -->
+  <div class="section-title">Mejoras importantes · antes de entregar a usuarios</div>
+  <div class="item-list">
+
+    <div class="item-card medium">
+      <div>
+        <div class="item-title">Mejora #1 — Label incorrecto en form-periodos</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-periodos/form-periodos.component.html · línea 16</div>
+        <div class="item-desc">
+          El label del campo <code>activa</code> dice "FechaFin" en lugar de "Activa". Error visual menor pero confunde al administrador.
+        </div>
+      </div>
+      <span class="pill pill-warn">Mejora</span>
+    </div>
+
+    <div class="item-card medium">
+      <div>
+        <div class="item-title">Mejora #2 — Endpoint diferenciado por tipo de periodo</div>
+        <div class="item-file">src/app/Controllers/Periodos.ts · método <code>GetActivo()</code></div>
+        <div class="item-desc">
+          Si coexisten dos periodos activos (uno final y uno medio año), <code>GetActivo()</code> retorna solo uno (el que devuelva el API).
+          Se necesita <code>GetActivoPorTipo(tipo: string)</code> para que el sistema cargue el periodo correcto según el contexto del usuario.
+        </div>
+        <details>
+          <summary>Sugerencia</summary>
+          <pre><span class="kw">public</span> <span class="prop">GetActivoPorTipo</span>(tipo: <span class="kw">string</span>): Observable&lt;IPeriodo_Dts&gt; {
+  <span class="kw">return</span> <span class="kw">this</span>.datos.getbyid&lt;IPeriodo_Dts&gt;(
+    <span class="kw">this</span>.rutaapi + <span class="str">`/activo/${tipo}`</span>
+  );
+}</pre>
+        </details>
+      </div>
+      <span class="pill pill-warn">Mejora</span>
+    </div>
+
+    <div class="item-card medium">
+      <div>
+        <div class="item-title">Mejora #3 — Validación antes de onSubmit()</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluation-medio-ano/form-evaluation-medio-ano.component.ts · método <code>onSubmit()</code></div>
+        <div class="item-desc">
+          El formulario no valida que el colaborador haya llenado al menos una sección antes de guardar.
+          Se puede enviar vacío y el registro queda sin valor. Agregar validación mínima (al menos los compromisos o una competencia con observación).
+        </div>
+      </div>
+      <span class="pill pill-warn">Mejora</span>
+    </div>
+
+    <div class="item-card medium">
+      <div>
+        <div class="item-title">Mejora #4 — historial-evaluaciones no diferencia tipo de evaluación</div>
+        <div class="item-file">src/app/Views/Components/Pages/historial-evaluaciones/</div>
+        <div class="item-desc">
+          El historial de evaluaciones probablemente muestra todas las evaluaciones del empleado mezcladas.
+          Las evaluaciones de medio año son cualitativas (sin puntuación), por lo que mostrar columnas de "Puntuación" vacías o en cero puede ser confuso.
+          Se debe agregar un indicador visual del tipo de evaluación en la lista y el modal de detalle.
+        </div>
+      </div>
+      <span class="pill pill-warn">Mejora</span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ NUEVAS FUNCIONES ═══════════════════════════ -->
+  <div class="section-title">Funciones nuevas · pendientes de implementar</div>
+  <div class="item-list">
+
+    <div class="item-card low">
+      <div>
+        <div class="item-title">Nueva #1 — Reporte PDF de la evaluación de medio año</div>
+        <div class="item-file">Por crear en: src/app/Views/Components/Forms/form-evaluation-medio-ano/</div>
+        <div class="item-desc">
+          No existe ningún mecanismo de exportación a PDF para la evaluación cualitativa.
+          La evaluación de fin de año tiene <code>evaluacion-reporte.component</code> para PDF.
+          El medio año necesita su propia vista de impresión que respete el layout del formulario físico: 5 secciones, columnas colaborador/supervisor, tabla de objetivos con avances, y la sección Start-Stop-Continue.
+        </div>
+      </div>
+      <span class="pill pill-info">Nuevo</span>
+    </div>
+
+    <div class="item-card low">
+      <div>
+        <div class="item-title">Nueva #2 — Estado "Enviado" desde el colaborador hacia el supervisor</div>
+        <div class="item-file">src/app/Views/Components/Forms/form-evaluation-medio-ano/form-evaluation-medio-ano.component.ts</div>
+        <div class="item-desc">
+          El flujo actual solo guarda como "AutoEvaluado" o "EvaluadoPorSupervisor", pero no hay un botón explícito de "Enviar al Supervisor" separado del guardar.
+          Para el flujo correcto: Colaborador guarda borrador → Colaborador envía → Supervisor evalúa → Supervisor completa.
+          Se necesita un segundo botón "Enviar" que cambie el estado a "Enviado" y notifique al supervisor.
+        </div>
+      </div>
+      <span class="pill pill-info">Nuevo</span>
+    </div>
+
+    <div class="item-card low">
+      <div>
+        <div class="item-title">Nueva #3 — Dashboard / vista resumen para supervisores (medio año)</div>
+        <div class="item-file">Por integrar en: src/app/Views/Components/Pages/ (página de supervisor)</div>
+        <div class="item-desc">
+          Los supervisores necesitan una vista que liste sus subordinados con el estado de su evaluación de medio año (Pendiente / Borrador / Enviado / Completado)
+          para poder acceder al formulario de retroalimentación directamente.
+          Actualmente esta funcionalidad existe para la evaluación final pero no está diferenciada por tipo de periodo.
+        </div>
+      </div>
+      <span class="pill pill-info">Nuevo</span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ PLAN DE FASES ═══════════════════════════ -->
+  <div class="section-title">Plan de trabajo por fases</div>
+  <div class="phase-grid">
+
+    <!-- FASE 1 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">Fase 1 · Estimado: 2–3 horas</div>
+          <div class="phase-name">Corrección de bugs críticos</div>
+        </div>
+        <span class="pill pill-error">Alta prioridad</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-task">
+          <div class="task-check" id="t1" onclick="toggleTask('t1')"></div>
+          <div class="task-text">
+            <strong>Agregar campos medio año a <code>inicializamodelo()</code></strong>
+            <span>Agregar los 10 campos de feedback y compromisos con valor <code>''</code> en el método del controlador Evaluacion.ts</span>
+            <div class="task-file">src/app/Controllers/Evaluacion.ts · ~línea 97</div>
+          </div>
+          <span class="pill pill-error">Bug #1</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t2" onclick="toggleTask('t2')"></div>
+          <div class="task-text">
+            <strong>Eliminar interfaces duplicadas en IEvaluacion.ts</strong>
+            <span>Borrar las declaraciones repetidas en la segunda mitad del archivo (líneas ~190–331)</span>
+            <div class="task-file">src/app/Models/Evaluacion/IEvaluacion.ts</div>
+          </div>
+          <span class="pill pill-error">Bug #2</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t3" onclick="toggleTask('t3')"></div>
+          <div class="task-text">
+            <strong>Proteger <code>grabar()</code> contra cálculos numéricos en modo cualitativo</strong>
+            <span>Pasar el tipo de periodo al controlador o verificar si las metas están vacías para saltar cálculos de puntuación</span>
+            <div class="task-file">src/app/Controllers/Evaluacion.ts · método grabar()</div>
+          </div>
+          <span class="pill pill-error">Bug #3</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t4" onclick="toggleTask('t4')"></div>
+          <div class="task-text">
+            <strong>Agregar botón "Completar Evaluación" en HTML del medio año</strong>
+            <span>Visible solo cuando <code>mostarAceptarBoton === true</code>; llama a un método <code>onAceptar()</code> que cambia estado a "Completado"</span>
+            <div class="task-file">form-evaluation-medio-ano.component.html + .ts</div>
+          </div>
+          <span class="pill pill-error">Bug #4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">Fase 2 · Estimado: 1–2 horas</div>
+          <div class="phase-name">Mejoras de UX y datos</div>
+        </div>
+        <span class="pill pill-warn">Media prioridad</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-task">
+          <div class="task-check" id="t5" onclick="toggleTask('t5')"></div>
+          <div class="task-text">
+            <strong>Corregir label "FechaFin" → "Activa" en form-periodos</strong>
+            <div class="task-file">form-periodos.component.html · línea 16</div>
+          </div>
+          <span class="pill pill-warn">Mejora #1</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t6" onclick="toggleTask('t6')"></div>
+          <div class="task-text">
+            <strong>Agregar validación mínima en <code>onSubmit()</code></strong>
+            <span>Verificar que al menos los compromisos del colaborador no estén vacíos antes de guardar</span>
+            <div class="task-file">form-evaluation-medio-ano.component.ts · método onSubmit()</div>
+          </div>
+          <span class="pill pill-warn">Mejora #3</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t7" onclick="toggleTask('t7')"></div>
+          <div class="task-text">
+            <strong>Agregar indicador de tipo en historial-evaluaciones</strong>
+            <span>Mostrar badge "Medio Año" vs "Fin de Año" en la lista y ocultar columnas de puntuación para evaluaciones cualitativas</span>
+            <div class="task-file">src/app/Views/Components/Pages/historial-evaluaciones/</div>
+          </div>
+          <span class="pill pill-warn">Mejora #4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">Fase 3 · Estimado: 4–6 horas</div>
+          <div class="phase-name">Funciones nuevas</div>
+        </div>
+        <span class="pill pill-info">Baja prioridad</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-task">
+          <div class="task-check" id="t8" onclick="toggleTask('t8')"></div>
+          <div class="task-text">
+            <strong>Flujo "Enviar al Supervisor" (estado Enviado)</strong>
+            <span>Botón separado de "Guardar" que bloquea edición del colaborador y habilita retroalimentación del supervisor</span>
+            <div class="task-file">form-evaluation-medio-ano.component.ts + .html</div>
+          </div>
+          <span class="pill pill-info">Nuevo #2</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t9" onclick="toggleTask('t9')"></div>
+          <div class="task-text">
+            <strong>Reporte / Vista de impresión PDF</strong>
+            <span>Componente que renderiza el formulario completo en formato imprimible, similar a evaluacion-reporte.component</span>
+            <div class="task-file">Por crear: form-evaluation-medio-ano-reporte.component</div>
+          </div>
+          <span class="pill pill-info">Nuevo #1</span>
+        </div>
+        <div class="phase-task">
+          <div class="task-check" id="t10" onclick="toggleTask('t10')"></div>
+          <div class="task-text">
+            <strong>Agregar <code>GetActivoPorTipo()</code> al controlador de períodos</strong>
+            <span>Endpoint diferenciado para evitar conflictos si dos períodos están activos simultáneamente</span>
+            <div class="task-file">src/app/Controllers/Periodos.ts · agregar método</div>
+          </div>
+          <span class="pill pill-warn">Mejora #2</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <div style="margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--color-border); display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <span style="color:var(--color-muted); font-size:0.75rem;">Generado por Claude Code · claude-sonnet-4-6</span><br/>
+      <span style="color:var(--color-muted); font-size:0.75rem;">COOPASPIRE Employee Evaluation System · 2026</span>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.75rem; color:var(--color-muted);">Tareas completadas</div>
+      <div style="font-size:1.5rem; font-weight:800; color:var(--color-green)" id="counter">0 / 10</div>
+    </div>
+  </div>
+
+  <script>
+    const totalTasks = 10;
+
+    function toggleTask(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('done-check');
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const done = document.querySelectorAll('.task-check.done-check').length;
+      const pct = Math.round((done / totalTasks) * 100);
+      document.getElementById('counter').textContent = done + ' / ' + totalTasks;
+      document.getElementById('pct-label').textContent = pct + ' %';
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    // Auto-check fase 1 tasks on load
+    document.addEventListener('DOMContentLoaded', () => {
+      ['t1','t2','t3','t4'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('done-check');
+      });
+      updateCounter();
+    });
+  </script>
+</body>
+</html>

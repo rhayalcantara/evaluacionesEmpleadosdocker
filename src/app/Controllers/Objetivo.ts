@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IObjetivo, IGrupoCompetencia, IObjetivoDts } from '../Models/Objetivo/IObjetivo';
 import { IPeriodo } from '../Models/Periodos/IPeriodo';
@@ -18,7 +18,6 @@ export class Objetivo {
     titulos=[
       {grupoc: 'Grupo Competencia'},
       {nombre: 'Nombre'},
-      {descripcion:'Descripcion'},
       {periodo:'Periodo'},
       {estad:'Estado'},
       {fecha:'Fecha'}
@@ -39,7 +38,7 @@ export class Objetivo {
         nombre: "",
         descripcion: "",
         periodoId: 0,
-        estadoId: 0,
+        estadoId: 6,
         fecha: new Date().toISOString().split('T')[0],
         grupoCompetencia:{
           id: 0,
@@ -81,6 +80,7 @@ export class Objetivo {
             next: (rep: IObjetivo) => {
               this.model = rep;
               this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
+              this.getdatos();
               resolve(true);
             },
             error: (err: Error) => {
@@ -92,6 +92,7 @@ export class Objetivo {
           this.Update(this.model).subscribe({
             next: (rep: IObjetivo) => {
               this.datos.showMessage('Registro Actualizado Correctamente', this.titulomensage, "success");
+              this.getdatos();
               resolve(true);
             },
             error: (err: Error) => {
@@ -101,6 +102,32 @@ export class Objetivo {
           });
         }
       });
+    }
+
+    public async copiarDePeriodo(periodoOrigenId: number, periodoDestinoId: number): Promise<number> {
+      const allResponse = await firstValueFrom(this.Gets());
+      const competencias: IObjetivoDts[] = (allResponse.data as IObjetivoDts[]).filter(
+        (x: IObjetivoDts) => x.periodoId === periodoOrigenId
+      );
+      let copiadas = 0;
+      for (const comp of competencias) {
+        const nueva = {
+          id: 0,
+          grupoCompetenciaId: comp.grupoCompetenciaId,
+          nombre: comp.nombre,
+          descripcion: comp.descripcion,
+          periodoId: periodoDestinoId,
+          estadoId: comp.estadoId,
+          fecha: comp.fecha
+        } as IObjetivo;
+        try {
+          await firstValueFrom(this.insert(nueva));
+          copiadas++;
+        } catch (_) { /* continue with rest */ }
+      }
+      this.datos.showMessage(`Se copiaron ${copiadas} competencias correctamente`, this.titulomensage, 'success');
+      this.getdatos();
+      return copiadas;
     }
 
     public async delete(id: number): Promise<boolean> {

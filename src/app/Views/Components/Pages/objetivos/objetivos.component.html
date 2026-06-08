@@ -1,18 +1,56 @@
 <div class="shadow p-3 mb-5 bg-body rounded my-4 ">
-    <h2 class="mb-3">Mantenimiento de Competencias</h2>   
-    <div class=" col-md-8 col-lg-8 col-xl-8 my-3 ">                      
+    <h2 class="mb-3">Mantenimiento de Competencias</h2>
+    <div class=" col-md-8 col-lg-8 col-xl-8 my-3 ">
       <button class="btn  float-end" (click)="excel()"><i class="fa fa-file-excel-o"></i></button>
       <button class="btn  float-end" (click)="pdf()"><i class="fa fa-print"></i></button>
-    </div>  
+    </div>
     <div class=" col-md-4 col-lg-4 col-xl-4" style="display:inline;">
-      <div class="d-grid gap-2 ">
-        <button class="btn btn-outline-success" data-toggle="modal" 
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-outline-success" data-toggle="modal"
                 data-bs-target="#exampleModal" (click)="agregar()">
           Agregar
         </button>
+        <button class="btn btn-outline-primary" (click)="iniciarCopia()">
+          <i class="fa fa-copy"></i> Copiar competencias...
+        </button>
       </div>
+
+      <div *ngIf="mostrarCopia" class="card p-3 mb-3">
+        <h6>Copiar competencias de un período a otro</h6>
+        <div class="row g-2 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label small">Período origen</label>
+            <select class="form-control form-control-sm" [(ngModel)]="periodoOrigenId">
+              <option value="0">Seleccione...</option>
+              <option *ngFor="let p of periodos" [value]="p.id">{{p.descripcion}}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small">Período destino</label>
+            <select class="form-control form-control-sm" [(ngModel)]="periodoDestinoId">
+              <option value="0">Seleccione...</option>
+              <option *ngFor="let p of periodos" [value]="p.id">{{p.descripcion}}</option>
+            </select>
+          </div>
+          <div class="col-md-4 d-flex gap-2">
+            <button class="btn btn-success btn-sm" (click)="confirmarCopia()"
+                    [disabled]="!+periodoOrigenId || !+periodoDestinoId || +periodoOrigenId === +periodoDestinoId || copiando">
+              {{copiando ? 'Copiando...' : 'Confirmar'}}
+            </button>
+            <button class="btn btn-secondary btn-sm" (click)="cancelarCopia()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <select class="form-control" [(ngModel)]="periodoFiltroId" (change)="filtrarPorPeriodo()">
+          <option value="0">Todos los períodos</option>
+          <option *ngFor="let p of periodos" [value]="p.id">{{p.descripcion}}</option>
+        </select>
+      </div>
+
       <div class="input-group mb-3">
-        <input aria-describedby="basic-addon2" 
+        <input aria-describedby="basic-addon2"
               aria-label="Search" class="form-control" placeholder="Search for..."
               type="text"
               [(ngModel)]="term"

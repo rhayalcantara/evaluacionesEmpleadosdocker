@@ -7,19 +7,15 @@ import { Meta } from "@angular/platform-browser";
 import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
 
 
-
-
-
-
 @Injectable({
     providedIn: 'root'
   })
 
   export class Periodos implements OnInit{
-      
+
       rutaapi:string = this.datos.URL+'/api/Periods'
       titulomensage:string='Periodos'
-      
+
        public model:IPeriodo = this.inicializamodelo()
        public titulos=[{descripcion:'Descripcion'},{fechaInicio:'Fechainicio'},{fechaFin:'Fechafin'},{activa:'Activa'},{tipo:'Tipo'}]
        public estado:string='`'
@@ -28,16 +24,15 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
        public pagesize:number=10
        public filtro:string=''
        public arraymodel:IPeriodo[]=[]
-       
+
        public operationSuccessful: boolean = false;
        @Output() TRegistros = new EventEmitter<number>();
 
     constructor(
         private datos:DatosServiceService,
         public datosMeta:Meta
-        
-                        
        ){}
+
     ngOnInit(): void {
         this.filtro=""
         this.estado=""
@@ -46,19 +41,18 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
         this.getdatos()
     }
 
-  
     public inicializamodelo():IPeriodo{
       return {
         id:0,
         descripcion:'',
         fechaInicio:new Date(),
         fechaFin:new Date(),
-        activa:true, 
+        activa:true,
         estadoid:0,
         tipo:'final_ano'
-      } 
-      
+      }
     }
+
     public InicializaModeloDTS():IPeriodo_Dts{
       let p:IPeriodo_Dts={
         estado: {
@@ -75,107 +69,88 @@ import { IPeriodo, IPeriodo_Dts } from "../Models/Periodos/IPeriodo";
         tipo: 'final_ano'
       }
       return p;
-    } 
-    public  getdatos(){
-  
+    }
 
-    
-         this.Gets()        
-           .subscribe({        
-          next:(rep:ModelResponse)=>{
-            this.totalregistros =  rep.count
-            this.arraymodel=[]
-            this.arraymodel=rep.data    
-                
-            this.TRegistros.emit(this.totalregistros)        
-            
-  
-  
- 
-         
-          }
-        }
-        ) 
+    public getdatos(){
+      this.Gets().subscribe({
+        next:(rep:ModelResponse)=>{
+          this.totalregistros = rep.count;
+          this.arraymodel = [];
+          this.arraymodel = rep.data;
+          this.TRegistros.emit(this.totalregistros);
+        },
+        error:(err)=>{}
+      });
     }
 
     public filtrar(){
-        this.Gets().subscribe(
-                        (m:ModelResponse)=>{
-                          this.totalregistros =  m.count
-                          this.TRegistros.emit(this.totalregistros)        
-                          
-                          this.arraymodel=[]
-                          this.arraymodel=m.data
-                        }
-                      )
-          
-    }
-    
-    
-
-      public Gets():Observable<ModelResponse> {
-        return this.datos.getdatos<ModelResponse>( this.rutaapi)
-      }
-  
-      public Get(id:string):Observable<IPeriodo>{
-          return this.datos.getbyid<IPeriodo>(this.rutaapi+`/${id}`)
-      }
-      public GetActivo():Observable<IPeriodo_Dts>{
-        return this.datos.getbyid<IPeriodo_Dts>(this.rutaapi+`/activo`)
+      this.Gets().subscribe(
+        (m:ModelResponse)=>{
+          this.totalregistros = m.count;
+          this.TRegistros.emit(this.totalregistros);
+          this.arraymodel = [];
+          this.arraymodel = m.data;
+        }
+      );
     }
 
-      public GetCount():Observable<number>{
-        
-        return this.datos.getdatoscount(this.rutaapi+`/count`)
-      }
-  
-      public insert(obj:IPeriodo):Observable<IPeriodo>{  
-        return this.datos.insertardatos<IPeriodo>(this.rutaapi, obj ); 
-      }
-      public Update(obj:IPeriodo):Observable<IPeriodo>{
-        return this.datos.updatedatos<IPeriodo>(this.rutaapi+`/${obj.id}`,obj); 
-      }
-  
-      public Reporte(){}
-      
-      public exportexcel(){}
-              
-      public async grabar(): Promise<boolean> {
-        // Envuelve el código en una nueva Promise
-        return new Promise<boolean>(async (resolve) => {
-          if (this.model.id == 0) {
-            // inserta el registro
-            await firstValueFrom(this.insert(this.model)).then(
-              (rep: IPeriodo) => {
-   
-                this.model = rep;
-                this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");                
-                resolve(true); // Devuelve true si la operación fue exitosa
-              },
-              (err: Error) => {
-                this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
-                resolve(false); // Devuelve false si la operación falló
-              }
-            );
-          } else {
-            // actualiza el registro
-            await firstValueFrom(this.Update(this.model)).then(
-              (rep: IPeriodo) => {
-                
-                this.model = rep;
-            
-                this.TRegistros.emit(this.totalregistros)
+    public Gets():Observable<ModelResponse> {
+      return this.datos.getdatos<ModelResponse>(this.rutaapi);
+    }
 
-                resolve(true); // Devuelve true si la operación fue exitosa
-              },
-              (err: Error) => {
-                this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
-                resolve(false); // Devuelve false si la operación falló
-              }
-            );
-          }
-         
+    public Get(id:string):Observable<IPeriodo>{
+        return this.datos.getbyid<IPeriodo>(this.rutaapi+`/${id}`);
+    }
 
-        });
-      }
+    public GetActivo():Observable<IPeriodo_Dts>{
+      return this.datos.getbyid<IPeriodo_Dts>(this.rutaapi+`/activo`);
+    }
+
+    public GetCount():Observable<number>{
+      return this.datos.getdatoscount(this.rutaapi+`/count`);
+    }
+
+    public insert(obj:IPeriodo):Observable<IPeriodo>{
+      return this.datos.insertardatos<IPeriodo>(this.rutaapi, obj);
+    }
+
+    public Update(obj:IPeriodo):Observable<IPeriodo>{
+      return this.datos.updatedatos<IPeriodo>(this.rutaapi+`/${obj.id}`,obj);
+    }
+
+    public Reporte(){}
+
+    public exportexcel(){}
+
+    public async grabar(): Promise<boolean> {
+      return new Promise<boolean>(async (resolve) => {
+        if (this.model.id == 0) {
+          await firstValueFrom(this.insert(this.model)).then(
+            (rep: IPeriodo) => {
+              this.model = rep;
+              this.datos.showMessage('Registro Insertado Correctamente', this.titulomensage, "success");
+              this.getdatos();
+              resolve(true);
+            },
+            (err: Error) => {
+              this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+              resolve(false);
+            }
+          );
+        } else {
+          await firstValueFrom(this.Update(this.model)).then(
+            (rep: IPeriodo) => {
+              this.model = rep;
+              this.TRegistros.emit(this.totalregistros);
+              this.getdatos();
+              resolve(true);
+            },
+            (err: Error) => {
+              this.datos.showMessage('Error:' + err.message, this.titulomensage, 'error');
+              resolve(false);
+            }
+          );
+        }
+      });
+    }
   }

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flujo de Evaluaciones — COOPASPIRE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── Variables ─── */
+:root{
+  --navy:#1a3a5c; --navy-d:#0f2540; --navy-s:#e8f0f8;
+  --fa:#c9621a; --fa-l:#fff4ec; --fa-b:#f0c99a; --fa-m:#f5a96a;
+  --ma:#0f8a6e; --ma-l:#eaf7f4; --ma-b:#a8e0d4; --ma-m:#5ec9b0;
+  --admin-c:#6b21a8; --admin-b:#f5f0ff;
+  --colab-c:#1d4ed8; --colab-b:#eff6ff;
+  --super-c:#166534; --super-b:#f0fdf4;
+  --st-b:#6b7280; --st-a:#b45309; --st-s:#c2410c; --st-env:#7c3aed; --st-ok:#15803d;
+  --r:11px; --sh:0 2px 20px rgba(26,58,92,.09); --tr:.26s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.6;color:#1e293b;background:#f2f5f9;min-height:100vh}
+
+/* ─── Hero ─── */
+.hero{background:var(--navy-d);background-image:radial-gradient(ellipse 90% 70% at 15% 50%,rgba(36,80,128,.7) 0%,transparent 65%),radial-gradient(ellipse 50% 90% at 85% 15%,rgba(15,138,110,.18) 0%,transparent 55%);color:#fff;padding:50px 40px 44px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0,transparent 30px,rgba(255,255,255,.022) 30px,rgba(255,255,255,.022) 31px);pointer-events:none}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px 5px 8px;border-radius:40px;margin-bottom:20px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8);letter-spacing:.05em}
+.hero-chip span{width:26px;height:26px;background:var(--ma);border-radius:50%;display:grid;place-items:center;font-size:13px}
+.hero h1{font-family:'Libre Baskerville',serif;font-size:clamp(26px,3.8vw,42px);font-weight:700;line-height:1.15;margin-bottom:12px;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--fa-m),var(--ma-m));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:rgba(255,255,255,.6);font-size:14px;max-width:500px;margin:0 auto 26px}
+
+/* ─── Tabs ─── */
+.tabs{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.tb{padding:8px 20px;border-radius:40px;border:1.5px solid rgba(255,255,255,.22);background:transparent;color:rgba(255,255,255,.65);cursor:pointer;font:500 13px 'DM Sans',sans-serif;transition:var(--tr);letter-spacing:.02em}
+.tb:hover,.tb.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45);color:#fff;transform:translateY(-1px)}
+
+/* ─── Layout ─── */
+.main{max-width:1360px;margin:0 auto;padding:38px 18px 80px}
+.view{display:none}.view.on{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sec-label{text-align:center;margin-bottom:32px}
+.sec-label h2{font-family:'Libre Baskerville',serif;font-size:24px;color:var(--navy);margin-bottom:5px}
+.sec-label p{color:#64748b;font-size:13.5px}
+
+/* ─── Dual columns ─── */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.dual{grid-template-columns:1fr}}
+
+/* ─── Column header ─── */
+.ch{border-radius:var(--r) var(--r) 0 0;padding:18px 22px 16px;display:flex;align-items:center;gap:12px}
+.ch.fa{background:var(--fa)}.ch.ma{background:var(--ma)}
+.ch-icon{width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:21px;flex-shrink:0}
+.ch h3{font-family:'Libre Baskerville',serif;font-size:17px;color:#fff;line-height:1.2}
+.ch p{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:1px}
+.ch-tag{margin-left:auto;background:rgba(255,255,255,.18);color:#fff;padding:3px 11px;border-radius:40px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+
+/* ─── Flow wrap ─── */
+.fw{border:1.5px solid;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.fw.fa{border-color:var(--fa-b)}.fw.ma{border-color:var(--ma-b)}
+
+/* ─── State bar ─── */
+.sbar{display:flex;align-items:flex-start;gap:0;padding:14px 18px;background:#fff;border-bottom:1.5px solid #f1f5f9;overflow-x:auto}
+.sn-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.sn{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:2px solid}
+.sn.b{background:#f1f5f9;border-color:#94a3b8;color:#475569}
+.sn.a{background:#fffbeb;border-color:#fbbf24;color:#92400e}
+.sn.s{background:#fff7ed;border-color:#fb923c;color:#9a3412}
+.sn.e{background:#f5f0ff;border-color:#a78bfa;color:#5b21b6}
+.sn.ok{background:#f0fdf4;border-color:#22c55e;color:#14532d}
+.sl{font-size:9.5px;color:#64748b;text-align:center;width:52px;line-height:1.25;margin-top:3px}
+.sarr{width:22px;height:2px;background:#cbd5e1;margin:0 1px;flex-shrink:0;position:relative;top:-15px}
+.sarr::after{content:'';position:absolute;right:-1px;top:-3px;border-left:6px solid #cbd5e1;border-top:3.5px solid transparent;border-bottom:3.5px solid transparent}
+
+/* ─── Steps ─── */
+.steps{}
+.step{border-bottom:1.5px solid;cursor:pointer;transition:background var(--tr)}
+.fa .step{border-color:var(--fa-b)}.ma .step{border-color:var(--ma-b)}
+.step:last-child{border-bottom:none}
+.sh2{display:flex;align-items:center;gap:10px;padding:13px 18px;user-select:none;position:relative}
+.fa .step:hover .sh2{background:var(--fa-l)}.ma .step:hover .sh2{background:var(--ma-l)}
+.step.open>.sh2{background:rgba(0,0,0,.02)}
+
+/* Step number */
+.snum{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.fa .snum{background:var(--fa)}.ma .snum{background:var(--ma)}
+
+/* Actor pill */
+.ap{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 7px;border-radius:40px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.ap.adm{background:var(--admin-b);color:var(--admin-c)}
+.ap.col{background:var(--colab-b);color:var(--colab-c)}
+.ap.sup{background:var(--super-b);color:var(--super-c)}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.adm .dot{background:var(--admin-c)}.col .dot{background:var(--colab-c)}.sup .dot{background:var(--super-c)}
+
+.st-title{flex:1;font-size:13.5px;font-weight:500;color:#1e293b;line-height:1.35}
+
+/* Status badge */
+.sb{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:40px;font-size:10px;font-weight:600;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;border:1.5px solid}
+.sb::before{content:'●';font-size:6.5px}
+.sb.b{background:#f1f5f9;color:var(--st-b);border-color:#cbd5e1}
+.sb.a{background:#fffbeb;color:var(--st-a);border-color:#fcd34d}
+.sb.s{background:#fff7ed;color:var(--st-s);border-color:#fb923c}
+.sb.e{background:#f5f0ff;color:var(--st-env);border-color:#c4b5fd}
+.sb.ok{background:#f0fdf4;color:var(--st-ok);border-color:#86efac}
+
+/* Chevron */
+.chev{width:20px;height:20px;border-radius:50%;background:#e2e8f0;display:grid;place-items:center;font-size:9px;color:#64748b;transition:transform var(--tr),background var(--tr);flex-shrink:0}
+.step.open .chev{transform:rotate(180deg);background:var(--navy);color:#fff}
+
+/* Body */
+.sbody{max-height:0;overflow:hidden;transition:max-height .42s cubic-bezier(.4,0,.2,1)}
+.sbody-i{padding:0 18px 16px}
+.step.open .sbody{max-height:1800px}
+
+/* ─── Detail cards ─── */
+.dcards{display:flex;flex-direction:column;gap:7px}
+.dcard{background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:11px 14px}
+.dcard h4{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.dcard h4 .ic{font-size:14px}
+.dcard ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.dcard li{font-size:12.5px;color:#475569;padding-left:14px;position:relative;line-height:1.45}
+.dcard li::before{content:'›';position:absolute;left:3px;color:#94a3b8;font-weight:700}
+.dcard li strong{color:#1e293b;font-weight:500}
+code{font-family:'DM Mono',monospace;font-size:11px;background:#f1f5f9;padding:1px 5px;border-radius:4px;color:#0f8a6e}
+
+/* Route tag */
+.rtag{display:inline-flex;align-items:center;gap:5px;background:var(--navy-d);color:rgba(255,255,255,.85);padding:3px 10px;border-radius:5px;font-family:'DM Mono',monospace;font-size:11px;margin-top:6px}
+.rtag::before{content:'→';color:var(--ma-m);font-style:normal;font-family:sans-serif}
+
+/* Result card */
+.rcard{margin-top:8px;border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:11px}
+.rcard.fa{background:var(--fa-l);border:1.5px solid var(--fa-b)}
+.rcard.ma{background:var(--ma-l);border:1.5px solid var(--ma-b)}
+.rcard .ri{font-size:20px;flex-shrink:0}
+.rcard .rt{font-size:12px;color:#374151}
+.rcard .rt strong{display:block;font-size:13px;color:#1e293b;margin-bottom:1px}
+
+/* New badge */
+.new{display:inline-block;background:linear-gradient(135deg,var(--ma),#0e6b58);color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;margin-left:5px;vertical-align:middle}
+
+/* ─── Formula block ─── */
+.formula{display:inline-flex;align-items:center;gap:5px;background:var(--navy);color:#fff;padding:5px 12px;border-radius:7px;font-family:'DM Mono',monospace;font-size:11.5px;margin-top:7px;flex-wrap:wrap}
+.formula .op{color:var(--ma-m)}.formula .v{color:var(--fa-m);font-weight:500}
+
+/* ─── Separator label ─── */
+.phase-sep{padding:6px 18px 0;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;display:flex;align-items:center;gap:8px}
+.phase-sep::after{content:'';flex:1;height:1px;background:#e2e8f0}
+
+/* ─── Comparison table ─── */
+.ctw{background:#fff;border-radius:var(--r);border:1.5px solid #e2e8f0;overflow:hidden;box-shadow:var(--sh)}
+.ct{width:100%;border-collapse:collapse}
+.ct th{padding:12px 18px;text-align:left;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.ct th:first-child{background:var(--navy);color:rgba(255,255,255,.8);width:26%}
+.ct th:nth-child(2){background:var(--fa);color:#fff}
+.ct th:nth-child(3){background:var(--ma);color:#fff}
+.ct td{padding:11px 18px;font-size:13px;border-bottom:1.5px solid #f1f5f9;vertical-align:top;line-height:1.5}
+.ct tr:last-child td{border-bottom:none}
+.ct td:first-child{font-weight:600;color:var(--navy);font-size:12px;background:#f8fafc}
+.ct td:nth-child(2){background:var(--fa-l);color:#374151}
+.ct td:nth-child(3){background:var(--ma-l);color:#374151}
+.ct tr:hover td:nth-child(2){background:#ffeedd}.ct tr:hover td:nth-child(3){background:#d5f5ee}
+.tick{color:#16a34a;font-weight:700}.cross{color:#dc2626;font-weight:700}
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.chip.fa{background:var(--fa-b);color:#7c2d12}.chip.ma{background:var(--ma-b);color:#064e3b}
+
+/* ─── Config grid ─── */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:18px}
+.ccard{background:#fff;border-radius:var(--r);padding:20px;border:1.5px solid #e2e8f0;box-shadow:var(--sh);transition:transform var(--tr),box-shadow var(--tr)}
+.ccard:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(26,58,92,.13)}
+.cc-ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:22px;margin-bottom:12px}
+.ccard h4{font-family:'Libre Baskerville',serif;font-size:14.5px;color:var(--navy);margin-bottom:7px}
+.ccard p{font-size:12.5px;color:#64748b;line-height:1.55}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+
+/* ─── Responsive ─── */
+@media(max-width:600px){.hero{padding:32px 14px 28px}.main{padding:20px 10px 60px}.ap{display:none}.st-title{font-size:12.5px}}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-chip"><span>🌿</span>COOPASPIRE · Sistema de Evaluación</div>
+  <h1>Flujo Completo de<br><em>Evaluaciones de Desempeño</em></h1>
+  <p>Proceso verificado en código. Haz clic en cada paso para ver detalles y rutas del sistema.</p>
+  <nav class="tabs">
+    <button class="tb on" onclick="sv('flujos')">⚡ Flujos completos</button>
+    <button class="tb" onclick="sv('config')">⚙️ Configuración admin</button>
+    <button class="tb" onclick="sv('comparar')">⚖️ Comparativa</button>
+  </nav>
+</header>
+
+<main class="main">
+
+<!-- ════ FLUJOS ════ -->
+<div id="view-flujos" class="view on">
+  <div class="sec-label">
+    <h2>Los dos tipos de evaluación — proceso completo</h2>
+    <p>Expande cada paso · Los estados progresan de izquierda a derecha</p>
+  </div>
+
+  <div class="dual">
+
+    <!-- ── FINAL DE AÑO ── -->
+    <div>
+    <div class="fw fa">
+      <div class="ch fa">
+        <div class="ch-icon">📊</div>
+        <div><h3>Evaluación Final de Año</h3><p>Competencias numéricas · Puntuación ponderada · PDF al cierre</p></div>
+        <span class="ch-tag">final_ano</span>
+      </div>
+
+      <!-- barra de estados -->
+      <div class="sbar">
+        <div class="sn-wrap"><div class="sn b">B</div><div class="sl">Borrador</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn a">A</div><div class="sl">Auto­Evaluado</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn s">S</div><div class="sl">Evaluado Sup.</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn e">E</div><div class="sl">Enviado</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn ok">✓</div><div class="sl">Completado</div></div>
+      </div>
+
+      <div class="steps">
+        <!-- separador -->
+        <div class="phase-sep">Fase de configuración</div>
+
+        <!-- 1 Crear período -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">1</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Crear y activar período</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📅</span>Crear el período</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Periodos → Agregar</li>
+                <li>Definir descripción, fecha inicio y fecha fin</li>
+                <li>Elegir <strong>Tipo:</strong> "Evaluación de Fin de Año (Puntuada)"</li>
+                <li>Marcar <code>activa = true</code> para activarlo</li>
+              </ul>
+              <div class="rtag">/Periodo</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">⚖️</span>Configurar pesos PDC</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Porciento Desempeño/Competencia</li>
+                <li>Agregar <strong>Desempeño 30%</strong> para este período</li>
+                <li>Agregar <strong>Competencia 70%</strong> para este período</li>
+                <li>Sin PDC configurado, <code>totalCalculo</code> será 0</li>
+              </ul>
+              <div class="rtag">/porciento-desempeno-competencia</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 2 Agregar competencias -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">2</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Agregar competencias al período</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">🎯</span>Configurar competencias en el período activo</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Períodos de Evaluación</li>
+                <li>El sistema carga el período activo automáticamente via <code>GET /api/Periods/activo</code></li>
+                <li>Aquí se vinculan los <strong>Goals / Objetivos</strong> al período</li>
+                <li>Se pueden filtrar por puesto (<code>PositionSecuential</code>)</li>
+              </ul>
+              <div class="rtag">/evaluation-periods</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">📋</span>Crear / editar competencias individuales</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Competencias</li>
+                <li>Cada competencia pertenece a un <strong>Grupo de Competencias</strong></li>
+                <li>Se asocia a puestos específicos o a todos</li>
+              </ul>
+              <div class="rtag">/Objetivo</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 3 Subir objetivos -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">3</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Cargar objetivos (KPIs / KRIs / Proyectos)</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📤</span>Carga masiva desde archivo</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Carga de Archivos KPIs</li>
+                <li>Subir archivo Excel/CSV con indicadores de desempeño</li>
+                <li>Endpoint: <code>POST /api/EmpleadoDesempenoes/upload</code></li>
+                <li>Asocia los objetivos a cada empleado por período</li>
+              </ul>
+              <div class="rtag">/uploadfile</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">📈</span>Carga manual de KPIs y KRIs</h4>
+              <ul>
+                <li>Gestionar KPIs individualmente: Configuración → KPIs</li>
+                <li>Gestionar KRIs individualmente: Configuración → KRIs</li>
+                <li>Gestionar Proyectos/Objetivos: Plan Estratégico → Proyectos/Objetivos</li>
+              </ul>
+              <div class="rtag">/kpi · /kri · /opp</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">🤝</span>Asignar metas a subordinados</h4>
+              <ul>
+                <li>El <strong>supervisor</strong> asigna metas específicas a cada miembro</li>
+                <li>Se accede desde el Home o desde Evaluar Equipo</li>
+                <li>Formulario: <code>SupervisorGoalsComponent</code></li>
+              </ul>
+              <div class="rtag">/supervisor-goals</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- separador -->
+        <div class="phase-sep">Fase de evaluación</div>
+
+        <!-- 4 Autoevaluación -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">4</div>
+            <div class="ap col"><div class="dot"></div>COLABORADOR</div>
+            <span class="st-title">Completar autoevaluación</span>
+            <span class="sb a">AutoEvaluado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">🧭</span>Acceso al formulario</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Evaluaciones → AutoEvaluación</li>
+                <li>El sistema detecta el período activo desde <code>localStorage</code></li>
+                <li>Si no existe evaluación, se crea en estado <strong>Borrador</strong></li>
+                <li>Componente: <code>FormEvaluationEmployeComponent</code></li>
+              </ul>
+              <div class="rtag">/Evaluacion</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">📝</span>Metas de desempeño</h4>
+              <ul>
+                <li>Registrar el <strong>% de logro</strong> de cada KPI / KRI / Objetivo</li>
+                <li>Indicar medio de verificación y comentario</li>
+                <li>El sistema calcula <code>resultadoLogro = logro × peso / 100</code></li>
+              </ul>
+            </div>
+            <div class="dcard"><h4><span class="ic">⭐</span>Competencias (escala numérica 1–5)</h4>
+              <ul>
+                <li>Calificar cada competencia con valor del <strong>1 al 5</strong></li>
+                <li>El componente <code>criterialitem</code> calcula el promedio</li>
+                <li>Genera <code>puntuacioncompetenciacolaborador</code></li>
+              </ul>
+            </div>
+            <div class="rcard fa">
+              <span class="ri">💾</span>
+              <div class="rt"><strong>Grabar → estado: AutoEvaluado</strong>Se calculan desempeño y competencia del colaborador y se persisten.</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 5 Supervisor evalúa -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">5</div>
+            <div class="ap sup"><div class="dot"></div>SUPERVISOR</div>
+            <span class="st-title">Evaluar al colaborador</span>
+            <span class="sb s">EvaluadoPorSupervisor</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">👥</span>Acceder al equipo</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Evaluaciones → Evaluar Equipo</li>
+                <li>Ve la lista de subordinados directos con su estado</li>
+                <li>Hace clic en la tarjeta del colaborador a evaluar</li>
+              </ul>
+              <div class="rtag">/EvaluarSubordinados</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">⭐</span>Calificar competencias del supervisor</h4>
+              <ul>
+                <li>Calificar cada competencia del <strong>1 al 5</strong> (perspectiva supervisor)</li>
+                <li>Ver y validar las metas registradas por el colaborador</li>
+                <li>Añadir observación general al formulario</li>
+              </ul>
+            </div>
+            <div class="rcard fa">
+              <span class="ri">💾</span>
+              <div class="rt"><strong>Grabar → estado: EvaluadoPorSupervisor</strong>Se calcula el score del supervisor. El totalCalculo pondera 20% colab + 80% supervisor.</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 6 Supervisor envía -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">6</div>
+            <div class="ap sup"><div class="dot"></div>SUPERVISOR</div>
+            <span class="st-title">Enviar evaluación al colaborador</span>
+            <span class="sb e">Enviado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📨</span>Botón "Enviar" en la tarjeta del colaborador</h4>
+              <ul>
+                <li>Aparece solo cuando el estado es <strong>EvaluadoPorSupervisor</strong></li>
+                <li>Componente: <code>CardEmpleadoComponent</code> → método <code>Enviar()</code></li>
+                <li>Cambia el estado a <strong>Enviado</strong> y notifica el cambio</li>
+                <li>El colaborador verá la sección de "Aceptación de Evaluación"</li>
+              </ul>
+              <div class="rtag">/EvaluarSubordinados → botón Enviar</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- separador -->
+        <div class="phase-sep">Fase de cierre</div>
+
+        <!-- 7 Empleado acepta -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">7</div>
+            <div class="ap col"><div class="dot"></div>COLABORADOR</div>
+            <span class="st-title">Revisar y aceptar la evaluación</span>
+            <span class="sb ok">Completado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">👀</span>Ver la evaluación del supervisor</h4>
+              <ul>
+                <li>El colaborador ingresa a AutoEvaluación — ve el estado <strong>Enviado</strong></li>
+                <li>Aparece la sección <strong>"Aceptación de Evaluación"</strong></li>
+                <li>Confirma si hubo entrevista con el supervisor</li>
+              </ul>
+              <div class="rtag">/Evaluacion → sección aceptación</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">✍️</span>Opciones de aceptación</h4>
+              <ul>
+                <li><strong>Acepta en Conformidad</strong> — está de acuerdo con la evaluación</li>
+                <li><strong>Acepta en No Conformidad</strong> — no está de acuerdo (requiere escribir comentario)</li>
+                <li>Método: <code>onAceptarEvaluacion()</code> en <code>FormEvaluationEmployeComponent</code></li>
+              </ul>
+            </div>
+            <div class="rcard fa">
+              <span class="ri">🏆</span>
+              <div class="rt"><strong>Aceptar Evaluación → estado: Completado</strong>
+              Se genera automáticamente el PDF de la evaluación y se redirige al Home.
+              <div class="formula">totalCalculo <span class="op">=</span> <span class="v">colabScore×.20</span> <span class="op">+</span> <span class="v">superScore×.80</span></div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+      </div><!-- /steps -->
+    </div><!-- /fw -->
+    </div>
+
+    <!-- ── MEDIO AÑO ── -->
+    <div>
+    <div class="fw ma">
+      <div class="ch ma">
+        <div class="ch-icon">💬</div>
+        <div><h3>Evaluación de Medio Año</h3><p>Competencias cualitativas · Retroalimentación 360° · Sin PDF numérico</p></div>
+        <span class="ch-tag">medio_ano</span>
+      </div>
+
+      <!-- barra de estados -->
+      <div class="sbar">
+        <div class="sn-wrap"><div class="sn b">B</div><div class="sl">Borrador</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn a">A</div><div class="sl">Auto­Evaluado</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn s">S</div><div class="sl">Evaluado Sup.</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn e">E</div><div class="sl">Enviado</div></div>
+        <div class="sarr"></div>
+        <div class="sn-wrap"><div class="sn ok">✓</div><div class="sl">Completado</div></div>
+      </div>
+
+      <div class="steps">
+        <div class="phase-sep">Fase de configuración</div>
+
+        <!-- 1 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">1</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Crear y activar período de Medio Año</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📅</span>Crear el período</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Periodos → Agregar</li>
+                <li>Elegir <strong>Tipo:</strong> "Evaluación de Medio Año (Cualitativa)" <span class="new">Nuevo</span></li>
+                <li>Marcar <code>activa = true</code></li>
+                <li>Al activar, todos ven el formulario de medio año en AutoEvaluación</li>
+              </ul>
+              <div class="rtag">/Periodo</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">⚖️</span>Configurar PDC (para metas cuantitativas)</h4>
+              <ul>
+                <li>Mismo proceso que final de año: Desempeño % + Competencia %</li>
+                <li>Se usa para calcular el avance de los objetivos del primer semestre</li>
+                <li>Las competencias cualitativas <strong>no</strong> generan puntuación numérica</li>
+              </ul>
+              <div class="rtag">/porciento-desempeno-competencia</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 2 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">2</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Agregar competencias al período</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">🎯</span>Misma configuración que final de año</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Configuración → Períodos de Evaluación</li>
+                <li>Las mismas 12 competencias aplican en ambos tipos</li>
+                <li>En medio año se evalúan de forma <strong>cualitativa</strong> (texto, no número)</li>
+                <li>Aparecen automáticamente en el formulario <code>FormEvaluationMedioAnoComponent</code></li>
+              </ul>
+              <div class="rtag">/evaluation-periods</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 3 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">3</div>
+            <div class="ap adm"><div class="dot"></div>ADMIN</div>
+            <span class="st-title">Cargar objetivos del primer semestre</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📤</span>Mismos canales de carga que final de año</h4>
+              <ul>
+                <li>Carga masiva desde archivo Excel: <code>/uploadfile</code></li>
+                <li>Los objetivos del año completo se miden en su avance a mitad de año</li>
+                <li>El colaborador reporta el avance actual (<strong>no</strong> el logro final)</li>
+              </ul>
+              <div class="rtag">/uploadfile · /kpi · /kri</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div class="phase-sep">Fase de evaluación</div>
+
+        <!-- 4 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">4</div>
+            <div class="ap col"><div class="dot"></div>COLABORADOR</div>
+            <span class="st-title">Autoevaluación cualitativa de medio año</span>
+            <span class="sb a">AutoEvaluado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">🧭</span>Acceso al formulario de Medio Año</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Evaluaciones → AutoEvaluación</li>
+                <li>Si <code>periodo.tipo === 'medio_ano'</code> carga el nuevo formulario</li>
+                <li>Componente: <code>FormEvaluationMedioAnoComponent</code> <span class="new">Nuevo</span></li>
+              </ul>
+              <div class="rtag">/Evaluacion</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">💬</span>Observaciones por competencia (texto)</h4>
+              <ul>
+                <li>Para cada competencia: escribir una <strong>reflexión narrativa</strong></li>
+                <li>No hay escala numérica — es evaluación cualitativa</li>
+                <li>El supervisor responde con su perspectiva por competencia</li>
+              </ul>
+            </div>
+            <div class="dcard"><h4><span class="ic">🔄</span>Retroalimentación Start-Stop-Continue <span class="new">Nuevo</span></h4>
+              <ul>
+                <li><strong>Continuar Haciendo</strong> — fortalezas a mantener</li>
+                <li><strong>Hacer Más</strong> — incrementar frecuencia/esfuerzo</li>
+                <li><strong>Hacer Menos</strong> — actividades de bajo impacto</li>
+                <li><strong>Parar de Hacer</strong> — hábitos a eliminar</li>
+                <li>Cada sección puede vincularse a hasta <strong>3 competencias</strong></li>
+              </ul>
+            </div>
+            <div class="dcard"><h4><span class="ic">🤝</span>Compromisos y cursos <span class="new">Nuevo</span></h4>
+              <ul>
+                <li><strong>Compromisos del colaborador</strong> para el resto del año</li>
+                <li>Sugerir hasta <strong>3 cursos de capacitación</strong> del catálogo</li>
+                <li>Comentario adicional libre</li>
+              </ul>
+            </div>
+            <div class="rcard ma">
+              <span class="ri">💾</span>
+              <div class="rt"><strong>Grabar → estado: AutoEvaluado</strong>Observaciones, retroalimentación y compromisos del colaborador guardados.</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 5 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">5</div>
+            <div class="ap sup"><div class="dot"></div>SUPERVISOR</div>
+            <span class="st-title">Retroalimentación del supervisor</span>
+            <span class="sb s">EvaluadoPorSupervisor</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">👥</span>Acceder al equipo</h4>
+              <ul>
+                <li><strong>Ruta:</strong> Evaluaciones → Evaluar Equipo</li>
+                <li>El formulario detecta <code>medio_ano</code> y carga el formulario correcto</li>
+                <li>Puede ver las observaciones del colaborador</li>
+              </ul>
+              <div class="rtag">/EvaluarSubordinados</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">💬</span>Perspectiva del supervisor</h4>
+              <ul>
+                <li>Escribir retroalimentación por cada competencia</li>
+                <li>Completar su propia sección Start-Stop-Continue</li>
+              </ul>
+            </div>
+            <div class="dcard"><h4><span class="ic">🤝</span>Compromisos del supervisor <span class="new">Nuevo</span></h4>
+              <ul>
+                <li><strong>Plan de apoyo y próximos pasos</strong> que el supervisor se compromete a dar</li>
+                <li>Capacitaciones, recursos y seguimiento</li>
+                <li>Formaliza el acuerdo bidireccional</li>
+              </ul>
+            </div>
+            <div class="rcard ma">
+              <span class="ri">💾</span>
+              <div class="rt"><strong>Grabar → estado: EvaluadoPorSupervisor</strong>Retroalimentación y compromisos del supervisor guardados.</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <!-- 6 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">6</div>
+            <div class="ap sup"><div class="dot"></div>SUPERVISOR</div>
+            <span class="st-title">Enviar evaluación al colaborador</span>
+            <span class="sb e">Enviado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">📨</span>Botón "Enviar" en la tarjeta del colaborador</h4>
+              <ul>
+                <li>Mismo mecanismo que final de año</li>
+                <li>Aparece solo cuando el estado es <strong>EvaluadoPorSupervisor</strong></li>
+                <li>El colaborador verá el botón "Completar Evaluación"</li>
+              </ul>
+              <div class="rtag">/EvaluarSubordinados → botón Enviar</div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div class="phase-sep">Fase de cierre</div>
+
+        <!-- 7 -->
+        <div class="step" onclick="tog(this)">
+          <div class="sh2">
+            <div class="snum">7</div>
+            <div class="ap col"><div class="dot"></div>COLABORADOR</div>
+            <span class="st-title">Confirmar y completar la evaluación</span>
+            <span class="sb ok">Completado</span>
+            <div class="chev">▼</div>
+          </div>
+          <div class="sbody"><div class="sbody-i"><div class="dcards">
+            <div class="dcard"><h4><span class="ic">👀</span>Ver retroalimentación del supervisor</h4>
+              <ul>
+                <li>El colaborador ingresa a AutoEvaluación — ve estado <strong>Enviado</strong></li>
+                <li>Aparece el botón <strong>"Completar Evaluación"</strong></li>
+                <li>Puede revisar todas las observaciones del supervisor</li>
+              </ul>
+              <div class="rtag">/Evaluacion → botón Completar</div>
+            </div>
+            <div class="dcard"><h4><span class="ic">✅</span>Cierre simplificado (sin conformidad)</h4>
+              <ul>
+                <li>En medio año no hay opción de "no conformidad"</li>
+                <li>El colaborador simplemente confirma con <strong>"Completar Evaluación"</strong></li>
+                <li>Método: <code>onAceptar()</code> en <code>FormEvaluationMedioAnoComponent</code></li>
+              </ul>
+            </div>
+            <div class="rcard ma">
+              <span class="ri">🏆</span>
+              <div class="rt"><strong>Completar → estado: Completado</strong>Ciclo de evaluación de medio año cerrado. Los compromisos quedan documentados para seguimiento.</div>
+            </div>
+          </div></div></div>
+        </div>
+
+      </div><!-- /steps -->
+    </div><!-- /fw -->
+    </div>
+
+  </div><!-- /dual -->
+</div><!-- /view-flujos -->
+
+<!-- ════ CONFIG ════ -->
+<div id="view-config" class="view">
+  <div class="sec-label">
+    <h2>Configuración del Administrador</h2>
+    <p>Pasos que el admin debe completar antes de iniciar cualquier tipo de evaluación</p>
+  </div>
+
+  <div class="cgrid">
+    <div class="ccard"><div class="cc-ico" style="background:#ede9fe">📅</div>
+      <h4>1. Crear Período</h4>
+      <p>Define el período, sus fechas y elige el tipo: <strong>Final de Año</strong> o <strong>Medio Año</strong>. Márcalo activo para que los empleados lo vean al ingresar a AutoEvaluación.</p>
+      <div class="rtag">/Periodo</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#dbeafe">⚖️</div>
+      <h4>2. Configurar Pesos PDC</h4>
+      <p>Asigna los porcentajes de <strong>Desempeño</strong> y <strong>Competencia</strong> para el período. Sin esto, el <code>totalCalculo</code> será 0.</p>
+      <div class="rtag">/porciento-desempeno-competencia</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#dcfce7">🎯</div>
+      <h4>3. Agregar Competencias</h4>
+      <p>Configura las competencias del período en <strong>Períodos de Evaluación</strong>. Vincula Goals a puestos. Aparecerán en los formularios del empleado y supervisor.</p>
+      <div class="rtag">/evaluation-periods · /Objetivo</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#fef9c3">📤</div>
+      <h4>4. Cargar Objetivos</h4>
+      <p>Sube los KPIs, KRIs y Proyectos vía archivo masivo o carga individual. Estos son los indicadores cuantitativos que el empleado reportará su avance.</p>
+      <div class="rtag">/uploadfile · /kpi · /kri · /opp</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#f0f9ff">🤝</div>
+      <h4>5. Asignar Metas</h4>
+      <p>El <strong>supervisor</strong> asigna las metas específicas a cada miembro de su equipo usando el panel de Supervisor Goals desde el Home.</p>
+      <div class="rtag">/supervisor-goals</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#f0fdf4">📚</div>
+      <h4>6. Catálogo de Cursos</h4>
+      <p>Para la evaluación de medio año, el colaborador sugiere hasta 3 cursos. Carga el catálogo de cursos disponibles con anticipación.</p>
+      <div class="rtag">/cursos-capacitacion</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#fdf2f8">📊</div>
+      <h4>7. Monitorear Estado</h4>
+      <p>Usa los reportes para ver quién completó, quién está pendiente y el resumen de resultados. Filtra por período para ver el avance en tiempo real.</p>
+      <div class="rtag">/ReporteEstadoEvaluacion · /Reportes</div>
+    </div>
+    <div class="ccard"><div class="cc-ico" style="background:#fffbeb">⚠️</div>
+      <h4>Importante: Período Activo</h4>
+      <p>Solo el período con <code>activa=true</code> aparece en AutoEvaluación. El formulario (Final vs Medio Año) se detecta automáticamente por <code>periodo.tipo</code>.</p>
+    </div>
+  </div>
+
+  <!-- Notas rápidas -->
+  <div style="margin-top:24px;background:#fff;border-radius:var(--r);border:1.5px solid #e2e8f0;padding:22px;box-shadow:var(--sh)">
+    <h3 style="font-family:'Libre Baskerville',serif;color:var(--navy);margin-bottom:14px;font-size:17px">💡 Reglas del sistema</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px">
+      <div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:8px;padding:13px">
+        <p style="font-size:12.5px;color:#78350f;line-height:1.5"><strong>Un período activo a la vez.</strong> Si se activa otro, los empleados verán el nuevo al recargar.</p>
+      </div>
+      <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:8px;padding:13px">
+        <p style="font-size:12.5px;color:#1e40af;line-height:1.5"><strong>La evaluación se crea automáticamente</strong> la primera vez que el empleado accede a AutoEvaluación para un período.</p>
+      </div>
+      <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:13px">
+        <p style="font-size:12.5px;color:#14532d;line-height:1.5"><strong>Solo el supervisor puede Enviar.</strong> El empleado no puede completar hasta recibir el envío del supervisor.</p>
+      </div>
+      <div style="background:#fdf2f8;border:1.5px solid #f0abfc;border-radius:8px;padding:13px">
+        <p style="font-size:12.5px;color:#6b21a8;line-height:1.5"><strong>No Conformidad solo en Final de Año.</strong> En medio año el cierre es directo: "Completar Evaluación".</p>
+      </div>
+    </div>
+  </div>
+</div><!-- /config -->
+
+<!-- ════ COMPARATIVA ════ -->
+<div id="view-comparar" class="view">
+  <div class="sec-label">
+    <h2>Tabla Comparativa</h2>
+    <p>Diferencias clave entre ambos tipos de evaluación</p>
+  </div>
+
+  <div class="ctw">
+    <table class="ct">
+      <thead>
+        <tr>
+          <th>Aspecto</th>
+          <th>📊 Final de Año</th>
+          <th>💬 Medio Año <span class="new" style="font-size:8px">Nuevo</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Formulario Angular</td><td><code>FormEvaluationEmployeComponent</code></td><td><code>FormEvaluationMedioAnoComponent</code></td></tr>
+        <tr><td>Tipo de período</td><td><span class="chip fa">final_ano</span></td><td><span class="chip ma">medio_ano</span></td></tr>
+        <tr><td>Evaluación de competencias</td><td>Escala numérica <strong>1–5</strong> → puntuación</td><td>Observaciones de <strong>texto libre</strong> → sin puntuación</td></tr>
+        <tr><td>Retroalimentación Start-Stop-Continue</td><td><span class="cross">✗</span> No incluida</td><td><span class="tick">✓</span> Continuar / Más / Menos / Parar + vinculación competencias</td></tr>
+        <tr><td>Compromisos y Próximos Pasos</td><td><span class="cross">✗</span> No incluida</td><td><span class="tick">✓</span> Colaborador + Supervisor documenta su plan de apoyo</td></tr>
+        <tr><td>Cursos de capacitación sugeridos</td><td><span class="cross">✗</span> No aplica</td><td><span class="tick">✓</span> Colaborador sugiere hasta 3 cursos del catálogo</td></tr>
+        <tr><td>Metas / KPIs / KRIs</td><td><span class="tick">✓</span> % logro final → resultado ponderado</td><td><span class="tick">✓</span> Avance a la fecha → mismo cálculo cuantitativo</td></tr>
+        <tr><td>Aceptación del empleado</td><td>Conformidad o <strong>No Conformidad</strong> + comentario</td><td>Cierre simple: botón <strong>"Completar Evaluación"</strong></td></tr>
+        <tr><td>Generación de PDF</td><td><span class="tick">✓</span> Se genera automáticamente al aceptar</td><td>Pendiente de implementar</td></tr>
+        <tr><td>Ponderación</td><td>Colaborador <strong>20%</strong> · Supervisor <strong>80%</strong></td><td>Colaborador <strong>20%</strong> · Supervisor <strong>80%</strong></td></tr>
+        <tr><td>Estados del proceso</td>
+          <td colspan="2" style="text-align:center;background:#f8fafc">
+            <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;align-items:center">
+              <span class="sb b">Borrador</span>→
+              <span class="sb a">AutoEvaluado</span>→
+              <span class="sb s">EvaluadoPorSupervisor</span>→
+              <span class="sb e">Enviado</span>→
+              <span class="sb ok">Completado</span>
+            </div>
+          </td>
+        </tr>
+        <tr><td>Propósito</td><td>Puntuar y <strong>cerrar</strong> el desempeño anual con score numérico</td><td><strong>Reflexión</strong> y ajuste a mitad de año, sin puntaje global definitivo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fórmulas -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px">
+    <div style="background:#fff;border-radius:var(--r);border:1.5px solid var(--fa-b);padding:20px;box-shadow:var(--sh)">
+      <h4 style="font-family:'Libre Baskerville',serif;color:var(--fa);margin-bottom:12px">📊 Cálculo — Final de Año</h4>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;background:#1e293b;color:#e2e8f0;padding:14px;border-radius:8px;line-height:2">
+        <span style="color:#94a3b8">// Desempeño individual por meta</span><br>
+        logro_i = <span style="color:var(--fa-m)">logro% × peso_i / 100</span><br>
+        promedioDesempeno = <span style="color:var(--fa-m)">Σ logro_i</span><br><br>
+        <span style="color:#94a3b8">// Scores por actor</span><br>
+        colabScore = <span style="color:var(--fa-m)">desempeno×PDC%</span> + <span style="color:var(--ma-m)">compColab×PDC%</span><br>
+        superScore = <span style="color:var(--fa-m)">desempeno×PDC%</span> + <span style="color:var(--ma-m)">compSuper×PDC%</span><br><br>
+        <span style="color:#f8fafc;font-weight:bold">totalCalculo</span> = colabScore×<span style="color:#fbbf24">.20</span> + superScore×<span style="color:#fbbf24">.80</span>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:var(--r);border:1.5px solid var(--ma-b);padding:20px;box-shadow:var(--sh)">
+      <h4 style="font-family:'Libre Baskerville',serif;color:var(--ma);margin-bottom:12px">💬 Cálculo — Medio Año</h4>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;background:#1e293b;color:#e2e8f0;padding:14px;border-radius:8px;line-height:2">
+        <span style="color:#94a3b8">// Solo avance de objetivos (cuantitativo)</span><br>
+        avance_i = <span style="color:var(--fa-m)">logro% × peso_i / 100</span><br>
+        desempenoFinal = <span style="color:var(--fa-m)">Σ avance_i × PDC%</span><br><br>
+        <span style="color:#94a3b8">// Competencias = texto (sin score)</span><br>
+        competencias = <span style="color:var(--ma-m)">observaciones narrativas</span><br><br>
+        <span style="color:#f8fafc;font-weight:bold">totalCalculo</span> = <span style="color:#fbbf24">desempenoFinal</span><br>
+        <span style="color:#94a3b8">// (puntuación de competencias = 0)</span>
+      </div>
+    </div>
+  </div>
+</div><!-- /comparar -->
+
+</main>
+
+<footer style="text-align:center;padding:22px;color:#94a3b8;font-size:12px;border-top:1.5px solid #e2e8f0;background:#fff">
+  COOPASPIRE · Sistema de Evaluación de Desempeño · v2.0 · Flujo verificado en código fuente
+</footer>
+
+<script>
+function tog(el){
+  const open=el.classList.contains('open');
+  el.parentElement.querySelectorAll('.step').forEach(s=>s.classList.remove('open'));
+  if(!open)el.classList.add('open');
+}
+
+function sv(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('view-'+id).classList.add('on');
+  const m={flujos:0,config:1,comparar:2};
+  document.querySelectorAll('.tb')[m[id]]?.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Abrir primer paso de cada columna al cargar
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.steps').forEach(s=>{
+    const f=s.querySelector('.step');
+    if(f)f.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>

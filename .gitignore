@@ -46,3 +46,14 @@ angular-errors.log
 # Playwright test scripts (herramientas de verificación locales)
 test-*.mjs
 *.mjs
+
+# Videos generados y archivos temporales de demo
+demo-videos/*.mp4
+demo-videos/_diag.py
+demo-videos/_tmp_*/
+demo-videos/__pycache__/
+test-results/
+
+# Worktrees y herramientas internas
+.claude/worktrees/
+.antigravitycli/
