@@ -50,6 +50,7 @@ test-*.mjs
 # Videos generados y archivos temporales de demo
 demo-videos/*.mp4
 demo-videos/_diag.py
+demo-videos/.env
 demo-videos/_tmp_*/
 demo-videos/__pycache__/
 test-results/
