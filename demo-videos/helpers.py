@@ -158,6 +158,44 @@ def login(page, base_url: str, username: str, password: str, timeout_ms: int = 3
     page.wait_for_load_state("networkidle")
 
 
+def scroll_to_section(page, heading_text: str, wait_ms: int = 900):
+    """Scroll to an h2/h4 that contains heading_text."""
+    page.evaluate(f"""
+      () => {{
+        const h = Array.from(document.querySelectorAll('h2,h4'))
+                       .find(el => el.textContent.trim().includes('{heading_text}'));
+        if (h) h.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+      }}
+    """)
+    page.wait_for_timeout(wait_ms)
+
+
+def highlight_briefly(page, selector: str, duration_ms: int = 2500):
+    """Add a visible amber outline to an element for duration_ms milliseconds."""
+    page.evaluate(f"""
+      () => {{
+        const el = document.querySelector('{selector}');
+        if (!el) return;
+        const prev = el.style.cssText;
+        el.style.outline = '3px solid #f59e0b';
+        el.style.boxShadow = '0 0 0 6px rgba(245,158,11,0.25)';
+        el.style.borderRadius = '4px';
+        setTimeout(() => {{ el.style.cssText = prev; }}, {duration_ms});
+      }}
+    """)
+
+
+def dismiss_swal(page, timeout_ms: int = 4000):
+    """Dismiss a SweetAlert popup if visible."""
+    try:
+        page.wait_for_selector(".swal2-popup", state="visible", timeout=timeout_ms)
+        page.wait_for_timeout(400)
+        page.evaluate("document.querySelector('.swal2-confirm')?.click()")
+        page.wait_for_selector(".swal2-popup", state="hidden", timeout=4000)
+    except Exception:
+        pass
+
+
 def goto_via_menu(page, dropdown_text: str, item_text: str, timeout_ms: int = 10_000):
     """
     Navigate to a route by clicking through the Bootstrap navbar dropdown.
