@@ -35,72 +35,75 @@
   <div class="my-4 text-dark" *ngIf="desempeno.length > 0">
     <h2>Revisión de Objetivos del Año</h2>
     <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead class="bg-light">
+      <table class="table table-bordered objetivos-table">
+        <thead>
           <tr>
             <th>Perspectiva</th>
             <th>Objetivo</th>
             <th>¿Cómo se Mide?</th>
-            <th>Tipo</th>
             <th>Peso</th>
             <th class="text-end">Meta</th>
-            <th class="text-end">Avance a la Fecha (Resultado)</th>
-            <th class="text-end">% Logro</th>
+            <th class="text-end">Avance a la Fecha</th>
+            <th class="text-end">% de Logro</th>
             <th>Comentarios del Colaborador</th>
             <th *ngIf="supervisor">Comentarios del Supervisor</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of desempeno; let index = index">
-            <td>{{ row.perspectiva }}</td>
-            <td>{{ row.objetivo }}</td>
-            <td>
-              <input 
-                type="text" 
-                class="form-control form-control-sm"
-                [(ngModel)]="resultadologro[index].medioverificacion"
-                name="medioverificacion-{{index}}"
-                [disabled]="supervisor || sololectura"
-                (change)="onMedioverificacionChange($event, index)">
-            </td>
-            <td>{{ row.tipo }}</td>
-            <td>{{ row.peso }}%</td>
-            <td class="text-end">{{ row.meta }}</td>
-            <td class="text-end">
-              <input 
-                type="number" 
-                class="form-control form-control-sm text-end"
-                [(ngModel)]="resultadologro[index].logro"
-                name="logro-{{index}}"
-                [disabled]="supervisor || sololectura"
-                (input)="onLogroChange($event, index)">
-            </td>
-            <td class="text-end">{{ resultadologro[index].porcientologro | number:'1.2-2' }}%</td>
-            <td>
-              <input 
-                type="text" 
-                class="form-control form-control-sm"
-                [(ngModel)]="resultadologro[index].comentario"
-                name="comentario-colab-{{index}}"
-                [disabled]="supervisor || sololectura"
-                (change)="onComentarioObjetivoChange($event, index)">
-            </td>
-            <td *ngIf="supervisor">
-              <input 
-                type="text" 
-                class="form-control form-control-sm"
-                [(ngModel)]="resultadologro[index].comentariosupervisor"
-                name="comentario-super-{{index}}"
-                [disabled]="sololectura"
-                (change)="onComentarioObjetivoSupervisorChange($event, index)">
-            </td>
-          </tr>
+          <ng-container *ngFor="let grupo of objetivosAgrupados">
+            <tr class="tipo-header-row">
+              <td [attr.colspan]="supervisor ? 9 : 8">{{ grupo.tipo }}</td>
+            </tr>
+            <tr *ngFor="let item of grupo.filas">
+              <td>{{ item.row.perspectiva }}</td>
+              <td>{{ item.row.objetivo }}</td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="resultadologro[item.idx].medioverificacion"
+                  name="medioverificacion-{{item.idx}}"
+                  [disabled]="supervisor || sololectura"
+                  (change)="onMedioverificacionChange($event, item.idx)">
+              </td>
+              <td>{{ item.row.peso }}%</td>
+              <td class="text-end">{{ item.row.meta }}</td>
+              <td class="text-end">
+                <input
+                  type="number"
+                  class="form-control form-control-sm text-end"
+                  [(ngModel)]="resultadologro[item.idx].logro"
+                  name="logro-{{item.idx}}"
+                  [disabled]="supervisor || sololectura"
+                  (input)="onLogroChange($event, item.idx)">
+              </td>
+              <td class="text-end">{{ resultadologro[item.idx].porcientologro | number:'1.2-2' }}%</td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="resultadologro[item.idx].comentario"
+                  name="comentario-colab-{{item.idx}}"
+                  [disabled]="supervisor || sololectura"
+                  (change)="onComentarioObjetivoChange($event, item.idx)">
+              </td>
+              <td *ngIf="supervisor">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="resultadologro[item.idx].comentariosupervisor"
+                  name="comentario-super-{{item.idx}}"
+                  [disabled]="sololectura"
+                  (change)="onComentarioObjetivoSupervisorChange($event, item.idx)">
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="4" class="text-end"><strong>Total Peso:</strong></td>
+            <td colspan="3" class="text-end"><strong>Total Peso:</strong></td>
             <td><strong>{{ totalPeso }}%</strong></td>
-            <td colspan="5"></td>
+            <td [attr.colspan]="supervisor ? 5 : 4"></td>
           </tr>
         </tfoot>
       </table>
@@ -110,6 +113,7 @@
   <!-- 3. EVALUACIÓN DE COMPETENCIAS -->
   <div class="my-4 text-dark" *ngIf="evaluacionempleado?.evaluacionGoals && evaluacionempleado.evaluacionGoals.length > 0">
     <h2>Evaluación de Competencias</h2>
+    <p class="text-muted mb-3">Seleccione la calificación correspondiente para cada competencia.</p>
     <div class="table-responsive">
       <table class="table table-bordered competencias-table">
         <thead>
@@ -125,7 +129,15 @@
         <tbody>
           <tr *ngFor="let met of evaluacionempleado.evaluacionGoals; let index = index"
               [class.fila-alt]="index % 2 !== 0">
-            <td class="align-middle">{{ met.goal.objetivo.nombre }}</td>
+            <td class="align-middle comp-nombre-cell" (click)="toggleCompetencia(index)">
+              <span class="comp-nombre">
+                {{ met.goal.objetivo.nombre }}
+                <i class="comp-expand-icon">{{ expandedCompetencias.has(index) ? '▲' : '▼' }}</i>
+              </span>
+              <div class="comp-descripcion" *ngIf="expandedCompetencias.has(index)">
+                {{ met.goal.objetivo.descripcion || 'Sin descripción registrada.' }}
+              </div>
+            </td>
             <td class="text-center align-middle">
               <select class="form-select form-select-sm competencias-select"
                       [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].repuesta"
@@ -152,7 +164,7 @@
   <!-- 4. RETROALIMENTACIÓN DE DESEMPEÑO (Start-Stop-Continue-More) -->
   <div class="my-4 card p-4 text-dark">
     <h2>Retroalimentación de Desempeño (Modelo Start-Stop-Continue)</h2>
-    <p class="text-muted">Documentación estructurada vinculando las acciones recomendadas con hasta 3 competencias clave.</p>
+    <p class="text-muted">Basado en los objetivos y competencias evaluados, registre acciones concretas en cada categoría.</p>
 
     <!-- BLOQUE COLABORADOR (AUTOEVALUACIÓN) -->
     <div class="mt-3">
@@ -161,7 +173,8 @@
         <!-- Continuar Haciendo -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-success">
-            <h6 class="text-success">Continuar Haciendo (Fortalezas a mantener)</h6>
+            <h6 class="text-success">Continuar Haciendo</h6>
+            <p class="text-muted small mb-1">Actividades o prácticas que funcionan bien y deben mantenerse.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -190,7 +203,8 @@
         <!-- Hacer Más -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-primary">
-            <h6 class="text-primary">Hacer Más (Incrementar esfuerzo/frecuencia)</h6>
+            <h6 class="text-primary">Hacer Más</h6>
+            <p class="text-muted small mb-1">Acciones que necesitan mayor esfuerzo o frecuencia para lograr los objetivos.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -219,7 +233,8 @@
         <!-- Hacer Menos -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-warning">
-            <h6 class="text-warning">Hacer Menos (Reducir actividades ineficientes)</h6>
+            <h6 class="text-warning">Hacer Menos</h6>
+            <p class="text-muted small mb-1">Actividades que consumen demasiado tiempo sin el resultado esperado.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -248,7 +263,8 @@
         <!-- Parar de Hacer -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-danger">
-            <h6 class="text-danger">Parar de Hacer (Hábitos nocivos/ineficientes)</h6>
+            <h6 class="text-danger">Parar de Hacer</h6>
+            <p class="text-muted small mb-1">Prácticas o hábitos perjudiciales o ineficientes que deben detenerse.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -283,7 +299,8 @@
         <!-- Continuar Haciendo -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-success">
-            <h6 class="text-success">Continuar Haciendo (Fortalezas a mantener)</h6>
+            <h6 class="text-success">Continuar Haciendo</h6>
+            <p class="text-muted small mb-1">Actividades o prácticas que funcionan bien y deben mantenerse.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -312,7 +329,8 @@
         <!-- Hacer Más -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-primary">
-            <h6 class="text-primary">Hacer Más (Incrementar esfuerzo/frecuencia)</h6>
+            <h6 class="text-primary">Hacer Más</h6>
+            <p class="text-muted small mb-1">Acciones que necesitan mayor esfuerzo o frecuencia para lograr los objetivos.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -341,7 +359,8 @@
         <!-- Hacer Menos -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-warning">
-            <h6 class="text-warning">Hacer Menos (Reducir actividades ineficientes)</h6>
+            <h6 class="text-warning">Hacer Menos</h6>
+            <p class="text-muted small mb-1">Actividades que consumen demasiado tiempo sin el resultado esperado.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -370,7 +389,8 @@
         <!-- Parar de Hacer -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-danger">
-            <h6 class="text-danger">Parar de Hacer (Hábitos nocivos/ineficientes)</h6>
+            <h6 class="text-danger">Parar de Hacer</h6>
+            <p class="text-muted small mb-1">Prácticas o hábitos perjudiciales o ineficientes que deben detenerse.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -402,6 +422,7 @@
   <!-- 5. COMPROMISOS Y PRÓXIMOS PASOS -->
   <div class="my-4 card p-4 text-dark">
     <h2>Compromisos y Próximos Pasos</h2>
+    <p class="text-muted mb-3">Registre los acuerdos concretos que resultan de esta conversación. Deben ser específicos y con fecha de seguimiento.</p>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -463,41 +484,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- SUGERENCIA DE CAPACITACIONES (Opcional) -->
-  <div class="cursos-capacitacion card my-4 p-4 text-dark">
-    <h4>Cursos de Capacitación Sugeridos (Seleccione hasta 3)</h4>
-    <div class="cursos-selector mb-3" *ngIf="!sololectura && !supervisor">
-      <select class="form-select" (change)="onCursoSeleccionado(cursos[$any($event.target).value])" [disabled]="cursosSeleccionados.length >= 3">
-        <option value="" disabled selected>Seleccione un curso...</option>
-        <option *ngFor="let curso of cursos; let i = index" [value]="i">{{ curso.descripcion }}</option>
-      </select>
-    </div>
-    
-    <div class="cursos-seleccionados">
-      <div *ngFor="let curso of cursosSeleccionados" class="card p-2 mb-2 bg-light">
-        <div class="d-flex justify-content-between align-items-center">
-          <strong>{{ curso.cursoCapacitacion?.descripcion }}</strong>
-          <button type="button" class="btn btn-sm btn-danger" *ngIf="!sololectura && !supervisor" (click)="onCursoRemovido(curso)">Eliminar</button>
-        </div>
-        <div class="mt-2">
-          <label class="small text-muted">¿Por qué sugiere esta capacitación?</label>
-          <textarea 
-            class="form-control" 
-            rows="2" 
-            [(ngModel)]="curso.porque" 
-            name="porque-curso-{{curso.cursoCapacitacionId}}"
-            [disabled]="supervisor || sololectura"
-            maxlength="500"></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="my-3 text-dark">
-    <label for="comments">Comentario Adicional:</label>
-    <textarea id="comments" class="form-control" rows="3" [(ngModel)]="comentarioAdicional" name="comments" [disabled]="sololectura"></textarea>
   </div>
 
   <!-- ACCIONES -->

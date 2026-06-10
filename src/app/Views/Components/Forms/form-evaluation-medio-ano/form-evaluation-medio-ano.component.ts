@@ -14,8 +14,6 @@ import { Empleados } from 'src/app/Controllers/Empleados';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { LoadingComponent } from '../../loading/loading.component';
-import { ICursoCapacitacion, IEvaluacionCursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
-import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 import { IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
 
 interface IQualitativeFeedback {
@@ -63,17 +61,12 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
   public colaboradorCompromisos: string = '';
   public supervisorCompromisos: string = '';
-  public comentarioAdicional: string = '';
 
   // Objetivos de desempeño
   public desempeno: IEvalucionResultDto[] = [];
   public resultadologro: IResultadoLogro[] = [];
   public totalPeso: number = 0;
   public sololectura: boolean = false;
-
-  // Cursos de capacitación
-  public cursos: ICursoCapacitacion[] = [];
-  public cursosSeleccionados: IEvaluacionCursoCapacitacion[] = [];
 
   // Opciones de calificación para tabla de competencias
   public readonly calificaciones: { valor: number; etiqueta: string }[] = [
@@ -95,7 +88,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     private router: Router,
     private toastr: MatDialog,
     private http: HttpClient,
-    private cursoCapacitacionController: CursoCapacitacionController
   ) {
     this.evaluacionempleado = this.EvaluacionController.inicializamodelo();
   }
@@ -132,8 +124,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
           // Cargar campos cualitativos y parsear si vienen en formato JSON
           this.parseQualitativeFields();
 
-          this.comentarioAdicional = this.evaluacionempleado.observacion || '';
-          this.cursosSeleccionados = this.evaluacionempleado.evaluacionCursoCapacitacions || [];
 
           // Asegurar respuestas de competencias
           this.evaluacionempleado.evaluacionGoals.forEach((goal, i) => {
@@ -212,13 +202,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
         }
       });
 
-    // Cargar catálogo de cursos sugeridos
-    this.cursoCapacitacionController.Gets().subscribe({
-      next: (rep) => {
-        this.cursos = rep.data as ICursoCapacitacion[];
-      },
-      error: (err) => console.error(err)
-    });
   }
 
   private loadLogoAsBase64() {
@@ -284,6 +267,29 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     return item?.goal?.objetivo?.nombre || `Competencia ${compId}`;
   }
 
+  // Competencias expandidas (descripcion visible)
+  public expandedCompetencias = new Set<number>();
+  public toggleCompetencia(index: number) {
+    this.expandedCompetencias.has(index)
+      ? this.expandedCompetencias.delete(index)
+      : this.expandedCompetencias.add(index);
+  }
+
+  // Agrupa desempeno por tipo preservando los índices originales para acceder a resultadologro[]
+  get objetivosAgrupados(): { tipo: string; filas: { row: IEvalucionResultDto; idx: number }[] }[] {
+    const order = ['KRI', 'KPI', 'Objetivo', 'Proyecto'];
+    const map = new Map<string, { row: IEvalucionResultDto; idx: number }[]>();
+    this.desempeno.forEach((row, idx) => {
+      const tipo = row.tipo || 'Otro';
+      if (!map.has(tipo)) map.set(tipo, []);
+      map.get(tipo)!.push({ row, idx });
+    });
+    const result: { tipo: string; filas: { row: IEvalucionResultDto; idx: number }[] }[] = [];
+    order.forEach(t => { if (map.has(t)) result.push({ tipo: t, filas: map.get(t)! }); });
+    map.forEach((filas, tipo) => { if (!order.includes(tipo)) result.push({ tipo, filas }); });
+    return result;
+  }
+
   public calcularLogro(index: number) {
     const row = this.desempeno[index];
     const res = this.resultadologro[index];
@@ -342,26 +348,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     }
   }
 
-  public onCursoSeleccionado(curso: ICursoCapacitacion): void {
-    if (this.cursosSeleccionados.length < 3) {
-      if (!this.cursosSeleccionados.find(c => c.cursoCapacitacionId === curso.id)) {
-        this.cursosSeleccionados.push({
-          id: 0,
-          evaluacionId: this.evaluacionempleado.id,
-          cursoCapacitacionId: curso.id,
-          cursoCapacitacion: curso,
-          porque: ''
-        });
-      }
-    } else {
-      this.datos.showMessage("Solo puede seleccionar hasta 3 cursos", this.titulo, "warning");
-    }
-  }
-
-  public onCursoRemovido(curso: IEvaluacionCursoCapacitacion): void {
-    this.cursosSeleccionados = this.cursosSeleccionados.filter(c => c.cursoCapacitacionId !== curso.cursoCapacitacionId);
-  }
-
   public async onSubmit() {
     if (!this.evaluacionempleado) return;
 
@@ -378,7 +364,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
     this.evaluacionempleado.colaboradorCompromisos = this.colaboradorCompromisos;
     this.evaluacionempleado.supervisorCompromisos = this.supervisorCompromisos;
-    this.evaluacionempleado.observacion = this.comentarioAdicional;
 
     // Estado de la evaluación
     if (this.supervisor) {
@@ -386,12 +371,6 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     } else {
       this.evaluacionempleado.estadoevaluacion = 'AutoEvaluado';
     }
-
-    this.evaluacionempleado.evaluacionCursoCapacitacions = this.cursosSeleccionados.map(c => {
-      const cLimpio = { ...c };
-      delete cLimpio.cursoCapacitacion;
-      return cLimpio;
-    });
 
     // Recalcular logros de todas las metas antes de persistir
     this.resultadologro.forEach((_, index) => {
