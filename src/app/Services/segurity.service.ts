@@ -31,9 +31,11 @@ export class SegurityService {
 
     // 4. Redirigir al login usando Angular Router
     // El login está configurado como lazy-loaded module de Module Federation
-    // en app-routing.module.ts línea 21-23
+    // en app-routing.module.ts línea 21-23.
+    // IMPORTANTE: navegar a '/login' (ruta existente), NO a '/' — esta última
+    // no tiene ruta configurada y provoca NG04002 ("Cannot match any routes").
     setTimeout(() => {
-      this.router.navigate(['/']).then(() => {
+      this.router.navigate(['/login']).then(() => {
         // Forzar recarga completa para limpiar estado del Module Federation
         window.location.reload();
       });

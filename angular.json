@@ -105,7 +105,8 @@
               "browserTarget": "evaluacionempleado:build:development"
             },
             "prueba": {
-              "buildTarget": "evaluacionempleado:build:prueba"
+              "browserTarget": "evaluacionempleado:build:prueba",
+              "extraWebpackConfig": "webpack.prueba.config.js"
             }
           },
           "defaultConfiguration": "development",
