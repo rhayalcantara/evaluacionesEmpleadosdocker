@@ -15,6 +15,7 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { LoadingComponent } from '../../loading/loading.component';
 import { IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { finalize } from 'rxjs/operators';
 
 interface IQualitativeFeedback {
   texto: string;
@@ -94,6 +95,9 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLogoAsBase64();
+
+    // Modal de carga (disableClose). finalize() garantiza el cierre en next/error/complete
+    // y ante teardown, evitando que el overlay quede bloqueando la app (incluido el menú).
     this.dialogRef = this.toastr.open(LoadingComponent, {
       width: '340px',
       height: '180px',
@@ -101,77 +105,79 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     });
 
     this.EvaluacionController.GetEvaluacionePorEmpleadoyPeriodo(this.empleado.secuencial, this.periodo.id)
+      .pipe(finalize(() => this.cerrarLoading()))
       .subscribe({
         next: (rep: IEvaluacion) => {
-          this.evaluacionempleado = rep;
-          this.EvaluacionController.model = rep;
+            this.evaluacionempleado = rep;
+            this.EvaluacionController.model = rep;
 
-          // Manejo de visibilidad de botones según estado de la evaluación
-          if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
-            this.mostarAceptar = true;
-            this.mostarAceptarBoton = true;
-            this.mostargrabar = false;
-          } else if (this.evaluacionempleado.estadoevaluacion === "Completado") {
-            this.mostarAceptar = true;
-            this.mostargrabar = false;
-            this.mostarAceptarBoton = false;
-          } else {
-            this.mostarAceptar = false;
-            this.mostarAceptarBoton = false;
-            this.mostargrabar = true;
-          }
-
-          // Cargar campos cualitativos y parsear si vienen en formato JSON
-          this.parseQualitativeFields();
-
-
-          // Asegurar respuestas de competencias
-          this.evaluacionempleado.evaluacionGoals.forEach((goal, i) => {
-            if (!this.evaluacionempleado.goalEmpleadoRespuestas[i]) {
-              this.evaluacionempleado.goalEmpleadoRespuestas.splice(i, 0, {
-                id: 0,
-                evaluacionId: rep.id,
-                goalId: goal.goalId,
-                repuesta: 0,
-                repuestasupervisor: 0,
-                weight: 0,
-                observacion: '',
-                observacionsupervisor: ''
-              });
+            // Manejo de visibilidad de botones según estado de la evaluación
+            if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
+              this.mostarAceptar = true;
+              this.mostarAceptarBoton = true;
+              this.mostargrabar = false;
+            } else if (this.evaluacionempleado.estadoevaluacion === "Completado") {
+              this.mostarAceptar = true;
+              this.mostargrabar = false;
+              this.mostarAceptarBoton = false;
+            } else {
+              this.mostarAceptar = false;
+              this.mostarAceptarBoton = false;
+              this.mostargrabar = true;
             }
-          });
 
-          // Buscar objetivos de desempeño asociados
-          this.EvaluacionController.GetsEvaluacionResultado(rep.id).subscribe({
-            next: (ores) => {
-              this.desempeno = ores.data;
-              this.totalPeso = this.desempeno.reduce((sum, item) => sum + Number(item.peso), 0);
+            // Cargar campos cualitativos y parsear si vienen en formato JSON
+            this.parseQualitativeFields();
 
-              this.desempeno.forEach((item, index) => {
-                const metaAsociada = this.evaluacionempleado.evaluacionDesempenoMetas.find(x => x.id === item.id);
-                
-                this.resultadologro.push({
-                  id: item.id,
-                  EvaluacionId: rep.id,
-                  logro: Number(metaAsociada?.evaluacioneDesempenoMetaRespuestas?.logro || 0),
-                  porcientologro: 0,
-                  resultadologro: 0,
-                  medioverificacion: metaAsociada?.evaluacioneDesempenoMetaRespuestas?.medioverificacion || '',
-                  comentario: metaAsociada?.evaluacioneDesempenoMetaRespuestas?.comentario || '',
-                  comentariosupervisor: '', // Se limpia para evitar error TS (no existe en DB de metas)
-                  peso: item.peso
+            // Asegurar arreglos para evitar excepciones si el API no los envía
+            this.evaluacionempleado.evaluacionGoals = this.evaluacionempleado.evaluacionGoals || [];
+            this.evaluacionempleado.goalEmpleadoRespuestas = this.evaluacionempleado.goalEmpleadoRespuestas || [];
+            this.evaluacionempleado.evaluacionDesempenoMetas = this.evaluacionempleado.evaluacionDesempenoMetas || [];
+            // Asegurar respuestas de competencias
+            this.evaluacionempleado.evaluacionGoals.forEach((goal, i) => {
+              if (!this.evaluacionempleado.goalEmpleadoRespuestas[i]) {
+                this.evaluacionempleado.goalEmpleadoRespuestas.splice(i, 0, {
+                  id: 0,
+                  evaluacionId: rep.id,
+                  goalId: goal.goalId,
+                  repuesta: 0,
+                  repuestasupervisor: 0,
+                  weight: 0,
+                  observacion: '',
+                  observacionsupervisor: ''
                 });
-
-                this.calcularLogro(index);
+              }
+            });
+            // Buscar objetivos de desempeño asociados
+            this.EvaluacionController.GetsEvaluacionResultado(rep.id)
+              .subscribe({
+                next: (ores) => {
+                  this.desempeno = ores?.data || [];
+                  this.totalPeso = this.desempeno.reduce((sum, item) => sum + Number(item.peso), 0);
+                  this.resultadologro = [];
+                  this.desempeno.forEach((item, index) => {
+                    const metaAsociada = this.evaluacionempleado.evaluacionDesempenoMetas.find(x => x.id === item.id);
+                    this.resultadologro.push({
+                      id: item.id,
+                      EvaluacionId: rep.id,
+                      logro: Number(metaAsociada?.evaluacioneDesempenoMetaRespuestas?.logro || 0),
+                      porcientologro: 0,
+                      resultadologro: 0,
+                      medioverificacion: metaAsociada?.evaluacioneDesempenoMetaRespuestas?.medioverificacion || '',
+                      comentario: metaAsociada?.evaluacioneDesempenoMetaRespuestas?.comentario || '',
+                      comentariosupervisor: '', // Se limpia para evitar error TS (no existe en DB de metas)
+                      peso: item.peso
+                    });
+                    this.calcularLogro(index);
+                  });
+                  // Recalcular el agrupado UNA sola vez (referencia estable para *ngFor)
+                  this.agruparObjetivos();
+                  this.cd.detectChanges();
+                },
+                error: (err) => {
+                  console.error('Error al obtener los resultados de desempeño:', err);
+                }
               });
-              this.dialogRef.close();
-              this.cd.detectChanges();
-            },
-            error: (err) => {
-              console.error(err);
-              this.dialogRef.close();
-            }
-          });
         },
         error: (err: any) => {
           // El interceptor re-lanza el error como string ("Not Found"), no como HttpErrorResponse
@@ -188,7 +194,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
             this.mostarAceptarBoton = false;
             this.mostargrabar = true;
 
-            this.dialogRef.close();
+            this.cerrarLoading();
             this.datos.showMessage(
               `No se encontró evaluación previa. Se iniciará una autoevaluación para el periodo de medio año: ${this.periodo.descripcion}.`,
               this.titulo,
@@ -196,12 +202,21 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
             );
           } else {
             console.error('Error al obtener la evaluación:', err);
-            this.dialogRef.close();
+            this.cerrarLoading();
             this.datos.showMessage("Error al cargar la evaluación", this.titulo, "error");
           }
         }
       });
+  }
 
+  /** Cierra el diálogo de carga de forma segura e idempotente. */
+  private cerrarLoading(): void {
+    try {
+      this.dialogRef?.close();
+    } catch (e) {
+      console.error('Error al cerrar el loading:', e);
+    }
+    this.dialogRef = null;
   }
 
   private loadLogoAsBase64() {
@@ -276,7 +291,13 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
   }
 
   // Agrupa desempeno por tipo preservando los índices originales para acceder a resultadologro[]
-  get objetivosAgrupados(): { tipo: string; filas: { row: IEvalucionResultDto; idx: number }[] }[] {
+  // Memoizado: se recalcula SOLO cuando cambia `desempeno` (vía agruparObjetivos()).
+  // Antes era un getter que devolvía un arreglo NUEVO en cada ciclo de detección de cambios;
+  // usado en *ngFor hacía que Angular recreara todo el árbol y entrara en un loop infinito
+  // de change detection (congelaba el hilo principal). Ahora es una referencia estable.
+  public objetivosAgrupados: { tipo: string; filas: { row: IEvalucionResultDto; idx: number }[] }[] = [];
+
+  private agruparObjetivos(): void {
     const order = ['KRI', 'KPI', 'Objetivo', 'Proyecto'];
     const map = new Map<string, { row: IEvalucionResultDto; idx: number }[]>();
     this.desempeno.forEach((row, idx) => {
@@ -287,7 +308,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     const result: { tipo: string; filas: { row: IEvalucionResultDto; idx: number }[] }[] = [];
     order.forEach(t => { if (map.has(t)) result.push({ tipo: t, filas: map.get(t)! }); });
     map.forEach((filas, tipo) => { if (!order.includes(tipo)) result.push({ tipo, filas }); });
-    return result;
+    this.objetivosAgrupados = result;
   }
 
   public calcularLogro(index: number) {
@@ -385,22 +406,23 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.EvaluacionController.model = this.evaluacionempleado;
     this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 
-    // Calcular totalCalculo, desempeñoFinal y puntuaciones de competencia
-    await this.EvaluacionController.calculaelpromediodesempeno(this.supervisor, this.resultadologro);
+    try {
+      // Calcular totalCalculo, desempeñoFinal y puntuaciones de competencia
+      await this.EvaluacionController.calculaelpromediodesempeno(this.supervisor, this.resultadologro);
 
-    this.EvaluacionController.grabar(this.supervisor).then(() => {
-      this.dialogRef.close();
+      await this.EvaluacionController.grabar(this.supervisor);
+      this.cerrarLoading();
       this.datos.showMessage("Evaluación de medio año guardada exitosamente.", this.titulo, "success");
       if (this.supervisor) {
         this.dataEmitter.emit("grabado");
       } else {
         this.router.navigate(['/Home']);
       }
-    }).catch(err => {
-      this.dialogRef.close();
+    } catch (err) {
+      this.cerrarLoading();
       console.error(err);
       this.datos.showMessage("Error al guardar la evaluación de medio año.", this.titulo, "error");
-    });
+    }
   }
 
   public onAceptar() {
@@ -411,11 +433,11 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.dialogRef = this.toastr.open(LoadingComponent, { disableClose: true });
 
     this.EvaluacionController.grabar(this.supervisor).then(() => {
-      this.dialogRef.close();
+      this.cerrarLoading();
       this.datos.showMessage("Evaluación de medio año completada.", this.titulo, "success");
       this.dataEmitter.emit("grabado");
     }).catch(err => {
-      this.dialogRef.close();
+      this.cerrarLoading();
       console.error(err);
       this.datos.showMessage("Error al completar la evaluación.", this.titulo, "error");
     });
