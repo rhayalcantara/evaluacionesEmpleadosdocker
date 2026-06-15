@@ -49,7 +49,8 @@ test-*.mjs
 
 # Videos generados y archivos temporales de demo
 demo-videos/*.mp4
-demo-videos/_diag.py
+# Scripts/artefactos de diagnóstico (scratch): _diag.py, _diag_*.py, _diag_*.png, _diag_*.mjs
+demo-videos/_diag*
 demo-videos/.env
 demo-videos/_tmp_*/
 demo-videos/__pycache__/
