@@ -59,3 +59,6 @@ test-results/
 # Worktrees y herramientas internas
 .claude/worktrees/
 .antigravitycli/
+
+# Config local de Claude Code (por máquina)
+.claude/settings.local.json
