@@ -1,5 +1,11 @@
 """
 CORRECCIÓN 4 — Instrucciones actualizadas en Retroalimentación (Start-Stop-Continue)
+
+Fixes aplicados:
+- Zoom 90% para que las 4 tarjetas queden dentro del viewport
+- Scroll INMEDIATO a la sección SSC (sin wait extra post-navegación)
+  para evitar el desfase entre narración y video
+- Selectores robustos para el párrafo de instrucción y las tarjetas
 """
 import os, sys, shutil
 from pathlib import Path
@@ -21,35 +27,66 @@ RECORD_DIR = "_tmp_c4_video"
 Path(RECORD_DIR).mkdir(exist_ok=True)
 
 
+def highlight_by_text(page, contains_text: str, duration_ms: int = 2500):
+    """Resalta el primer párrafo que contiene el texto dado."""
+    page.evaluate(f"""
+      () => {{
+        const el = Array.from(document.querySelectorAll('p.text-muted, h6'))
+                        .find(e => e.textContent.includes('{contains_text}'));
+        if (!el) return;
+        const prev = el.style.cssText;
+        el.style.outline = '3px solid #f59e0b';
+        el.style.boxShadow = '0 0 0 6px rgba(245,158,11,0.25)';
+        el.style.borderRadius = '4px';
+        setTimeout(() => {{ el.style.cssText = prev; }}, {duration_ms});
+      }}
+    """)
+
+
+def highlight_card(page, border_class: str, duration_ms: int = 2500):
+    """Resalta la primera tarjeta con la clase de borde dada."""
+    page.evaluate(f"""
+      () => {{
+        const el = document.querySelector('.{border_class}');
+        if (!el) return;
+        const prev = el.style.cssText;
+        el.style.outline = '3px solid #f59e0b';
+        el.style.boxShadow = '0 0 0 8px rgba(245,158,11,0.3)';
+        el.style.borderRadius = '8px';
+        setTimeout(() => {{ el.style.cssText = prev; }}, {duration_ms});
+      }}
+    """)
+
+
 def run():
     narrator = Narrator(TMP_AUDIO)
 
     t_intro = narrator.add(
         "Corrección número cuatro: instrucciones de la sección de Retroalimentación de Desempeño. "
         "Navegamos a la autoevaluación de medio año.",
-        delay_after_ms=500
+        delay_after_ms=300
     )
     t_instruccion_principal = narrator.add(
         "La instrucción principal de la sección ahora indica: "
         "Basado en los objetivos y competencias evaluados, registre acciones concretas "
         "en cada categoría. Esto conecta directamente la retroalimentación con "
         "lo que fue evaluado previamente en el formulario.",
-        delay_after_ms=600
+        delay_after_ms=500
     )
     t_continuar = narrator.add(
         "El primer cuadro, Continuar Haciendo, tiene la descripción: "
         "Actividades o prácticas que funcionan bien y deben mantenerse.",
-        delay_after_ms=400
+        delay_after_ms=300
     )
     t_mas = narrator.add(
         "El segundo cuadro, Hacer Más, indica: "
         "Acciones que necesitan mayor esfuerzo o frecuencia para lograr los objetivos.",
-        delay_after_ms=400
+        delay_after_ms=300
     )
     t_menos = narrator.add(
         "El tercer cuadro, Hacer Menos, dice: "
         "Actividades que consumen demasiado tiempo sin el resultado esperado.",
-        delay_after_ms=400
+        delay_after_ms=300
     )
     t_parar = narrator.add(
         "Y el cuarto cuadro, Parar de Hacer, especifica: "
@@ -71,36 +108,38 @@ def run():
         login(page, BASE_URL, USERNAME, PASSWORD)
         goto_via_menu(page, "Evaluaciones", "AutoEvaluación")
         dismiss_swal(page)
-        page.wait_for_timeout(t_intro)
+        page.wait_for_timeout(800)
 
+        # Aplicar zoom 90% para que las 4 tarjetas SSC quepan en pantalla
+        page.evaluate("document.documentElement.style.zoom = '0.9'")
+        page.wait_for_timeout(400)
+
+        # CLAVE: scroll INMEDIATO a la sección SSC — sin esperar t_intro.
+        # La narración del intro sigue sonando mientras el navegador se desplaza,
+        # evitando el desfase de ~6s que causaba el wait post-navegación anterior.
         scroll_to_section(page, "Retroalimentación de Desempeño")
-        page.wait_for_timeout(500)
+        page.wait_for_timeout(t_intro)   # intro termina mientras la sección ya está visible
 
-        # Highlight main instruction
-        highlight_briefly(page, ".my-4.card.p-4 > p.text-muted", duration_ms=3000)
+        # Resaltar el párrafo de instrucción principal
+        highlight_by_text(page, "Basado en los objetivos", duration_ms=min(t_instruccion_principal - 300, 4000))
         page.wait_for_timeout(t_instruccion_principal)
 
-        # Scroll to show cards
-        page.evaluate("window.scrollBy(0, 180)")
-        page.wait_for_timeout(400)
-
-        # Highlight "Continuar Haciendo" card
-        highlight_briefly(page, ".border-success", duration_ms=2000)
+        # Fila 1 de tarjetas: "Continuar Haciendo" + "Hacer Más"
+        # Las dos primeras tarjetas ya deben estar en vista tras el scroll
+        highlight_card(page, "border-success", duration_ms=min(t_continuar - 200, 3000))
         page.wait_for_timeout(t_continuar)
 
-        # Highlight "Hacer Más" card
-        highlight_briefly(page, ".border-primary", duration_ms=2000)
+        highlight_card(page, "border-primary", duration_ms=min(t_mas - 200, 3000))
         page.wait_for_timeout(t_mas)
 
-        page.evaluate("window.scrollBy(0, 250)")
-        page.wait_for_timeout(400)
+        # Fila 2 de tarjetas: "Hacer Menos" + "Parar de Hacer" — desplazar para verlas
+        page.evaluate("window.scrollBy({top: 380, behavior: 'smooth'})")
+        page.wait_for_timeout(700)
 
-        # Highlight "Hacer Menos" card
-        highlight_briefly(page, ".border-warning", duration_ms=2000)
+        highlight_card(page, "border-warning", duration_ms=min(t_menos - 200, 3000))
         page.wait_for_timeout(t_menos)
 
-        # Highlight "Parar de Hacer" card
-        highlight_briefly(page, ".border-danger", duration_ms=2000)
+        highlight_card(page, "border-danger", duration_ms=min(t_parar - 200, 3000))
         page.wait_for_timeout(t_parar)
 
         context.close()

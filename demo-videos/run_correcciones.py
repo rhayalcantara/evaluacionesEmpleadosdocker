@@ -14,6 +14,10 @@ Los mp4 se generan en el directorio actual (demo-videos/).
 import importlib, os, sys, time
 from pathlib import Path
 
+# Forzar UTF-8 en la salida de la consola (Windows cp1252 no soporta simbolos unicode)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 SCRIPTS = [
     ("c1_objetivos_agrupados",      "Corrección 1 — Tabla de objetivos agrupada"),
     ("c2_instruccion_competencias", "Corrección 2 — Instrucción en competencias"),
@@ -38,24 +42,34 @@ for module_name, label in SCRIPTS:
     print(f"  {label}")
     print(f"{'='*60}")
     start = time.time()
+    # Detectar el mp4 de salida del modulo para hacer skip si ya existe
+    output_mp4 = module_name.replace("_", "-", 1).replace("_", "_") + ".mp4"
+    # patron real: c1_objetivos_agrupados -> correccion_1_objetivos_agrupados.mp4
+    # lo obtenemos importando el modulo y leyendo OUTPUT_MP4
     try:
         mod = importlib.import_module(module_name)
+        expected_mp4 = getattr(mod, 'OUTPUT_MP4', None)
+        if expected_mp4 and Path(expected_mp4).exists():
+            size_mb = Path(expected_mp4).stat().st_size / 1_048_576
+            print(f"  SKIP: {expected_mp4} ya existe ({size_mb:.1f} MB)")
+            results.append((label, "SKIP", expected_mp4))
+            continue
         mod.run()
         elapsed = time.time() - start
         results.append((label, "OK", f"{elapsed:.0f}s"))
-        print(f"  ✓ Completado en {elapsed:.0f}s")
+        print(f"  OK: Completado en {elapsed:.0f}s")
     except Exception as e:
         elapsed = time.time() - start
         results.append((label, "ERROR", str(e)))
-        print(f"  ✗ Error: {e}")
+        print(f"  ERROR: {e}")
 
 total = time.time() - total_start
 print(f"\n{'='*60}")
 print(f"  RESUMEN  ({total:.0f}s total)")
 print(f"{'='*60}")
 for label, status, detail in results:
-    icon = "✓" if status == "OK" else "✗"
-    print(f"  {icon}  {label}  —  {detail}")
+    icon = "[OK]  " if status in ("OK", "SKIP") else "[ERR]"
+    print(f"  {icon}  {label}  -  {detail}")
 
 mp4s = sorted(Path(".").glob("correccion_*.mp4"))
 if mp4s:

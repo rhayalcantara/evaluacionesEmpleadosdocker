@@ -141,7 +141,9 @@ def login(page, base_url: str, username: str, password: str, timeout_ms: int = 3
     Navigate to the app, wait for login form, fill credentials, submit.
     Waits for redirect to 'Home' route.
     """
-    page.goto(base_url, wait_until="networkidle")
+    # NOTE: no usar wait_until="networkidle" — esta app mantiene tráfico de red
+    # constante (polling de fotos/token) y nunca alcanza "idle", causando timeouts.
+    page.goto(base_url, wait_until="domcontentloaded")
     # The navmenu redirects to /login automatically on init
     page.wait_for_url("**/login**", timeout=timeout_ms)
 
@@ -153,9 +155,10 @@ def login(page, base_url: str, username: str, password: str, timeout_ms: int = 3
     submit = page.locator("button:has-text('Entrar'):visible").first
     submit.click()
 
-    # Wait for redirect to Home
+    # Wait for redirect to Home — el cambio de URL confirma login exitoso.
+    # Pausa fija en lugar de networkidle (que nunca se cumple en esta app).
     page.wait_for_url("**/Home**", timeout=timeout_ms)
-    page.wait_for_load_state("networkidle")
+    page.wait_for_timeout(2000)
 
 
 def scroll_to_section(page, heading_text: str, wait_ms: int = 900):
@@ -208,5 +211,6 @@ def goto_via_menu(page, dropdown_text: str, item_text: str, timeout_ms: int = 10
     page.wait_for_timeout(400)
     # Click the menu item — use :text-is() for exact match (avoid substring hits)
     page.locator(f"a.dropdown-item:text-is('{item_text}')").first.click()
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(1500)  # Angular lazy-loads components
+    # Pausa fija para que Angular cargue el componente lazy — NO usar networkidle
+    # (esta app nunca queda idle de red y causaría timeout de 30s).
+    page.wait_for_timeout(2500)
