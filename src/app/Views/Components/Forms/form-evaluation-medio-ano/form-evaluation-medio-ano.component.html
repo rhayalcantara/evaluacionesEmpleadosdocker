@@ -38,6 +38,7 @@
       <table class="table table-bordered objetivos-table">
         <thead>
           <tr>
+            <th>Tipo</th>
             <th>Perspectiva</th>
             <th>Objetivo</th>
             <th>Peso</th>
@@ -49,10 +50,8 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let grupo of objetivosAgrupados">
-            <tr class="tipo-header-row">
-              <td [attr.colspan]="supervisor ? 7 : 6">{{ grupo.tipo }}</td>
-            </tr>
             <tr *ngFor="let item of grupo.filas">
+              <td>{{ grupo.tipo }}</td>
               <td>{{ item.row.perspectiva }}</td>
               <td>{{ item.row.objetivo }}</td>
               <td>{{ item.row.peso }}%</td>
@@ -81,7 +80,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="2" class="text-end"><strong>Total Peso:</strong></td>
+            <td colspan="3" class="text-end"><strong>Total Peso:</strong></td>
             <td><strong>{{ totalPeso }}%</strong></td>
             <td [attr.colspan]="supervisor ? 4 : 3"></td>
           </tr>
