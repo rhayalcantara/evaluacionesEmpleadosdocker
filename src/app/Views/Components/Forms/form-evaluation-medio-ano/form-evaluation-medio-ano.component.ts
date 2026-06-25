@@ -22,6 +22,11 @@ interface IQualitativeFeedback {
   competencias: number[];
 }
 
+interface ICierreFeedback {
+  comentarios: string;
+  compromisos: string;
+}
+
 @Component({
   selector: 'app-form-evaluation-medio-ano',
   standalone: true,
@@ -60,7 +65,9 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     parar: { texto: '', competencias: [] as number[] }
   };
 
+  public colaboradorComentarios: string = '';
   public colaboradorCompromisos: string = '';
+  public supervisorComentarios: string = '';
   public supervisorCompromisos: string = '';
 
   // Objetivos de desempeño
@@ -242,8 +249,37 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.feedbackSuper.menos = this.safeJsonParse(this.evaluacionempleado.supervisorHacerMenos);
     this.feedbackSuper.parar = this.safeJsonParse(this.evaluacionempleado.supervisorParar);
 
-    this.colaboradorCompromisos = this.evaluacionempleado.colaboradorCompromisos || '';
-    this.supervisorCompromisos = this.evaluacionempleado.supervisorCompromisos || '';
+    // "Comentarios, Compromisos y Próximos Pasos" se guarda como JSON { comentarios, compromisos }
+    // en los campos *Compromisos existentes (sin tocar la BD). Datos viejos en texto plano se
+    // interpretan como "compromisos" para mantener compatibilidad.
+    const cierreColab = this.parseCierre(this.evaluacionempleado.colaboradorCompromisos);
+    this.colaboradorComentarios = cierreColab.comentarios;
+    this.colaboradorCompromisos = cierreColab.compromisos;
+
+    const cierreSuper = this.parseCierre(this.evaluacionempleado.supervisorCompromisos);
+    this.supervisorComentarios = cierreSuper.comentarios;
+    this.supervisorCompromisos = cierreSuper.compromisos;
+  }
+
+  private parseCierre(val: string | undefined): ICierreFeedback {
+    if (!val) {
+      return { comentarios: '', compromisos: '' };
+    }
+    try {
+      const obj = JSON.parse(val);
+      // Validar que sea el objeto esperado (y no, p.ej., un número o arreglo)
+      if (obj && typeof obj === 'object' && ('comentarios' in obj || 'compromisos' in obj)) {
+        return { comentarios: obj.comentarios || '', compromisos: obj.compromisos || '' };
+      }
+      return { comentarios: '', compromisos: val };
+    } catch {
+      // Dato viejo en texto plano → era un compromiso
+      return { comentarios: '', compromisos: val };
+    }
+  }
+
+  private stringifyCierre(comentarios: string, compromisos: string): string {
+    return JSON.stringify({ comentarios, compromisos });
   }
 
   private safeJsonParse(val: string | undefined): IQualitativeFeedback {
@@ -383,8 +419,8 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.evaluacionempleado.supervisorHacerMenos = this.stringifyFeedback(this.feedbackSuper.menos);
     this.evaluacionempleado.supervisorParar = this.stringifyFeedback(this.feedbackSuper.parar);
 
-    this.evaluacionempleado.colaboradorCompromisos = this.colaboradorCompromisos;
-    this.evaluacionempleado.supervisorCompromisos = this.supervisorCompromisos;
+    this.evaluacionempleado.colaboradorCompromisos = this.stringifyCierre(this.colaboradorComentarios, this.colaboradorCompromisos);
+    this.evaluacionempleado.supervisorCompromisos = this.stringifyCierre(this.supervisorComentarios, this.supervisorCompromisos);
 
     // Estado de la evaluación
     if (this.supervisor) {
