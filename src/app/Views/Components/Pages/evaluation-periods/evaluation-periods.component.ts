@@ -17,6 +17,7 @@ import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { FormPeriodosComponent } from '../../Forms/form-periodos/form-periodos.component';
 import { FormMetasComponent } from '../../Forms/form-metas/form-metas.component';
 import { LoggerService } from 'src/app/Services/logger.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-evaluation-periods',
@@ -96,7 +97,10 @@ export class EvaluationPeriodsComponent implements OnInit {
       
      })
     
-     this.Periodo.GetActivo().subscribe({
+     this.Periodo.GetActivo().pipe(
+      // Garantiza que el loading se cierre tanto en exito como en error
+      finalize(() => dialogRef.close())
+     ).subscribe({
       next:(rep:IPeriodo_Dts)=>{
         if(rep.activa==true){
             this.mostrarpantalla(rep)
@@ -110,9 +114,10 @@ export class EvaluationPeriodsComponent implements OnInit {
             this.mostrarpantalla(rep)
           });
         }
-        dialogRef.close()
       },
-      error:(err)=>{}
+      error:(err)=>{
+        this.logger.error('Error al obtener el periodo activo:', err);
+      }
     })
   }
   filterPuestos() {
