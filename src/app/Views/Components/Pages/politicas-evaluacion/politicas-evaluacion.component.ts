@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TablesComponent } from '../../tables/tables.component';
 import { FormsModule } from '@angular/forms';
 import { PoliticaEvaluacion } from 'src/app/Controllers/PoliticaEvaluacion';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
@@ -29,7 +29,7 @@ export class PoliticasEvaluacionComponent implements OnInit {
     private toastr: MatDialog
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
       }
     })
   }

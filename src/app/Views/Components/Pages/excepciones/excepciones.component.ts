@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { IException, IExceptionDts } from 'src/app/Models/Excepcion/IExcepcion';
 import { Excepcion } from 'src/app/Controllers/Excepcion';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { ExcepcionFormComponent } from '../../Forms/form-exception/excepcion-form.component';
 
@@ -34,7 +34,7 @@ constructor(public excepcioncontrolador:Excepcion,
             private dialog: MatDialog
 ) { 
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-        next: (mensaje: string) => {
+        next: (mensaje: MensajeComunicacion) => {
         }
     });
 }

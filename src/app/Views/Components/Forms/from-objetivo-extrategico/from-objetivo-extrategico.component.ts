@@ -13,7 +13,7 @@ import { Perspectiva } from 'src/app/Controllers/Perspectiva';
 import { IPerspectiva } from 'src/app/Models/Perspectiva/IPerspectiva';
 import { PlanAnos } from 'src/app/Controllers/PlanAnos';
 import { ObjetivoExtrategicoAno } from 'src/app/Controllers/ObjetivoExtrategicoAno';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { KriAno } from 'src/app/Controllers/KriAno';
 import { FormKriAnoComponent } from '../form-kri-ano/form-kri-ano.component';
 import { KrisComponent } from "../../Pages/kris/kris.component";
@@ -69,7 +69,7 @@ export class FromObjetivoExtrategicoComponent implements OnInit, OnDestroy {
       KriPorAnos: this.fb.array([])
     })
     this.ServiceComunicacion.enviarMensajeObservable.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
       }
     });
   }

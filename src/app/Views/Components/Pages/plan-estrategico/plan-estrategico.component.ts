@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormPlanEstrategicoComponent } from '../../Forms/form-plan-estrategico/form-plan-estrategico.component';
 import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
@@ -31,7 +31,7 @@ export class PlanEstrategicoComponent {
     private dialog: MatDialog
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
       }
     });
   }

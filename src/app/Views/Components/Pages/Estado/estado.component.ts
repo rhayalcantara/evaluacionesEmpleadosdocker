@@ -5,7 +5,7 @@ import { IEstado } from 'src/app/Models/Estado/IEstado';
 import { TablesComponent } from '../../tables/tables.component';
 import { CommonModule } from '@angular/common';
 
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
@@ -33,7 +33,7 @@ export class EstadoComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
       }
     });
   }

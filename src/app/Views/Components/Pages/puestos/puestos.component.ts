@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TablesComponent } from '../../tables/tables.component';
 import { Puestos } from 'src/app/Controllers/Puestos';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
@@ -29,7 +29,7 @@ export class PuestosComponent implements OnInit {
     public departamentoService: Departamento
     ) { 
       // this.Puestos.getdatos()
-      this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:string)=>{
+      this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:MensajeComunicacion)=>{
       
       }})
     }

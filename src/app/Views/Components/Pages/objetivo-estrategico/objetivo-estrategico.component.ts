@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { IObjetivoEstrategico, IPlanExtrategico } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
 import { TablesComponent } from '../../tables/tables.component';
 import { CommonModule } from '@angular/common';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
@@ -41,7 +41,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     private logger: LoggerService
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
         this.logger.debug('mensaje', mensaje);
       }
     });

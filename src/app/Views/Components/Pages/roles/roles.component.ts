@@ -5,7 +5,7 @@ import { IRol } from 'src/app/Models/Rol/IRol';
 import { TablesComponent } from '../../tables/tables.component';
 import { CommonModule } from '@angular/common';
 import { Roles } from 'src/app/Controllers/Roles';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
@@ -30,7 +30,7 @@ export class RolesComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
-      next: (mensaje: string) => {
+      next: (mensaje: MensajeComunicacion) => {
       }
     })
   }

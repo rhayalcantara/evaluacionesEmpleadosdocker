@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TablesComponent } from '../../tables/tables.component';
 import { FormsModule } from '@angular/forms';
 import { Departamento } from 'src/app/Controllers/Departamento';
-import { ComunicacionService } from 'src/app/Services/comunicacion.service';
+import { ComunicacionService, MensajeComunicacion } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
@@ -24,7 +24,7 @@ export class DepartamentosComponent implements OnInit {
     private toastr: MatDialog
     ) { 
       // this.departamento.getdatos()
-      this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:string)=>{
+      this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:MensajeComunicacion)=>{
       
       }})
     }
