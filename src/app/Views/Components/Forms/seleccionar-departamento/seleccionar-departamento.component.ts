@@ -47,15 +47,34 @@ term: string="";
     this.departamentoService.getdatos()
     const dialogRef = this.toastr.open(LoadingComponent, {
       width: '340px',
-      height: '180px', 
-    }); 
+      height: '180px',
+    });
+    let loadingCerrado = false;
+    const cerrarLoading = () => {
+      if (loadingCerrado) { return; }
+      loadingCerrado = true;
+      try {
+        dialogRef.close();
+      } catch (e) {
+        // No-op: el dialogo ya pudo haber sido cerrado previamente.
+      }
+    };
+    // Nota: Departamento (src/app/Controllers/Departamento.ts, fuera del alcance de este cambio)
+    // solo emite TRegistros cuando la peticion HTTP tiene exito; si falla, su subscribe()
+    // no tiene manejador de error y TRegistros nunca se emite, dejando este overlay pegado.
+    // Como mitigacion local se agrega este timeout de seguridad.
+    const timeoutSeguridad = setTimeout(() => cerrarLoading(), 15000);
     this.departamentoService.TRegistros.subscribe({
       next:(rep:number)=>{
+        clearTimeout(timeoutSeguridad);
         this.config.totalItems=rep
         this.ServiceComunicacion.enviarMensaje(this.config)
-        dialogRef.close()
+        cerrarLoading()
+      },
+      error: () => {
+        clearTimeout(timeoutSeguridad);
+        cerrarLoading();
       }
-     
     })
     this.departamentoService.titulos.map((x: string | any) => {
       let nx: string = x[Object.keys(x)[0]];

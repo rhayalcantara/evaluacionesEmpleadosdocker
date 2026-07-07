@@ -52,29 +52,43 @@ export class Usuario implements OnInit{
    }
   }
   public  getdatos(){
-    
+
       const dialogRef = this.toastr.open(LoadingComponent, {
        width: '340px',
-       height: '180px', 
-     }); 
-    
-    
+       height: '180px',
+     });
 
-     this.Gets().subscribe({next:(rep:ModelResponse)=>{
+
+
+     this.Gets().subscribe({
+      next:(rep:ModelResponse)=>{
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
         this.arraymodel=[]
-        this.arraymodel=rep.data    
-        this.TRegistros.emit(this.totalregistros)        
-        
+        this.arraymodel=rep.data
+        this.TRegistros.emit(this.totalregistros)
 
 
-      dialogRef.close()
-     
+        this.cerrarLoading(dialogRef)
+
+      },
+      error: (err: Error) => {
+        this.datos.showMessage('Error al cargar los usuarios: ' + (err?.message ?? ''), this.titulomensage, 'error');
+        this.cerrarLoading(dialogRef)
       }
     }
-    ) 
+    )
+  }
+
+  // Cierra el overlay de carga de forma segura, tanto si la operacion tuvo exito
+  // como si fallo, evitando que quede pegado en pantalla ante un error HTTP.
+  private cerrarLoading(dialogRef: any): void {
+    try {
+      dialogRef?.close();
+    } catch (e) {
+      // No-op: el dialogo ya pudo haber sido cerrado previamente.
+    }
   }
   public Gets():Observable<ModelResponse> {
     

@@ -46,12 +46,15 @@ export class PoliticasEvaluacionComponent implements OnInit {
       height: '180px',
     });
     this.politicaEvaluacion.getdatos()
-    
+
     this.politicaEvaluacion.TRegistros.subscribe({
       next: (rep: number) => {
         this.config.totalItems = rep
         this.ServiceComunicacion.enviarMensaje(this.config)
-        dialogRef.close()
+        this.cerrarLoading(dialogRef)
+      },
+      error: () => {
+        this.cerrarLoading(dialogRef)
       }
     })
 
@@ -141,5 +144,15 @@ export class PoliticasEvaluacionComponent implements OnInit {
 
   delete(prod: IPoliticaEvaluacion, p: PoliticaEvaluacion, t: MatDialog): Promise<any> {
     return new Promise((resolve, reject) => { resolve(prod); });
+  }
+
+  // Cierra el overlay de carga de forma segura, tanto si la operacion tuvo exito
+  // como si fallo, evitando que quede pegado en pantalla ante un error HTTP.
+  private cerrarLoading(dialogRef: any): void {
+    try {
+      dialogRef?.close();
+    } catch (e) {
+      // No-op: el dialogo ya pudo haber sido cerrado previamente.
+    }
   }
 }

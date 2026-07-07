@@ -60,7 +60,7 @@ export class PoliticaEvaluacion implements OnInit {
   }
 
   public getdatos() {
- 
+
 
     this.Gets().subscribe({
       next: (rep: ModelResponse) => {
@@ -71,9 +71,18 @@ export class PoliticaEvaluacion implements OnInit {
         if(rep.data){
             this.arraymodel.sort((a, b) => a.nombre.localeCompare(b.nombre));
         }
-        
+
         this.TRegistros.emit(this.totalregistros)
-       
+
+      },
+      error: (err: Error) => {
+        // Este controller no abre el LoadingComponent directamente (lo abren los
+        // componentes que lo consumen, p.ej. PoliticasEvaluacionComponent, y esperan
+        // la emision de TRegistros para cerrarlo). Si la peticion HTTP fallaba antes,
+        // TRegistros nunca se emitia y el overlay de carga quedaba pegado en pantalla.
+        // Se emite igual en el error para que esos suscriptores puedan cerrar su dialogo.
+        this.datos.showMessage('Error al cargar las políticas de evaluación: ' + (err?.message ?? ''), this.titulomensage, 'error');
+        this.TRegistros.emit(this.totalregistros)
       }
     })
   }
