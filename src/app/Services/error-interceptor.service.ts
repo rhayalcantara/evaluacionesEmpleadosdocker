@@ -52,8 +52,8 @@ intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<an
             );
         }
 
-        const error = err.error?.message || err.statusText || 'Error desconocido';
-        return throwError(() => error);
+        const mensaje = err.error?.message || err.statusText || 'Error desconocido';
+        return throwError(() => new Error(mensaje));
     }))
 }
 
