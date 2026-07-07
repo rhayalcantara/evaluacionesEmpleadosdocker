@@ -7,6 +7,7 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { UtilsService } from 'src/app/Helpers/utils.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-periodos',
@@ -36,6 +37,7 @@ cancelar() {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private periodoController: Periodos,
     private datService: DatosServiceService,
+    private logger: LoggerService,
   ) {
     
   }
@@ -75,7 +77,7 @@ cancelar() {
           this.dialogRef.close(result);
         },
         error: (err) => {
-          console.error('Error inserting periodo:', err.message);
+          this.logger.error('Error inserting periodo:', err.message);
         }
       });
     } else {
@@ -84,7 +86,7 @@ cancelar() {
           this.dialogRef.close(result);
         },
         error: (err) => {
-          console.error('Error updating periodo:', err);
+          this.logger.error('Error updating periodo:', err);
         }
       });
     }

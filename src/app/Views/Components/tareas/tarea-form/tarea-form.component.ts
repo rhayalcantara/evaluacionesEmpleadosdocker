@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ITarea } from '../../../../Models/Tarea/ITarea';
 import { TareaService } from 'src/app/Services/tarea.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-tarea-form',
@@ -13,7 +14,8 @@ export class TareaFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private tareaService: TareaService
+    private tareaService: TareaService,
+    private logger: LoggerService
   ) {
     this.tareaForm = this.fb.group({
       descripcion: ['', Validators.required],
@@ -37,7 +39,7 @@ export class TareaFormComponent implements OnInit {
           // Redirigir a la lista de tareas o mostrar un mensaje de éxito
         },
         (error: any) => {
-          console.error('Error al crear la tarea:', error);
+          this.logger.error('Error al crear la tarea:', error);
           // Mostrar un mensaje de error
         }
       );

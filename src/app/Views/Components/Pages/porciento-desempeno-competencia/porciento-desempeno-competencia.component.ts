@@ -7,6 +7,7 @@ import { IPorcientoDesempenoCompetencia } from 'src/app/Models/PorcientoDesempen
 import { FormPorcientoDesempenoCompetenciaComponent } from '../../Forms/form-porciento-desempeno-competencia/form-porciento-desempeno-competencia.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-porciento-desempeno-competencia',
@@ -31,7 +32,8 @@ export class PorcientoDesempenoCompetenciaComponent implements OnInit, OnDestroy
 
   constructor(
     private service: PorcientoDesempenoCompetencia,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.service.TRegistros.subscribe(() => {
       this.loadItems();
@@ -57,7 +59,7 @@ export class PorcientoDesempenoCompetenciaComponent implements OnInit, OnDestroy
         this.updateDisplayedItems();
       },
       error: (error: Error) => {
-        console.error('Error loading items:', error);
+        this.logger.error('Error loading items:', error);
       }
     });
   }

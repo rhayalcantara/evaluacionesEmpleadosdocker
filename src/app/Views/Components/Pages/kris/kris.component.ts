@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { KrisanosComponent } from '../krisanos/krisanos.component';
 import { IPlan_Anos } from 'src/app/Models/PlanExtrategico/IPlanExtrategico';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-kris',
@@ -35,7 +36,8 @@ export class KrisComponent implements OnInit, OnDestroy {
 
   constructor(
     private kriService: Kri,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.kriService.TRegistros.subscribe(() => {
       this.loadKris();
@@ -66,7 +68,7 @@ export class KrisComponent implements OnInit, OnDestroy {
         this.updateDisplayedKris();
       },
       error: (error) => {
-        console.error('Error loading KRIs:', error);
+        this.logger.error('Error loading KRIs:', error);
       }
     });
   }

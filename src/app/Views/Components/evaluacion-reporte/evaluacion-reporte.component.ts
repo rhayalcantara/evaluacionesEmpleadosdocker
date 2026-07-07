@@ -18,6 +18,7 @@ import { LoadingComponent } from '../loading/loading.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { firstValueFrom } from 'rxjs'; // New import
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-evaluacion-reporte',
@@ -62,7 +63,8 @@ export class EvaluacionReporteComponent implements OnInit {
     private excelService: ExcelService,
     private utilsService: UtilsService,
     private empleadoService: Empleados,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {
@@ -216,7 +218,7 @@ export class EvaluacionReporteComponent implements OnInit {
     //obtener los datos de reporte2
     this.evaluacionService.GetEvaluacionReporte02(this.currentPeriodId).subscribe({
       next: (response: ModelResponse) => {
-        console.log(response.data);
+        this.logger.debug('response.data', response.data);
         if (response && response.data) {
           
           this.excelService.exportAsExcelFile(response.data, 'Reporte_Evaluaciones_2');
@@ -260,7 +262,7 @@ export class EvaluacionReporteComponent implements OnInit {
         this.periodo = JSON.parse(periodoString);
         this.currentPeriodId = this.periodo.id;
       } catch (e) {
-        console.error("Error parsing 'periodo' from localStorage", e);
+        this.logger.error("Error parsing 'periodo' from localStorage", e as Error);
         this.datosService.showMessage('Error al cargar el periodo desde el almacenamiento local.', 'Periodo', 'error');
         this.periodo = { id: 0, descripcion: '', fechaInicio: new Date(), fechaFin: new Date(), activa: false, estadoid: 0 };
         this.currentPeriodId = 0;
@@ -327,7 +329,7 @@ export class EvaluacionReporteComponent implements OnInit {
 
       for (const report of activeEvaluations) {
         if (report.evaluacionid === undefined || report.identificacion === undefined) {
-          console.warn('Skipping report due to missing evaluacionid or secuencial_empleado:', report);
+          this.logger.warn('Skipping report due to missing evaluacionid or secuencial_empleado:', report);
           continue;
         }
 

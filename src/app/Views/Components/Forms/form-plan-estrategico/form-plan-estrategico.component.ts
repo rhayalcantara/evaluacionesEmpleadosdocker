@@ -9,6 +9,7 @@ import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { Aspiracion } from 'src/app/Controllers/Aspiracion';
 import { PlanAnos } from 'src/app/Controllers/PlanAnos';
 import { Perspectiva } from 'src/app/Controllers/Perspectiva';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-plan-estrategico',
@@ -29,18 +30,19 @@ export class FormPlanEstrategicoComponent implements OnInit {
     private AspirecionesController:Aspiracion,
     private PlananoController:PlanAnos,
     private PerspectivasController: Perspectiva,
-    private datosService: DatosServiceService
+    private datosService: DatosServiceService,
+    private logger: LoggerService
   ) {
     this.model = this.planExtrategicoService.inicializamodelo();
   }
 
   ngOnInit(): void {
-    console.log('🔵 FormPlanEstrategico ngOnInit ejecutado');
-    console.log('📋 Data recibida:', this.data);
-    console.log('🆔 Model ID:', this.data.model?.id);
+    this.logger.debug('🔵 FormPlanEstrategico ngOnInit ejecutado');
+    this.logger.debug('📋 Data recibida:', this.data);
+    this.logger.debug('🆔 Model ID:', this.data.model?.id);
 
     if (this.data.model.id) {
-      console.log('✅ Entrando a cargar datos - ID válido:', this.data.model.id);
+      this.logger.debug('✅ Entrando a cargar datos - ID válido:', this.data.model.id);
 
       this.model = this.data.model
       // obtener los datos complementarios
@@ -55,7 +57,7 @@ export class FormPlanEstrategicoComponent implements OnInit {
             }
           },
           error: (error) => {
-            console.error('Error cargando años del plan:', error);
+            this.logger.error('Error cargando años del plan:', error);
             this.datosService.showMessage('Error cargando años del plan', 'Error', 'error');
           }
         })
@@ -63,16 +65,16 @@ export class FormPlanEstrategicoComponent implements OnInit {
       this.AspirecionesController.GetsPlan(this.model.id).subscribe(
         {
           next:(data: IAspiracion[]) => {
-            console.log('Aspiraciones cargadas:', data);
-            console.log('Verificando IDs de aspiraciones cargadas:');
+            this.logger.debug('Aspiraciones cargadas:', data);
+            this.logger.debug('Verificando IDs de aspiraciones cargadas:');
             data.forEach((a, index) => {
-              console.log(`  Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+              this.logger.debug(`  Aspiración ${index}: id=${a.id}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
             });
             this.aspiraciones = data;
             this.model.aspiraciones = data;
           },
           error: (error) => {
-            console.error('Error cargando aspiraciones:', error);
+            this.logger.error('Error cargando aspiraciones:', error);
             this.datosService.showMessage('Error cargando aspiraciones', 'Error', 'error');
           }
         })
@@ -80,23 +82,23 @@ export class FormPlanEstrategicoComponent implements OnInit {
         this.PerspectivasController.GetsPlan(this.model.id).subscribe(
           {
             next: (data: IPerspectiva[]) => {
-              console.log('Perspectivas cargadas:', data);
-              console.log('Verificando IDs de perspectivas cargadas:');
+              this.logger.debug('Perspectivas cargadas:', data);
+              this.logger.debug('Verificando IDs de perspectivas cargadas:');
               data.forEach((p, index) => {
-                console.log(`  Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+                this.logger.debug(`  Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
               });
               this.perspectivas = data;
               this.model.perspectiva = data;
             },
             error: (error) => {
-              console.error('Error cargando perspectivas:', error);
+              this.logger.error('Error cargando perspectivas:', error);
               this.datosService.showMessage('Error cargando perspectivas', 'Error', 'error');
             }
           }
         )
 
     } else {
-      console.log('⚠️ No hay ID - Modo creación nuevo Plan Estratégico');
+      this.logger.debug('⚠️ No hay ID - Modo creación nuevo Plan Estratégico');
     }
   }
 
@@ -131,15 +133,15 @@ export class FormPlanEstrategicoComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log('📤 Iniciando onSubmit');
-    console.log('📊 Estado actual - Model ID:', this.model.id);
-    console.log('📊 Aspiraciones en memoria:', this.aspiraciones);
-    console.log('📊 Perspectivas en memoria:', this.perspectivas);
+    this.logger.debug('📤 Iniciando onSubmit');
+    this.logger.debug('📊 Estado actual - Model ID:', this.model.id);
+    this.logger.debug('📊 Aspiraciones en memoria:', this.aspiraciones);
+    this.logger.debug('📊 Perspectivas en memoria:', this.perspectivas);
 
     if (this.anoInicio) {
       // MODO CREACIÓN - Generar años desde cero
       if(this.model.id == 0){
-        console.log('🆕 Modo creación - Generando años');
+        this.logger.debug('🆕 Modo creación - Generando años');
         this.model.planAnos = [{
           id: 0,
           planExtrategicoId: this.model.id,
@@ -153,60 +155,60 @@ export class FormPlanEstrategicoComponent implements OnInit {
             ano: (parseInt(this.anoInicio) + i - 1).toString()
           });
         }
-        console.log('✅ Años generados:', this.model.planAnos);
+        this.logger.debug('✅ Años generados:', this.model.planAnos);
       } else {
         // MODO EDICIÓN - Solo actualizar años si cambió el año inicial
-        console.log('✏️ Modo edición - Verificando si cambió año inicial');
-        console.log('Año actual en BD:', this.model.planAnos[0]?.ano);
-        console.log('Año nuevo:', this.anoInicio);
+        this.logger.debug('✏️ Modo edición - Verificando si cambió año inicial');
+        this.logger.debug('Año actual en BD:', this.model.planAnos[0]?.ano);
+        this.logger.debug('Año nuevo:', this.anoInicio);
 
         if (this.model.planAnos && this.model.planAnos.length > 0) {
           if (this.model.planAnos[0].ano !== this.anoInicio) {
-            console.log('⚠️ Año inicial cambió - Actualizando años');
+            this.logger.debug('⚠️ Año inicial cambió - Actualizando años');
             // Actualizar todos los años según el nuevo año inicial
             this.model.planAnos.forEach((ano, index) => {
               ano.ano = (parseInt(this.anoInicio) + index).toString();
             });
-            console.log('✅ Años actualizados:', this.model.planAnos);
+            this.logger.debug('✅ Años actualizados:', this.model.planAnos);
           } else {
-            console.log('ℹ️ Año inicial no cambió - Manteniendo años existentes');
+            this.logger.debug('ℹ️ Año inicial no cambió - Manteniendo años existentes');
           }
         }
       }
     }
     // Asegurar que todas las aspiraciones tengan el ID correcto del plan
-    console.log('🔧 Asignando IDs a aspiraciones y perspectivas');
-    console.log('  Model ID que se va a asignar:', this.model.id);
+    this.logger.debug('🔧 Asignando IDs a aspiraciones y perspectivas');
+    this.logger.debug('  Model ID que se va a asignar:', this.model.id);
 
     this.aspiraciones.forEach((a, index) => {
-      console.log(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      this.logger.debug(`  ANTES - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
       a.planExtrategicoId = this.model.id;
       a.planExtrategicoModelId = this.model.id;
-      console.log(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
+      this.logger.debug(`  DESPUÉS - Aspiración ${index}: id=${a.id}, planExtrategicoId=${a.planExtrategicoId}, planExtrategicoModelId=${a.planExtrategicoModelId}`);
     });
 
     this.perspectivas.forEach((p, index) => {
-      console.log(`  ANTES - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+      this.logger.debug(`  ANTES - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
       p.planExtrategicoModelId = this.model.id;
-      console.log(`  DESPUÉS - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
+      this.logger.debug(`  DESPUÉS - Perspectiva ${index}: id=${p.id}, planExtrategicoModelId=${p.planExtrategicoModelId}`);
     });
 
     // Asignar los arrays al modelo
     this.model.aspiraciones = this.aspiraciones;
     this.model.perspectiva = this.perspectivas;
 
-    console.log('📦 Datos finales antes de grabar:');
-    console.log('  - Descripción:', this.model.descripcion);
-    console.log('  - Cantidad años:', this.model.cantidad_anos);
-    console.log('  - PlanAnos:', this.model.planAnos);
-    console.log('  - Aspiraciones:', this.model.aspiraciones);
-    console.log('  - Perspectivas:', this.model.perspectiva);
+    this.logger.debug('📦 Datos finales antes de grabar:');
+    this.logger.debug('  - Descripción:', this.model.descripcion);
+    this.logger.debug('  - Cantidad años:', this.model.cantidad_anos);
+    this.logger.debug('  - PlanAnos:', this.model.planAnos);
+    this.logger.debug('  - Aspiraciones:', this.model.aspiraciones);
+    this.logger.debug('  - Perspectivas:', this.model.perspectiva);
 
     // Asignar el model del componente al service antes de grabar
     this.planExtrategicoService.model = this.model;
 
     // se envia a grabar
-    console.log('💾 Llamando a grabar()...');
+    this.logger.debug('💾 Llamando a grabar()...');
     const success = await this.planExtrategicoService.grabar();
     if (success) {
       this.model = this.planExtrategicoService.inicializamodelo();

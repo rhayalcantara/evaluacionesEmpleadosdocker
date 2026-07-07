@@ -8,6 +8,7 @@ import { IEmpleadoDesempeno } from '../../../../Models/EmpleadoDesempeno/IEmplea
 import { EmpleadoDesempeno } from '../../../../Controllers/EmpleadoDesempeno';
 import { FormEmpleadoDesempenoComponent } from '../../Forms/form-empleado-desempeno/form-empleado-desempeno.component';
 import { DatosServiceService } from '../../../../Services/datos-service.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-empleado-desempeno',
@@ -32,7 +33,8 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
   constructor(
     private empleadoDesempenoService: EmpleadoDesempeno,
     private datosService: DatosServiceService,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.empleadoDesempenoService.TRegistros.subscribe(() => {
       this.empleadoDesempenos = this.empleadoDesempenoService.arraymodel.sort((a, b) => a.secuencialId - b.secuencialId);
@@ -59,7 +61,7 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
         this.updateDisplayedEmpleadoDesempenos();
       },
       error: (error: Error) => {
-        console.error('Error loading empleado desempenos:', error);
+        this.logger.error('Error loading empleado desempenos:', error);
       }
     });
   }
@@ -120,7 +122,7 @@ export class EmpleadoDesempenoComponent implements OnInit, OnDestroy {
           this.datosService.showMessage('Registro eliminado correctamente', 'Desempeño del Empleado', 'success');
         },
         error: (error: Error) => {
-          console.error('Error deleting empleado desempeno:', error);
+          this.logger.error('Error deleting empleado desempeno:', error);
           this.datosService.showMessage('Error al eliminar el registro', 'Desempeño del Empleado', 'error');
         }
       });

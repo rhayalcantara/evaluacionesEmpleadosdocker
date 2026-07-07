@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PeriodoEvaluacionService } from '../../../../Services/periodo-evaluacion.service';
 import { IPeriodoEvaluacion } from 'src/app/Models/PeriodoEvaluacion/IPeriodoEvaluacion';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 
 @Component({
@@ -12,7 +13,10 @@ export class PeriodosEvaluacionComponent implements OnInit {
   periodosEvaluacion: IPeriodoEvaluacion[] = [];
   selectedPeriodoEvaluacion: IPeriodoEvaluacion | null = null;
 
-  constructor(private periodoEvaluacionService: PeriodoEvaluacionService) { }
+  constructor(
+    private periodoEvaluacionService: PeriodoEvaluacionService,
+    private logger: LoggerService
+  ) { }
 
   ngOnInit(): void {
     this.loadPeriodosEvaluacion();
@@ -24,7 +28,7 @@ export class PeriodosEvaluacionComponent implements OnInit {
         this.periodosEvaluacion = data;
       },
       (error) => {
-        console.error('Error loading periodos evaluacion:', error);
+        this.logger.error('Error loading periodos evaluacion:', error);
       }
     );
   }
@@ -41,7 +45,7 @@ export class PeriodosEvaluacionComponent implements OnInit {
           this.selectedPeriodoEvaluacion = null;
         },
         (error) => {
-          console.error('Error updating periodo evaluacion:', error);
+          this.logger.error('Error updating periodo evaluacion:', error);
         }
       );
     } else {
@@ -51,7 +55,7 @@ export class PeriodosEvaluacionComponent implements OnInit {
           this.selectedPeriodoEvaluacion = null;
         },
         (error) => {
-          console.error('Error creating periodo evaluacion:', error);
+          this.logger.error('Error creating periodo evaluacion:', error);
         }
       );
     }
@@ -65,7 +69,7 @@ export class PeriodosEvaluacionComponent implements OnInit {
           this.selectedPeriodoEvaluacion = null;
         },
         (error) => {
-          console.error('Error deleting periodo evaluacion:', error);
+          this.logger.error('Error deleting periodo evaluacion:', error);
         }
       );
     }

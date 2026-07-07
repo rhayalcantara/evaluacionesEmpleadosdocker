@@ -19,6 +19,7 @@ import { SeleccionObjetivoProyectoComponent } from '../seleccion-objetivo-proyec
 import { IObjetivoProyectoPerspectiva } from 'src/app/Models/ObjetivoProyectoPerspectiva/IObjetivoProyectoPerspectiva';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { Periodos } from 'src/app/Controllers/Periodos';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-empleado-desempeno',
@@ -87,6 +88,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { model: IEmpleadoDesempeno },
     private datosService: DatosServiceService,
     private cd: ChangeDetectorRef,
+    private logger: LoggerService,
   ) {
     //seccion de reccion de datos
     if (data.model.id) {
@@ -190,8 +192,8 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       if (result) {
         this.fg.patchValue({ SecuencialId: result.secuencial });
         this.selectedEmpleado = result;
-        console.table(result);
-        console.table(this.fg.value);
+        this.logger.debug('result', result);
+        this.logger.debug('fg.value', this.fg.value);
       }
     });
   }
@@ -231,7 +233,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       if (result) {
         this.selectedKpi = result;
         this.fg.patchValue({ KpiId: result.id });
-        console.table(this.fg.value);
+        this.logger.debug('fg.value', this.fg.value);
       }
       });
 
@@ -246,7 +248,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
         this.selectedKri = result;
         this.fg.patchValue({ KriId: result.id });
         this.kpiService.getdatos();
-        console.table(this.fg.value);
+        this.logger.debug('fg.value', this.fg.value);
       }
     });
   }
@@ -261,13 +263,13 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       if (result) {
         this.seleccionarObjetivo
         this.fg.patchValue({ ObjetivoProyectoId: result.id });
-        console.table(this.fg.value);
+        this.logger.debug('fg.value', this.fg.value);
       }
     });
   }
 
   grabar(): void {
-    console.table(this.fg.value);
+    this.logger.debug('fg.value', this.fg.value);
     if (this.fg.valid) {
       
       const empleadoDesempeno:IEmpleadoDesempeno = this.fg.value;

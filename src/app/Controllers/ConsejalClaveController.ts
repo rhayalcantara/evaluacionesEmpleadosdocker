@@ -3,6 +3,7 @@ import { DatosServiceService } from '../Services/datos-service.service';
 import { IConsejalClave } from '../Models/Consejal/Iconsejal'; // Importar IConsejalClave
 import { ModelResponse } from '../Models/Usuario/modelResponse';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 
 @Injectable({
@@ -34,7 +35,8 @@ export class ConsejalClaveController implements OnInit { // Cambiar nombre de cl
   @Output() TRegistros = new EventEmitter<number>();
 
   constructor(
-    private datos: DatosServiceService
+    private datos: DatosServiceService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {
@@ -72,7 +74,7 @@ export class ConsejalClaveController implements OnInit { // Cambiar nombre de cl
         this.TRegistros.emit(this.totalregistros);
       },
       error: (err) => {
-        console.error('Error fetching ConsejalClave data:', err);
+        this.logger.error('Error fetching ConsejalClave data:', err);
         // Manejar el error apropiadamente (e.g., mostrar mensaje al usuario)
         this.operationSuccessful = false;
       }

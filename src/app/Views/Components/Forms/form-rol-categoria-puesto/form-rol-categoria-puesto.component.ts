@@ -9,6 +9,7 @@ import { RolCategoriaPuesto } from 'src/app/Controllers/RolCategoriaPuesto';
 import { CategoriaPuesto } from 'src/app/Controllers/CategoriaPuesto';
 import { IRolCategoriaPuesto, IRolCategoriaPuestoDet } from 'src/app/Models/RolCategoriaPuesto/IRolCategoriaPuesto';
 import { ICategoriaPuesto } from 'src/app/Models/Puesto/IPuesto';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-rol-categoria-puesto',
@@ -35,7 +36,8 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
     private rolCategoriaService: RolCategoriaPuesto,
     private categoriaPuestoService: CategoriaPuesto,
     public dialogRef: MatDialogRef<FormRolCategoriaPuestoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { model: IRolCategoriaPuesto }
+    @Inject(MAT_DIALOG_DATA) public data: { model: IRolCategoriaPuesto },
+    private logger: LoggerService
   ) {
     this.form = this.fb.group({
       id: [0],
@@ -72,7 +74,7 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
         this.updateCategoriasDisponibles();
       },
       error: (error) => {
-        console.error('Error loading Categorias Puesto:', error);
+        this.logger.error('Error loading Categorias Puesto:', error);
       }
     });
   }
@@ -99,7 +101,7 @@ export class FormRolCategoriaPuestoComponent implements OnInit {
 
       },
       error: (error) => {
-        console.error('Error loading Rol Categorias:', error);
+        this.logger.error('Error loading Rol Categorias:', error);
       }
     });
   }

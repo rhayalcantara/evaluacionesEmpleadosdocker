@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ITarea } from '../../../../Models/Tarea/ITarea';
 import { TareaService } from '../../../../Services/tarea.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-tarea-detail',
@@ -17,7 +18,8 @@ export class TareaDetailComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     public router: Router, // Cambiado a público
-    private tareaService: TareaService
+    private tareaService: TareaService,
+    private logger: LoggerService
   ) {
     this.tareaForm = this.fb.group({
       descripcion: ['', Validators.required],
@@ -40,12 +42,12 @@ export class TareaDetailComponent implements OnInit {
             if (tarea) {
               this.tareaForm.patchValue(tarea);
             } else {
-              console.error('Tarea no encontrada');
+              this.logger.error('Tarea no encontrada');
               this.router.navigate(['/tareas']);
             }
           },
           (error: any) => {
-            console.error('Error al obtener la tarea:', error);
+            this.logger.error('Error al obtener la tarea:', error);
           }
         );
       }
@@ -67,7 +69,7 @@ export class TareaDetailComponent implements OnInit {
           this.router.navigate(['/tareas']);
         },
         (error: any) => {
-          console.error('Error al actualizar la tarea:', error);
+          this.logger.error('Error al actualizar la tarea:', error);
         }
       );
     }

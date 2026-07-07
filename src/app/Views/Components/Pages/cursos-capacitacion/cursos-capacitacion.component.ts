@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CursoCapacitacionController } from 'src/app/Controllers/CursoCapacitacion';
 import { ICursoCapacitacion } from 'src/app/Models/Capacitacion/Cursos';
 import { FormCursoCapacitacionComponent } from '../../Forms/form-curso-capacitacion/form-curso-capacitacion.component';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-cursos-capacitacion',
@@ -30,7 +31,8 @@ export class CursosCapacitacionComponent implements OnInit, OnDestroy {
 
   constructor(
     private cursoService: CursoCapacitacionController,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.cursoService.TRegistros.subscribe(() => {
       this.loadCursos();
@@ -55,7 +57,7 @@ export class CursosCapacitacionComponent implements OnInit, OnDestroy {
         this.updateDisplayedCursos();
       },
       error: (error) => {
-        console.error('Error loading cursos:', error);
+        this.logger.error('Error loading cursos:', error);
       }
     });
   }

@@ -13,6 +13,7 @@ import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { firstValueFrom } from 'rxjs';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-evaluacion-desempeno-meta',
@@ -56,7 +57,8 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     public evaluacioncontroller:Evaluacion,
     @Inject(MAT_DIALOG_DATA) public data: { model: IEvaluacionDesempenoMeta },
     private datosService: DatosServiceService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private logger: LoggerService
   ) {
     this.fg = this.fb.group({
       id: [0],
@@ -104,14 +106,14 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
       if (result) {
         this.fg.patchValue({ secuencialId: result.secuencial });
         this.selectedEmpleado = result;
-        console.table(result);
-        console.table(this.fg.value);
+        this.logger.debug('result', result);
+        this.logger.debug('fg.value', this.fg.value);
       }
     });
   }
 
   grabar(): void {
-    //console.table(this.fg.value);
+    //logger.debug('fg.value', this.fg.value);
     if (this.fg.valid) {
       const meta: IEvaluacionDesempenoMeta ={
         id: this.fg.get('id')?.value,

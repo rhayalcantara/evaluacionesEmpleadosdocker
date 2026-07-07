@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IEstado } from 'src/app/Models/Estado/IEstado';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
     selector: 'app-form-empleado-rol',
@@ -34,10 +35,11 @@ export class FormEmpleadoRolComponent implements OnInit {
         private rolesController: Roles,
         private datosService: DatosServiceService,
         private empleadoservice:Empleados,
-        private cd: ChangeDetectorRef
-              
+        private cd: ChangeDetectorRef,
+        private logger: LoggerService
 
-    ) { 
+
+    ) {
         this.empleadoSeleccionado = this.data.model
     }
 
@@ -61,7 +63,7 @@ export class FormEmpleadoRolComponent implements OnInit {
         this.empleadoRolController.Gets().subscribe(
             {
                 next:(rep:ModelResponse) => {
-                    console.table(rep.data)
+                    this.logger.debug('rep.data', rep.data);
                     let empleadorol: IEmpleadoRol[] = rep.data;
                     let elemprol: IEmpleadoRol | undefined = empleadorol.find(x => x.empleadoSecuencial == this.empleadoSeleccionado.secuencial);
                     if (elemprol) {

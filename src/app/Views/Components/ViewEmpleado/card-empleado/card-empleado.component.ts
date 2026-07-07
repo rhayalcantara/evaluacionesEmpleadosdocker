@@ -239,7 +239,7 @@ export class CardEmpleadoComponent implements OnInit {
         this.estadoEvaluacionSupervisor = estado.evaluadoPorSupervisor ? 'Completada' : 'Pendiente';
         this.cdr.detectChanges();
       },
-      error => //console.error('Error al obtener estado de evaluación', error)
+      error => //this.logger.error('Error al obtener estado de evaluación', error)
     ); */
   }
   subdelsub() {

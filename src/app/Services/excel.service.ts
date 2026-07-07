@@ -5,13 +5,14 @@ import * as XLSX from 'xlsx-js-style';
 import { LoadingComponent } from '../Views/Components/loading/loading.component';
 import { CellObject, WorkSheet, Range, ColInfo } from 'xlsx-js-style'; // Importar tipos necesarios
 import { IReporte01 } from '../Models/Evaluacion/IEvaluacion'; // Importar la interfaz necesaria
+import { LoggerService } from 'src/app/Services/logger.service';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable() // Asegurarse que @Injectable() está presente
 export class ExcelService {
-constructor(private toastr: MatDialog) { } // Corregido el nombre de la variable a 'toastr' como estaba originalmente
+constructor(private toastr: MatDialog, private logger: LoggerService) { } // Corregido el nombre de la variable a 'toastr' como estaba originalmente
 
 public exportAsExcelFile(json: any[], excelFileName: string): void {
   const dialogRef = this.toastr.open(LoadingComponent,{data:{}});
@@ -148,7 +149,7 @@ public exportReporte1AsExcelFile(jsonData: IReporte01[], excelFileName: string):
     this.saveAsExcelFile(excelBuffer, excelFileName);
 
   } catch (error) {
-    console.error("Error al generar el archivo Excel:", error);
+    this.logger.error("Error al generar el archivo Excel:", error as Error);
   } finally {
     dialogRef.close();
   }

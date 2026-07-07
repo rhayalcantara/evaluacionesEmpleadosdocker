@@ -17,7 +17,7 @@
 | T1.1 | Eliminar app-routing.module copy.ts | [ ] | | |
 | T1.2 | Unificar ruta /Reportes duplicada | [ ] | | |
 | T1.3 | Sanear package.json + scripts | [ ] | | |
-| T1.4 | console.* → LoggerService (no vetados) | [ ] | | |
+| T1.4 | console.* → LoggerService (no vetados) | [x] | 2026-07-07 | (pendiente) |
 | T1.5 | Eliminar card-empleado2/empleadoteam (si 0 usos) | [x] parcial | 2026-07-07 | (pendiente) |
 | T2.1 | Fix "Error:undefined" (interceptor) | [ ] | | |
 | T2.2 | Guard labels[value-1] en emojirating | [ ] | | |

@@ -3,6 +3,7 @@ import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { IEvaluacionDesempenoMeta } from "../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta";
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +30,8 @@ export class EvaluacionDesempenoMeta implements OnInit {
     @Output() TRegistros = new EventEmitter<number>();
 
     constructor(
-        private datos: DatosServiceService
+        private datos: DatosServiceService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit(): void {
@@ -104,7 +106,7 @@ export class EvaluacionDesempenoMeta implements OnInit {
                     this.TRegistros.emit(this.totalregistros)
                 },
                 error: (err) => {
-                    console.error('Error al cargar evaluaciones por periodo:', err)
+                    this.logger.error('Error al cargar evaluaciones por periodo:', err)
                 }
             })
     }

@@ -10,6 +10,7 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-excepcion-supervisor-inmediato',
@@ -34,7 +35,8 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
   constructor(public excepcionController: ExcepcionSupervisorInmediato,
                 private ServiceComunicacion: ComunicacionService,
                 private datos: DatosServiceService,
-                private dialog:MatDialog
+                private dialog:MatDialog,
+                private logger: LoggerService
   ) {
     this.currentExcepcion = this.excepcionController.inicializamodelo();
   }
@@ -74,7 +76,7 @@ export class ExcepcionSupervisorInmediatoComponent implements OnInit {
       await this.excepcionController.getdatos();
       this.excepciones = this.excepcionController.arraymodel;
     } catch (error) {
-      console.error('Error loading excepciones', error);
+      this.logger.error('Error loading excepciones', error as Error);
       this.excepcionController.showMessage('Error al cargar las excepciones', 'Error', 'error');
     } finally {
       this.isLoading = false;

@@ -3,6 +3,7 @@ import { DatosServiceService } from "../Services/datos-service.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { IConsejal, IConsejalTeam } from "../Models/Consejal/Iconsejal"; // Importar IConsejal y IConsejalTeam
+import { LoggerService } from 'src/app/Services/logger.service';
 
 // Asumimos una interfaz DTO simple para la actualización, similar a EmpleadoRol
 // Podría necesitar ajustes según la API real
@@ -39,7 +40,8 @@ export class ConsejalController implements OnInit { // Cambiar nombre de clase
     @Output() TRegistros = new EventEmitter<number>();
 
     constructor(
-        private datos: DatosServiceService
+        private datos: DatosServiceService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit(): void {
@@ -163,7 +165,7 @@ export class ConsejalController implements OnInit { // Cambiar nombre de clase
                                 });
                                 
                             } catch (error) {
-                                console.error('Error al guardar el equipo del consejal:', error);
+                                this.logger.error('Error al guardar el equipo del consejal:', error as Error);
                                 // Continuar a pesar del error en el equipo
                             }
                         }

@@ -4,6 +4,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { IExcepcionSupervisorInmediato, IExcepcionSupervisorInmediatoDts } from '../Models/Excepcion/IExcepcionSupervisorInmediato';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,8 @@ export class ExcepcionSupervisorInmediato {
     @Output() TRegistros = new EventEmitter<number>();
    
     constructor(
-      private datos: DatosServiceService
+      private datos: DatosServiceService,
+      private logger: LoggerService
     ) {}
 
     ngOnInit(): void {
@@ -91,7 +93,7 @@ export class ExcepcionSupervisorInmediato {
         this.arraymodel.sort((a, b) => new Date(a.fechaInicio).getTime() - new Date(b.fechaInicio).getTime())
         this.TRegistros.emit(this.totalregistros)
       } catch (error) {
-        console.error('Error fetching data:', error);
+        this.logger.error('Error fetching data:', error as Error);
         this.showMessage('Error al cargar los datos', this.titulomensage, 'error');
         throw error;
       }
@@ -143,7 +145,7 @@ export class ExcepcionSupervisorInmediato {
             resolve(true)
           }
         } catch (err) {
-          console.error('Error al grabar:', err);
+          this.logger.error('Error al grabar:', err as Error);
           this.showMessage('Error al grabar: ' + (err instanceof Error ? err.message : String(err)), this.titulomensage, 'error')
           resolve(false)
         }
@@ -164,7 +166,7 @@ export class ExcepcionSupervisorInmediato {
         this.showMessage('Registro Eliminado Correctamente', this.titulomensage, "success");
         return true;
       } catch (err) {
-        console.error('Error al eliminar:', err);
+        this.logger.error('Error al eliminar:', err as Error);
         this.showMessage('Error al eliminar: ' + (err instanceof Error ? err.message : String(err)), this.titulomensage, 'error');
         return false;
       }

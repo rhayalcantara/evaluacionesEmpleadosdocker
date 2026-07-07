@@ -17,6 +17,7 @@ import { Tipos } from 'src/app/Controllers/Tipos';
 import { IGrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
 import { IObjetivo } from 'src/app/Models/Objetivo/IObjetivo';
 import { Objetivo } from 'src/app/Controllers/Objetivo';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-form-metas',
@@ -47,6 +48,7 @@ export class FormMetasComponent implements OnInit {
     public Objetivocontrolador:Objetivo,
     private dialogRef: MatDialogRef<FormMetasComponent>,
     private datService: DatosServiceService,
+    private logger: LoggerService,
   ) {
     this.fg = this.fb.group({});
   }
@@ -58,10 +60,10 @@ export class FormMetasComponent implements OnInit {
     if (this.meta.id == 0){
       //obtener el periodo activo de localstore
       this.selectedPeriodo = JSON.parse(localStorage.getItem('periodo') ?? "")
-      console.table(this.selectedPeriodo)
+      this.logger.debug('selectedPeriodo', this.selectedPeriodo);
       if (this.selectedPeriodo!=undefined){
         this.meta.periodId=this.selectedPeriodo.id
-        console.table(this.meta)
+        this.logger.debug('meta', this.meta);
       }
     }
     //this.TipoDatos.getdatos()
@@ -145,7 +147,7 @@ export class FormMetasComponent implements OnInit {
       this.dialogRef.close(this.metasDatos.model);
     } else {
       // Show an error message or handle the case when no puesto is selected
-      console.error('No se ha seleccionado un puesto');
+      this.logger.error('No se ha seleccionado un puesto');
     }
   }
 

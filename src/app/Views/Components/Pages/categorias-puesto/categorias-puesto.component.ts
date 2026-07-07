@@ -7,6 +7,7 @@ import { ICategoriaPuesto } from 'src/app/Models/Puesto/IPuesto';
 import { FormCategoriaPuestoComponent } from '../../Forms/form-categoria-puesto/form-categoria-puesto.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-categorias-puesto',
@@ -31,7 +32,8 @@ export class CategoriasPuestoComponent implements OnInit, OnDestroy {
 
   constructor(
     private categoriaPuestoService: CategoriaPuesto,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.categoriaPuestoService.TRegistros.subscribe(() => {
       this.loadCategorias();
@@ -57,7 +59,7 @@ export class CategoriasPuestoComponent implements OnInit, OnDestroy {
         this.updateDisplayedCategorias();
       },
       error: (error) => {
-        console.error('Error loading Categorías de Puesto:', error);
+        this.logger.error('Error loading Categorías de Puesto:', error);
       }
     });
   }

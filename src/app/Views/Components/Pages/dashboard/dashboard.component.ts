@@ -3,6 +3,7 @@ import { PeriodoEvaluacionService } from '../../../../Services/periodo-evaluacio
 import { DatosServiceService } from '../../../../Services/datos-service.service';
 import { IPeriodo, IPeriodo_Dts } from 'src/app/Models/Periodos/IPeriodo';
 import { Periodos } from 'src/app/Controllers/Periodos';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 
 interface Estadisticas {
@@ -45,7 +46,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private periodoService: Periodos,
-    private datosService: DatosServiceService
+    private datosService: DatosServiceService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {
@@ -82,7 +84,7 @@ export class DashboardComponent implements OnInit {
         this.cargarMetricasResultados();
         break;
       default:
-        console.error('Estado de período no reconocido');
+        this.logger.error('Estado de período no reconocido');
     }
    }
 
@@ -91,7 +93,7 @@ export class DashboardComponent implements OnInit {
   //     (porcentaje: number) => {
   //       this.metricas.porcentajePuestosConMetas = porcentaje;
   //     },
-  //     (error: any) => console.error('Error al obtener porcentaje de puestos con metas', error)
+  //     (error: any) => logger.error('Error al obtener porcentaje de puestos con metas', error)
   //   );
    }
 
@@ -102,7 +104,7 @@ export class DashboardComponent implements OnInit {
   //       this.metricas.empleadosEvaluadosPorSupervisor = estadisticas.evaluadosPorSupervisor;
   //       this.metricas.totalEmpleados = estadisticas.totalEmpleados;
   //     },
-  //     (error: any) => console.error('Error al obtener estadísticas de evaluación', error)
+  //     (error: any) => logger.error('Error al obtener estadísticas de evaluación', error)
   //   );
    }
 
@@ -113,7 +115,7 @@ export class DashboardComponent implements OnInit {
   //       this.metricas.promediosPorPuesto = resultados.promediosPorPuesto;
   //       this.metricas.puntajesPorEmpleado = resultados.puntajesPorEmpleado;
   //     },
-  //     (error: any) => console.error('Error al obtener resultados de evaluación', error)
+  //     (error: any) => logger.error('Error al obtener resultados de evaluación', error)
   //   );
    }
 }

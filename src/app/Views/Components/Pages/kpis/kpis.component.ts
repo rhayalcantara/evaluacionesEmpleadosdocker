@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Kri } from 'src/app/Controllers/Kri';
 import { IKri } from 'src/app/Models/Kri/IKri';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-kpis',
@@ -43,6 +44,7 @@ export class KpisComponent implements OnInit, OnDestroy {
     private kriService: Kri,
     private dialogmat: MatDialog,
     private cd: ChangeDetectorRef,
+    private logger: LoggerService,
   ) {
     this.subscription = this.kpiService.TRegistros.subscribe(() => {
       this.kpis = this.kpiService.arraymodel;
@@ -82,7 +84,7 @@ export class KpisComponent implements OnInit, OnDestroy {
         this.updateDisplayedKpis();
       },
       error: (error) => {
-        console.error('Error loading KPIs:', error);
+        this.logger.error('Error loading KPIs:', error);
       }
     });
   }

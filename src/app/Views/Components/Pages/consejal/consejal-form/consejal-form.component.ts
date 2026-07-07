@@ -13,6 +13,7 @@ import { IEmpleado } from '../../../../../Models/Empleado/IEmpleado';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Empleados } from  '../../../../../Controllers/Empleados'
 import { ConsejalClaveController } from 'src/app/Controllers/ConsejalClaveController';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-consejal-form',
@@ -52,7 +53,8 @@ crearusuario(consejal: IConsejal) {
     private datosService: DatosServiceService,
     private dialog: MatDialog,
     private empleado:Empleados,
-    private consejalclaveController: ConsejalClaveController
+    private consejalclaveController: ConsejalClaveController,
+    private logger: LoggerService
   ) {
     // Inicializar el modelo
     this.consejal = this.consejalController.inicializamodelo();
@@ -77,7 +79,7 @@ crearusuario(consejal: IConsejal) {
       this.consejalclave = data;
     },
     (error: HttpErrorResponse) => {
-      console.error('Error fetching consejal clave:', error);
+      this.logger.error('Error fetching consejal clave:', error);
       this.datosService.showMessage(`Error al cargar Consejero Clave: ${error.message}`, 'Error', 'error');
     }
   )
@@ -93,7 +95,7 @@ crearusuario(consejal: IConsejal) {
         this.getconsejalclave()
       },
       (error: HttpErrorResponse) => {
-        console.error('Error fetching consejal:', error);
+        this.logger.error('Error fetching consejal:', error);
         this.loading = false;
         this.datosService.showMessage(`Error al cargar Consejero: ${error.message}`, 'Error', 'error');
       }
@@ -156,7 +158,7 @@ crearusuario(consejal: IConsejal) {
             this.datosService.showMessage('Empleado añadido al equipo', 'Éxito', 'success');
           },
           (error: HttpErrorResponse) => {
-            console.error('Error adding employee to team:', error);
+            this.logger.error('Error adding employee to team:', error);
             // Eliminar del array local si falla
             this.consejal.consejal_Team = this.consejal.consejal_Team.filter(
               t => t.empleadoSecuencial !== newTeamMember.empleadoSecuencial
@@ -184,7 +186,7 @@ crearusuario(consejal: IConsejal) {
           this.datosService.showMessage('Empleado eliminado del equipo', 'Éxito', 'success');
         },
         (error: HttpErrorResponse) => {
-          console.error('Error removing employee from team:', error);
+          this.logger.error('Error removing employee from team:', error);
           this.datosService.showMessage(`Error al eliminar empleado: ${error.message}`, 'Error', 'error');
         }
       );
@@ -216,7 +218,7 @@ crearusuario(consejal: IConsejal) {
         this.router.navigate(['/consejal']);
       }
     } catch (error) {
-      console.error('Error saving consejal:', error);
+      this.logger.error('Error saving consejal:', error as Error);
       this.datosService.showMessage(`Error al guardar: ${error}`, 'Error', 'error');
     } finally {
       this.saving = false;

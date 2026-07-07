@@ -12,6 +12,7 @@ import { PlanExtrategico } from 'src/app/Controllers/PlanExtrategico';
 import { FromObjetivoExtrategicoComponent } from '../../Forms/from-objetivo-extrategico/from-objetivo-extrategico.component';
 import { FormKriComponent } from '../../Forms/form-kri/form-kri.component';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-objetivo-estrategico',
@@ -36,11 +37,12 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     public planEstrategicoService: PlanExtrategico,
     private ServiceComunicacion: ComunicacionService,
     private datos: DatosServiceService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private logger: LoggerService
   ) {
     this.ServiceComunicacion.enviarMensajeObservable.subscribe({
       next: (mensaje: string) => {
-        console.table(mensaje);
+        this.logger.debug('mensaje', mensaje);
       }
     });
   }
@@ -57,7 +59,7 @@ export class ObjetivoEstrategicoComponent implements OnInit {
     this.objetivoEstrategicoService.getdatos();
     this.objetivoEstrategicoService.TRegistros.subscribe({
       next: (rep: number) => {
-        console.table(this.objetivoEstrategicoService.arraymodel);
+        this.logger.debug('arraymodel', this.objetivoEstrategicoService.arraymodel);
         this.config.totalItems = rep;
         this.ServiceComunicacion.enviarMensaje(this.config);
       }

@@ -9,6 +9,7 @@ import { ICategoriaPuesto } from 'src/app/Models/Puesto/IPuesto';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { FormRolCategoriaPuestoComponent } from '../../Forms/form-rol-categoria-puesto/form-rol-categoria-puesto.component';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-rol-categoria-puesto',
@@ -35,7 +36,8 @@ export class RolCategoriaPuestoComponent implements OnInit, OnDestroy {
   constructor(
     private rolCategoriaService: RolCategoriaPuesto,
     private categoriaPuestoService: CategoriaPuesto,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.rolCategoriaService.TRegistros.subscribe(() => {
       this.loadRolCategorias();
@@ -64,7 +66,7 @@ export class RolCategoriaPuestoComponent implements OnInit, OnDestroy {
         this.loadRolCategorias();
       },
       error: (error) => {
-        console.error('Error loading Categorias Puesto:', error);
+        this.logger.error('Error loading Categorias Puesto:', error);
       }
     });
   }
@@ -77,7 +79,7 @@ export class RolCategoriaPuestoComponent implements OnInit, OnDestroy {
         this.updateDisplayedRolCategorias();
       },
       error: (error) => {
-        console.error('Error loading Rol Categorias:', error);
+        this.logger.error('Error loading Rol Categorias:', error);
       }
     });
   }
@@ -117,7 +119,7 @@ export class RolCategoriaPuestoComponent implements OnInit, OnDestroy {
           this.loadRolCategorias();
         },
         error: (error) => {
-          console.error('Error deleting Rol Categoria:', error);
+          this.logger.error('Error deleting Rol Categoria:', error);
         }
       });
       //this.loadRolCategorias();

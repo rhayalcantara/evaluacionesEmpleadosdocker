@@ -16,6 +16,7 @@ import { ChangeStateFormComponent } from '../../Forms/change-state-form/change-s
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { FormPeriodosComponent } from '../../Forms/form-periodos/form-periodos.component';
 import { FormMetasComponent } from '../../Forms/form-metas/form-metas.component';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-evaluation-periods',
@@ -59,8 +60,9 @@ export class EvaluationPeriodsComponent implements OnInit {
     private ServiceComunicacion: ComunicacionService,
     private empleadoscontroller: Empleados,
     private toastr: MatDialog,
-    private metascontroller: Metas
-    
+    private metascontroller: Metas,
+    private logger: LoggerService
+
   ) { }
   ngOnInit(): void {
     // TODO: Fetch actual periods data from a service
@@ -182,7 +184,7 @@ export class EvaluationPeriodsComponent implements OnInit {
         this.updateConfig();
       },
       error: (error) => {
-        console.error('Error refreshing active period:', error);
+        this.logger.error('Error refreshing active period:', error);
       }
     });
   }

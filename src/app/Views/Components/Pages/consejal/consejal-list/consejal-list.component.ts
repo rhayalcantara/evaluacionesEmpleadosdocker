@@ -8,6 +8,7 @@ import { ComunicacionService } from '../../../../../Services/comunicacion.servic
 import { DatosServiceService } from '../../../../../Services/datos-service.service';
 import { ModelResponse } from '../../../../../Models/Usuario/modelResponse';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-consejal-list',
@@ -27,7 +28,8 @@ export class ConsejalListComponent implements OnInit {
     private consejalController: ConsejalController,
     private router: Router,
     private comunicacionService: ComunicacionService, // Para títulos, etc.
-    private datosService: DatosServiceService // Para manejar datos globales si es necesario
+    private datosService: DatosServiceService, // Para manejar datos globales si es necesario
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {
@@ -57,7 +59,7 @@ export class ConsejalListComponent implements OnInit {
         this.loading = false;
       },
       (error: HttpErrorResponse) => { // Tipar el error
-        console.error('Error fetching consejales:', error);
+        this.logger.error('Error fetching consejales:', error);
         this.error = error.message || 'Error desconocido al cargar los consejales';
         this.loading = false;
         // Asegurarnos de que consejales sea un array vacío en caso de error
@@ -83,7 +85,7 @@ export class ConsejalListComponent implements OnInit {
           // Mostrar mensaje de éxito
         },
         (error) => {
-          console.error('Error deleting consejal:', error);
+          this.logger.error('Error deleting consejal:', error);
           // Manejar error (mostrar mensaje al usuario)
         }
       );

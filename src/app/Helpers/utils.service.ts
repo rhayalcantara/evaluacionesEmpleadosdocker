@@ -11,6 +11,7 @@ import { IPeriodo } from '../Models/Periodos/IPeriodo';
 import { HttpClient } from '@angular/common/http';
 import { Evaluacion } from '../Controllers/Evaluacion';
 import * as JSZip from 'jszip';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 
 //(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -25,7 +26,8 @@ export class UtilsService {
   constructor(
     private tool:DatosServiceService,
     public EvaluacionController: Evaluacion,
-    private http: HttpClient
+    private http: HttpClient,
+    private logger: LoggerService
     ){
       this.loadLogoAsBase64();
        this.evaluacionempleado = this.EvaluacionController.inicializamodelo();
@@ -216,7 +218,7 @@ static  generaNss() {
       //   dialogRef.afterClosed().subscribe(result => {
       //   })
       // }, err => {
-      //   console.error(err);
+      //   this.logger.error(err);
       // });
        
     }
@@ -250,7 +252,7 @@ static  generaNss() {
           evaluacionempleado = rep;
         },
         error: (err: Error) => {
-          console.error('Error al obtener la evaluación:', err);
+          this.logger.error('Error al obtener la evaluación:', err);
          }
       });*/
 
@@ -442,7 +444,7 @@ static  generaNss() {
 
       pdfMake.createPdf(docDefinition).download(`evaluacion_${empleado?.nombreunido ?? 'empleado'}_${periodo?.descripcion ?? 'periodo'}.pdf`);
     } catch (error) {
-      console.error('Error detallado al generar el PDF:', error);
+      this.logger.error('Error detallado al generar el PDF:', error as Error);
       this.tool.showMessage('Error al generar el PDF. Verifique la consola para más detalles.', "PDF", 'error');
     }
   }
@@ -648,7 +650,7 @@ static  generaNss() {
         });
       });
     } catch (error) {
-      console.error('Error detallado al generar el PDF blob:', error);
+      this.logger.error('Error detallado al generar el PDF blob:', error as Error);
       throw new Error('Error al generar el PDF blob. Verifique la consola para más detalles.');
     }
   }

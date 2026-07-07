@@ -27,6 +27,10 @@ import { ValoresEvaluacion } from './ValoresEvaluacion';
 import { PorcientoDesempenoCompetencia } from './PorcientoDesempenoCompetencia';
 import { ComunicacionService } from '../Services/comunicacion.service';
 import { IResultadoLogro } from '../Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { LoggerService } from '../Services/logger.service';
+
+// LoggerService no tiene dependencias en su constructor, se instancia directo para este spec informativo.
+const specLogger = new LoggerService();
 
 // ─── Tabla de ValoresEvaluacion (mock) ───────────────────────────────────────
 // Usada para:
@@ -637,18 +641,18 @@ describe('Evaluacion — auditoría comparativa con datos reales de BD', () => {
       const ponderado = (pct * m.peso) / 100;
       return `  Meta ${i + 1}: logro=${m.logro}, meta=${m.meta}, inverso=${m.inverso} → ${pct.toFixed(2)}% × ${m.peso}% = ${ponderado.toFixed(4)}`;
     });
-    console.log('\n── Desglose de metas ──────────────────────────────────');
-    lineas.forEach(l => console.log(l));
-    console.log(`  promedioDesempeno = ${promedioDesempeno.toFixed(4)}`);
-    console.log(`  desempenoFinal    = ${desempenoFinal.toFixed(4)}`);
-    console.log(`  avgCompColaborador= ${avgCompColaborador.toFixed(4)}`);
-    console.log(`  totalcolaborador  = ${totalcolaborador.toFixed(4)}`);
+    specLogger.debug('\n── Desglose de metas ──────────────────────────────────');
+    lineas.forEach(l => specLogger.debug(l));
+    specLogger.debug(`  promedioDesempeno = ${promedioDesempeno.toFixed(4)}`);
+    specLogger.debug(`  desempenoFinal    = ${desempenoFinal.toFixed(4)}`);
+    specLogger.debug(`  avgCompColaborador= ${avgCompColaborador.toFixed(4)}`);
+    specLogger.debug(`  totalcolaborador  = ${totalcolaborador.toFixed(4)}`);
     if (SNAPSHOT_EVALUACION.esSupervisor) {
-      console.log(`  avgCompSupervisor = ${avgCompSupervisor.toFixed(4)}`);
-      console.log(`  totalsupervisor   = ${totalsupervisor.toFixed(4)}`);
+      specLogger.debug(`  avgCompSupervisor = ${avgCompSupervisor.toFixed(4)}`);
+      specLogger.debug(`  totalsupervisor   = ${totalsupervisor.toFixed(4)}`);
     }
-    console.log(`  totalCalculo      = ${totalCalculo.toFixed(4)}`);
-    console.log('────────────────────────────────────────────────────────');
+    specLogger.debug(`  totalCalculo      = ${totalCalculo.toFixed(4)}`);
+    specLogger.debug('────────────────────────────────────────────────────────');
     expect(true).toBeTrue(); // solo informativo
   });
 });

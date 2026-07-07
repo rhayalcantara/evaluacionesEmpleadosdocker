@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ConsejalClaveController } from '../../../../../Controllers/ConsejalClaveController';
 import { IConsejalClave } from '../../../../../Models/Consejal/Iconsejal';
 import { DatosServiceService } from '../../../../../Services/datos-service.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-consejal-clave-form',
@@ -29,7 +30,8 @@ export class ConsejalClaveFormComponent implements OnInit {
     private consejalClaveController: ConsejalClaveController,
     public dialogRef: MatDialogRef<ConsejalClaveFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { consejalId: number },
-    private datosService: DatosServiceService // O un servicio de notificaciones
+    private datosService: DatosServiceService, // O un servicio de notificaciones
+    private logger: LoggerService
   ) {
     this.consejalId = data.consejalId;
     this.claveForm = this.fb.group({
@@ -71,7 +73,7 @@ export class ConsejalClaveFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading existing key data:', error);
+        this.logger.error('Error loading existing key data:', error);
         this.isLoading = false;
         // Si es un 404 (no encontrado), simplemente continuamos en modo creación
         // Para otros errores, podríamos mostrar un mensaje
@@ -108,7 +110,7 @@ export class ConsejalClaveFormComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error saving credentials:', error);
+        this.logger.error('Error saving credentials:', error);
         this.datosService.showMessage('Error al guardar las credenciales.', 'Error', 'error');
         // No cerrar el diálogo en caso de error para que el usuario pueda reintentar
       }

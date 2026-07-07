@@ -13,6 +13,7 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { Metas } from 'src/app/Controllers/Metas';
 import { FormMetasComponent } from '../../Forms/form-metas/form-metas.component';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 interface Position {
   id: number;
@@ -73,7 +74,8 @@ config: any;
     private dialog: MatDialog,
     public empl: Empleados,
     private ServiceComunicacion:ComunicacionService,
-    private metascontroller:Metas
+    private metascontroller:Metas,
+    private logger: LoggerService
     //private router: Router
   ) {
 
@@ -169,7 +171,7 @@ config: any;
           this.goalInput = ''; // Clear the input after submission
         },
         (error) => {
-          console.error('Error adding goal:', error);
+          this.logger.error('Error adding goal:', error);
         }
       );*/
     }

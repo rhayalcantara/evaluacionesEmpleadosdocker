@@ -7,6 +7,7 @@ import { IValoresEvaluacion } from 'src/app/Models/ValoresEvaluacion/IValoresEva
 import { FormValoresEvaluacionComponent } from '../../Forms/form-valores-evaluacion/form-valores-evaluacion.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-valores-evaluacion',
@@ -31,7 +32,8 @@ export class ValoresEvaluacionComponent implements OnInit, OnDestroy {
 
   constructor(
     private service: ValoresEvaluacion,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.service.TRegistros.subscribe(() => {
       this.loadItems();
@@ -57,7 +59,7 @@ export class ValoresEvaluacionComponent implements OnInit, OnDestroy {
         this.updateDisplayedItems();
       },
       error: (error: Error) => {
-        console.error('Error loading items:', error);
+        this.logger.error('Error loading items:', error);
       }
     });
   }

@@ -7,6 +7,7 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { Estado } from 'src/app/Controllers/Estado';
 import { firstValueFrom } from 'rxjs';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-change-state-form',
@@ -26,7 +27,8 @@ export class ChangeStateFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private periodosController: Periodos,
     private estadoController: Estado,
-    private Datos:DatosServiceService
+    private Datos:DatosServiceService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class ChangeStateFormComponent implements OnInit {
       const allStates:IEstado[] = (await firstValueFrom(this.estadoController.Gets())).data;
       this.availableStates = allStates.filter(x => x.id > this.activePeriod.estadoid);
     } catch (error) {
-      console.error('Error loading available states:', error);
+      this.logger.error('Error loading available states:', error as Error);
     }
   }
 
@@ -69,7 +71,7 @@ export class ChangeStateFormComponent implements OnInit {
           
           this.closeForm();
         } catch (error) {
-          console.error('Error changing state:', error);
+          this.logger.error('Error changing state:', error as Error);
         }
       }else{
         this.Datos.showMessage("Tiene que selecionar un nuevo estado","Cambio de Estado","error")

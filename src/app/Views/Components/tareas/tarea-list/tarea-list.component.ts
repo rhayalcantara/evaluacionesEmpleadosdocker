@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ITarea } from '../../../../Models/Tarea/ITarea';
 import { TareaService } from '../../../../Services/tarea.service';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-tarea-list',
@@ -10,7 +11,7 @@ import { TareaService } from '../../../../Services/tarea.service';
 export class TareaListComponent implements OnInit {
   tareas: ITarea[] = [];
 
-  constructor(private tareaService: TareaService) { }
+  constructor(private tareaService: TareaService, private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.getTareas();
@@ -22,7 +23,7 @@ export class TareaListComponent implements OnInit {
         this.tareas = tareas;
       },
       (error: any) => {
-        console.error('Error al obtener las tareas:', error);
+        this.logger.error('Error al obtener las tareas:', error);
       }
     );
   }
@@ -33,7 +34,7 @@ export class TareaListComponent implements OnInit {
         this.tareas = this.tareas.filter(tarea => tarea.id !== id);
       },
       (error: any) => {
-        console.error('Error al eliminar la tarea:', error);
+        this.logger.error('Error al eliminar la tarea:', error);
       }
     );
   }

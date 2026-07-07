@@ -8,6 +8,7 @@ import { FormObjetivoProyectoPerspectivaComponent } from '../../Forms/form-objet
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ModelResponse } from 'src/app/Models/Usuario/modelResponse';
+import { LoggerService } from 'src/app/Services/logger.service';
 
 @Component({
   selector: 'app-objetivos-proyecto-perspectiva',
@@ -34,7 +35,8 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
 
   constructor(
     private objetivoService: ObjetivoProyectoPerspectiva,
-    private dialogmat: MatDialog
+    private dialogmat: MatDialog,
+    private logger: LoggerService
   ) {
     this.subscription = this.objetivoService.TRegistros.subscribe(() => {
       this.loadObjetivos();
@@ -68,7 +70,7 @@ export class ObjetivosProyectoPerspectivaComponent implements OnInit, OnDestroy 
         this.updateDisplayedObjetivos();
       },
       error: (error) => {
-        console.error('Error loading Objetivos:', error);
+        this.logger.error('Error loading Objetivos:', error);
       }
     });
   }

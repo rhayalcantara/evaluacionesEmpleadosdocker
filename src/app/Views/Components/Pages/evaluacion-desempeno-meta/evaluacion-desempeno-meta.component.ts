@@ -53,7 +53,7 @@ export class EvaluacionDesempenoMetaComponent implements OnInit {
     public periodosService: Periodos
   ) { 
     this.metaService.TRegistros.subscribe(() => {
-     // console.table(this.metaService.arraymodel[0].evaluacion)
+     // logger.debug(this.metaService.arraymodel[0].evaluacion)
   //   this.dataSource = this.metaService.arraymodel;
       this.dataSources.data = this.metaService.arraymodel;
       this.dataSources.paginator = this.paginator;
