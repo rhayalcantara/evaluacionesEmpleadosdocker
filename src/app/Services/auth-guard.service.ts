@@ -25,7 +25,7 @@ export class AuthGuard  {
           return true;            
       }
       this.datos.showMessage("Pagina no Autorizada","Error","error");
-      this.router.navigate([''], { queryParams: { returnUrl: state.url }});
+      this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
       return false;
   }
 }

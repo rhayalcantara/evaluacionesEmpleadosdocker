@@ -225,6 +225,8 @@ const routes: Routes = [
   { path: 'tareas', component: TareaListComponent, canActivate: [AuthGuard] },
   { path: 'tareas/nueva', component: TareaFormComponent, canActivate: [AuthGuard] },
   { path: 'tareas/:id', component: TareaDetailComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({
