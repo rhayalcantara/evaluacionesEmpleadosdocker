@@ -58,26 +58,26 @@ export class Puestos implements OnInit{
  
     
 
-     this.Gets().subscribe({next:(rep:ModelResponse)=>{
+     this.Gets().subscribe({next:(rep:ModelResponse<IPuesto[]>)=>{
         //se obtiene los datos y se ponen en los array
         this.totalregistros =  rep.count
         this.pagesize=rep.count
         this.arraymodel=[]
         this.arraytotal=[]
-        this.arraymodel=rep.data   
+        this.arraymodel=rep.data
         this.arraytotal=rep.data
         //ordernar por nombre de puestos
         this.arraymodel.sort((a, b) => a.descripcion.localeCompare(b.descripcion))
-        this.TRegistros.emit(this.totalregistros)        
+        this.TRegistros.emit(this.totalregistros)
 
-      
-     
+
+
       }
     }
-    ) 
+    )
   }
-  public Gets():Observable<ModelResponse> {
-    return this.datos.getdatos<ModelResponse>(this.rutaapi)
+  public Gets():Observable<ModelResponse<IPuesto[]>> {
+    return this.datos.getdatos<IPuesto[]>(this.rutaapi)
 }
 
 public Get(id:string):Observable<IPuesto>{

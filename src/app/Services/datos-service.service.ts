@@ -123,8 +123,8 @@ export class DatosServiceService {
    
     return this.http.put<T>(url, JSON.stringify(obj), { headers:this.headers } )
    }
-   public getdatos<T>(url:string):Observable<ModelResponse>{
-    return this.http.get<ModelResponse>(url)
+   public getdatos<T = any>(url:string):Observable<ModelResponse<T>>{
+    return this.http.get<ModelResponse<T>>(url)
    }
    public getdatoscount(url:string):Observable<number>{
     return this.http.get<number>(url)

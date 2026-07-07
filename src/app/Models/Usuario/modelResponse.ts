@@ -1,6 +1,6 @@
-export interface ModelResponse{
+export interface ModelResponse<T = any>{
     exito:number
     mensaje:string
     count:number
-    data:any
+    data:T
 }
