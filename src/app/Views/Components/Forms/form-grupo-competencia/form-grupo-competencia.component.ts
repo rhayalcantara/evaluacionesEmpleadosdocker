@@ -16,6 +16,7 @@ export class FormGrupoCompetenciaComponent implements OnInit {
     id: 0, nombre: '',
     description: ''
   };
+  isSaving = false;
   constructor(
     public dialogRef: MatDialogRef<FormGrupoCompetenciaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { model: IGrupoCompetencia }
@@ -24,7 +25,9 @@ export class FormGrupoCompetenciaComponent implements OnInit {
     this.model = this.data.model
   }
   onSubmit(form: NgForm): void {
+    if (this.isSaving) return;
     if (form.valid) {
+      this.isSaving = true;
       // Aquí puedes agregar la lógica para guardar el grupo de competencia
       this.dialogRef.close(this.model)
     }

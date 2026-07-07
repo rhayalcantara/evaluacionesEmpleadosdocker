@@ -17,6 +17,7 @@ import { Kri } from 'src/app/Controllers/Kri';
 export class FormKriComponent implements OnInit {
   fg: FormGroup;
   titulo: string = 'Nuevo KRI';
+  isSaving = false;
 
   constructor(
     private fb: FormBuilder,
@@ -42,8 +43,10 @@ export class FormKriComponent implements OnInit {
   }
 
   grabar(): void {
+    if (this.isSaving) return;
     if (this.fg.valid) {
-      const kri: IKri = this.fg.value;      
+      this.isSaving = true;
+      const kri: IKri = this.fg.value;
       this.kriservice.model = kri;
       this.kriservice.grabar().then(() => {
                this.datosService.showMessage('KRI guardado exitosamente', 'Éxito', 'success');
@@ -51,6 +54,7 @@ export class FormKriComponent implements OnInit {
                this.datosService.showMessage('Error al guardar el KRI', 'Error', 'error');
       }).finally(() => {
                // Optional: Add any cleanup or final actions here
+               this.isSaving = false;
                this.dialogRef.close(kri);
       })
       //this.dialogRef.close(kri);

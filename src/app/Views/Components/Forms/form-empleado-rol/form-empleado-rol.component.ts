@@ -27,6 +27,7 @@ export class FormEmpleadoRolComponent implements OnInit {
     public empleadoSeleccionado: IEmpleado;
     public roles: IRol[] = [];
     public model = this.empleadoRolController.model;
+    public isSaving = false;
 
     constructor(
         public dialogRef: MatDialogRef<FormEmpleadoRolComponent>,
@@ -91,6 +92,8 @@ export class FormEmpleadoRolComponent implements OnInit {
     }
 
     async guardar() {
+        if (this.isSaving) return;
+
         if (!this.empleadoSeleccionado) {
             this.datosService.showMessage('Debe seleccionar un empleado', 'Error', 'error');
             return;
@@ -101,10 +104,15 @@ export class FormEmpleadoRolComponent implements OnInit {
             return;
         }
 
-        const resultado = await this.empleadoRolController.grabar();
-        if (resultado) {
-            this.datosService.showMessage("Grabado",this.empleadoRolController.titulomensage,"success")
-            this.dialogRef.close()
+        this.isSaving = true;
+        try {
+            const resultado = await this.empleadoRolController.grabar();
+            if (resultado) {
+                this.datosService.showMessage("Grabado",this.empleadoRolController.titulomensage,"success")
+                this.dialogRef.close()
+            }
+        } finally {
+            this.isSaving = false;
         }
     }
 

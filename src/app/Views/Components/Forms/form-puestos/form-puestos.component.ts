@@ -41,16 +41,22 @@ export class FormPuestosComponent implements OnInit {
 
   }
   onChange($event: Event) {
-    
+
   }
   cancelar() {
     this.dialogre.close(null)
   }
+  isSaving = false;
+
   grabar() {
+    if (this.isSaving) return;
+    this.isSaving = true;
     this.puestodatos.model.secuencial = +this.fg.controls['secuencial'].value
-    this.puestodatos.model.descripcion = this.fg.controls['descripcion'].value    
-    this.puestodatos.model.departmentSecuencial=+this.fg.controls['departmentSecuencial'].value        
-    this.puestodatos.grabar()
-    this.dialogre.close(this.puestodatos.model)
+    this.puestodatos.model.descripcion = this.fg.controls['descripcion'].value
+    this.puestodatos.model.departmentSecuencial=+this.fg.controls['departmentSecuencial'].value
+    this.puestodatos.grabar().finally(() => {
+      this.isSaving = false;
+      this.dialogre.close(this.puestodatos.model)
+    })
   }
 }

@@ -40,10 +40,16 @@ export class FormRolesComponent implements OnInit {
     this.fg= this.Dat.llenarFormGrup(this.roles.model)
   }
 
+  isSaving = false;
+
   grabar(): void {
+    if (this.isSaving) return;
+    this.isSaving = true;
     this.roles.model = this.fg.value as IRol
-    this.roles.grabar()
-    this.dialogre.close(this.roles.model)
+    this.roles.grabar().finally(() => {
+      this.isSaving = false;
+      this.dialogre.close(this.roles.model)
+    })
   }
   cancelar() {
     this.dialogre.close(null)

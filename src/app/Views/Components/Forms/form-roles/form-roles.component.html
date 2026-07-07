@@ -14,7 +14,7 @@
     
     <div class="text-center pt-1 mb-5 pb-1">
       <div class="d-grid gap-2">
-        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="submit">Grabar</button>
+        <button class="btn btn-success btn-block mb-3" (click)="grabar()" type="submit" [disabled]="isSaving">Grabar</button>
         <button class="btn btn-secondary btn-block" type="button" (click)="cancelar()">Cancelar</button>
       </div>
     </div>
