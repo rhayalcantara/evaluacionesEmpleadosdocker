@@ -203,11 +203,7 @@ const routes: Routes = [
     .then((m)=> m.OrganigramaComponent),
     canActivate: [AuthGuard]
   },
-  { path: 'evaluacion-reporte',
-    loadComponent:()=> import('./Views/Components/evaluacion-reporte/evaluacion-reporte.component')
-    .then((m)=> m.EvaluacionReporteComponent),
-    canActivate: [AuthGuard]
-  },
+  { path: 'evaluacion-reporte', redirectTo: 'Reportes' },
   { path: 'consejal',
     loadComponent: () => import('./Views/Components/Pages/consejal/consejal-list/consejal-list.component').then(m => m.ConsejalListComponent),
     canActivate: [AuthGuard]
