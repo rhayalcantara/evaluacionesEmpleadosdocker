@@ -41,7 +41,7 @@ export class EmojiratingComponent implements OnInit{
 // Add to emojirating.component.ts
 getLabel(value: number): string {
   const labels = ['Deficiente', 'Necesita Mejorar', 'Cumple', 'Muy Efectivo', 'Excelente'];
-  return labels[value - 1];
+  return value >= 1 && value <= labels.length ? labels[value - 1] : '';
 }
   ngOnInit(): void {
     if (this.goalempleadorepuesta){      
@@ -64,7 +64,7 @@ getLabel(value: number): string {
   
   getEmoji(value: number): string {
     const emojis = ['😔', '😐', '🙂', '😄', '😁'];
-    return emojis[value - 1];
+    return value >= 1 && value <= emojis.length ? emojis[value - 1] : '';
   }
   
   cambiovalor(valor: number) {
