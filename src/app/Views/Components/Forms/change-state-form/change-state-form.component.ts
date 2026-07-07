@@ -48,6 +48,7 @@ export class ChangeStateFormComponent implements OnInit {
       this.availableStates = allStates.filter(x => x.id > this.activePeriod.estadoid);
     } catch (error) {
       this.logger.error('Error loading available states:', error as Error);
+      this.Datos.showMessage('No se pudieron cargar los estados disponibles.', 'Error', 'error');
     }
   }
 
@@ -72,6 +73,7 @@ export class ChangeStateFormComponent implements OnInit {
           this.closeForm();
         } catch (error) {
           this.logger.error('Error changing state:', error as Error);
+          this.Datos.showMessage('No se pudo cambiar el estado del periodo.', 'Error', 'error');
         }
       }else{
         this.Datos.showMessage("Tiene que selecionar un nuevo estado","Cambio de Estado","error")

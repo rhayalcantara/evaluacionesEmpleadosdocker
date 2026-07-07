@@ -77,7 +77,8 @@ cancelar() {
           this.dialogRef.close(result);
         },
         error: (err) => {
-          this.logger.error('Error inserting periodo:', err.message);
+          this.logger.error('Error inserting periodo:', err);
+          this.datService.showMessage(err.message || 'No se pudo guardar el periodo.', 'Error', 'error');
         }
       });
     } else {
@@ -87,6 +88,7 @@ cancelar() {
         },
         error: (err) => {
           this.logger.error('Error updating periodo:', err);
+          this.datService.showMessage(err.message || 'No se pudo actualizar el periodo.', 'Error', 'error');
         }
       });
     }
