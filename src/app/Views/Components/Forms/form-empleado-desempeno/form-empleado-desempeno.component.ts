@@ -1,4 +1,6 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
@@ -28,7 +30,8 @@ import { LoggerService } from 'src/app/Services/logger.service';
   standalone: true,
   imports: [ReactiveFormsModule, MatDialogModule, CommonModule]
 })
-export class FormEmpleadoDesempenoComponent implements OnInit {
+export class FormEmpleadoDesempenoComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   fg: FormGroup;
   titulo: string = 'Nuevo Desempeño de Empleado';
@@ -133,7 +136,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
     }
     
     //seccion de busqueda de datos
-    this.kriService.TRegistros.subscribe(() => {
+    this.kriService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.kris = this.kriService.arraymodel;
       const foundKri = this.kris.find((kri) => kri.id === data.model.kriId);
       if (foundKri) {
@@ -141,7 +144,7 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       }
       this.cd.detectChanges();
     });
-    this.kpiService.TRegistros.subscribe(() => {
+    this.kpiService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.kpis = this.kpiService.arraymodel;
       const foundKpi = this.kpis.find((kpi) => kpi.id === data.model.kpiId);
       if (foundKpi) {
@@ -149,14 +152,14 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       }
       this.cd.detectChanges();
     });
-    this.empleadocontroller.TRegistros.subscribe(() => {
+    this.empleadocontroller.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (data.model.secuencialId!=0) {
 
         this.selectedEmpleado = this.getempleado(data.model.secuencialId);
-      }      
+      }
       this.cd.detectChanges();
-    });    
-    this.objetivoProyectoService.TRegistros.subscribe(() => {
+    });
+    this.objetivoProyectoService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (data.model.objetivoProyectoId!=0) {
         this.selectedObjetivo = this.objetivoProyectoService.arraymodel.find((objetivo) => objetivo.id === data.model.objetivoProyectoId);
 
@@ -164,10 +167,15 @@ export class FormEmpleadoDesempenoComponent implements OnInit {
       }
       this.cd.detectChanges();
     });
-    this.periodocontroller.TRegistros.subscribe(() => {
+    this.periodocontroller.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.periodos = this.periodocontroller.arraymodel;
       this.cd.detectChanges();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {

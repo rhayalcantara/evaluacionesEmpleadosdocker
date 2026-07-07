@@ -1,7 +1,9 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { TableResponse, TipoCampo } from 'src/app/Helpers/Interfaces';
 import { UtilsService } from 'src/app/Helpers/utils.service';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
@@ -13,7 +15,8 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
   templateUrl: './tables.component.html',
   styleUrls: ['./tables.component.css']
 })
-export class TablesComponent implements OnInit {
+export class TablesComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   @Input() config:any;
   public labels: any;
@@ -55,9 +58,14 @@ export class TablesComponent implements OnInit {
       screenReaderPageLabel: "paginacion1",
       screenReaderCurrentLabel: "paginacion2"
     };
-    this.ServiceComunicacion.enviarMensajeObservable.subscribe({next:(mensaje:any)=>{
-      this.actualizaelconfig(mensaje)   
+    this.ServiceComunicacion.enviarMensajeObservable.pipe(takeUntil(this.destroy$)).subscribe({next:(mensaje:any)=>{
+      this.actualizaelconfig(mensaje)
     }})
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   actualizaelconfig(tt:any){

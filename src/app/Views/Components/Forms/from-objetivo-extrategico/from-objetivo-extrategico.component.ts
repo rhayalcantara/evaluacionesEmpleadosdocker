@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -29,7 +31,8 @@ import { ObjetivosProyectoPerspectivaComponent } from '../../Pages/objetivos-pro
     MatDialogModule, ReactiveFormsModule, MatTabsModule,
      KrisComponent,ObjetivosProyectoPerspectivaComponent]
 })
-export class FromObjetivoExtrategicoComponent implements OnInit {
+export class FromObjetivoExtrategicoComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   KriPorAnos:IKriAno[]=[] ;
 
   // Estado del componente
@@ -65,34 +68,39 @@ export class FromObjetivoExtrategicoComponent implements OnInit {
       perspectivaId: [this.perspectivaId, Validators.required],
       KriPorAnos: this.fb.array([])
     })
-    this.ServiceComunicacion.enviarMensajeObservable.subscribe({
+    this.ServiceComunicacion.enviarMensajeObservable.pipe(takeUntil(this.destroy$)).subscribe({
       next: (mensaje: string) => {
       }
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
-    this.planestrategicocontroller.TRegistros.subscribe(
+    this.planestrategicocontroller.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(
       {next: (data:number) =>{
-       
+
         this.planesEstrategicos = this.planestrategicocontroller.arraymodel
-        this.cd.detectChanges() 
+        this.cd.detectChanges()
       }
 
       })
-    this.plananosController.TRegistros.subscribe(
+    this.plananosController.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(
       {next: (data:number) =>{
-        
+
         //this.plananos = this.plananosController.arraymodel
-        this.cd.detectChanges() 
+        this.cd.detectChanges()
       }
 
       })
-    this.PrespectivasController.TRegistros.subscribe(
+    this.PrespectivasController.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(
       {next: (data:number) =>{
-        
+
         // this.perpectiva = this.PrespectivasController.arraymodel
-        this.cd.detectChanges() 
+        this.cd.detectChanges()
       }
 
       })
