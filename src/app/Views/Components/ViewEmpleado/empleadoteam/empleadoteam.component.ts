@@ -8,7 +8,6 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angu
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { SupervisorGoalsComponent } from '../../Pages/supervisor-goals/supervisor-goals.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { CardEmpleadoComponent2 } from '../card-empleado2/card-empleado.component';
 import { ObjetivosComponent } from '../../Pages/objetivos/objetivos.component';
 import { GrupoCompetenciasComponent } from '../../Pages/grupo-competencias/grupo-competencias.component';
 

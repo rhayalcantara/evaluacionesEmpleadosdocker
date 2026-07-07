@@ -7,7 +7,6 @@ import { FormEvaluationMedioAnoComponent } from '../form-evaluation-medio-ano/fo
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CardEmpleadoComponent2 } from '../../ViewEmpleado/card-empleado2/card-empleado.component';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
 import { IEvaluacion } from 'src/app/Models/Evaluacion/IEvaluacion';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
@@ -16,7 +15,7 @@ import { DatosServiceService } from 'src/app/Services/datos-service.service';
   selector: 'app-form-evaluacion-supervisor',
   standalone:true,
   imports:[FormsModule,CommonModule,ReactiveFormsModule,
-    CardEmpleadoComponent2,FormEvaluationEmployeComponent,FormEvaluationMedioAnoComponent],
+    FormEvaluationEmployeComponent,FormEvaluationMedioAnoComponent],
   templateUrl: './form-evaluacion-supervisor.component.html',
   styleUrls: ['./form-evaluacion-supervisor.component.css']
 })

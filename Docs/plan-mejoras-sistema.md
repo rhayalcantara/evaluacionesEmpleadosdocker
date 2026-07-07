@@ -18,11 +18,11 @@
 | T1.2 | Unificar ruta /Reportes duplicada | [ ] | | |
 | T1.3 | Sanear package.json + scripts | [ ] | | |
 | T1.4 | console.* → LoggerService (no vetados) | [ ] | | |
-| T1.5 | Eliminar card-empleado2/empleadoteam (si 0 usos) | [ ] | | |
+| T1.5 | Eliminar card-empleado2/empleadoteam (si 0 usos) | [x] parcial | 2026-07-07 | (pendiente) |
 | T2.1 | Fix "Error:undefined" (interceptor) | [ ] | | |
 | T2.2 | Guard labels[value-1] en emojirating | [ ] | | |
 | T2.3 | Feedback de errores silenciosos | [ ] | | |
-| T2.4 | Null-checks card-empleado2 (condicional) | [ ] | | |
+| T2.4 | Null-checks card-empleado2 (condicional) | N/A | 2026-07-07 | componente eliminado en T1.5 |
 | T2.5 | Validación con feedback en form-metas | [ ] | | |
 | T2.6 | Ruta default + wildcard (fix NG04002) | [ ] | | |
 | T3.1 | Enum RolUsuario + getRolId() único | [ ] | | |
@@ -95,6 +95,7 @@ El sistema es funcional y su arquitectura declarada (Component → Controller �
 - **T1.3** Sanear `package.json`: revisar `mssql` en devDeps (quitar si nada lo usa — grep en scripts de raíz primero), añadir scripts `"test:ci": "ng test --watch=false --browsers=ChromeHeadless"`, `"build:prod": "ng build --configuration production"`, `"e2e:medioano": "node test-medio-ano.mjs"`. NO tocar `overrides.webpack`.
 - **T1.4** Migrar `console.*` → `LoggerService` en archivos NO vetados (empezar por `form-plan-estrategico`, 39 logs con datos del modelo). Reemplazo 1:1 sin cambiar lógica. Aceptación: `grep -rn "console\." src/app --include="*.ts"` solo devuelve archivos vetados + `logger.service.ts`.
 - **T1.5** Eliminar generación vieja `ViewEmpleado/card-empleado2/**` + `ViewEmpleado/empleadoteam/**` SI el grep de selectores e imports confirma 0 usos activos; si están en uso, posponer unificación a T6.5 y solo aplicar null-checks (T2.4).
+  - **Resultado (2026-07-07):** `card-empleado2` (`CardEmpleadoComponent2`) tenía 0 referencias reales (solo 3 imports muertos en `empleadoteam.component.ts`, `empleadoteam2.component.ts` y `form-evaluacion-supervisor.component.ts`, ninguno usado en template) → **eliminado** junto con los 3 imports huérfanos. `empleadoteam` (viejo) SÍ tiene uso activo real: `Pages/home/home.component.html:7` renderiza `<app-empleadoteam>` y `Home` está enrutada (`/Home`, `AuthGuard`) → **se pospone su unificación a T6.5** (migrar `home.component` a `empleadoteam2` y entonces borrar `empleadoteam`). T2.4 (null-checks en card-empleado2) queda **sin objeto**: el componente ya no existe.
 
 **Verificación F1:** build prod (sin warnings nuevos) + `test:ci` + smoke rápido (Home, EvaluarSubordinados, Reportes).
 

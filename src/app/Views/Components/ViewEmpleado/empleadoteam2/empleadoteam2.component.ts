@@ -8,17 +8,15 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angu
 import { Periodos } from 'src/app/Controllers/Periodos';
 import { SupervisorGoalsComponent } from '../../Pages/supervisor-goals/supervisor-goals.component';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
-import { CardEmpleadoComponent2 } from '../card-empleado2/card-empleado.component';
 import { EmpleadoTeamComponent } from '../empleadoteam/empleadoteam.component';
 import { EmpleadosFactory } from 'src/app/Controllers/EmpleadosFactory';
 
 @Component({
   selector: 'app-empleadoteam2',
   standalone:true,
-  imports:[FormsModule, CommonModule, 
+  imports:[FormsModule, CommonModule,
     EmpleadoTeamComponent,
-    CardEmpleadoComponent,
-    CardEmpleadoComponent2],
+    CardEmpleadoComponent],
   templateUrl: './empleadoteam2.component.html',
   styleUrls: ['./empleadoteam2.component.css']
 })
