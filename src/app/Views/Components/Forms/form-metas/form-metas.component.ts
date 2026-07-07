@@ -133,11 +133,10 @@ export class FormMetasComponent implements OnInit {
   }
 
   grabar() {
-      // Si selectedPuesto y selectedPeriodo puede grabar
-    if (this.selectedPeriodo || this.selectedPuesto || (this.selectedTipo?.id!=0)){
-    //if (this.selectedPuesto ) {
+      // Periodo y puesto son obligatorios (selectedTipo nunca se asigna desde la UI, se excluye)
+    if (this.selectedPeriodo && this.selectedPuesto){
       this.meta = this.fg.value as IMeta;
-      this.metasDatos.model = this.fg.value as IMeta  
+      this.metasDatos.model = this.fg.value as IMeta
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0
       //this.metasDatos.model.tiposid = n
       let nn:number = this.selectedPuesto ? this.selectedPuesto.secuencial : 0
@@ -146,8 +145,8 @@ export class FormMetasComponent implements OnInit {
       this.metasDatos.grabar();
       this.dialogRef.close(this.metasDatos.model);
     } else {
-      // Show an error message or handle the case when no puesto is selected
-      this.logger.error('No se ha seleccionado un puesto');
+      this.logger.error('No se ha seleccionado un periodo o un puesto');
+      this.datService.showMessage('Debe seleccionar un periodo y un puesto antes de guardar.', 'Meta', 'warning');
     }
   }
 
