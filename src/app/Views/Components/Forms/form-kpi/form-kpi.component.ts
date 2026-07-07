@@ -1,4 +1,6 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { IKpi } from 'src/app/Models/Kpi/IKpi';
@@ -16,7 +18,8 @@ import { SeleccionKriComponent } from '../seleccion-kri/seleccion-kri.component'
   standalone: true,
   imports: [ReactiveFormsModule, MatDialogModule, CommonModule]
 })
-export class FormKpiComponent implements OnInit {
+export class FormKpiComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   fg: FormGroup;
   titulo: string = 'Nuevo KPI';
@@ -57,13 +60,17 @@ export class FormKpiComponent implements OnInit {
       inverso: [false]
     });
   }
-    this.kriservice.TRegistros.subscribe(() => {
+    this.kriservice.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // al momento de terminar de recibir los kri en el servicio se actualiza aqui el array
       this.kris = this.kriservice.arraymodel;
       this.kri = this.kris.find((kri) => kri.id === data.model.kriId) ?? this.kri;
     })
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
     if (this.data.model.id) {
