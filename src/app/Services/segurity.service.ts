@@ -19,6 +19,21 @@ export class SegurityService {
     this._usuario=value;
    // this.commons.sendData('loguiado');
   }
+
+  /**
+   * Normaliza el rolId numerico guardado en localStorage bajo la clave 'rol'.
+   * Unica escritura real: navmenu.component.ts guarda el IEmpleadoRol completo
+   * (rolId al nivel raiz, o anidado en rol.id si solo viene el objeto Rol).
+   */
+  getRolId(): number {
+    const rolJson = localStorage.getItem('rol') || '';
+    try {
+      const rolObj = JSON.parse(rolJson);
+      return rolObj.rolId ?? rolObj.rol?.id ?? 0;
+    } catch {
+      return 0;
+    }
+  }
   public logout(): Observable<any> {
     // 1. Limpiar localStorage
     localStorage.clear();

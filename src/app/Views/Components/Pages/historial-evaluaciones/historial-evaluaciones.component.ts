@@ -18,6 +18,7 @@ import { DatosServiceService } from '../../../../Services/datos-service.service'
 import { LoggerService } from '../../../../Services/logger.service';
 import { Periodos } from '../../../../Controllers/Periodos';
 import { ExcelService } from '../../../../Services/excel.service';
+import { RolUsuario } from '../../../../Helpers/roles.enum';
 import { ComparacionModalComponent } from './modals/comparacion-modal.component';
 import { DetalleEvaluacionModalComponent } from './modals/detalle-evaluacion-modal.component';
 import { EvolucionModalComponent } from './modals/evolucion-modal.component';
@@ -118,22 +119,13 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
    * Inicializa el componente según el rol del usuario
    */
   private inicializarComponente(): void {
-    // Obtener rol y empleado actual
-    const rolJson = localStorage.getItem('rol') || '';
+    // Obtener rol y empleado actual (fuente unica: SegurityService.getRolId())
+    const rolId = this.segurityService.getRolId();
+    this.rolUsuario = rolId === RolUsuario.Admin ? 'admin'
+                     : rolId === RolUsuario.Supervisor ? 'supervisor'
+                     : 'empleado';
 
-    // El rol puede venir como JSON o como string simple
-    try {
-      const rolObj = JSON.parse(rolJson);
-      // Intentar múltiples propiedades donde puede estar el nombre del rol
-      this.rolUsuario = rolObj.rol?.name || rolObj.name || rolObj.descripcion ||
-                        rolObj.rol?.descripcion || rolObj.nombreRol || 'Usuario';
-
-      // Log para debugging
-      this.logger.debug('Rol parseado', { rolObj, rolUsuario: this.rolUsuario });
-    } catch {
-      // Si no es JSON, usar como está
-      this.rolUsuario = rolJson || 'Usuario';
-    }
+    this.logger.debug('Rol resuelto', { rolId, rolUsuario: this.rolUsuario });
 
     const empleadoJson = localStorage.getItem('empleado');
     if (empleadoJson) {
