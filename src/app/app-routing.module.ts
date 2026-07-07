@@ -99,7 +99,7 @@ const routes: Routes = [
     .then((m)=> m.ObjetivosComponent),
     canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path: 'grupo-competencias', component: GrupoCompetenciasComponent },
+  { path: 'grupo-competencias', component: GrupoCompetenciasComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path:'Excepciones', 
     loadComponent:()=> import('./Views/Components/Pages/excepciones/excepciones.component')
     .then((m)=> m.ExcepcionesComponent),
@@ -115,10 +115,10 @@ const routes: Routes = [
     .then((m)=> m.ExcepcionSupervisorInmediatoComponent),
     canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'kri', component: KrisComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
-  { path: 'uploadfile', component: FileUploadPageComponent },
+  { path: 'uploadfile', component: FileUploadPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path: 'empleado-desempeno',
     loadComponent:()=> import('./Views/Components/Pages/empleado-desempeno/empleado-desempeno.component')
     .then((m)=> m.EmpleadoDesempenoComponent),
@@ -219,10 +219,16 @@ const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   //ConsejalFormComponent
+  // NO AuthGuard aqui a proposito (T3.3): el flujo de login de consejal
+  // (navmenu.component.ts, tipodeusuario==='consejal') navega directo a esta
+  // ruta con el consejal serializado en el parametro, sin llamar nunca
+  // SegurityService.agregarusuario(). Confirmado: EvaluarequipoconsejalComponent
+  // no depende de SegurityService.usuario. Agregar AuthGuard rompería ese
+  // flujo externo (redirigiría siempre a login). Deuda documentada, no
+  // resuelta en este plan.
   { path: 'consejal/evaluacion/:consejal',
     loadComponent: () => import('./Views/Components/Pages/evaluarequipoconsejal/evaluarequipoconsejal.component')
     .then(m => m.EvaluarequipoconsejalComponent),
-   
   },
   { path: 'tareas', component: TareaListComponent, canActivate: [AuthGuard] },
   { path: 'tareas/nueva', component: TareaFormComponent, canActivate: [AuthGuard] },
