@@ -7,6 +7,7 @@ import { Objetivo } from 'src/app/Controllers/Objetivo';
 import { DatosServiceService } from 'src/app/Services/datos-service.service';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { IEstado } from 'src/app/Models/Estado/IEstado';
+import { UtilsService } from 'src/app/Helpers/utils.service';
 
 @Component({
   selector: 'app-form-objetivos',
@@ -45,7 +46,7 @@ export class FormObjetivosComponent implements OnInit {
     this.loadGruposCompetencia();
 
     this.objetivoForm.patchValue({
-      fecha: this.formatDateForInput(this.objetivo.fecha)
+      fecha: UtilsService.formatDateForInput(this.objetivo.fecha)
     });
     this.cd.detectChanges();
   }
@@ -96,15 +97,6 @@ export class FormObjetivosComponent implements OnInit {
   onGrupoCompetenciaSelect(event: any): void {
     const selectedGrupoCompetenciaId = event.target.value;
     this.objetivoForm.patchValue({ grupocompetenciaid: selectedGrupoCompetenciaId });
-  }
-
-  private formatDateForInput(d: string): string {
-    let date = new Date(d)
-    
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   onSubmit(): void {
