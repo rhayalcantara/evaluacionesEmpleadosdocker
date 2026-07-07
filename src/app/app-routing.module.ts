@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './Services/auth-guard.service';
+import { RoleGuard } from './Services/role-guard.service';
+import { RolUsuario } from './Helpers/roles.enum';
 import { HomeComponent } from './Views/Components/Pages/home/home.component';
 import { MetasComponent } from './Views/Components/Pages/metas/metas.component';
 import { TiposComponent } from './Views/Components/Pages/tipos/tipos.component';
@@ -28,38 +30,38 @@ const routes: Routes = [
     .then((m)=> m.MetasComponent),
     canActivate: [AuthGuard]
   },
-  { path:'PlanEstrategico', 
+  { path:'PlanEstrategico',
     loadComponent:()=> import('./Views/Components/Pages/plan-estrategico/plan-estrategico.component')
     .then((m)=> m.PlanEstrategicoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path:'ObjetivoEstrategico', 
+  { path:'ObjetivoEstrategico',
     loadComponent:()=> import('./Views/Components/Pages/objetivo-estrategico/objetivo-estrategico.component')
     .then((m)=> m.ObjetivoEstrategicoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path:'Departamento', 
+  { path:'Departamento',
     loadComponent:()=> import('./Views/Components/Pages/departamentos/departamentos.component')
     .then((m)=> m.DepartamentosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path:'Puesto', 
+  { path:'Puesto',
     loadComponent:()=> import('./Views/Components/Pages/puestos/puestos.component')
     .then((m)=> m.PuestosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
-  { path:'Periodo', 
+  { path:'Periodo',
     loadComponent:()=> import('./Views/Components/Pages/periodos/periodos.component')
     .then((m)=> m.PeriodosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path:'Tipo', component: TiposComponent, canActivate: [AuthGuard] },
-  { path:'Empleado', component: EmpleadosComponent, canActivate: [AuthGuard] },
+  { path:'Empleado', component: EmpleadosComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path:'PeriodoEvaluacion', component: PeriodosEvaluacionComponent, canActivate: [AuthGuard] },
-  { path:'PoliticaEvaluacion', 
+  { path:'PoliticaEvaluacion',
     loadComponent:()=> import('./Views/Components/Pages/politicas-evaluacion/politicas-evaluacion.component')
     .then((m)=> m.PoliticasEvaluacionComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path:'Rol', 
     loadComponent:()=> import('./Views/Components/Pages/roles/roles.component')
@@ -76,11 +78,11 @@ const routes: Routes = [
     .then((m)=> m.EvaluarSubordinadosComponent),
     canActivate: [AuthGuard]
   },
-  { path:'evaluation-periods', component: EvaluationPeriodsComponent, canActivate: [AuthGuard] },
-  { path:'Estado', 
+  { path:'evaluation-periods', component: EvaluationPeriodsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
+  { path:'Estado',
     loadComponent:()=> import('./Views/Components/Pages/Estado/estado.component')
     .then((m)=> m.EstadoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path:'Perspectiva', 
     loadComponent:()=> import('./Views/Components/Pages/perspectivas/perspectivas.component')
@@ -92,10 +94,10 @@ const routes: Routes = [
     .then((m)=> m.SupervisorGoalsComponent),
     canActivate: [AuthGuard]
   },
-  { path:'Objetivo', 
+  { path:'Objetivo',
     loadComponent:()=> import('./Views/Components/Pages/objetivos/objetivos.component')
     .then((m)=> m.ObjetivosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'grupo-competencias', component: GrupoCompetenciasComponent },
   { path:'Excepciones', 
@@ -108,14 +110,14 @@ const routes: Routes = [
     .then((m)=> m.ExcepcionesComponent),
     canActivate: [AuthGuard]
   },
-  { path:'ExcepcionSupervisorInmediato', 
+  { path:'ExcepcionSupervisorInmediato',
     loadComponent:()=> import('./Views/Components/Pages/excepcion-supervisor-inmediato/excepcion-supervisor-inmediato.component')
     .then((m)=> m.ExcepcionSupervisorInmediatoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'kri', component: KrisComponent, canActivate: [AuthGuard] },
-  { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard] },
+  { path: 'kri', component: KrisComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
+  { path: 'kpi', component: KpisComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path: 'uploadfile', component: FileUploadPageComponent },
   { path: 'empleado-desempeno',
     loadComponent:()=> import('./Views/Components/Pages/empleado-desempeno/empleado-desempeno.component')
@@ -130,22 +132,22 @@ const routes: Routes = [
   { path: 'CategoriasPuestoa',
     loadComponent:()=> import('./Views/Components/Pages/categorias-puesto/categorias-puesto.component')
     .then((m)=> m.CategoriasPuestoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'Roles',
     loadComponent:()=> import('./Views/Components/Pages/roles/roles.component')
     .then((m)=> m.RolesComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'valores-evaluacion',
     loadComponent:()=> import('./Views/Components/Pages/valores-evaluacion/valores-evaluacion.component')
     .then((m)=> m.ValoresEvaluacionComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'porciento-desempeno-competencia',
     loadComponent:()=> import('./Views/Components/Pages/porciento-desempeno-competencia/porciento-desempeno-competencia.component')
     .then((m)=> m.PorcientoDesempenoCompetenciaComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'resultado-evaluacion',
     loadComponent:()=> import('./Views/Components/Pages/resultado-evaluacion/resultado-evaluacion.component')
@@ -155,32 +157,32 @@ const routes: Routes = [
   { path: 'rol-categoria-puesto',
     loadComponent:()=> import('./Views/Components/Pages/rol-categoria-puesto/rol-categoria-puesto.component')
     .then((m)=> m.RolCategoriaPuestoComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'Reportes',
     loadComponent:()=> import('./Views/Components/evaluacion-reporte/evaluacion-reporte.component')
     .then((m)=> m.EvaluacionReporteComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'ReportesCursos',
     loadComponent:()=> import('./Views/Components/reporte-cursos/reporte-cursos.component')
     .then((m)=> m.ReporteCursosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'ReporteGrupos',
     loadComponent:()=> import('./Views/Components/Pages/reporte-grupos/reporte-grupos.component')
     .then((m)=> m.ReporteGruposComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'ReporteEstadoEvaluacion',
     loadComponent:()=> import('./Views/Components/Pages/reporte-estado-evaluacion/reporte-estado-evaluacion.component')
     .then((m)=> m.ReporteEstadoEvaluacionComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'ReporteEmpleadosSinDatos',
     loadComponent:()=> import('./Views/Components/Pages/reporte-empleados-sin-datos/reporte-empleados-sin-datos.component')
     .then((m)=> m.ReporteEmpleadosSinDatosComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'historial-evaluaciones',
     loadComponent:()=> import('./Views/Components/Pages/historial-evaluaciones/historial-evaluaciones.component')
@@ -191,12 +193,12 @@ const routes: Routes = [
   { path: 'opp',
     loadComponent:()=> import('./Views/Components/Pages/objetivos-proyecto-perspectiva/objetivos-proyecto-perspectiva.component')
     .then((m)=> m.ObjetivosProyectoPerspectivaComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'cursos-capacitacion',
     loadComponent:()=> import('./Views/Components/Pages/cursos-capacitacion/cursos-capacitacion.component')
     .then((m)=> m.CursosCapacitacionComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'organigrama',
     loadComponent:()=> import('./Views/Components/organigrama/organigrama.component')
@@ -206,15 +208,15 @@ const routes: Routes = [
   { path: 'evaluacion-reporte', redirectTo: 'Reportes' },
   { path: 'consejal',
     loadComponent: () => import('./Views/Components/Pages/consejal/consejal-list/consejal-list.component').then(m => m.ConsejalListComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'consejal/new',
     loadComponent: () => import('./Views/Components/Pages/consejal/consejal-form/consejal-form.component').then(m => m.ConsejalFormComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path: 'consejal/edit/:id',
     loadComponent: () => import('./Views/Components/Pages/consejal/consejal-form/consejal-form.component').then(m => m.ConsejalFormComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   //ConsejalFormComponent
   { path: 'consejal/evaluacion/:consejal',
