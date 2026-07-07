@@ -52,8 +52,11 @@ export class ChangeStateFormComponent implements OnInit {
     }
   }
 
+  isSaving = false;
+
   async onSubmit() {
-    
+    if (this.isSaving) return;
+
     if (this.changeStateForm.valid) {
 
       const newStateId = this.changeStateForm.get('newState')!.value;
@@ -67,13 +70,16 @@ export class ChangeStateFormComponent implements OnInit {
           activa:  this.activePeriod.activa,
           estadoid:  this.activePeriod.estadoid
         }
+        this.isSaving = true;
         try {
           await firstValueFrom(this.periodosController.Update(pp))
-          
+
           this.closeForm();
         } catch (error) {
           this.logger.error('Error changing state:', error as Error);
           this.Datos.showMessage('No se pudo cambiar el estado del periodo.', 'Error', 'error');
+        } finally {
+          this.isSaving = false;
         }
       }else{
         this.Datos.showMessage("Tiene que selecionar un nuevo estado","Cambio de Estado","error")

@@ -54,7 +54,7 @@
 
 
     <div class="button-group">
-      <button type="submit" class="btn btn-primary" (click)="grabar()" >Guardar</button>
+      <button type="submit" class="btn btn-primary" (click)="grabar()" [disabled]="isSaving">Guardar</button>
       <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
     </div>
   </form>

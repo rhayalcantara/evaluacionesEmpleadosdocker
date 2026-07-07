@@ -96,15 +96,20 @@ export class FormKpiComponent implements OnInit {
   });
 } 
 
+  isSaving = false;
+
   grabar(): void {
+    if (this.isSaving) return;
     if (this.fg.valid) {
-      const kpi: IKpi = this.fg.value;      
+      this.isSaving = true;
+      const kpi: IKpi = this.fg.value;
       this.kpiservice.model = kpi;
       this.kpiservice.grabar().then(() => {
         this.datosService.showMessage('KPI guardado exitosamente', 'Éxito', 'success');
       }).catch((error) => {
         this.datosService.showMessage('Error al guardar el KPI', 'Error', 'error');
       }).finally(() => {
+        this.isSaving = false;
         this.dialogRef.close(kpi);
       })
     } else {

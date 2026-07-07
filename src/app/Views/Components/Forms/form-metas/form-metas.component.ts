@@ -132,9 +132,13 @@ export class FormMetasComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
+  isSaving = false;
+
   grabar() {
+    if (this.isSaving) return;
       // Periodo y puesto son obligatorios (selectedTipo nunca se asigna desde la UI, se excluye)
     if (this.selectedPeriodo && this.selectedPuesto){
+      this.isSaving = true;
       this.meta = this.fg.value as IMeta;
       this.metasDatos.model = this.fg.value as IMeta
       let n:number = this.selectedTipo ? this.selectedTipo.id  : 0

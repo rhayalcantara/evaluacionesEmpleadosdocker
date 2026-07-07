@@ -62,7 +62,10 @@ cancelar() {
     
   }
 
+  isSaving = false;
+
   onSubmit(): void {
+    if (this.isSaving) return;
     //this.model = this.fg.value as IPeriodo
 
      this.model.descripcion = this.fg.controls["descripcion"].value
@@ -71,12 +74,15 @@ cancelar() {
      const activaVal = this.fg.controls["activa"]?.value;
      this.model.activa = activaVal === true || activaVal === 'true';
      this.model.tipo = this.fg.controls["tipo"]?.value || 'final_ano';
+    this.isSaving = true;
     if (this.model.id === 0) {
       this.periodoController.insert(this.model).subscribe({
         next: (result) => {
+          this.isSaving = false;
           this.dialogRef.close(result);
         },
         error: (err) => {
+          this.isSaving = false;
           this.logger.error('Error inserting periodo:', err);
           this.datService.showMessage(err.message || 'No se pudo guardar el periodo.', 'Error', 'error');
         }
@@ -84,9 +90,11 @@ cancelar() {
     } else {
       this.periodoController.Update(this.model).subscribe({
         next: (result) => {
+          this.isSaving = false;
           this.dialogRef.close(result);
         },
         error: (err) => {
+          this.isSaving = false;
           this.logger.error('Error updating periodo:', err);
           this.datService.showMessage(err.message || 'No se pudo actualizar el periodo.', 'Error', 'error');
         }
