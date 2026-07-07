@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from '@angular/core';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { IEmpleado } from '../Models/Empleado/IEmpleado';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { IPuesto } from '../Models/Puesto/IPuesto';
 import { UtilsService } from '../Helpers/utils.service';
 import { IPeriodo } from '../Models/Periodos/IPeriodo';
@@ -123,13 +123,17 @@ export class Empleados implements OnInit {
       next: (rep: ModelResponse) => {
         //se obtiene los datos y se ponen en los array
         this.arraymodelsubordinados = rep.data
-        //llena los puestos
-        this.arraymodelsubordinados.map((x: IEmpleado) => {
-          this.datos.getbyid<IPuesto>(this.datos.URL + `/api/Positions/${x.scargo}`).subscribe((puesto: IPuesto) => {
-            this.arraypuestossub.push(puesto);
-          })
+        //llena los puestos (una sola tanda en paralelo en vez de N subscribes sueltos)
+        const puestoRequests = this.arraymodelsubordinados.map((x: IEmpleado) =>
+          this.datos.getbyid<IPuesto>(this.datos.URL + `/api/Positions/${x.scargo}`)
+        )
+        if (puestoRequests.length === 0) {
+          this.arraypuestossub = []
+          return
+        }
+        forkJoin(puestoRequests).subscribe((puestos: IPuesto[]) => {
+          this.arraypuestossub = puestos
         })
-
       }
     }
     )
