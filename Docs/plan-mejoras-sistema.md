@@ -19,12 +19,12 @@
 | T1.3 | Sanear package.json + scripts | [ ] | | |
 | T1.4 | console.* → LoggerService (no vetados) | [x] | 2026-07-07 | (pendiente) |
 | T1.5 | Eliminar card-empleado2/empleadoteam (si 0 usos) | [x] parcial | 2026-07-07 | (pendiente) |
-| T2.1 | Fix "Error:undefined" (interceptor) | [ ] | | |
-| T2.2 | Guard labels[value-1] en emojirating | [ ] | | |
-| T2.3 | Feedback de errores silenciosos | [ ] | | |
+| T2.1 | Fix "Error:undefined" (interceptor) | [x] | 2026-07-07 | (pendiente) |
+| T2.2 | Guard labels[value-1] en emojirating | [x] | 2026-07-07 | (pendiente) |
+| T2.3 | Feedback de errores silenciosos | [x] | 2026-07-07 | (pendiente) |
 | T2.4 | Null-checks card-empleado2 (condicional) | N/A | 2026-07-07 | componente eliminado en T1.5 |
-| T2.5 | Validación con feedback en form-metas | [ ] | | |
-| T2.6 | Ruta default + wildcard (fix NG04002) | [ ] | | |
+| T2.5 | Validación con feedback en form-metas | [x] | 2026-07-07 | (pendiente) |
+| T2.6 | Ruta default + wildcard (fix NG04002) | [x] | 2026-07-07 | (pendiente) |
 | T3.1 | Enum RolUsuario + getRolId() único | [ ] | | |
 | T3.2 | RoleGuard en rutas administrativas | [ ] | | |
 | T3.3 | AuthGuard en 4 rutas desprotegidas | [ ] | | |
