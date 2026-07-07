@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -11,6 +11,8 @@ import { TablesComponent } from '../../tables/tables.component';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { LoadingComponent } from '../../loading/loading.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-seleccion-empleado',
@@ -19,7 +21,7 @@ import { LoadingComponent } from '../../loading/loading.component';
   templateUrl: './seleccion-empleado.component.html',
   styleUrls: ['./seleccion-empleado.component.css']
 })
-export class SeleccionEmpleadoComponent implements OnInit {
+export class SeleccionEmpleadoComponent implements OnInit, OnDestroy {
   empleados: IEmpleado[] = [];
   departamentos: IDepartamento[] = [];
   selectedDepartamento: number | null = null;
@@ -30,6 +32,8 @@ export class SeleccionEmpleadoComponent implements OnInit {
   public campos: string[] = [];
   public tituloslocal: string[] = [];
   public term: string = '';
+
+  private destroy$ = new Subject<void>();
 
 
   constructor(
@@ -70,7 +74,7 @@ export class SeleccionEmpleadoComponent implements OnInit {
     // no tiene manejador de error y TRegistros nunca se emite, dejando este overlay pegado.
     // Como mitigacion local se agrega este timeout de seguridad.
     const timeoutSeguridad = setTimeout(() => cerrarLoading(), 15000);
-    this.empleadosService.TRegistros.subscribe({
+    this.empleadosService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe({
       next:(rep:number)=>{
         clearTimeout(timeoutSeguridad);
         this.config.totalItems=rep
@@ -84,6 +88,11 @@ export class SeleccionEmpleadoComponent implements OnInit {
     })
 
 
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   cargarDepartamentos() {

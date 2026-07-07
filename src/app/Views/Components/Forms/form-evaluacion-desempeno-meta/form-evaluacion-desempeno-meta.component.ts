@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { IEvaluacionDesempenoMeta } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
@@ -11,7 +11,8 @@ import { SeleccionEmpleadoComponent } from '../seleccion-empleado/seleccion-empl
 import { Empleados } from 'src/app/Controllers/Empleados';
 import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
 import { Evaluacion } from 'src/app/Controllers/Evaluacion';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { IPeriodo } from 'src/app/Models/Periodos/IPeriodo';
 import { LoggerService } from 'src/app/Services/logger.service';
 
@@ -22,8 +23,9 @@ import { LoggerService } from 'src/app/Services/logger.service';
   standalone: true,
   imports: [ReactiveFormsModule, MatDialogModule, CommonModule, MatButtonModule, MatSelectModule]
 })
-export class FormEvaluacionDesempenoMetaComponent implements OnInit {
+export class FormEvaluacionDesempenoMetaComponent implements OnInit, OnDestroy {
   fg: FormGroup;
+  private destroy$ = new Subject<void>();
   titulo: string = 'Nueva Meta de Evaluación';
   tipoOptions: string[] = ['KRI', 'KPI', 'OBJETIVO', 'PROYECTO'];
   perspectivaOptions: string[] = ['Financiera', 'Cliente', 'Procesos Internos', 'Aprendizaje y Crecimiento'];
@@ -85,12 +87,17 @@ export class FormEvaluacionDesempenoMetaComponent implements OnInit {
     this.empleadocontroller.getdatos();
     this.selectedEmpleado = this.data.model.evaluacion?.empleado;
 
-    this.empleadocontroller.TRegistros.subscribe(() => {
+    this.empleadocontroller.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.fg.get('secuencialId')?.value) {
         this.selectedEmpleado = this.getempleado(this.fg.get('secuencialId')?.value);
-      }      
+      }
       this.cd.detectChanges();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getempleado(id: number): IEmpleado | undefined {

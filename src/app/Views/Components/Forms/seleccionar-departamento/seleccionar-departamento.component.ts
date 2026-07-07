@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TablesComponent } from '../../tables/tables.component';
@@ -7,6 +7,8 @@ import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-seleccionar-departamento',
@@ -15,14 +17,14 @@ import { TableResponse } from 'src/app/Helpers/Interfaces';
   templateUrl: './seleccionar-departamento.component.html',
   styleUrls: ['./seleccionar-departamento.component.css']
 })
-export class SeleccionarDepartamentoComponent implements OnInit{
+export class SeleccionarDepartamentoComponent implements OnInit, OnDestroy{
 filtro() {
 throw new Error('Method not implemented.');
 }
 cancelar() {
 throw new Error('Method not implemented.');
 }
-  
+
   config:any
   searchTerm: string = '';
   selectedDepartamento: any = null;
@@ -30,7 +32,10 @@ sele: boolean=true;
 campos: string[]=[];
 tituloslocal: string[]=[];
 term: string="";
-  constructor(   
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
      public departamentoService: Departamento,
      private ServiceComunicacion:ComunicacionService,
      public dialogRef: MatDialogRef<SeleccionarDepartamentoComponent>,
@@ -64,7 +69,7 @@ term: string="";
     // no tiene manejador de error y TRegistros nunca se emite, dejando este overlay pegado.
     // Como mitigacion local se agrega este timeout de seguridad.
     const timeoutSeguridad = setTimeout(() => cerrarLoading(), 15000);
-    this.departamentoService.TRegistros.subscribe({
+    this.departamentoService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe({
       next:(rep:number)=>{
         clearTimeout(timeoutSeguridad);
         this.config.totalItems=rep
@@ -82,6 +87,12 @@ term: string="";
       this.tituloslocal.push(nx);
     });
      }
+
+     ngOnDestroy(): void {
+       this.destroy$.next();
+       this.destroy$.complete();
+     }
+
      opcion(event: TableResponse) {
       this.dialogRef.close(event.key);
     }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TablesComponent } from '../../tables/tables.component';
 import { Usuario } from 'src/app/Controllers/Usuario';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { TableResponse } from 'src/app/Helpers/Interfaces';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     standalone:true,
@@ -14,7 +16,7 @@ import { FormsModule } from '@angular/forms';
     styleUrls: ['./form-usuarios.css']
   })
 
-  export class FormUsuariosComponent implements OnInit{
+  export class FormUsuariosComponent implements OnInit, OnDestroy{
 
 
     config:any
@@ -22,6 +24,8 @@ import { FormsModule } from '@angular/forms';
     public sele:boolean = true
     public campos:string[]=[]
     public tituloslocal:string[]=[]
+
+    private destroy$ = new Subject<void>();
 
      constructor(
         public usuario:Usuario,
@@ -38,20 +42,25 @@ import { FormsModule } from '@angular/forms';
              totalItems: this.usuario.totalregistros
            };
 
-        this.usuario.TRegistros.subscribe({
+        this.usuario.TRegistros.pipe(takeUntil(this.destroy$)).subscribe({
          next:(rep:number)=>{
            this.config.totalItems=rep
            this.ServiceComunicacion.enviarMensaje(this.config)
          }
-         
+
         })
-    
+
          this.usuario.titulos.map((x:string|any)=>{
            let nx:string = x[Object.keys(x)[0]]
            this.campos.push(...Object.keys(x))
            this.tituloslocal.push(nx)
          })
-         
+
+       }
+
+       ngOnDestroy(): void {
+         this.destroy$.next();
+         this.destroy$.complete();
        }
        opcion(event:TableResponse){
             this.dialogRef.close(event.key)

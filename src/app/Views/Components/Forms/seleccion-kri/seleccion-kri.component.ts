@@ -1,5 +1,5 @@
 // seleccion-kri.component.ts
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,8 @@ import { IKri } from 'src/app/Models/Kri/IKri';
 // ultimos cambios
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -30,20 +32,22 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './seleccion-kri.component.html',
   styleUrls: ['./seleccion-kri.component.css']
 })
-export class SeleccionKriComponent implements OnInit {
+export class SeleccionKriComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [ 'descripcion'];
-  searchControl = new FormControl('');  
+  searchControl = new FormControl('');
   selectedRow: IKri | null = null;
   dataSource: MatTableDataSource<IKri>= new MatTableDataSource<IKri>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     public dialogRef: MatDialogRef<SeleccionKriComponent>,
     private kriService: Kri
   ) {
-      this.kriService.TRegistros.subscribe(() => {
-        
+      this.kriService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
+
         this.dataSource = new MatTableDataSource(this.kriService.arraymodel);
         this.dataSource.paginator = this.paginator;
       })
@@ -52,6 +56,11 @@ export class SeleccionKriComponent implements OnInit {
   ngOnInit(): void {
     this.loadKris();
     this.setupSearch();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

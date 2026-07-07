@@ -1,5 +1,5 @@
 // seleccion-objetivo-proyecto.component.ts
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,8 @@ import { ObjetivoProyectoPerspectiva } from 'src/app/Controllers/ObjetivoProyect
 import { IObjetivoProyectoPerspectiva } from 'src/app/Models/ObjetivoProyectoPerspectiva/IObjetivoProyectoPerspectiva';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-seleccion-objetivo-proyecto',
@@ -28,19 +30,21 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './seleccion-objetivo-proyecto.component.html',
   styleUrls: ['./seleccion-objetivo-proyecto.component.css']
 })
-export class SeleccionObjetivoProyectoComponent implements OnInit {
+export class SeleccionObjetivoProyectoComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['tipo', 'descripcion', 'valor'];
-  searchControl = new FormControl('');  
+  searchControl = new FormControl('');
   selectedRow: IObjetivoProyectoPerspectiva | null = null;
   dataSource: MatTableDataSource<IObjetivoProyectoPerspectiva> = new MatTableDataSource<IObjetivoProyectoPerspectiva>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     public dialogRef: MatDialogRef<SeleccionObjetivoProyectoComponent>,
     private objetivoService: ObjetivoProyectoPerspectiva
   ) {
-    this.objetivoService.TRegistros.subscribe(() => {
+    this.objetivoService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.dataSource = new MatTableDataSource(this.objetivoService.arraymodel);
       this.dataSource.paginator = this.paginator;
     });
@@ -49,6 +53,11 @@ export class SeleccionObjetivoProyectoComponent implements OnInit {
   ngOnInit(): void {
     this.loadObjetivos();
     this.setupSearch();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngAfterViewInit() {

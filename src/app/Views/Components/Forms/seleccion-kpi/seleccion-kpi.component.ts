@@ -1,5 +1,5 @@
 // seleccion-kpi.component.ts
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,8 @@ import { Kpi } from 'src/app/Controllers/Kpi';
 import { IKpi } from 'src/app/Models/Kpi/IKpi';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-seleccion-kpi',
@@ -28,19 +30,21 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './seleccion-kpi.component.html',
   styleUrls: ['./seleccion-kpi.component.css']
 })
-export class SeleccionKpiComponent implements OnInit {
+export class SeleccionKpiComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['descripcion', 'valor', 'inverso'];
-  searchControl = new FormControl('');  
+  searchControl = new FormControl('');
   selectedRow: IKpi | null = null;
   dataSource: MatTableDataSource<IKpi> = new MatTableDataSource<IKpi>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     public dialogRef: MatDialogRef<SeleccionKpiComponent>,
     private kpiService: Kpi
   ) {
-    this.kpiService.TRegistros.subscribe(() => {
+    this.kpiService.TRegistros.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.dataSource = new MatTableDataSource(this.kpiService.arraymodel);
       this.dataSource.paginator = this.paginator;
     });
@@ -49,6 +53,11 @@ export class SeleccionKpiComponent implements OnInit {
   ngOnInit(): void {
     this.loadKpis();
     this.setupSearch();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngAfterViewInit() {
