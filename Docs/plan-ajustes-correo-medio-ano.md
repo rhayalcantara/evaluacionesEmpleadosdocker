@@ -1,7 +1,13 @@
 # Plan de Ejecución — Ajustes solicitados por correo (Evaluación de Medio Año)
 
-> **Estado:** Cambios A, B y "Comentarios" **IMPLEMENTADOS** (build OK). Pendiente: tema Pablo (ver §6).
+> **Estado:** Cambios A, B y "Comentarios" **IMPLEMENTADOS** (build OK). Tema Pablo **RESUELTO** (ver §6).
 > **Fecha:** 2026-06-25
+>
+> ⚠️ **Desactualizado desde 2026-07-16.** Un segundo correo de RRHH cambió los rótulos y las definiciones
+> de §4: *Continuar Haciendo* → **Estoy Haciendo Bien**, y *Parar de Hacer* → **Empezar a Hacer** (concepto
+> invertido, reutilizando los campos `colaboradorParar`/`supervisorParar`). Los textos vigentes son los del
+> HTML, no los de la tabla de §4. Ese correo también pide una matriz de plan de acción →
+> ver `Docs/diseno-plan-accion-medio-ano.md`.
 > **Componente afectado principal:** `src/app/Views/Components/Forms/form-evaluation-medio-ano/`
 
 ---
