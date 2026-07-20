@@ -33,11 +33,16 @@ export class EvaluarSubordinadosComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
+  /**
+   * Valor inicial neutro: el periodo real se lee de localStorage en ngOnInit.
+   * `id: 0` es intencional — hace que cargarEstadosSubordinados() no consulte
+   * estados si no hay periodo guardado, en vez de traerlos de un periodo ajeno.
+   */
   periodo: IPeriodo = {
-    id: 1,
-    descripcion: 'Evaluacion de Medio Año 2024',
-    fechaInicio: new Date('2024-01-01'),
-    fechaFin: new Date('2024-06-30'),
+    id: 0,
+    descripcion: '',
+    fechaInicio: new Date(),
+    fechaFin: new Date(),
     activa: true,
     estadoid: 0
   }
