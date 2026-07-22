@@ -14,9 +14,9 @@
 |---|---|---|---|---|
 | T0.1 | Baseline build/tests | [x] | 2026-07-07 | (pendiente) |
 | T0.2 | Checklist smoke piloto | [x] | 2026-07-07 | (pendiente) |
-| T1.1 | Eliminar app-routing.module copy.ts | [ ] | | |
-| T1.2 | Unificar ruta /Reportes duplicada | [ ] | | |
-| T1.3 | Sanear package.json + scripts | [ ] | | |
+| T1.1 | Eliminar app-routing.module copy.ts | [x] | 2026-07-07 | 4df6e6f |
+| T1.2 | Unificar ruta /Reportes duplicada | [x] | 2026-07-07 | 1170f4a |
+| T1.3 | Sanear package.json + scripts | [x] | 2026-07-07 | 558a58b |
 | T1.4 | console.* → LoggerService (no vetados) | [x] | 2026-07-07 | (pendiente) |
 | T1.5 | Eliminar card-empleado2/empleadoteam (si 0 usos) | [x] parcial | 2026-07-07 | (pendiente) |
 | T2.1 | Fix "Error:undefined" (interceptor) | [x] | 2026-07-07 | (pendiente) |
