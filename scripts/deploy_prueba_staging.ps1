@@ -25,6 +25,19 @@ $Staging  = Join-Path $WwwRoot "$SiteName`_new"
 $Backup   = Join-Path $WwwRoot "$SiteName`_old"
 $DistDir  = 'dist\deploy-prueba'
 $SiteUrl  = "http://$Server/$SiteName/"
+$ServerFqdn = 'srv-sifizsoft3.aspiresa.local'   # WinRM exige hostname (Kerberos), no IP
+$AppPool    = 'EvaluacionFrontendPrueba'        # pool dedicado del sitio prueba - NO toca produccion
+
+# El swap por rename deja el cache de archivos de IIS apuntando a los handles de la
+# carpeta vieja (sigue sirviendo el build anterior aunque el disco ya tenga el nuevo).
+# Reciclar el pool dedicado lo limpia; es instantaneo y solo afecta el sitio prueba.
+function Reset-CacheIIS {
+    Invoke-Command -ComputerName $ServerFqdn -ScriptBlock {
+        Import-Module WebAdministration
+        Restart-WebAppPool $using:AppPool
+    }
+    Start-Sleep -Seconds 2
+}
 
 function Assert-SiteResponde {
     $resp = Invoke-WebRequest -Uri "$SiteUrl`index.html" -UseBasicParsing -TimeoutSec 30
@@ -45,6 +58,7 @@ if ($Rollback) {
     Rename-Item -Path $Live   -NewName "$SiteName`_swap"
     Rename-Item -Path $Backup -NewName $SiteName
     Rename-Item -Path $tmp    -NewName "$SiteName`_old"
+    Reset-CacheIIS
     Assert-SiteResponde
     Write-Host 'Rollback completado. El despliegue revertido quedo en _old por si hay que volver.' -ForegroundColor Green
     exit 0
@@ -91,7 +105,8 @@ try {
     Rename-Item -Path $Backup -NewName $SiteName
     throw
 }
-Write-Host 'Swap completado.' -ForegroundColor Green
+Write-Host 'Swap completado. Reciclando app pool para limpiar el cache de IIS...' -ForegroundColor Cyan
+Reset-CacheIIS
 
 # ---------- VERIFICACION ----------
 Assert-SiteResponde
