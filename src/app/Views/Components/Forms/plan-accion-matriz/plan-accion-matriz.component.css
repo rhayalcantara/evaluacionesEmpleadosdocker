@@ -1,0 +1,47 @@
+.intro {
+  margin-bottom: 12px;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.tabla-plan {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.tabla-plan th,
+.tabla-plan td {
+  border: 1px solid #dee2e6;
+  padding: 6px;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+.tabla-plan thead th {
+  background-color: #f8f9fa;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.col-num {
+  width: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+.col-fecha {
+  min-width: 150px;
+}
+
+.tabla-plan .form-control {
+  font-size: 0.9rem;
+  padding: 4px 8px;
+}
+
+.btn-grabar {
+  margin-left: 8px;
+}

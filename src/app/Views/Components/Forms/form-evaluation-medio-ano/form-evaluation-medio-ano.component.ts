@@ -15,6 +15,8 @@ import { Periodos } from 'src/app/Controllers/Periodos';
 import { ComunicacionService } from 'src/app/Services/comunicacion.service';
 import { LoadingComponent } from '../../loading/loading.component';
 import { IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluacionDesempenoMeta';
+import { IAccionPlan } from 'src/app/Models/Evaluacion/IAccionPlan';
+import { PlanAccionMatrizComponent } from '../plan-accion-matriz/plan-accion-matriz.component';
 import { finalize } from 'rxjs/operators';
 
 interface IQualitativeFeedback {
@@ -25,6 +27,7 @@ interface IQualitativeFeedback {
 interface ICierreFeedback {
   comentarios: string;
   compromisos: string;
+  planAccion?: IAccionPlan[];
 }
 
 @Component({
@@ -69,6 +72,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
   public colaboradorCompromisos: string = '';
   public supervisorComentarios: string = '';
   public supervisorCompromisos: string = '';
+  public planAccion: IAccionPlan[] = [];
 
   // Objetivos de desempeño
   public desempeno: IEvalucionResultDto[] = [];
@@ -257,6 +261,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     const cierreColab = this.parseCierre(this.evaluacionempleado.colaboradorCompromisos);
     this.colaboradorComentarios = cierreColab.comentarios;
     this.colaboradorCompromisos = cierreColab.compromisos;
+    this.planAccion = cierreColab.planAccion ?? [];
 
     const cierreSuper = this.parseCierre(this.evaluacionempleado.supervisorCompromisos);
     this.supervisorComentarios = cierreSuper.comentarios;
@@ -271,7 +276,11 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       const obj = JSON.parse(val);
       // Validar que sea el objeto esperado (y no, p.ej., un número o arreglo)
       if (obj && typeof obj === 'object' && ('comentarios' in obj || 'compromisos' in obj)) {
-        return { comentarios: obj.comentarios || '', compromisos: obj.compromisos || '' };
+        return {
+          comentarios: obj.comentarios || '',
+          compromisos: obj.compromisos || '',
+          planAccion: Array.isArray(obj.planAccion) ? obj.planAccion : []
+        };
       }
       return { comentarios: '', compromisos: val };
     } catch {
@@ -280,8 +289,26 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     }
   }
 
-  private stringifyCierre(comentarios: string, compromisos: string): string {
-    return JSON.stringify({ comentarios, compromisos });
+  private stringifyCierre(comentarios: string, compromisos: string, planAccion?: IAccionPlan[]): string {
+    const cierre: ICierreFeedback = { comentarios, compromisos };
+    if (planAccion && planAccion.length > 0) {
+      cierre.planAccion = planAccion;
+    }
+    return JSON.stringify(cierre);
+  }
+
+  /** Abre la matriz de plan de acción. El colaborador la edita; supervisor y solo-lectura la ven. */
+  public abrirPlanAccion(): void {
+    const ref = this.toastr.open(PlanAccionMatrizComponent, {
+      width: '1100px',
+      maxWidth: '95vw',
+      data: { filas: this.planAccion, sololectura: this.supervisor || this.sololectura }
+    });
+    ref.afterClosed().subscribe((filas?: IAccionPlan[]) => {
+      if (filas) {
+        this.planAccion = filas;
+      }
+    });
   }
 
   private safeJsonParse(val: string | undefined): IQualitativeFeedback {
@@ -421,7 +448,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.evaluacionempleado.supervisorHacerMenos = this.stringifyFeedback(this.feedbackSuper.menos);
     this.evaluacionempleado.supervisorParar = this.stringifyFeedback(this.feedbackSuper.parar);
 
-    this.evaluacionempleado.colaboradorCompromisos = this.stringifyCierre(this.colaboradorComentarios, this.colaboradorCompromisos);
+    this.evaluacionempleado.colaboradorCompromisos = this.stringifyCierre(this.colaboradorComentarios, this.colaboradorCompromisos, this.planAccion);
     this.evaluacionempleado.supervisorCompromisos = this.stringifyCierre(this.supervisorComentarios, this.supervisorCompromisos);
 
     // Estado de la evaluación

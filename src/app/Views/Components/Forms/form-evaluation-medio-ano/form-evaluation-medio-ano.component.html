@@ -406,13 +406,17 @@
       <div class="col-md-6">
         <div class="form-group mb-3">
           <label><strong>Plan de acción:</strong></label>
-          <textarea
-            class="form-control"
-            rows="3"
-            [(ngModel)]="colaboradorComentarios"
-            name="colab-comentarios"
-            [disabled]="supervisor || sololectura"
-            placeholder="Escriba las acciones específicas con fechas definidas..."></textarea>
+          <div>
+            <button type="button" class="btn btn-primary" (click)="abrirPlanAccion()">
+              Plan de acción
+            </button>
+            <span class="text-muted" style="margin-left: 10px;">
+              {{ planAccion.length }} de 5 acciones registradas
+            </span>
+          </div>
+          <div *ngIf="colaboradorComentarios" class="text-muted" style="margin-top: 6px; font-size: 0.85em;">
+            <strong>Comentario registrado con el formato anterior:</strong> {{ colaboradorComentarios }}
+          </div>
         </div>
         <div class="form-group">
           <label><strong>Compromiso y Comentario:</strong></label>

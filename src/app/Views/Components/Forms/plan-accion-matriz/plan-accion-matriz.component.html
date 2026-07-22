@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Plan de acción</h2>
+
+<div mat-dialog-content>
+  <p class="text-muted intro">
+    Registre las acciones específicas que se compromete a realizar, con su fecha de cierre.
+    Solo se guardan las filas que tengan contenido.
+  </p>
+
+  <div class="tabla-scroll">
+    <table class="tabla-plan">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th>Acciones</th>
+          <th>Objetivo o competencia que impacta</th>
+          <th>Responsable</th>
+          <th>Soporte Requerido de</th>
+          <th>Recursos requeridos</th>
+          <th class="col-fecha">Fecha de cierre de la acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fila of filas">
+          <td class="col-num">{{ fila.numero }}</td>
+          <td>
+            <textarea rows="2" class="form-control"
+              [(ngModel)]="fila.accion"
+              [disabled]="sololectura"
+              placeholder="Acción a realizar..."></textarea>
+          </td>
+          <td>
+            <textarea rows="2" class="form-control"
+              [(ngModel)]="fila.objetivoCompetenciaTexto"
+              [disabled]="sololectura"
+              placeholder="Objetivo o competencia..."></textarea>
+          </td>
+          <td>
+            <input type="text" class="form-control"
+              [(ngModel)]="fila.responsableTexto"
+              [disabled]="sololectura"
+              placeholder="Responsable...">
+          </td>
+          <td>
+            <input type="text" class="form-control"
+              [(ngModel)]="fila.soporteTexto"
+              [disabled]="sololectura"
+              placeholder="Persona o área...">
+          </td>
+          <td>
+            <textarea rows="2" class="form-control"
+              [(ngModel)]="fila.recursos"
+              [disabled]="sololectura"
+              placeholder="Recursos..."></textarea>
+          </td>
+          <td class="col-fecha">
+            <input type="date" class="form-control"
+              [(ngModel)]="fila.fechaCierre"
+              [disabled]="sololectura">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button type="button" class="btn btn-secondary" (click)="cancelar()">
+    {{ sololectura ? 'Cerrar' : 'Cancelar' }}
+  </button>
+  <button *ngIf="!sololectura" type="button" class="btn btn-primary btn-grabar" (click)="grabar()">
+    Grabar
+  </button>
+</div>
