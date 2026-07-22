@@ -1,0 +1,84 @@
+<div class="container-fluid mt-3 text-dark">
+  <div class="card p-4">
+    <h2>Reporte — Planes de Acción</h2>
+    <p class="text-muted">
+      Acciones registradas por los colaboradores en la matriz "Plan de acción" de la evaluación de mitad de año.
+    </p>
+
+    <div class="fila-controles">
+      <div>
+        <label><strong>Período:</strong></label>
+        <select class="form-control" [(ngModel)]="periodoSeleccionado" (ngModelChange)="onPeriodoChange()">
+          <option *ngFor="let p of periodos" [ngValue]="p.id">{{ p.descripcion }}</option>
+        </select>
+      </div>
+      <div>
+        <label><strong>Buscar:</strong></label>
+        <input type="text" class="form-control" [(ngModel)]="filtro"
+          placeholder="Empleado, departamento, acción, responsable...">
+      </div>
+      <div class="control-vencidas">
+        <label>
+          <input type="checkbox" [(ngModel)]="soloVencidas"> Solo vencidas
+        </label>
+      </div>
+      <button type="button" class="btn btn-success" (click)="exportarExcel()" [disabled]="loading">
+        Exportar a Excel
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="text-center my-4">Cargando...</div>
+
+    <ng-container *ngIf="!loading">
+      <div class="resumen">
+        <span class="chip chip-azul">{{ totalEmpleadosConPlan }} empleados con plan</span>
+        <span class="chip chip-verde">{{ filas.length }} acciones</span>
+        <span class="chip chip-rojo">{{ totalVencidas }} vencidas</span>
+      </div>
+
+      <div *ngIf="filas.length === 0" class="text-muted text-center my-4">
+        Ningún colaborador ha registrado acciones en este período.
+      </div>
+
+      <div class="tabla-scroll" *ngIf="filasVisibles.length > 0">
+        <table class="tabla-reporte">
+          <thead>
+            <tr>
+              <th>Empleado</th>
+              <th>Departamento</th>
+              <th>Estado</th>
+              <th>#</th>
+              <th>Acción</th>
+              <th>Objetivo o competencia</th>
+              <th>Responsable</th>
+              <th>Soporte Requerido de</th>
+              <th>Recursos</th>
+              <th>Fecha de cierre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of filasVisibles" [class.fila-vencida]="f.vencida">
+              <td>{{ f.empleado }}</td>
+              <td>{{ f.departamento }}</td>
+              <td>{{ f.estadoEvaluacion }}</td>
+              <td class="centrado">{{ f.numero }}</td>
+              <td>{{ f.accion }}</td>
+              <td>{{ f.objetivoCompetencia }}</td>
+              <td>{{ f.responsable }}</td>
+              <td>{{ f.soporte }}</td>
+              <td>{{ f.recursos }}</td>
+              <td class="centrado">
+                {{ f.fechaCierre ? (f.fechaCierre | date:'dd/MM/yyyy') : '—' }}
+                <span *ngIf="f.vencida" class="badge-vencida">Vencida</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="filas.length > 0 && filasVisibles.length === 0" class="text-muted text-center my-4">
+        Ninguna acción coincide con el filtro.
+      </div>
+    </ng-container>
+  </div>
+</div>

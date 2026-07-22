@@ -179,6 +179,11 @@ const routes: Routes = [
     .then((m)=> m.ReporteEstadoEvaluacionComponent),
     canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
+  { path: 'ReportePlanAccion',
+    loadComponent:()=> import('./Views/Components/Pages/reporte-plan-accion/reporte-plan-accion.component')
+    .then((m)=> m.ReportePlanAccionComponent),
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
+  },
   { path: 'ReporteEmpleadosSinDatos',
     loadComponent:()=> import('./Views/Components/Pages/reporte-empleados-sin-datos/reporte-empleados-sin-datos.component')
     .then((m)=> m.ReporteEmpleadosSinDatosComponent),

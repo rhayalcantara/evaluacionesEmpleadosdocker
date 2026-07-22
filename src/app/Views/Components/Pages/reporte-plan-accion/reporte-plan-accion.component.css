@@ -1,0 +1,76 @@
+.fila-controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.fila-controles > div {
+  min-width: 220px;
+}
+
+.control-vencidas {
+  min-width: auto !important;
+  padding-bottom: 6px;
+}
+
+.resumen {
+  margin-bottom: 12px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-right: 8px;
+  color: #fff;
+}
+
+.chip-azul { background-color: #007bff; }
+.chip-verde { background-color: #28a745; }
+.chip-rojo { background-color: #dc3545; }
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.tabla-reporte {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+  font-size: 0.9rem;
+}
+
+.tabla-reporte th,
+.tabla-reporte td {
+  border: 1px solid #dee2e6;
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+.tabla-reporte thead th {
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.centrado {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.fila-vencida {
+  background-color: #fff5f5;
+}
+
+.badge-vencida {
+  display: inline-block;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 8px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
