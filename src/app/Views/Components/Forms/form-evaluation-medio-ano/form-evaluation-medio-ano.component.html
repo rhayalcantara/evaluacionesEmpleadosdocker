@@ -398,31 +398,31 @@
     </div>
   </div>
 
-  <!-- 5. COMENTARIOS, COMPROMISOS Y PRÓXIMOS PASOS -->
+  <!-- 5. PLAN DE ACCIÓN, COMPROMISO Y COMENTARIO -->
   <div class="my-4 card p-4 text-dark">
-    <h2>Comentarios, Compromisos y Próximos Pasos</h2>
+    <h2>Plan de Acción, Compromiso y Comentario</h2>
     <p class="text-muted mb-3">Registre los acuerdos concretos que resultan de esta conversación. Deben ser específicos y con fecha de seguimiento.</p>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group mb-3">
-          <label><strong>Comentarios del Colaborador:</strong></label>
+          <label><strong>Plan de acción:</strong></label>
           <textarea
             class="form-control"
             rows="3"
             [(ngModel)]="colaboradorComentarios"
             name="colab-comentarios"
             [disabled]="supervisor || sololectura"
-            placeholder="Comentarios generales sobre el periodo evaluado..."></textarea>
+            placeholder="Escriba las acciones específicas con fechas definidas..."></textarea>
         </div>
         <div class="form-group">
-          <label><strong>Compromisos del Colaborador:</strong></label>
+          <label><strong>Compromiso y Comentario:</strong></label>
           <textarea
             class="form-control"
             rows="4"
             [(ngModel)]="colaboradorCompromisos"
             name="colab-compromisos"
             [disabled]="supervisor || sololectura"
-            placeholder="Escriba los compromisos que asume para el próximo periodo..."></textarea>
+            placeholder="Escriba su compromiso para el cumplimiento de los objetivos establecidos, incrementar la ejecución en el puesto y cualquier comentario adicional..."></textarea>
         </div>
       </div>
       <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">

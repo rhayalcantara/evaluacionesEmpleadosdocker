@@ -249,9 +249,11 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.feedbackSuper.menos = this.safeJsonParse(this.evaluacionempleado.supervisorHacerMenos);
     this.feedbackSuper.parar = this.safeJsonParse(this.evaluacionempleado.supervisorParar);
 
-    // "Comentarios, Compromisos y Próximos Pasos" se guarda como JSON { comentarios, compromisos }
-    // en los campos *Compromisos existentes (sin tocar la BD). Datos viejos en texto plano se
-    // interpretan como "compromisos" para mantener compatibilidad.
+    // "Plan de Acción, Compromiso y Comentario" se guarda como JSON { comentarios, compromisos }
+    // en los campos *Compromisos existentes (sin tocar la BD). Las claves conservan los nombres
+    // originales aunque los rótulos en pantalla cambiaron (comentarios = "Plan de acción",
+    // compromisos = "Compromiso y Comentario"). Datos viejos en texto plano se interpretan
+    // como "compromisos" para mantener compatibilidad.
     const cierreColab = this.parseCierre(this.evaluacionempleado.colaboradorCompromisos);
     this.colaboradorComentarios = cierreColab.comentarios;
     this.colaboradorCompromisos = cierreColab.compromisos;
