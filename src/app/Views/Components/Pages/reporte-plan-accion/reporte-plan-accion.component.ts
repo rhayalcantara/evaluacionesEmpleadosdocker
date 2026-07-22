@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { Evaluacion } from '../../../../Controllers/Evaluacion';
 import { Periodos } from '../../../../Controllers/Periodos';
@@ -30,7 +31,8 @@ interface IFilaPlanAccion {
 @Component({
   selector: 'app-reporte-plan-accion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatDialogModule],
+  providers: [ExcelService],
   templateUrl: './reporte-plan-accion.component.html',
   styleUrls: ['./reporte-plan-accion.component.css']
 })
