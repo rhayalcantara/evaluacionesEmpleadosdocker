@@ -94,7 +94,28 @@ if ($nLocal -ne $nStage) { throw "Staging incompleto: $nStage archivos vs $nLoca
 
 # ---------- SWAP (ventana de milisegundos) ----------
 Write-Host 'Ejecutando swap...' -ForegroundColor Cyan
-if (Test-Path $Backup) { Remove-Item $Backup -Recurse -Force -Confirm:$false }
+# Borrar el backup anterior con reintentos: SMB sobre el enlace lento a veces da
+# errores transitorios ("network path not found") a mitad de un borrado recursivo.
+# Si aun asi falla, se renombra para no bloquear el despliegue.
+if (Test-Path $Backup) {
+    $borrado = $false
+    foreach ($intento in 1..3) {
+        try {
+            Remove-Item $Backup -Recurse -Force -Confirm:$false -ErrorAction Stop
+            $borrado = $true
+            break
+        } catch {
+            if (-not (Test-Path $Backup)) { $borrado = $true; break }  # el borrado si termino
+            Write-Host "Intento $intento de borrar _old fallo: $($_.Exception.Message)" -ForegroundColor Yellow
+            Start-Sleep -Seconds 3
+        }
+    }
+    if (-not $borrado) {
+        $trash = "$SiteName`_old_descartado_$(Get-Date -Format yyyyMMddHHmmss)"
+        Write-Host "No se pudo borrar _old; se renombra a $trash (borrarlo luego a mano)" -ForegroundColor Yellow
+        Rename-Item -Path $Backup -NewName $trash
+    }
+}
 
 Rename-Item -Path $Live -NewName "$SiteName`_old"
 try {
