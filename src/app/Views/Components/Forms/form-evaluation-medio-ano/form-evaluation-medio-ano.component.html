@@ -31,6 +31,10 @@
     </div>
   </div>
 
+  <div class="alert alert-info py-2 mb-4" *ngIf="mensajeSoloLectura">
+    {{ mensajeSoloLectura }}
+  </div>
+
   <!-- 2. REVISIÓN DE OBJETIVOS DEL AÑO 2026 -->
   <div class="my-4 text-dark" *ngIf="desempeno.length > 0">
     <h2>Revisión de objetivos del año 2026</h2>

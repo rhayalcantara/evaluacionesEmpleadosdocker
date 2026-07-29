@@ -122,20 +122,22 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
             this.evaluacionempleado = rep;
             this.EvaluacionController.model = rep;
 
-            // Manejo de visibilidad de botones según estado de la evaluación
-            if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
-              this.mostarAceptar = true;
-              this.mostarAceptarBoton = true;
-              this.mostargrabar = false;
-            } else if (this.evaluacionempleado.estadoevaluacion === "Completado") {
-              this.mostarAceptar = true;
-              this.mostargrabar = false;
-              this.mostarAceptarBoton = false;
-            } else {
-              this.mostarAceptar = false;
-              this.mostarAceptarBoton = false;
-              this.mostargrabar = true;
-            }
+            // Control de turno. El ciclo es:
+            //   Borrador/AutoEvaluado -> EvaluadoPorSupervisor -> Enviado -> Completado
+            // El colaborador pierde el turno en cuanto el supervisor evalua: antes
+            // podia volver a entrar, grabar, y el estado regresaba a 'AutoEvaluado',
+            // deshaciendo la evaluacion del supervisor sin que nadie se enterara.
+            // El supervisor sigue afinando la suya hasta que la somete.
+            const estado = this.evaluacionempleado.estadoevaluacion;
+            const turnoDelSupervisor = estado === "EvaluadoPorSupervisor";
+            const yaSometida = estado === "Enviado";
+            const cerrada = estado === "Completado";
+
+            this.sololectura = cerrada || yaSometida || (!this.supervisor && turnoDelSupervisor);
+            this.mostargrabar = !this.sololectura;
+            // Aceptar es acto del colaborador, y solo cuando el supervisor ya sometio
+            this.mostarAceptarBoton = yaSometida && !this.supervisor;
+            this.mostarAceptar = yaSometida || cerrada;
 
             // Cargar campos cualitativos y parsear si vienen en formato JSON
             this.parseQualitativeFields();
@@ -295,6 +297,25 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       cierre.planAccion = planAccion;
     }
     return JSON.stringify(cierre);
+  }
+
+  /**
+   * Explica por que el formulario esta bloqueado. Sin esto el colaborador solo
+   * ve una pantalla que no responde y no sabe si es un error o es el turno de
+   * otro. Cadena vacia = el formulario esta editable.
+   */
+  public get mensajeSoloLectura(): string {
+    if (!this.sololectura) { return ''; }
+    const estado = this.evaluacionempleado?.estadoevaluacion;
+    if (estado === 'Completado') {
+      return 'Esta evaluación ya fue completada. Se muestra solo para consulta.';
+    }
+    if (estado === 'Enviado') {
+      return this.supervisor
+        ? 'Ya sometió esta evaluación al colaborador. Queda en espera de que la acepte.'
+        : 'Su supervisor ya completó la evaluación. Revísela y presione "Aceptar Evaluación".';
+    }
+    return 'Su supervisor está revisando esta evaluación. Podrá editarla nuevamente solo si se la devuelve.';
   }
 
   /**
