@@ -489,7 +489,10 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       this.calcularLogro(index);
     });
 
-    // Registrar firma electrónica con la fecha actual si aún no tiene valor
+    // Semilla de fechaRepuestas solo para el alta (la columna es NOT NULL). En los
+    // updates el API la sobrescribe con la hora del servidor: es "ultima
+    // modificacion", no una firma. Las firmas las sella el API en
+    // fechaFirmaColaborador / fechaFirmaSupervisor segun el estado.
     if (!this.evaluacionempleado.fechaRepuestas) {
       this.evaluacionempleado.fechaRepuestas = new Date().toISOString().split('T')[0];
     }

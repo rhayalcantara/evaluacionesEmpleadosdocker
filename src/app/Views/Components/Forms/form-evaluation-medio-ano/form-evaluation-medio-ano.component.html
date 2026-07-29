@@ -458,14 +458,15 @@
     </div>
     <div class="card-body">
       <div class="row">
+        <!-- Cada firma sale de su propia fecha, no de quien esta mirando la pantalla -->
         <div class="col-md-6">
           <p class="text-muted small mb-1">Firma del Colaborador</p>
           <div class="border rounded p-3 text-center bg-white">
             <p class="fw-bold mb-0">{{ empleado.nombreunido }}</p>
-            <p class="text-muted small mb-0" *ngIf="evaluacionempleado.fechaRepuestas">
-              Firmado electrónicamente el {{ evaluacionempleado.fechaRepuestas | date:'dd/MM/yyyy' }}
+            <p class="text-muted small mb-0" *ngIf="evaluacionempleado.fechaFirmaColaborador">
+              Firmado electrónicamente el {{ evaluacionempleado.fechaFirmaColaborador | date:'dd/MM/yyyy' }}
             </p>
-            <p class="text-muted small mb-0" *ngIf="!evaluacionempleado.fechaRepuestas">
+            <p class="text-muted small mb-0" *ngIf="!evaluacionempleado.fechaFirmaColaborador">
               Pendiente de firma
             </p>
           </div>
@@ -474,10 +475,10 @@
           <p class="text-muted small mb-1">Firma del Supervisor</p>
           <div class="border rounded p-3 text-center bg-white">
             <p class="fw-bold mb-0">{{ empleado.jefeinmediato || 'Supervisor' }}</p>
-            <p class="text-muted small mb-0" *ngIf="supervisor && evaluacionempleado.fechaRepuestas">
-              Firmado electrónicamente el {{ evaluacionempleado.fechaRepuestas | date:'dd/MM/yyyy' }}
+            <p class="text-muted small mb-0" *ngIf="evaluacionempleado.fechaFirmaSupervisor">
+              Firmado electrónicamente el {{ evaluacionempleado.fechaFirmaSupervisor | date:'dd/MM/yyyy' }}
             </p>
-            <p class="text-muted small mb-0" *ngIf="!supervisor">
+            <p class="text-muted small mb-0" *ngIf="!evaluacionempleado.fechaFirmaSupervisor">
               Pendiente de firma del supervisor
             </p>
           </div>
