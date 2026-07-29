@@ -31,9 +31,9 @@
     </div>
   </div>
 
-  <!-- 2. REVISIÓN DE OBJETIVOS DEL AÑO -->
+  <!-- 2. REVISIÓN DE OBJETIVOS DEL AÑO 2026 -->
   <div class="my-4 text-dark" *ngIf="desempeno.length > 0">
-    <h2>Revisión de Objetivos del Año</h2>
+    <h2>Revisión de objetivos del año 2026</h2>
     <div class="table-responsive">
       <table class="table table-bordered objetivos-table">
         <thead>
@@ -140,20 +140,20 @@
     </div>
   </div>
 
-  <!-- 4. RETROALIMENTACIÓN DE DESEMPEÑO (Start-Stop-Continue-More) -->
+  <!-- 4. RETROALIMENTACIÓN MITAD DE AÑO 2026 -->
   <div class="my-4 card p-4 text-dark">
-    <h2>Retroalimentación de Desempeño (Modelo Start-Stop-Continue)</h2>
-    <p class="fw-bold fs-5 text-dark">Basado en el progreso de los objetivos, proyectos y competencias evaluadas, registre acciones concretas en cada categoría. Justifíquela con las Competencias que aplican, pueden usar hasta 3.</p>
+    <h2>Retroalimentación Mitad de Año 2026</h2>
+    <p class="fw-bold fs-5 text-dark">Basado en el progreso de tus objetivos, proyectos y competencias evaluadas, registra acciones concretas en cada categoría que contribuyan a garantizar un buen desempeño al final del año y Justifíquela con las Competencias que aplican, pueden usar hasta 3.</p>
 
     <!-- BLOQUE COLABORADOR (AUTOEVALUACIÓN) -->
     <div class="mt-3">
       <h4>Retroalimentación del Colaborador</h4>
       <div class="row">
-        <!-- Continuar Haciendo -->
+        <!-- Estoy Haciendo Bien -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-success">
-            <h6 class="text-success">Continuar Haciendo</h6>
-            <p class="text-muted small mb-1">Actividades o prácticas que funcionan bien y deben mantenerse para apoyar el logro de los objetivos y proyectos de forma satisfactoria; y porque evidencian los comportamientos esperados de acuerdo con las competencias de su puesto.</p>
+            <h6 class="text-success">Estoy Haciendo Bien</h6>
+            <p class="text-muted small mb-1">Continuar haciendo o mantener los hábitos que funcionan bien y apoyan el logro de los objetivos y proyectos de forma satisfactoria; y que evidencian los comportamientos esperados de acuerdo con las competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -183,7 +183,7 @@
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-primary">
             <h6 class="text-primary">Hacer Más</h6>
-            <p class="text-muted small mb-1">Acciones que necesitan mayor esfuerzo o frecuencia para apoyar el logro de los objetivos y proyectos; además de realizar el trabajo basado en las Competencias de su puesto.</p>
+            <p class="text-muted small mb-1">Acciones y hábitos que necesitan mayor esfuerzo o frecuencia para apoyar el logro de los objetivos y proyectos; además de realizar el trabajo basado en las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -213,7 +213,7 @@
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-warning">
             <h6 class="text-warning">Hacer Menos</h6>
-            <p class="text-muted small mb-1">Actividades que consumen tiempo sin el resultado esperado, que aportan poco al logro de los objetivos y no proveen evidencias fuertes de los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
+            <p class="text-muted small mb-1">Actividades y hábitos que consumen tiempo sin el resultado esperado, que aportan poco al logro de los objetivos y no proveen evidencias fuertes de los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -239,11 +239,11 @@
           </div>
         </div>
 
-        <!-- Parar de Hacer -->
+        <!-- Empezar a Hacer (campo `parar` en BD, reutilizado) -->
         <div class="col-md-6 mb-3">
-          <div class="card p-3 border-danger">
-            <h6 class="text-danger">Parar de Hacer</h6>
-            <p class="text-muted small mb-1">Prácticas o hábitos perjudiciales o ineficientes que deben detenerse de inmediato porque impactan negativamente el logro de los objetivos, y no demuestran el comportamiento esperado en la realización de su trabajo, de acuerdo con la Competencias de su puesto.</p>
+          <div class="card p-3 border-info">
+            <h6 class="text-info">Empezar a Hacer</h6>
+            <p class="text-muted small mb-1">Actividades y hábitos que aún no realiza y debe incorporar para impulsar el logro de los objetivos y proyectos, y para demostrar los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -261,9 +261,9 @@
               </select>
             </div>
             <div class="d-flex flex-wrap gap-1 mt-2">
-              <span *ngFor="let compId of feedbackColab.parar.competencias" class="badge bg-danger d-flex align-items-center gap-1">
+              <span *ngFor="let compId of feedbackColab.parar.competencias" class="badge bg-info text-dark d-flex align-items-center gap-1">
                 {{ getCompetenciaNombre(compId) }}
-                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.parar, compId)"></button>
+                <button type="button" class="btn-close" style="font-size: 0.6rem;" *ngIf="!supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackColab.parar, compId)"></button>
               </span>
             </div>
           </div>
@@ -275,11 +275,11 @@
     <div class="mt-4" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
       <h4>Retroalimentación del Supervisor</h4>
       <div class="row">
-        <!-- Continuar Haciendo -->
+        <!-- Estoy Haciendo Bien -->
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-success">
-            <h6 class="text-success">Continuar Haciendo</h6>
-            <p class="text-muted small mb-1">Actividades o prácticas que funcionan bien y deben mantenerse para apoyar el logro de los objetivos y proyectos de forma satisfactoria; y porque evidencian los comportamientos esperados de acuerdo con las competencias de su puesto.</p>
+            <h6 class="text-success">Estoy Haciendo Bien</h6>
+            <p class="text-muted small mb-1">Continuar haciendo o mantener los hábitos que funcionan bien y apoyan el logro de los objetivos y proyectos de forma satisfactoria; y que evidencian los comportamientos esperados de acuerdo con las competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -309,7 +309,7 @@
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-primary">
             <h6 class="text-primary">Hacer Más</h6>
-            <p class="text-muted small mb-1">Acciones que necesitan mayor esfuerzo o frecuencia para apoyar el logro de los objetivos y proyectos; además de realizar el trabajo basado en las Competencias de su puesto.</p>
+            <p class="text-muted small mb-1">Acciones y hábitos que necesitan mayor esfuerzo o frecuencia para apoyar el logro de los objetivos y proyectos; además de realizar el trabajo basado en las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -339,7 +339,7 @@
         <div class="col-md-6 mb-3">
           <div class="card p-3 border-warning">
             <h6 class="text-warning">Hacer Menos</h6>
-            <p class="text-muted small mb-1">Actividades que consumen tiempo sin el resultado esperado, que aportan poco al logro de los objetivos y no proveen evidencias fuertes de los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
+            <p class="text-muted small mb-1">Actividades y hábitos que consumen tiempo sin el resultado esperado, que aportan poco al logro de los objetivos y no proveen evidencias fuertes de los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -365,11 +365,11 @@
           </div>
         </div>
 
-        <!-- Parar de Hacer -->
+        <!-- Empezar a Hacer (campo `parar` en BD, reutilizado) -->
         <div class="col-md-6 mb-3">
-          <div class="card p-3 border-danger">
-            <h6 class="text-danger">Parar de Hacer</h6>
-            <p class="text-muted small mb-1">Prácticas o hábitos perjudiciales o ineficientes que deben detenerse de inmediato porque impactan negativamente el logro de los objetivos, y no demuestran el comportamiento esperado en la realización de su trabajo, de acuerdo con la Competencias de su puesto.</p>
+          <div class="card p-3 border-info">
+            <h6 class="text-info">Empezar a Hacer</h6>
+            <p class="text-muted small mb-1">Actividades y hábitos que aún no realiza y debe incorporar para impulsar el logro de los objetivos y proyectos, y para demostrar los comportamientos esperados de acuerdo con las Competencias de su puesto.</p>
             <textarea 
               class="form-control" 
               rows="3" 
@@ -387,9 +387,9 @@
               </select>
             </div>
             <div class="d-flex flex-wrap gap-1 mt-2">
-              <span *ngFor="let compId of feedbackSuper.parar.competencias" class="badge bg-danger d-flex align-items-center gap-1">
+              <span *ngFor="let compId of feedbackSuper.parar.competencias" class="badge bg-info text-dark d-flex align-items-center gap-1">
                 {{ getCompetenciaNombre(compId) }}
-                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.parar, compId)"></button>
+                <button type="button" class="btn-close" style="font-size: 0.6rem;" *ngIf="supervisor && !sololectura" (click)="removerCompetenciaVinculada(feedbackSuper.parar, compId)"></button>
               </span>
             </div>
           </div>

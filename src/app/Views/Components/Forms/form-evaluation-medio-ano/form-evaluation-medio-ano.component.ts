@@ -40,7 +40,7 @@ interface ICierreFeedback {
 export class FormEvaluationMedioAnoComponent implements OnInit {
   @Input() empleado: IEmpleado = this.empleadocontroller.inicializamodelo();
   @Input() periodo: IPeriodo = this.periodocontroller.inicializamodelo();
-  @Input() titulo: string = "Evaluación de Medio Año";
+  @Input() titulo: string = "Evaluación de Mitad de año 2026";
   @Input() supervisor: boolean = false;
   @Input() mostargrabar: boolean = true;
   @Input() mostarAceptar: boolean = false;
@@ -207,7 +207,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
             this.cerrarLoading();
             this.datos.showMessage(
-              `No se encontró evaluación previa. Se iniciará una autoevaluación para el periodo de medio año: ${this.periodo.descripcion}.`,
+              `No se encontró evaluación previa. Se iniciará una autoevaluación para el periodo de mitad de año: ${this.periodo.descripcion}.`,
               this.titulo,
               "info"
             );
@@ -477,7 +477,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
       await this.EvaluacionController.grabar(this.supervisor);
       this.cerrarLoading();
-      this.datos.showMessage("Evaluación de medio año guardada exitosamente.", this.titulo, "success");
+      this.datos.showMessage("Evaluación de mitad de año guardada exitosamente.", this.titulo, "success");
       if (this.supervisor) {
         this.dataEmitter.emit("grabado");
       } else {
@@ -486,7 +486,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     } catch (err) {
       this.cerrarLoading();
       console.error(err);
-      this.datos.showMessage("Error al guardar la evaluación de medio año.", this.titulo, "error");
+      this.datos.showMessage("Error al guardar la evaluación de mitad de año.", this.titulo, "error");
     }
   }
 
@@ -499,7 +499,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
     this.EvaluacionController.grabar(this.supervisor).then(() => {
       this.cerrarLoading();
-      this.datos.showMessage("Evaluación de medio año completada.", this.titulo, "success");
+      this.datos.showMessage("Evaluación de mitad de año completada.", this.titulo, "success");
       this.dataEmitter.emit("grabado");
     }).catch(err => {
       this.cerrarLoading();
