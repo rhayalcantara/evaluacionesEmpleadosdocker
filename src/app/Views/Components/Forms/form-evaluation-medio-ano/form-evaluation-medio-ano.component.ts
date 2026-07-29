@@ -297,12 +297,17 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     return JSON.stringify(cierre);
   }
 
-  /** Abre la matriz de plan de acción. El colaborador la edita; supervisor y solo-lectura la ven. */
+  /**
+   * Abre la matriz de plan de acción. La editan tanto el colaborador como el
+   * supervisor: el plan se acuerda en la conversación de mitad de año y el
+   * supervisor debe poder ajustarlo mientras lo revisa. Solo el modo de
+   * solo-lectura la bloquea.
+   */
   public abrirPlanAccion(): void {
     const ref = this.toastr.open(PlanAccionMatrizComponent, {
       width: '1100px',
       maxWidth: '95vw',
-      data: { filas: this.planAccion, sololectura: this.supervisor || this.sololectura }
+      data: { filas: this.planAccion, sololectura: this.sololectura }
     });
     ref.afterClosed().subscribe((filas?: IAccionPlan[]) => {
       if (filas) {

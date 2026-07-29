@@ -430,25 +430,18 @@
         </div>
       </div>
       <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
-        <div class="form-group mb-3">
-          <label><strong>Comentarios del Supervisor:</strong></label>
-          <textarea
-            class="form-control"
-            rows="3"
-            [(ngModel)]="supervisorComentarios"
-            name="super-comentarios"
-            [disabled]="!supervisor || sololectura"
-            placeholder="Comentarios generales del supervisor sobre el desempeño..."></textarea>
-        </div>
         <div class="form-group">
-          <label><strong>Compromisos del Supervisor / Próximos Pasos:</strong></label>
+          <label><strong>Compromiso y Comentario:</strong></label>
           <textarea
             class="form-control"
             rows="4"
             [(ngModel)]="supervisorCompromisos"
             name="super-compromisos"
             [disabled]="!supervisor || sololectura"
-            placeholder="Describa el plan de apoyo, capacitaciones y próximos pasos a seguir..."></textarea>
+            placeholder="Escriba su compromiso como supervisor para apoyar el cumplimiento de los objetivos establecidos, incrementar la ejecución en el puesto y cualquier comentario adicional..."></textarea>
+          <div *ngIf="supervisorComentarios" class="text-muted" style="margin-top: 6px; font-size: 0.85em;">
+            <strong>Comentario registrado con el formato anterior:</strong> {{ supervisorComentarios }}
+          </div>
         </div>
       </div>
     </div>
@@ -492,7 +485,8 @@
   <!-- ACCIONES -->
   <div class="mt-4 pb-5 d-flex gap-2">
     <button *ngIf="mostargrabar" class="btn btn-primary" type="submit" (click)="onSubmit()">Grabar Evaluación</button>
-    <button *ngIf="mostarAceptarBoton" class="btn btn-success" type="button" (click)="onAceptar()">Completar Evaluación</button>
+    <!-- Solo lo ve el colaborador: aparece cuando el supervisor ya sometio la evaluacion (estado 'Enviado') -->
+    <button *ngIf="mostarAceptarBoton" class="btn btn-success" type="button" (click)="onAceptar()">Aceptar Evaluación</button>
     <button class="btn btn-secondary" type="button" (click)="cancelar()">Regresar</button>
   </div>
 </form>
