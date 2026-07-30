@@ -40,7 +40,7 @@ interface ICierreFeedback {
 export class FormEvaluationMedioAnoComponent implements OnInit {
   @Input() empleado: IEmpleado = this.empleadocontroller.inicializamodelo();
   @Input() periodo: IPeriodo = this.periodocontroller.inicializamodelo();
-  @Input() titulo: string = "Evaluación de Medio Año";
+  @Input() titulo: string = "Evaluación de Mitad de año 2026";
   @Input() supervisor: boolean = false;
   @Input() mostargrabar: boolean = true;
   @Input() mostarAceptar: boolean = false;
@@ -122,20 +122,22 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
             this.evaluacionempleado = rep;
             this.EvaluacionController.model = rep;
 
-            // Manejo de visibilidad de botones según estado de la evaluación
-            if (this.evaluacionempleado.estadoevaluacion === "Enviado") {
-              this.mostarAceptar = true;
-              this.mostarAceptarBoton = true;
-              this.mostargrabar = false;
-            } else if (this.evaluacionempleado.estadoevaluacion === "Completado") {
-              this.mostarAceptar = true;
-              this.mostargrabar = false;
-              this.mostarAceptarBoton = false;
-            } else {
-              this.mostarAceptar = false;
-              this.mostarAceptarBoton = false;
-              this.mostargrabar = true;
-            }
+            // Control de turno. El ciclo es:
+            //   Borrador/AutoEvaluado -> EvaluadoPorSupervisor -> Enviado -> Completado
+            // El colaborador pierde el turno en cuanto el supervisor evalua: antes
+            // podia volver a entrar, grabar, y el estado regresaba a 'AutoEvaluado',
+            // deshaciendo la evaluacion del supervisor sin que nadie se enterara.
+            // El supervisor sigue afinando la suya hasta que la somete.
+            const estado = this.evaluacionempleado.estadoevaluacion;
+            const turnoDelSupervisor = estado === "EvaluadoPorSupervisor";
+            const yaSometida = estado === "Enviado";
+            const cerrada = estado === "Completado";
+
+            this.sololectura = cerrada || yaSometida || (!this.supervisor && turnoDelSupervisor);
+            this.mostargrabar = !this.sololectura;
+            // Aceptar es acto del colaborador, y solo cuando el supervisor ya sometio
+            this.mostarAceptarBoton = yaSometida && !this.supervisor;
+            this.mostarAceptar = yaSometida || cerrada;
 
             // Cargar campos cualitativos y parsear si vienen en formato JSON
             this.parseQualitativeFields();
@@ -207,7 +209,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
             this.cerrarLoading();
             this.datos.showMessage(
-              `No se encontró evaluación previa. Se iniciará una autoevaluación para el periodo de medio año: ${this.periodo.descripcion}.`,
+              `No se encontró evaluación previa. Se iniciará una autoevaluación para el periodo de mitad de año: ${this.periodo.descripcion}.`,
               this.titulo,
               "info"
             );
@@ -297,12 +299,36 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     return JSON.stringify(cierre);
   }
 
-  /** Abre la matriz de plan de acción. El colaborador la edita; supervisor y solo-lectura la ven. */
+  /**
+   * Explica por que el formulario esta bloqueado. Sin esto el colaborador solo
+   * ve una pantalla que no responde y no sabe si es un error o es el turno de
+   * otro. Cadena vacia = el formulario esta editable.
+   */
+  public get mensajeSoloLectura(): string {
+    if (!this.sololectura) { return ''; }
+    const estado = this.evaluacionempleado?.estadoevaluacion;
+    if (estado === 'Completado') {
+      return 'Esta evaluación ya fue completada. Se muestra solo para consulta.';
+    }
+    if (estado === 'Enviado') {
+      return this.supervisor
+        ? 'Ya sometió esta evaluación al colaborador. Queda en espera de que la acepte.'
+        : 'Su supervisor ya completó la evaluación. Revísela y presione "Aceptar Evaluación".';
+    }
+    return 'Su supervisor está revisando esta evaluación. Podrá editarla nuevamente solo si se la devuelve.';
+  }
+
+  /**
+   * Abre la matriz de plan de acción. La editan tanto el colaborador como el
+   * supervisor: el plan se acuerda en la conversación de mitad de año y el
+   * supervisor debe poder ajustarlo mientras lo revisa. Solo el modo de
+   * solo-lectura la bloquea.
+   */
   public abrirPlanAccion(): void {
     const ref = this.toastr.open(PlanAccionMatrizComponent, {
       width: '1100px',
       maxWidth: '95vw',
-      data: { filas: this.planAccion, sololectura: this.supervisor || this.sololectura }
+      data: { filas: this.planAccion, sololectura: this.sololectura }
     });
     ref.afterClosed().subscribe((filas?: IAccionPlan[]) => {
       if (filas) {
@@ -463,7 +489,10 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       this.calcularLogro(index);
     });
 
-    // Registrar firma electrónica con la fecha actual si aún no tiene valor
+    // Semilla de fechaRepuestas solo para el alta (la columna es NOT NULL). En los
+    // updates el API la sobrescribe con la hora del servidor: es "ultima
+    // modificacion", no una firma. Las firmas las sella el API en
+    // fechaFirmaColaborador / fechaFirmaSupervisor segun el estado.
     if (!this.evaluacionempleado.fechaRepuestas) {
       this.evaluacionempleado.fechaRepuestas = new Date().toISOString().split('T')[0];
     }
@@ -477,7 +506,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
       await this.EvaluacionController.grabar(this.supervisor);
       this.cerrarLoading();
-      this.datos.showMessage("Evaluación de medio año guardada exitosamente.", this.titulo, "success");
+      this.datos.showMessage("Evaluación de mitad de año guardada exitosamente.", this.titulo, "success");
       if (this.supervisor) {
         this.dataEmitter.emit("grabado");
       } else {
@@ -486,7 +515,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     } catch (err) {
       this.cerrarLoading();
       console.error(err);
-      this.datos.showMessage("Error al guardar la evaluación de medio año.", this.titulo, "error");
+      this.datos.showMessage("Error al guardar la evaluación de mitad de año.", this.titulo, "error");
     }
   }
 
@@ -499,7 +528,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
 
     this.EvaluacionController.grabar(this.supervisor).then(() => {
       this.cerrarLoading();
-      this.datos.showMessage("Evaluación de medio año completada.", this.titulo, "success");
+      this.datos.showMessage("Evaluación de mitad de año completada.", this.titulo, "success");
       this.dataEmitter.emit("grabado");
     }).catch(err => {
       this.cerrarLoading();

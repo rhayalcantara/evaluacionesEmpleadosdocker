@@ -13,7 +13,12 @@ export interface IEvaluacion {
     periodId: number
     empleadoSecuencial: number
     totalCalculo: number
+    /** Ultima modificacion: el API la pisa en cada grabada. No es fecha de firma. */
     fechaRepuestas: string
+    /** Se sella en el API la primera vez que el colaborador compromete su evaluacion. */
+    fechaFirmaColaborador?: string | null
+    /** Se sella en el API la primera vez que el supervisor compromete la suya. */
+    fechaFirmaSupervisor?: string | null
     observacion: string
     evaluacionGoals: IEvaluacionGoal[]
     evaluacionDesempenoMetas:IEvaluacionDesempenoMeta[]
