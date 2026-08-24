@@ -135,13 +135,13 @@ const ESTADO = {
       tareas: [
         { id:"T2.1", nombre:"Competencias por puesto",
           desc:"Listado con semáforo de peso, alta múltiple, edición, borrado con confirmación y clonado.",
-          archivos:"tabs/competencias-puesto/", estado:"corriendo" },
+          archivos:"tabs/competencias-puesto/", estado:"corriendo", nota:"Corrección del crítico: el estado gris \"sin dato fiable\" cubre 115 puestos cuando solo importan los 8 ocupados; entre los grises caen ABOGADO JUNIOR y OFICIAL DE NEGOCIOS FLOTANTE, que son casos reales por configurar." },
         { id:"T2.2", nombre:"Catálogo y categorías",
           desc:"Mantenimiento del catálogo del periodo y matriz competencia ↔ categoría de puesto.",
-          archivos:"tabs/catalogo-categorias/", estado:"corriendo" },
+          archivos:"tabs/catalogo-categorias/", estado:"listo", commit:"99f8515" },
         { id:"T2.3", nombre:"Ponderación y diagnóstico",
           desc:"% Desempeño/Competencia del periodo y los tres listados de huecos de configuración.",
-          archivos:"tabs/ponderacion/ · tabs/diagnostico/", estado:"corriendo" }
+          archivos:"tabs/ponderacion/ · tabs/diagnostico/", estado:"listo", commit:"d784c3c" }
       ]
     },
     {
@@ -162,7 +162,9 @@ const ESTADO = {
     { t:"2026-08-24", m:"npm run build: exit 0, sin avisos nuevos. Los avisos de CSS y CommonJS son preexistentes." },
     { t:"2026-08-24", m:"Veredicto del critico: T1.3 APROBADA (commit f457ccc, push a origin). T1.1 y T1.2 con correcciones, devueltas a sus agentes." },
     { t:"2026-08-24", m:"Segunda pasada del critico: T1.1 y T1.2 APROBADAS (commits 6719c0d y 9ccc3b9). Fase 1 cerrada y pusheada." },
-    { t:"2026-08-24", m:"Fase 2 lanzada: tres subagentes en paralelo, uno por pestana." }
+    { t:"2026-08-24", m:"Fase 2 lanzada: tres subagentes en paralelo, uno por pestana." },
+    { t:"2026-08-24", m:"Compilacion con las tres pestanas: exit 0, sin avisos nuevos." },
+    { t:"2026-08-24", m:"Critico: T2.2 y T2.3 APROBADAS (99f8515, d784c3c). T2.1 con una correccion sustantiva. Dos defectos del API documentados en 04-Defectos-API.md." }
   ]
 };
 // ────────────────────────────────────────────────────────────────────────
