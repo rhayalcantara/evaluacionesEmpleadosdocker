@@ -135,7 +135,7 @@ const ESTADO = {
       tareas: [
         { id:"T2.1", nombre:"Competencias por puesto",
           desc:"Listado con semáforo de peso, alta múltiple, edición, borrado con confirmación y clonado.",
-          archivos:"tabs/competencias-puesto/", estado:"corriendo", nota:"Corrección del crítico: el estado gris \"sin dato fiable\" cubre 115 puestos cuando solo importan los 8 ocupados; entre los grises caen ABOGADO JUNIOR y OFICIAL DE NEGOCIOS FLOTANTE, que son casos reales por configurar." },
+          archivos:"tabs/competencias-puesto/", estado:"listo", commit:"6b34c54" },
         { id:"T2.2", nombre:"Catálogo y categorías",
           desc:"Mantenimiento del catálogo del periodo y matriz competencia ↔ categoría de puesto.",
           archivos:"tabs/catalogo-categorias/", estado:"listo", commit:"99f8515" },
@@ -148,9 +148,9 @@ const ESTADO = {
       titulo: "Fase 3 — Integración y evidencia",
       nota: "secuencial",
       tareas: [
-        { id:"T3.1", nombre:"Compilación e integración", desc:"npm run build sin errores nuevos; /Meta sigue funcionando.", archivos:"—", estado:"pendiente" },
+        { id:"T3.1", nombre:"Compilación e integración", desc:"npm run build sin errores nuevos; /Meta sigue funcionando.", archivos:"—", estado:"listo" },
         { id:"T3.2", nombre:"Crítica final", desc:"El crítico revisa la entrega completa contra el plan.", archivos:"—", estado:"pendiente" },
-        { id:"T3.3", nombre:"Playwright y auditoría", desc:"Recorrido completo con capturas y documento de auditoría.", archivos:"e2e/crud-competencias.spec.js · Docs/crud-competencias/03-Auditoria-Verificacion.md", estado:"pendiente" }
+        { id:"T3.3", nombre:"Playwright y auditoría", desc:"Recorrido completo con capturas y documento de auditoría.", archivos:"e2e/crud-competencias.spec.js · Docs/crud-competencias/03-Auditoria-Verificacion.md", estado:"corriendo", nota:"Escribiendo el guion. El recorrido necesita credenciales de un usuario con rol Administrador." }
       ]
     }
   ],
@@ -164,7 +164,10 @@ const ESTADO = {
     { t:"2026-08-24", m:"Segunda pasada del critico: T1.1 y T1.2 APROBADAS (commits 6719c0d y 9ccc3b9). Fase 1 cerrada y pusheada." },
     { t:"2026-08-24", m:"Fase 2 lanzada: tres subagentes en paralelo, uno por pestana." },
     { t:"2026-08-24", m:"Compilacion con las tres pestanas: exit 0, sin avisos nuevos." },
-    { t:"2026-08-24", m:"Critico: T2.2 y T2.3 APROBADAS (99f8515, d784c3c). T2.1 con una correccion sustantiva. Dos defectos del API documentados en 04-Defectos-API.md." }
+    { t:"2026-08-24", m:"Critico: T2.2 y T2.3 APROBADAS (99f8515, d784c3c). T2.1 con una correccion sustantiva. Dos defectos del API documentados en 04-Defectos-API.md." },
+    { t:"2026-08-24", m:"Clonado optimizado: 18,35 s -> 2,9 s. Aprobado y commiteado (0f8a785)." },
+    { t:"2026-08-24", m:"El critico detecta y se revierte un cambio no solicitado en app-routing que habria bloqueado /EvaluarSubordinados a dos gerentes sin rol asignado." },
+    { t:"2026-08-24", m:"T2.1 APROBADA (6b34c54). Fase 2 cerrada: siete commits de codigo en origin." }
   ]
 };
 // ────────────────────────────────────────────────────────────────────────
