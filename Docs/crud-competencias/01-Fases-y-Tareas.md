@@ -150,15 +150,19 @@ Un commit por tarea aprobada por el crítico, con `push` a `origin/feature/crud-
 
 ---
 
-## Notas de la Fase 1 para la Fase 2 (del subagente crítico)
+## Notas de la Fase 1 para la Fase 2 (del subagente crítico, tras aprobar T1.1, T1.2 y T1.3)
 
 Léelas antes de escribir código; son trampas reales, no teoría.
 
-1. **`getMatrizPorPeriodo` necesita las competencias del periodo.** Hasta que T1.1 aplique su corrección, llamarla con un solo argumento devuelve la matriz de **todos** los periodos mezclados, sin error. Pásale siempre los `ObjetivoId` del periodo, obtenidos del controlador `Objetivo`.
-2. **`GET /api/Goals` no ve los puestos con `Departmentsecuencial = 0`.** Afecta a `previsualizarClonado`, `GetMetasPorPeriodoYPuesto` y `pesoTotalPorPuesto`. Un puesto puede mostrarse con 0 competencias y peso 0 aunque en base de datos tenga 12 (caso real: puesto 19, GERENTE GESTION HUMANA). La pestaña de Diagnóstico debe listar estos puestos huérfanos explícitamente.
-3. **`insertarLote` es un `defer`:** cada suscripción vuelve a ejecutar el lote completo. Suscríbete una sola vez; nada de `async` pipe ni doble `subscribe` sobre el mismo Observable, o se insertan las filas dos veces.
-4. **`cambios` dispara un recálculo caro en el shell** (`getmetasperiodo` + `GET /api/Empleadoes` completo). En un alta múltiple, emítelo **una vez al terminar el lote**, nunca por fila.
-5. **Las pestañas viven dentro de `<ng-template matTabContent>`:** el contenido se destruye al cambiar de pestaña, así que filtros, selección de puesto o un panel de alta a medio llenar se pierden al ir y volver. Si hay que conservar estado, va en un servicio.
-6. **El peso total llega como suma cruda de `weight`,** sin redondeo. Para el semáforo compara con tolerancia, no con `=== 100`.
-7. **`Update` de `CompetenciaCategoriaPuesto` responde 204 sin cuerpo:** emite `null`. No encadenes nada que lea la entidad devuelta.
-8. **`/Meta` ahora exige rol Admin.** Avisar a QA para que no lo reporte como falla.
+1. **`getMatrizPorPeriodo(periodoId)` ya filtra por periodo de verdad**; basta con un argumento. El segundo parámetro es un atajo de rendimiento y el controlador **no verifica** que esos ids pertenezcan al periodo: ante la duda, omítelo.
+2. **Periodo sin competencias en el catálogo ⇒ `Map` vacío sin advertencia.** T2.2 debe pintar "este periodo no tiene competencias en el catálogo" y ofrecer copiar de otro periodo, no una matriz en blanco sin explicación.
+3. **T2.1 debe mostrar `preview.advertencias` en el diálogo de clonado siempre**, aunque `aCrear` esté vacío, y no dejar ejecutar sin que el usuario las haya visto.
+4. **El clonado de periodo completo (sin puesto declarado) no avisa de nada:** copia de menos en silencio. O exiges puesto declarado, o muestras un aviso fijo de "solo se clona lo que el API lista".
+5. **El peligro más serio, para T2.3.** Si el Diagnóstico calcula "puestos sin competencias" a partir de `GET /api/Goals`, hereda el punto ciego del join con departamentos y reportará el puesto 19 como "sin competencias" **teniendo 12 en base de datos**; el usuario las crearía a mano y terminaría con 24. Hay que comprobar contra el API de prueba **cuál endpoint no arrastra el join** (`GET /api/Goals/periodo` es candidato, pero se comprueba, no se supone) y contrastar el resultado con las consultas SQL de `Docs/proceso-configuracion-competencias-periodo8.md` antes de dar la pestaña por buena.
+6. **`insertarLote` es un `defer`:** cada suscripción reejecuta el lote completo. Una sola suscripción, nada de `async` pipe.
+7. **Para el semáforo de un listado usa `resumenPorPuesto(periodoId)`**; `pesoTotalPorPuesto` es para un puesto puntual (descarga la tabla entera cada vez).
+8. **Compara el peso con tolerancia, no con `=== 100`:** la suma de `weight` viene en crudo, sin redondeo.
+9. **`cambios` dispara en el shell `getmetasperiodo` + `GET /api/Empleadoes` completo.** Emítelo una vez al terminar el lote, nunca por fila.
+10. **Las pestañas viven en `<ng-template matTabContent>` y se destruyen al cambiar de tab.** El estado que deba sobrevivir va en un servicio.
+11. **`tsc` y `npm run build` no validan archivos que nadie importa** (`tsconfig.app.json` parte de `src/main.ts`). Antes de afirmar "compila", comprueba con `--listFiles` que tu archivo esté en el grafo.
+12. **`/Meta` ahora exige rol Admin.** Avisar a QA para que no lo reporte como falla.

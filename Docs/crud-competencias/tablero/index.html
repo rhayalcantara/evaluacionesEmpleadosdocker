@@ -118,11 +118,11 @@ const ESTADO = {
         { id:"T1.1", nombre:"Controlador CompetenciaCategoriaPuesto",
           desc:"Controlador y modelo nuevos para el vínculo competencia ↔ categoría de puesto.",
           archivos:"Controllers/CompetenciaCategoriaPuesto.ts · Models/CompetenciaCategoriaPuesto/",
-          estado:"corriendo", nota:"Aplicando correcciones del crítico: la matriz por periodo no filtraba de verdad y el tipo de Update no refleja el 204 sin cuerpo." },
+          estado:"listo", commit:"6719c0d" },
         { id:"T1.2", nombre:"Ampliar controlador de Metas (Goal)",
           desc:"Delete real, alta en lote, clonado con previsualización y cálculo de peso por puesto.",
           archivos:"Controllers/Metas.ts · Models/Meta/IMeta.ts",
-          estado:"corriendo", nota:"Aplicando correcciones del crítico: declarar y advertir el punto ciego del GET /api/Goals con puestos de departamento huérfano." },
+          estado:"listo", commit:"9ccc3b9" },
         { id:"T1.3", nombre:"Ruta, menú, guard y shell con pestañas",
           desc:"Ruta protegida por rol Admin, ítem de menú, shell con selector de periodo y 4 pestañas.",
           archivos:"app-routing.module.ts · navmenu.component.html · Pages/configuracion-competencias/",
@@ -135,13 +135,13 @@ const ESTADO = {
       tareas: [
         { id:"T2.1", nombre:"Competencias por puesto",
           desc:"Listado con semáforo de peso, alta múltiple, edición, borrado con confirmación y clonado.",
-          archivos:"tabs/competencias-puesto/", estado:"pendiente" },
+          archivos:"tabs/competencias-puesto/", estado:"corriendo" },
         { id:"T2.2", nombre:"Catálogo y categorías",
           desc:"Mantenimiento del catálogo del periodo y matriz competencia ↔ categoría de puesto.",
-          archivos:"tabs/catalogo-categorias/", estado:"pendiente" },
+          archivos:"tabs/catalogo-categorias/", estado:"corriendo" },
         { id:"T2.3", nombre:"Ponderación y diagnóstico",
           desc:"% Desempeño/Competencia del periodo y los tres listados de huecos de configuración.",
-          archivos:"tabs/ponderacion/ · tabs/diagnostico/", estado:"pendiente" }
+          archivos:"tabs/ponderacion/ · tabs/diagnostico/", estado:"corriendo" }
       ]
     },
     {
@@ -160,7 +160,9 @@ const ESTADO = {
     { t:"2026-08-24", m:"Fase 1 lanzada: tres subagentes en paralelo (T1.1 controlador de vinculo, T1.2 ampliacion de Metas, T1.3 ruta/menu/shell)." },
     { t:"2026-08-24", m:"Fase 1 entregada. En revision del subagente critico; compilacion de produccion corriendo en paralelo." },
     { t:"2026-08-24", m:"npm run build: exit 0, sin avisos nuevos. Los avisos de CSS y CommonJS son preexistentes." },
-    { t:"2026-08-24", m:"Veredicto del critico: T1.3 APROBADA (commit f457ccc, push a origin). T1.1 y T1.2 con correcciones, devueltas a sus agentes." }
+    { t:"2026-08-24", m:"Veredicto del critico: T1.3 APROBADA (commit f457ccc, push a origin). T1.1 y T1.2 con correcciones, devueltas a sus agentes." },
+    { t:"2026-08-24", m:"Segunda pasada del critico: T1.1 y T1.2 APROBADAS (commits 6719c0d y 9ccc3b9). Fase 1 cerrada y pusheada." },
+    { t:"2026-08-24", m:"Fase 2 lanzada: tres subagentes en paralelo, uno por pestana." }
   ]
 };
 // ────────────────────────────────────────────────────────────────────────
