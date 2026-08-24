@@ -1,9 +1,95 @@
-.cc-tab-pendiente {
-  padding: 16px;
-  color: #555;
+.pnd {
+  padding: 16px 8px;
 }
 
-.cc-tab-contexto {
+.pnd-intro {
+  color: #555;
+  font-size: 13px;
+  margin: 8px 0 16px;
+  max-width: 900px;
+}
+
+.pnd-tarjeta {
+  padding: 16px;
+  margin-bottom: 16px;
+  max-width: 900px;
+}
+
+.pnd-falta {
+  border-left: 4px solid #e65100;
+}
+
+.pnd-titulo {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pnd-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.pnd-campo {
+  width: 170px;
+}
+
+.pnd-selector {
+  min-width: 320px;
+}
+
+.pnd-completar {
+  margin-bottom: 20px;
+}
+
+.pnd-suma {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 4px 0 12px;
+}
+
+.pnd-ok {
+  color: #2e7d32;
+}
+
+.pnd-mal {
+  color: #c62828;
+}
+
+.pnd-nota {
+  font-size: 13px;
+  color: #555;
+  margin: 6px 0;
+}
+
+.pnd-aviso {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #e65100;
+}
+
+.pnd-icono-alerta {
+  color: #e65100;
+}
+
+.pnd-acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.pnd-pie {
   font-size: 12px;
   color: #888;
+  margin: 14px 0 0;
 }

@@ -1,5 +1,119 @@
-<div class="cc-tab-pendiente">
-  <h3>Ponderación</h3>
-  <p>Pendiente de implementación (tarea T2.3).</p>
-  <p class="cc-tab-contexto">Periodo recibido: {{ periodoId }} — {{ periodoActivo ? 'activo' : 'no activo' }}</p>
+<div class="pnd">
+
+  <mat-progress-bar mode="indeterminate" *ngIf="cargando || guardando"></mat-progress-bar>
+
+  <p class="pnd-intro">
+    Reparto del peso final de la evaluación entre Desempeño y Competencia. Los dos porcentajes
+    deben sumar 100. En los periodos 7 y 8 el reparto es 30 % Desempeño / 70 % Competencia.
+  </p>
+
+  <!-- ── El periodo no tiene ninguna fila: hay que crearla ── -->
+  <mat-card class="pnd-tarjeta pnd-falta" *ngIf="!cargando && sinConfigurar">
+    <h3 class="pnd-titulo">
+      <mat-icon class="pnd-icono-alerta">report_problem</mat-icon>
+      Este periodo no tiene ponderación configurada
+    </h3>
+    <p>
+      Sin estas dos filas el cálculo final de la evaluación no puede ponderar Desempeño y
+      Competencia. Es exactamente lo que le pasó al periodo 8, donde faltaba la fila y no se
+      detectó hasta revisarlo a mano.
+    </p>
+
+    <div class="pnd-fila" *ngIf="origenes.length > 0">
+      <mat-form-field appearance="outline" class="pnd-selector">
+        <mat-label>Copiar la ponderación de</mat-label>
+        <mat-select [(ngModel)]="origenSeleccionadoId" [disabled]="guardando">
+          <mat-option *ngFor="let o of origenes" [value]="o.periodoId">
+            {{ o.descripcion }} — {{ o.desempeno }} / {{ o.competencia }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="button"
+              (click)="copiarDeOrigen()" [disabled]="guardando || !origenSeleccionadoId">
+        <mat-icon>content_copy</mat-icon>
+        Crear copiando del periodo elegido
+      </button>
+    </div>
+
+    <p class="pnd-nota" *ngIf="origenSeleccionado">
+      Se crearán dos filas para este periodo:
+      <strong>{{ origenSeleccionado.desempeno }} % Desempeño</strong> y
+      <strong>{{ origenSeleccionado.competencia }} % Competencia</strong>.
+    </p>
+
+    <p class="pnd-nota" *ngIf="origenes.length === 0">
+      Ningún otro periodo tiene la ponderación completa, así que no hay de dónde copiar.
+    </p>
+  </mat-card>
+
+  <!-- ── El periodo ya tiene ponderación: editarla ── -->
+  <mat-card class="pnd-tarjeta" *ngIf="!cargando && !sinConfigurar">
+    <h3 class="pnd-titulo">Ponderación del periodo</h3>
+
+    <div class="pnd-fila">
+      <mat-form-field appearance="outline" class="pnd-campo">
+        <mat-label>% Desempeño</mat-label>
+        <input matInput type="number" min="0" max="100" step="1"
+               [(ngModel)]="valorDesempeno" [disabled]="guardando">
+      </mat-form-field>
+
+      <button mat-icon-button type="button" class="pnd-completar"
+              title="Ajustar Competencia para que sume 100"
+              (click)="completarA100('desempeno')" [disabled]="guardando">
+        <mat-icon>sync_alt</mat-icon>
+      </button>
+
+      <mat-form-field appearance="outline" class="pnd-campo">
+        <mat-label>% Competencia</mat-label>
+        <input matInput type="number" min="0" max="100" step="1"
+               [(ngModel)]="valorCompetencia" [disabled]="guardando">
+      </mat-form-field>
+
+      <button mat-icon-button type="button" class="pnd-completar"
+              title="Ajustar Desempeño para que sume 100"
+              (click)="completarA100('competencia')" [disabled]="guardando">
+        <mat-icon>sync_alt</mat-icon>
+      </button>
+    </div>
+
+    <p class="pnd-suma" [ngClass]="sumaValida ? 'pnd-ok' : 'pnd-mal'">
+      <mat-icon>{{ sumaValida ? 'check_circle' : 'error' }}</mat-icon>
+      Suma: {{ suma }} {{ sumaValida ? '— correcto' : '— debe ser exactamente 100 para poder guardar' }}
+    </p>
+
+    <p class="pnd-nota" *ngIf="!valoresEnRango">
+      Los porcentajes no pueden ser negativos ni quedar vacíos.
+    </p>
+
+    <p class="pnd-nota pnd-aviso" *ngIf="periodoActivo">
+      <mat-icon class="pnd-icono-alerta">warning</mat-icon>
+      Este es el periodo activo. Cambiar la ponderación altera el cálculo de las evaluaciones en curso.
+    </p>
+
+    <p class="pnd-nota" *ngIf="filasInesperadas.length > 0">
+      Además de Desempeño y Competencia, este periodo tiene
+      {{ filasInesperadas.length }} fila(s) con otra descripción
+      (<span *ngFor="let f of filasInesperadas; let ultimo = last">"{{ f.descripcion }}"{{ ultimo ? '' : ', ' }}</span>).
+      Esta pantalla no las toca; revíselas por base de datos.
+    </p>
+
+    <div class="pnd-acciones">
+      <button mat-raised-button color="primary" type="button"
+              (click)="guardar()" [disabled]="!puedeGuardar">
+        <mat-icon>save</mat-icon>
+        Guardar
+      </button>
+      <button mat-stroked-button type="button" (click)="cargar()" [disabled]="cargando || guardando">
+        <mat-icon>refresh</mat-icon>
+        Descartar y releer
+      </button>
+    </div>
+
+    <p class="pnd-pie">
+      Tras guardar, la pantalla vuelve a leer del API y compara lo que quedó con lo que se envió.
+      Si no coincide, avisa: el API responde 200 en algunos casos sin llegar a procesar.
+    </p>
+  </mat-card>
+
 </div>
