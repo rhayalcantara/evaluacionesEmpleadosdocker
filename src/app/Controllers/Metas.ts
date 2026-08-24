@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, OnInit, Output } from "@angular/core";
 import { DatosServiceService } from "../Services/datos-service.service";
 import { ExcelService } from "../Services/excel.service";
 import { ModelResponse } from "../Models/Usuario/modelResponse";
-import { defer, firstValueFrom, map, Observable } from 'rxjs';
+import { catchError, defer, firstValueFrom, forkJoin, map, of, Observable } from 'rxjs';
 import { IMeta, IMetadto, IMetaDts,
          IResultadoLoteMetas, IReferenciaClonadoMetas,
          IPrevisualizacionClonadoMetas, IResumenMetasPuesto } from "../Models/Meta/IMeta";
@@ -10,6 +10,7 @@ import { LoggerService } from "../Services/logger.service";
 import { Meta } from "@angular/platform-browser";
 import { IPeriodo } from "../Models/Periodos/IPeriodo";
 import { IPuesto } from "../Models/Puesto/IPuesto";
+import { IDepartamento } from "../Models/Departamento/IDepartamento";
 import { IGrupoCompetencia } from "./GrupoCompetencia";
 import { IObjetivo } from "../Models/Objetivo/IObjetivo";
 
@@ -243,15 +244,21 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
       }
 
       /**
+       * Saca el mensaje real que devolvio el API, no un texto generico.
+       */
+      private mensajeDe(err:any):string{
+        return err?.error?.mensaje
+            ?? err?.error?.title
+            ?? (typeof err?.error === 'string' ? err.error : null)
+            ?? err?.message
+            ?? 'Error desconocido';
+      }
+
+      /**
        * Texto de error legible para el reporte del lote.
        */
       private describirError(meta:IMeta, err:any):string{
-        const detalle = err?.error?.mensaje
-                     ?? err?.error?.title
-                     ?? (typeof err?.error === 'string' ? err.error : null)
-                     ?? err?.message
-                     ?? 'Error desconocido';
-        return `Puesto ${meta.positionSecuencial} - competencia ${meta.objetivoid} - "${meta.name}": ${detalle}`;
+        return `Puesto ${meta.positionSecuencial} - competencia ${meta.objetivoid} - "${meta.name}": ${this.mensajeDe(err)}`;
       }
 
       /**
@@ -298,39 +305,71 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
        * Si el destino trae puestoSecuencial, todas las filas se reasignan a ese
        * puesto; si no, cada fila conserva su puesto de origen y solo cambia el periodo.
        *
+       * LECTURAS QUE HACE (todas en paralelo, todas GET):
+       *   1. GET /api/Goals/periodo?periodoid=<origen>   -> filas a clonar
+       *   2. GET /api/Goals/periodo?periodoid=<destino>  -> indice de duplicados
+       *      Se COLAPSA en una sola cuando origen y destino son el mismo periodo
+       *      (caso "clonar desde otro puesto"), reutilizando la lectura del origen.
+       *   3. GET /api/Positions + GET /api/Departments   -> catalogo para detectar
+       *      puestos invisibles al API (ver mas abajo).
+       * Antes se usaba GET /api/Goals (todos los periodos): 7 612 filas, 15,5 MB y
+       * 17-22 s por previsualizacion. Por periodo son ~200 KB y 1,5-3 s. No se pierde
+       * visibilidad: los cuatro GET de GoalsController.cs arrastran exactamente el
+       * mismo join con Deparments, comprobado fila a fila en T2.1 y sobre el codigo
+       * del backend en T2.3.
+       *
+       * OJO: hacen falta LAS DOS lecturas de metas. Con solo la del destino, aCrear
+       * sale vacio; con solo la del origen, el indice de duplicados queda vacio y se
+       * duplicaria todo.
+       *
+       * Clonar hacia un periodo todavia vacio (el caso normal) funciona: comprobado
+       * contra :7071 que un periodo sin metas responde {exito:200, count:0, data:[]},
+       * asi que getmetasperiodo devuelve [] y no lanza.
+       *
        * LIMITACION IMPORTANTE (no se puede resolver desde el frontend):
-       * el indice de duplicados se arma con GET /api/Goals, y ese endpoint hace un
-       * join con Deparments, de modo que NO devuelve los goals de puestos cuyo
-       * Departmentsecuencial es 0 (puesto huerfano en el core RRHH). Caso real
-       * documentado en scripts/clonar_goals_gh_p7_a_p8.py (lineas 41-52): el puesto
-       * 19, GERENTE GESTION HUMANA, tiene 12 goals en BD (ids 11233-11244) que el
-       * API no lista. Si filas asi ya existen en el destino, esta previsualizacion
-       * las da por inexistentes, las reporta en aCrear y ejecutarClonado las inserta
-       * DUPLICADAS de verdad. Por eso la garantia de "nunca duplica" solo vale para
-       * lo que el API deja ver; los puestos invisibles se reportan en
+       * el indice de duplicados se arma con GET /api/Goals/periodo, y ese endpoint
+       * hace un join con Deparments, de modo que NO devuelve los goals de puestos
+       * cuyo Departmentsecuencial no existe en el catalogo de departamentos (puesto
+       * huerfano en el core RRHH, en la practica un 0). Caso real documentado en
+       * scripts/clonar_goals_gh_p7_a_p8.py (lineas 41-52): el puesto 19, GERENTE
+       * GESTION HUMANA, tiene 12 goals en BD (ids 11233-11244) que el API no lista.
+       * Si filas asi ya existen en el destino, esta previsualizacion las da por
+       * inexistentes, las reporta en aCrear y ejecutarClonado las inserta DUPLICADAS
+       * de verdad. Por eso la garantia de "nunca duplica" solo vale para lo que el
+       * API deja ver; los puestos invisibles se reportan en
        * IPrevisualizacionClonadoMetas.advertencias para que el usuario decida antes
        * de ejecutar, y la unica verificacion concluyente es por SQL.
        */
       public previsualizarClonado(origen:IReferenciaClonadoMetas,
                                   destino:IReferenciaClonadoMetas):Observable<IPrevisualizacionClonadoMetas>{
-        return this.Gets().pipe(
-          map((rep:ModelResponse) => {
-            const todas:IMetaDts[] = Array.isArray(rep?.data) ? rep.data : [];
 
-            const filasOrigen = todas.filter(m =>
-              m.periodId === origen.periodoId &&
-              (origen.puestoSecuencial == null || m.positionSecuencial === origen.puestoSecuencial)
+        // Clonar de un puesto a otro dentro del mismo periodo es el caso mas frecuente:
+        // ahi una sola lectura de metas sirve de origen y de indice de duplicados.
+        const mismoPeriodo = origen.periodoId === destino.periodoId;
+
+        return forkJoin({
+          metasOrigen: this.getmetasperiodo(origen.periodoId),
+          metasDestino: mismoPeriodo ? of<IMetaDts[]>([]) : this.getmetasperiodo(destino.periodoId),
+          puestos: this.catalogoPuestos(),
+          departamentos: this.catalogoDepartamentos()
+        }).pipe(
+          map(({ metasOrigen, metasDestino, puestos, departamentos }) => {
+
+            const delPeriodoOrigen:IMetaDts[]  = metasOrigen ?? [];
+            const delPeriodoDestino:IMetaDts[] = mismoPeriodo ? delPeriodoOrigen : (metasDestino ?? []);
+
+            const filasOrigen = delPeriodoOrigen.filter(m =>
+              origen.puestoSecuencial == null || m.positionSecuencial === origen.puestoSecuencial
             );
 
-            // Punto ciego del API: los puestos con departamento huerfano no salen en
-            // GET /api/Goals aunque tengan metas en BD. Si el puesto pedido no aparece
-            // en NINGUNA fila del listado, se avisa en vez de callarlo.
-            const advertencias = this.detectarPuestosInvisibles(todas, origen, destino);
+            // Punto ciego del API: se detecta con el catalogo de puestos y departamentos,
+            // que es independiente del periodo que se este clonando.
+            const advertencias = this.detectarPuestosInvisibles(puestos, departamentos, origen, destino);
 
-            // indice de lo que ya existe en el periodo destino
+            // indice de lo que ya existe en el periodo destino (todos sus puestos:
+            // la clave ya incluye el puesto, asi que filtrar de mas seria redundante)
             const yaExiste = new Set<string>(
-              todas.filter(m => m.periodId === destino.periodoId)
-                   .map(m => this.claveMeta(m.positionSecuencial, this.objetivoDe(m), m.name))
+              delPeriodoDestino.map(m => this.claveMeta(m.positionSecuencial, this.objetivoDe(m), m.name))
             );
 
             const aCrear:IMeta[] = [];
@@ -357,7 +396,8 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
             }
 
             this.logger.info('Metas: previsualizacion de clonado',
-                             { origen, destino, encontradas: filasOrigen.length,
+                             { origen, destino, lecturasDeMetas: mismoPeriodo ? 1 : 2,
+                               encontradas: filasOrigen.length,
                                aCrear: aCrear.length, duplicadas: duplicadas.length,
                                advertencias: advertencias.length });
 
@@ -371,34 +411,124 @@ import { IObjetivo } from "../Models/Objetivo/IObjetivo";
       }
 
       /**
-       * Detecta si el puesto de origen o el de destino no aparecen en el listado que
-       * devuelve el API. Un puesto ausente significa que el join con Deparments lo
-       * excluyo (Departmentsecuencial = 0) o que simplemente no tiene metas en ningun
-       * periodo; desde el frontend no se pueden distinguir los dos casos, y en el
-       * primero la comprobacion de duplicados deja de ser fiable.
+       * Catalogo completo de puestos (GET /api/Positions). Si falla no se tumba la
+       * previsualizacion: se devuelve vacio y la deteccion de invisibles lo avisa.
+       *
+       * Solo se usan `secuencial` y `departmentSecuencial`, que este endpoint si
+       * proyecta bien. NO usar `categoriaPuestoId` de aqui: el listado construye un
+       * `new Position { ... }` sin asignarlo y llega 0 en los 209 puestos (defecto
+       * comprobado en T2.3); para eso hace falta GET /api/Positions/{id}.
        */
-      private detectarPuestosInvisibles(todas:IMetaDts[],
+      private catalogoPuestos():Observable<IPuesto[]>{
+        return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Positions').pipe(
+          map((rep:ModelResponse) => (Array.isArray(rep?.data) ? rep.data as IPuesto[] : [])),
+          catchError((err:any) => {
+            this.logger.warn('Metas: no se pudo leer el catalogo de puestos (/api/Positions)',
+                             this.mensajeDe(err));
+            return of([] as IPuesto[]);
+          })
+        );
+      }
+
+      /**
+       * Catalogo de departamentos (GET /api/Departments). Mismo criterio: si falla,
+       * vacio y se avisa, en vez de tumbar la previsualizacion entera.
+       */
+      private catalogoDepartamentos():Observable<IDepartamento[]>{
+        return this.datos.getdatos<ModelResponse>(this.datos.URL + '/api/Departments').pipe(
+          map((rep:ModelResponse) => (Array.isArray(rep?.data) ? rep.data as IDepartamento[] : [])),
+          catchError((err:any) => {
+            this.logger.warn('Metas: no se pudo leer el catalogo de departamentos (/api/Departments)',
+                             this.mensajeDe(err));
+            return of([] as IDepartamento[]);
+          })
+        );
+      }
+
+      /**
+       * Detecta los puestos que el API no puede listar y arma las advertencias.
+       *
+       * Un puesto es invisible para GET /api/Goals* cuando su `departmentSecuencial`
+       * no existe en el catalogo de /api/Departments: es justo la condicion que hace
+       * fallar el join del backend (`from depa in _context.Deparments.Where(x =>
+       * x.secuencial == posi.DepartmentSecuencial)`). Es la misma heuristica de la
+       * pestana de Diagnostico, y esta verificado que equivale a departmentSecuencial = 0.
+       *
+       * La deteccion se hace contra el CATALOGO, no contra el listado de metas: si se
+       * mirara el listado, un puesto cuyas metas viven en otro periodo pareceria
+       * invisible en cuanto la previsualizacion dejo de leer todos los periodos, y se
+       * emitirian advertencias falsas.
+       */
+      private detectarPuestosInvisibles(puestos:IPuesto[],
+                                        departamentos:IDepartamento[],
                                         origen:IReferenciaClonadoMetas,
                                         destino:IReferenciaClonadoMetas):string[]{
         const advertencias:string[] = [];
-        const puestosVisibles = new Set<number>(todas.map(m => m.positionSecuencial));
+        const catalogo = new Map<number, IPuesto>((puestos ?? []).map(p => [Number(p.secuencial), p]));
+        const departamentosValidos = new Set<number>((departamentos ?? []).map(d => Number(d.secuencial)));
 
-        if (origen.puestoSecuencial != null && !puestosVisibles.has(origen.puestoSecuencial)){
+        // Sin catalogo no se puede afirmar nada: mejor decirlo que inventar avisos
+        // para todos los puestos (un catalogo de departamentos vacio los marcaria a todos).
+        if (catalogo.size === 0 || departamentosValidos.size === 0){
           advertencias.push(
-            `El puesto de origen ${origen.puestoSecuencial} no aparece en el listado de /api/Goals. ` +
-            `Puede que no tenga metas en ningun periodo, o que las tenga en base de datos pero el API ` +
-            `las oculte por tener el departamento en 0 (puesto huerfano). En ese caso no hay nada que clonar ` +
-            `desde aqui y hay que verificarlo por SQL.`
+            `No se pudo leer el catalogo de puestos o el de departamentos, asi que esta ` +
+            `previsualizacion NO puede avisar de puestos invisibles para el API. Si sospecha ` +
+            `que algun puesto tiene el departamento en 0, verifique por SQL antes de ejecutar.`
           );
+          return advertencias;
         }
 
-        if (destino.puestoSecuencial != null && !puestosVisibles.has(destino.puestoSecuencial)){
-          advertencias.push(
-            `El puesto de destino ${destino.puestoSecuencial} no aparece en el listado de /api/Goals, ` +
-            `asi que NO se puede confirmar que no tenga ya metas en el periodo destino. Si las tiene ` +
-            `(caso de los puestos con departamento en 0), ejecutar el clonado las duplicaria. ` +
-            `Verifique por SQL antes de continuar.`
-          );
+        const nombreDe = (secuencial:number):string => {
+          const p = catalogo.get(secuencial);
+          return p ? `${secuencial} (${p.descripcion})` : `${secuencial}`;
+        };
+        const esInvisible = (secuencial:number):boolean => {
+          const p = catalogo.get(secuencial);
+          return p ? !departamentosValidos.has(Number(p.departmentSecuencial)) : false;
+        };
+
+        if (origen.puestoSecuencial != null){
+          if (!catalogo.has(origen.puestoSecuencial)){
+            advertencias.push(
+              `El puesto de origen ${origen.puestoSecuencial} no existe en el catalogo de /api/Positions.`
+            );
+          }else if (esInvisible(origen.puestoSecuencial)){
+            advertencias.push(
+              `El puesto de origen ${nombreDe(origen.puestoSecuencial)} tiene un departamento que no ` +
+              `existe en el catalogo, asi que el API no lista sus metas aunque existan en base de datos. ` +
+              `Aqui aparecera como si no tuviera ninguna. Verifique por SQL que es lo que hay que clonar.`
+            );
+          }
+        }
+
+        if (destino.puestoSecuencial != null){
+          if (!catalogo.has(destino.puestoSecuencial)){
+            advertencias.push(
+              `El puesto de destino ${destino.puestoSecuencial} no existe en el catalogo de /api/Positions.`
+            );
+          }else if (esInvisible(destino.puestoSecuencial)){
+            advertencias.push(
+              `El puesto de destino ${nombreDe(destino.puestoSecuencial)} tiene un departamento que no ` +
+              `existe en el catalogo: el API no lista sus metas, asi que NO se puede confirmar que no ` +
+              `tenga ya metas en el periodo destino. Si las tiene, ejecutar el clonado las DUPLICARIA. ` +
+              `Verifique por SQL antes de continuar.`
+            );
+          }
+        }
+
+        // Cuando alguno de los dos extremos abarca el periodo completo, los puestos
+        // invisibles se quedan fuera de la comparacion sin que nadie los nombre.
+        if (origen.puestoSecuencial == null || destino.puestoSecuencial == null){
+          const invisibles = Array.from(catalogo.keys()).filter(esInvisible).sort((a, b) => a - b);
+          if (invisibles.length > 0){
+            const muestra = invisibles.slice(0, 5).join(', ');
+            const resto = invisibles.length > 5 ? `, y ${invisibles.length - 5} mas` : '';
+            advertencias.push(
+              `Hay ${invisibles.length} puesto(s) que el API no puede listar (${muestra}${resto}) porque su ` +
+              `departamento no existe en el catalogo. Sus metas quedan fuera de esta comparacion: no se ` +
+              `clonarian aunque les toque, y tampoco cuentan como duplicado. Verifique por SQL.`
+            );
+          }
         }
 
         return advertencias;
