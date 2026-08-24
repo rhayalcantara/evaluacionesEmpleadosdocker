@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero — Rediseño CRUD de Competencias</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --panel:#ffffff; --texto:#1f2933; --suave:#66757f; --borde:#dfe5ea;
+    --verde:#1f9d55; --ambar:#c98a00; --azul:#2b6cb0; --gris:#9aa5ad; --rojo:#c53030;
+    --sombra:0 1px 3px rgba(16,24,32,.08), 0 6px 16px rgba(16,24,32,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#12171c; --panel:#1b2229; --texto:#e6edf3; --suave:#9aa8b4; --borde:#2a333c;
+           --sombra:0 1px 3px rgba(0,0,0,.5), 0 6px 16px rgba(0,0,0,.35); }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--texto);
+       font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+  header h1{margin:0 0 4px;font-size:26px;letter-spacing:-.01em}
+  header p{margin:0;color:var(--suave);font-size:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 28px}
+  .chip{background:var(--panel);border:1px solid var(--borde);border-radius:999px;
+        padding:4px 12px;font-size:12.5px;color:var(--suave);box-shadow:var(--sombra)}
+  .chip b{color:var(--texto);font-weight:600}
+
+  .barra{background:var(--panel);border:1px solid var(--borde);border-radius:12px;
+         padding:18px 20px;box-shadow:var(--sombra);margin-bottom:28px}
+  .barra .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .barra .top span{font-size:13px;color:var(--suave)}
+  .barra .top strong{font-size:22px}
+  .pista{height:10px;background:var(--borde);border-radius:99px;overflow:hidden}
+  .pista i{display:block;height:100%;background:linear-gradient(90deg,var(--azul),var(--verde));
+           border-radius:99px;transition:width .4s ease}
+  .leyenda{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--suave)}
+  .leyenda em{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+  .punto{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+  .fase{background:var(--panel);border:1px solid var(--borde);border-radius:12px;
+        margin-bottom:18px;box-shadow:var(--sombra);overflow:hidden}
+  .fase>h2{margin:0;padding:14px 20px;font-size:15px;border-bottom:1px solid var(--borde);
+           display:flex;align-items:center;gap:10px}
+  .fase>h2 small{margin-left:auto;font-weight:400;color:var(--suave);font-size:12.5px}
+  .tarea{padding:14px 20px;border-bottom:1px solid var(--borde);display:grid;
+         grid-template-columns:96px 1fr auto;gap:14px;align-items:start}
+  .tarea:last-child{border-bottom:0}
+  .id{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--suave);padding-top:2px}
+  .tarea h3{margin:0 0 3px;font-size:14.5px;font-weight:600}
+  .tarea p{margin:0;font-size:13px;color:var(--suave)}
+  .tarea .archivos{margin-top:6px;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--suave);opacity:.85}
+  .estado{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .e-pendiente{background:rgba(154,165,173,.15);color:var(--gris)}
+  .e-corriendo{background:rgba(43,108,176,.14);color:var(--azul)}
+  .e-critica{background:rgba(201,138,0,.16);color:var(--ambar)}
+  .e-listo{background:rgba(31,157,85,.15);color:var(--verde)}
+  .e-bloqueado{background:rgba(197,48,48,.14);color:var(--rojo)}
+
+  .bitacora{background:var(--panel);border:1px solid var(--borde);border-radius:12px;
+            padding:18px 20px;box-shadow:var(--sombra)}
+  .bitacora h2{margin:0 0 12px;font-size:15px}
+  .bitacora ol{margin:0;padding-left:18px}
+  .bitacora li{font-size:13px;margin-bottom:8px}
+  .bitacora time{color:var(--suave);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;margin-right:8px}
+  footer{margin-top:28px;font-size:12px;color:var(--suave);text-align:center}
+  @media (max-width:640px){ .tarea{grid-template-columns:1fr;gap:6px} .id{padding-top:0} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Rediseño del CRUD de Competencias</h1>
+    <p>Sistema de Evaluación de Empleados — COOPASPIRE</p>
+  </header>
+
+  <div class="meta" id="meta"></div>
+
+  <section class="barra">
+    <div class="top">
+      <span>Avance general</span>
+      <strong id="pct">0%</strong>
+    </div>
+    <div class="pista"><i id="pista" style="width:0%"></i></div>
+    <div class="leyenda">
+      <em><span class="punto" style="background:var(--gris)"></span> Pendiente</em>
+      <em><span class="punto" style="background:var(--azul)"></span> En curso</em>
+      <em><span class="punto" style="background:var(--ambar)"></span> En crítica</em>
+      <em><span class="punto" style="background:var(--verde)"></span> Aprobado y commiteado</em>
+      <em><span class="punto" style="background:var(--rojo)"></span> Bloqueado</em>
+    </div>
+  </section>
+
+  <div id="fases"></div>
+
+  <section class="bitacora">
+    <h2>Bitácora</h2>
+    <ol id="bitacora"></ol>
+  </section>
+
+  <footer>Actualizado por el orquestador · <span id="sello"></span></footer>
+</div>
+
+<script>
+// ─── ESTADO DEL PROYECTO ────────────────────────────────────────────────
+// estados: pendiente | corriendo | critica | listo | bloqueado
+const ESTADO = {
+  actualizado: "2026-08-24",
+  rama: "feature/crud-competencias",
+  entorno: "local · ng serve --configuration prueba · API :7071",
+  rsia: "No aplica",
+  fases: [
+    {
+      titulo: "Fase 1 — Cimientos",
+      nota: "3 subagentes en paralelo",
+      tareas: [
+        { id:"T1.1", nombre:"Controlador CompetenciaCategoriaPuesto",
+          desc:"Controlador y modelo nuevos para el vínculo competencia ↔ categoría de puesto.",
+          archivos:"Controllers/CompetenciaCategoriaPuesto.ts · Models/CompetenciaCategoriaPuesto/",
+          estado:"pendiente" },
+        { id:"T1.2", nombre:"Ampliar controlador de Metas (Goal)",
+          desc:"Delete real, alta en lote, clonado con previsualización y cálculo de peso por puesto.",
+          archivos:"Controllers/Metas.ts · Models/Meta/IMeta.ts",
+          estado:"pendiente" },
+        { id:"T1.3", nombre:"Ruta, menú, guard y shell con pestañas",
+          desc:"Ruta protegida por rol Admin, ítem de menú, shell con selector de periodo y 4 pestañas.",
+          archivos:"app-routing.module.ts · navmenu.component.html · Pages/configuracion-competencias/",
+          estado:"pendiente" }
+      ]
+    },
+    {
+      titulo: "Fase 2 — Pestañas",
+      nota: "3 subagentes en paralelo · requiere Fase 1",
+      tareas: [
+        { id:"T2.1", nombre:"Competencias por puesto",
+          desc:"Listado con semáforo de peso, alta múltiple, edición, borrado con confirmación y clonado.",
+          archivos:"tabs/competencias-puesto/", estado:"pendiente" },
+        { id:"T2.2", nombre:"Catálogo y categorías",
+          desc:"Mantenimiento del catálogo del periodo y matriz competencia ↔ categoría de puesto.",
+          archivos:"tabs/catalogo-categorias/", estado:"pendiente" },
+        { id:"T2.3", nombre:"Ponderación y diagnóstico",
+          desc:"% Desempeño/Competencia del periodo y los tres listados de huecos de configuración.",
+          archivos:"tabs/ponderacion/ · tabs/diagnostico/", estado:"pendiente" }
+      ]
+    },
+    {
+      titulo: "Fase 3 — Integración y evidencia",
+      nota: "secuencial",
+      tareas: [
+        { id:"T3.1", nombre:"Compilación e integración", desc:"npm run build sin errores nuevos; /Meta sigue funcionando.", archivos:"—", estado:"pendiente" },
+        { id:"T3.2", nombre:"Crítica final", desc:"El crítico revisa la entrega completa contra el plan.", archivos:"—", estado:"pendiente" },
+        { id:"T3.3", nombre:"Playwright y auditoría", desc:"Recorrido completo con capturas y documento de auditoría.", archivos:"e2e/crud-competencias.spec.js · Docs/crud-competencias/03-Auditoria-Verificacion.md", estado:"pendiente" }
+      ]
+    }
+  ],
+  bitacora: [
+    { t:"2026-08-24", m:"Alcance confirmado: configuración completa del periodo, con clonado, validación de peso 100 y alta múltiple. Verificación local contra el API de prueba." },
+    { t:"2026-08-24", m:"Rama feature/crud-competencias creada. Plan general y desglose de fases redactados." }
+  ]
+};
+// ────────────────────────────────────────────────────────────────────────
+
+const ETIQUETA = { pendiente:"Pendiente", corriendo:"En curso", critica:"En crítica", listo:"Aprobado", bloqueado:"Bloqueado" };
+const PESO     = { pendiente:0, corriendo:.35, critica:.75, listo:1, bloqueado:0 };
+
+function render(){
+  document.getElementById("meta").innerHTML = [
+    ["Rama", ESTADO.rama], ["Entorno", ESTADO.entorno], ["RSIA", ESTADO.rsia]
+  ].map(([k,v]) => `<span class="chip">${k}: <b>${v}</b></span>`).join("");
+
+  const tareas = ESTADO.fases.flatMap(f => f.tareas);
+  const pct = Math.round(100 * tareas.reduce((a,t) => a + PESO[t.estado], 0) / tareas.length);
+  document.getElementById("pct").textContent = pct + "%";
+  document.getElementById("pista").style.width = pct + "%";
+
+  document.getElementById("fases").innerHTML = ESTADO.fases.map(f => `
+    <section class="fase">
+      <h2>${f.titulo}<small>${f.nota}</small></h2>
+      ${f.tareas.map(t => `
+        <div class="tarea">
+          <div class="id">${t.id}</div>
+          <div>
+            <h3>${t.nombre}</h3>
+            <p>${t.desc}</p>
+            ${t.archivos !== "—" ? `<div class="archivos">${t.archivos}</div>` : ""}
+          </div>
+          <span class="estado e-${t.estado}">${ETIQUETA[t.estado]}</span>
+        </div>`).join("")}
+    </section>`).join("");
+
+  document.getElementById("bitacora").innerHTML =
+    ESTADO.bitacora.map(b => `<li><time>${b.t}</time>${b.m}</li>`).join("");
+  document.getElementById("sello").textContent = ESTADO.actualizado;
+}
+render();
+</script>
+</body>
+</html>
