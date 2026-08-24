@@ -1,0 +1,109 @@
+<div class="cc-contenedor">
+
+  <h2 class="cc-titulo">Configuración de Competencias</h2>
+  <p class="cc-subtitulo">
+    Deje el periodo completamente configurado sin tocar la base de datos: competencias del puesto,
+    catálogo por categoría, ponderación y diagnóstico.
+  </p>
+
+  <mat-card class="cc-encabezado">
+
+    <div class="cc-fila">
+      <mat-form-field appearance="outline" class="cc-selector">
+        <mat-label>Periodo</mat-label>
+        <mat-select [(ngModel)]="periodoSeleccionadoId"
+                    (selectionChange)="alCambiarPeriodo()"
+                    [disabled]="cargandoPeriodos || periodos.length === 0">
+          <mat-option *ngFor="let p of periodos" [value]="p.id">
+            {{ p.descripcion }}<span *ngIf="p.activa"> — activo</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button color="primary" type="button"
+              (click)="alCambiarDatos()"
+              [disabled]="!periodoSeleccionadoId || cargandoResumen">
+        <mat-icon>refresh</mat-icon>
+        Actualizar resumen
+      </button>
+    </div>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="cargandoPeriodos || cargandoResumen"></mat-progress-bar>
+
+    <div class="cc-resumen" *ngIf="periodoSeleccionado">
+      <div class="cc-dato">
+        <span class="cc-etiqueta">Periodo</span>
+        <span class="cc-valor">{{ periodoSeleccionado.descripcion }}</span>
+      </div>
+      <div class="cc-dato">
+        <span class="cc-etiqueta">Estado</span>
+        <span class="cc-valor" [ngClass]="periodoActivo ? 'cc-si' : 'cc-no'">
+          {{ periodoActivo ? 'Activo' : 'No activo' }}
+        </span>
+      </div>
+      <div class="cc-dato">
+        <span class="cc-etiqueta">Puestos con competencias</span>
+        <span class="cc-valor cc-numero">{{ puestosConCompetencias }}</span>
+      </div>
+      <div class="cc-dato">
+        <span class="cc-etiqueta">Puestos con empleados activos</span>
+        <span class="cc-valor cc-numero">{{ puestosConEmpleadosActivos }}</span>
+      </div>
+    </div>
+
+    <p class="cc-aviso" *ngIf="periodoActivo">
+      <mat-icon class="cc-aviso-icono">warning</mat-icon>
+      Este es el periodo activo: los cambios pueden afectar evaluaciones en curso.
+    </p>
+
+  </mat-card>
+
+  <mat-tab-group class="cc-pestanas" animationDuration="0ms" *ngIf="periodoSeleccionadoId">
+
+    <mat-tab label="Competencias por puesto">
+      <ng-template matTabContent>
+        <app-cc-competencias-puesto
+          [periodoId]="periodoSeleccionadoId!"
+          [periodoActivo]="periodoActivo"
+          (cambios)="alCambiarDatos()">
+        </app-cc-competencias-puesto>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Catálogo y categorías">
+      <ng-template matTabContent>
+        <app-cc-catalogo-categorias
+          [periodoId]="periodoSeleccionadoId!"
+          [periodoActivo]="periodoActivo"
+          (cambios)="alCambiarDatos()">
+        </app-cc-catalogo-categorias>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Ponderación">
+      <ng-template matTabContent>
+        <app-cc-ponderacion
+          [periodoId]="periodoSeleccionadoId!"
+          [periodoActivo]="periodoActivo"
+          (cambios)="alCambiarDatos()">
+        </app-cc-ponderacion>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Diagnóstico">
+      <ng-template matTabContent>
+        <app-cc-diagnostico
+          [periodoId]="periodoSeleccionadoId!"
+          [periodoActivo]="periodoActivo"
+          (cambios)="alCambiarDatos()">
+        </app-cc-diagnostico>
+      </ng-template>
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <p class="cc-vacio" *ngIf="!periodoSeleccionadoId && !cargandoPeriodos">
+    Seleccione un periodo para configurar sus competencias.
+  </p>
+
+</div>

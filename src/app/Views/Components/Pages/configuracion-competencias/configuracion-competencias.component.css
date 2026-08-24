@@ -1,0 +1,100 @@
+.cc-contenedor {
+  padding: 20px;
+}
+
+.cc-titulo {
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.cc-subtitulo {
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.cc-encabezado {
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.cc-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.cc-selector {
+  min-width: 320px;
+}
+
+.cc-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cc-dato {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.cc-etiqueta {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #888;
+}
+
+.cc-valor {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.cc-numero {
+  font-size: 22px;
+}
+
+.cc-si {
+  color: #2e7d32;
+}
+
+.cc-no {
+  color: #9e9e9e;
+}
+
+.cc-aviso {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border-left: 4px solid #f0ad4e;
+  background-color: #fff8e1;
+  color: #7a5b00;
+  font-size: 13px;
+}
+
+.cc-aviso-icono {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.cc-pestanas {
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.cc-vacio {
+  color: #888;
+  font-style: italic;
+}
