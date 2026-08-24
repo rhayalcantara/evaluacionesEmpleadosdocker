@@ -49,6 +49,8 @@
   .tarea h3{margin:0 0 3px;font-size:14.5px;font-weight:600}
   .tarea p{margin:0;font-size:13px;color:var(--suave)}
   .tarea .archivos{margin-top:6px;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--suave);opacity:.85}
+  .tarea .nota{margin-top:6px;font-size:12.5px;color:var(--ambar)}
+  .tarea .commit{margin-top:6px;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--verde)}
   .estado{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}
   .e-pendiente{background:rgba(154,165,173,.15);color:var(--gris)}
   .e-corriendo{background:rgba(43,108,176,.14);color:var(--azul)}
@@ -116,15 +118,15 @@ const ESTADO = {
         { id:"T1.1", nombre:"Controlador CompetenciaCategoriaPuesto",
           desc:"Controlador y modelo nuevos para el vínculo competencia ↔ categoría de puesto.",
           archivos:"Controllers/CompetenciaCategoriaPuesto.ts · Models/CompetenciaCategoriaPuesto/",
-          estado:"pendiente" },
+          estado:"corriendo", nota:"Aplicando correcciones del crítico: la matriz por periodo no filtraba de verdad y el tipo de Update no refleja el 204 sin cuerpo." },
         { id:"T1.2", nombre:"Ampliar controlador de Metas (Goal)",
           desc:"Delete real, alta en lote, clonado con previsualización y cálculo de peso por puesto.",
           archivos:"Controllers/Metas.ts · Models/Meta/IMeta.ts",
-          estado:"pendiente" },
+          estado:"corriendo", nota:"Aplicando correcciones del crítico: declarar y advertir el punto ciego del GET /api/Goals con puestos de departamento huérfano." },
         { id:"T1.3", nombre:"Ruta, menú, guard y shell con pestañas",
           desc:"Ruta protegida por rol Admin, ítem de menú, shell con selector de periodo y 4 pestañas.",
           archivos:"app-routing.module.ts · navmenu.component.html · Pages/configuracion-competencias/",
-          estado:"pendiente" }
+          estado:"listo", commit:"f457ccc" }
       ]
     },
     {
@@ -154,7 +156,11 @@ const ESTADO = {
   ],
   bitacora: [
     { t:"2026-08-24", m:"Alcance confirmado: configuración completa del periodo, con clonado, validación de peso 100 y alta múltiple. Verificación local contra el API de prueba." },
-    { t:"2026-08-24", m:"Rama feature/crud-competencias creada. Plan general y desglose de fases redactados." }
+    { t:"2026-08-24", m:"Rama feature/crud-competencias creada. Plan general y desglose de fases redactados." },
+    { t:"2026-08-24", m:"Fase 1 lanzada: tres subagentes en paralelo (T1.1 controlador de vinculo, T1.2 ampliacion de Metas, T1.3 ruta/menu/shell)." },
+    { t:"2026-08-24", m:"Fase 1 entregada. En revision del subagente critico; compilacion de produccion corriendo en paralelo." },
+    { t:"2026-08-24", m:"npm run build: exit 0, sin avisos nuevos. Los avisos de CSS y CommonJS son preexistentes." },
+    { t:"2026-08-24", m:"Veredicto del critico: T1.3 APROBADA (commit f457ccc, push a origin). T1.1 y T1.2 con correcciones, devueltas a sus agentes." }
   ]
 };
 // ────────────────────────────────────────────────────────────────────────
@@ -182,6 +188,8 @@ function render(){
             <h3>${t.nombre}</h3>
             <p>${t.desc}</p>
             ${t.archivos !== "—" ? `<div class="archivos">${t.archivos}</div>` : ""}
+            ${t.nota ? `<div class="nota">${t.nota}</div>` : ""}
+            ${t.commit ? `<div class="commit">commit ${t.commit} · push a origin</div>` : ""}
           </div>
           <span class="estado e-${t.estado}">${ETIQUETA[t.estado]}</span>
         </div>`).join("")}

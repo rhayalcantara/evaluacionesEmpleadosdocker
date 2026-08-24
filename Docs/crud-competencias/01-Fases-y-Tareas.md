@@ -67,7 +67,7 @@ src/app/Views/Components/Pages/configuracion-competencias/
 **Qué hace:**
 1. `Delete(id: number): Observable<any>` usando `delbyid` (hoy no existe).
 2. `insertarLote(metas: IMeta[]): Observable<...>` — alta múltiple secuencial con reporte de cuántas se crearon y cuántas fallaron.
-3. `clonar(origen: {periodoId, puestoSecuencial?}, destino: {periodoId, puestoSecuencial?}): Observable<{aCrear, duplicadas}>` — **primero previsualiza**: devuelve qué filas se crearían y cuáles se saltarían por existir ya (misma clave puesto + competencia + descripción), y solo ejecuta si se le pasa `ejecutar: true`.
+3. Clonado en dos pasos (**así quedó implementado**, no como una sola función con bandera): `previsualizarClonado(origen, destino)` devuelve `{aCrear, duplicadas, advertencias}` y no escribe nada; `ejecutarClonado(aCrear)` inserta. La clave de duplicado es puesto + competencia + descripción normalizada.
 4. `pesoTotalPorPuesto(periodoId, puestoSecuencial): Observable<number>`.
 
 **Aceptación:** compila; el clonado nunca duplica; `Delete` llama a `DELETE /api/Goals/{id}`; se respeta `objetivoId` al leer y `objetivoid` al escribir; sin `console.log`.
@@ -146,3 +146,19 @@ Spec `e2e/crud-competencias.spec.js` contra `http://localhost:4200/evaluacionemp
 ## Control de commits
 
 Un commit por tarea aprobada por el crítico, con `push` a `origin/feature/crud-competencias`. Mensaje: `feat(competencias): <tarea> — aprobado por crítico`.
+
+
+---
+
+## Notas de la Fase 1 para la Fase 2 (del subagente crítico)
+
+Léelas antes de escribir código; son trampas reales, no teoría.
+
+1. **`getMatrizPorPeriodo` necesita las competencias del periodo.** Hasta que T1.1 aplique su corrección, llamarla con un solo argumento devuelve la matriz de **todos** los periodos mezclados, sin error. Pásale siempre los `ObjetivoId` del periodo, obtenidos del controlador `Objetivo`.
+2. **`GET /api/Goals` no ve los puestos con `Departmentsecuencial = 0`.** Afecta a `previsualizarClonado`, `GetMetasPorPeriodoYPuesto` y `pesoTotalPorPuesto`. Un puesto puede mostrarse con 0 competencias y peso 0 aunque en base de datos tenga 12 (caso real: puesto 19, GERENTE GESTION HUMANA). La pestaña de Diagnóstico debe listar estos puestos huérfanos explícitamente.
+3. **`insertarLote` es un `defer`:** cada suscripción vuelve a ejecutar el lote completo. Suscríbete una sola vez; nada de `async` pipe ni doble `subscribe` sobre el mismo Observable, o se insertan las filas dos veces.
+4. **`cambios` dispara un recálculo caro en el shell** (`getmetasperiodo` + `GET /api/Empleadoes` completo). En un alta múltiple, emítelo **una vez al terminar el lote**, nunca por fila.
+5. **Las pestañas viven dentro de `<ng-template matTabContent>`:** el contenido se destruye al cambiar de pestaña, así que filtros, selección de puesto o un panel de alta a medio llenar se pierden al ir y volver. Si hay que conservar estado, va en un servicio.
+6. **El peso total llega como suma cruda de `weight`,** sin redondeo. Para el semáforo compara con tolerancia, no con `=== 100`.
+7. **`Update` de `CompetenciaCategoriaPuesto` responde 204 sin cuerpo:** emite `null`. No encadenes nada que lea la entidad devuelta.
+8. **`/Meta` ahora exige rol Admin.** Avisar a QA para que no lo reporte como falla.
