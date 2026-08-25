@@ -20,3 +20,7 @@ Registro de lo que hizo cada subagente, qué dijo el crítico y qué se commite�
 | 2026-08-24 | Ajuste del clonado | T1.2 | 18,35 s → 2,9 s (1,0 s mismo periodo); detección de invisibles independiente del periodo | **APROBADO** | `0f8a785` |
 | 2026-08-24 | T2.1 correcciones | T2.1 | Gris acotado a puestos ocupados (115 → 8); tooltip que ya no propone una comprobación que no comprueba | **APROBADO** (arbitraje: la objeción del subagente era correcta, el encargo del orquestador era contradictorio) | `6b34c54` |
 | 2026-08-24 | Bloqueante detectado | Crítico | Cambio no solicitado en `app-routing.module.ts` que ponía RoleGuard a `/EvaluarSubordinados`: habría dejado sin evaluar a 2 gerentes sin fila en `EmpleadosRoles` y a sus 10 subordinados | — | revertido, no commiteado |
+| 2026-08-25 | T3.3 Playwright y auditoría | Subagente verif. | Guion de 12 pasos y documento de evidencia; 5 corridas hasta cerrar los 9 criterios | **APROBADO** tras 3 rondas de crítica | (commit final) |
+| 2026-08-25 | Hallazgo de método | Orquestador + crítico | Los 5 veredictos negativos del recorrido fueron del guion, ninguno del sistema | — | documentado en §2 de la auditoría |
+| 2026-08-25 | Confirmación en vivo del defecto A | Corrida 1 | 14 filas creadas por la propia pantalla que el API siguió sin listar (ids 11372-11385) | — | `04-Defectos-API.md` §A |
+| 2026-08-25 | Estado de la BD de prueba | Orquestador | 7.921 metas, 115 en el periodo 8, ponderaciones 30/70: idéntico a antes de empezar | — | verificado por SQL |

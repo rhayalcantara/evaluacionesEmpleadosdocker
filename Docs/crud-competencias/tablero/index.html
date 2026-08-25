@@ -149,8 +149,8 @@ const ESTADO = {
       nota: "secuencial",
       tareas: [
         { id:"T3.1", nombre:"Compilación e integración", desc:"npm run build sin errores nuevos; /Meta sigue funcionando.", archivos:"—", estado:"listo" },
-        { id:"T3.2", nombre:"Crítica final", desc:"El crítico revisa la entrega completa contra el plan.", archivos:"—", estado:"pendiente" },
-        { id:"T3.3", nombre:"Playwright y auditoría", desc:"Recorrido completo con capturas y documento de auditoría.", archivos:"e2e/crud-competencias.spec.js · Docs/crud-competencias/03-Auditoria-Verificacion.md", estado:"corriendo", nota:"Escribiendo el guion. El recorrido necesita credenciales de un usuario con rol Administrador." }
+        { id:"T3.2", nombre:"Crítica final", desc:"El crítico revisó la entrega completa: 9 criterios verificados, 3 rondas hasta aprobar.", archivos:"—", estado:"listo" },
+        { id:"T3.3", nombre:"Playwright y auditoría", desc:"Recorrido completo con capturas y documento de auditoría.", archivos:"e2e/crud-competencias.spec.js · Docs/crud-competencias/03-Auditoria-Verificacion.md", estado:"listo", nota:"12 de 12 pasos, cero problemas. Cinco corridas hicieron falta: los cinco veredictos negativos fueron del guion, ninguno del sistema." }
       ]
     }
   ],
@@ -167,7 +167,10 @@ const ESTADO = {
     { t:"2026-08-24", m:"Critico: T2.2 y T2.3 APROBADAS (99f8515, d784c3c). T2.1 con una correccion sustantiva. Dos defectos del API documentados en 04-Defectos-API.md." },
     { t:"2026-08-24", m:"Clonado optimizado: 18,35 s -> 2,9 s. Aprobado y commiteado (0f8a785)." },
     { t:"2026-08-24", m:"El critico detecta y se revierte un cambio no solicitado en app-routing que habria bloqueado /EvaluarSubordinados a dos gerentes sin rol asignado." },
-    { t:"2026-08-24", m:"T2.1 APROBADA (6b34c54). Fase 2 cerrada: siete commits de codigo en origin." }
+    { t:"2026-08-24", m:"T2.1 APROBADA (6b34c54). Fase 2 cerrada: siete commits de codigo en origin." },
+    { t:"2026-08-25", m:"Verificacion con Playwright: 12 de 12 pasos, cero problemas, 4,5 min. Criterio 5 (fijar la ponderacion) ejercido sobre el periodo cerrado de 2024." },
+    { t:"2026-08-25", m:"La corrida confirmo EN VIVO el defecto A: 14 competencias creadas desde la pantalla que el API siguio sin listar." },
+    { t:"2026-08-25", m:"Base de prueba intacta: 7.921 metas, 115 en el periodo 8, ponderaciones 30/70. El recorrido limpio todo lo que creo." }
   ]
 };
 // ────────────────────────────────────────────────────────────────────────
