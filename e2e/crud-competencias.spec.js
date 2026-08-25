@@ -431,7 +431,7 @@ test(`CRUD de Competencias — verificación T3.3 [${MODO}]`, async ({ page }) =
 
   // ── PASO 1 — Login y navegación ────────────────────────────────────────────
   await ejecutarPaso(page, 1, 'Login y navegación por el menú hasta la pantalla nueva', async () => {
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('input', { timeout: 15000 }).catch(() => null);
     await shot(page, 'login');
 
@@ -453,19 +453,32 @@ test(`CRUD de Competencias — verificación T3.3 [${MODO}]`, async ({ page }) =
     await dismissSwal(page);
     await shot(page, 'post-login');
 
+    // El menú de administrador no está listo al terminar el login: navmenu carga
+    // primero el periodo, luego el empleado y solo entonces busca el rol
+    // (GET /api/EmpleadoRols, ~196 kB). Hay que esperar a que aparezca en vez de
+    // suponer un tiempo fijo, o se concluye en falso que el usuario no es Admin.
     const menuConf = page.locator('li.nav-item.dropdown').filter({ hasText: 'Configuraci' });
-    if (await menuConf.count() === 0) {
-      issue('Auth', 'El menú "Configuración" no está visible: el usuario del recorrido no tiene rol 1 (Admin). ' +
-                    'Sin rol Admin el resto del recorrido no es válido.');
+    let menuVisible = false;
+    for (let i = 0; i < 30; i++) {
+      if (await menuConf.count() > 0) { menuVisible = true; break; }
+      await page.waitForTimeout(1000);
+    }
+    if (!menuVisible) {
+      const rolGuardado = await page.evaluate(() => localStorage.getItem('rol')).catch(() => null);
+      issue('Auth', 'El menú "Configuración" no apareció en 30 s. rol en localStorage: ' +
+                    (rolGuardado || '(no existe)') + '. Sin rol Admin el resto del recorrido no es válido.');
     } else {
-      await ok('Login correcto y menús de administrador visibles');
+      await ok(`Login correcto y menús de administrador visibles`);
     }
 
     const llego = await navMenu(page, 'Configuraci', 'Configuración de Competencias');
     if (!llego) {
-      nota('Se intenta la navegación directa por URL como alternativa');
-      await page.goto(`${BASE}/configuracion-competencias`, { waitUntil: 'networkidle' });
-      await page.waitForTimeout(2500);
+      // OJO: no sirve navegar por URL. navmenu.component.ts:86 llama a
+      // router.navigate(['Home']) al terminar de cargar el empleado, así que
+      // cualquier enlace directo con recarga completa termina en Home. La única
+      // navegación válida en esta app es por el menú.
+      issue('Nav', 'No se pudo llegar por el menú. La navegación directa por URL no es alternativa: ' +
+                   'navmenu.component.ts:86 redirige a Home en cada arranque de sesión.');
     }
 
     await esperarQuieto(page);
@@ -1400,7 +1413,12 @@ test(`CRUD de Competencias — verificación T3.3 [${MODO}]`, async ({ page }) =
     });
     await ok('Rol degradado a 2 (Supervisor) en el navegador');
 
-    await page.goto(`${BASE}/configuracion-competencias`, { waitUntil: 'networkidle' }).catch(() => null);
+    // Hay que entrar por el menú, no por URL: una navegación con recarga completa
+    // termina siempre en Home por navmenu.component.ts:86, y además el arranque
+    // vuelve a leer el rol del API y deshace la degradación. Al hacerlo por el
+    // menú (navegación interna, sin recarga) el guard sí se ejerce de verdad:
+    // lee el rol degradado de localStorage vía SegurityService.getRolId().
+    await navMenu(page, 'Configuraci', 'Configuración de Competencias');
     await page.waitForTimeout(3000);
     const swal = await textoSwal(page);
     const urlFinal = page.url();
