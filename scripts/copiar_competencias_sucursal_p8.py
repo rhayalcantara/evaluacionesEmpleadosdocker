@@ -23,10 +23,16 @@ import requests
 
 API = "http://192.168.7.222:7070"          # PRODUCCION
 PERIODO = 8
-ORIGEN = 54
+ORIGEN = 54                                # por defecto: GERENTE DE SUCURSAL MEDIANA
 DESTINOS = [270, 271]
 
+# Parametrizable para reutilizarlo con otros puestos:
+#   --origen 198 --destinos 94
 ejecutar = "--ejecutar" in sys.argv
+if "--origen" in sys.argv:
+    ORIGEN = int(sys.argv[sys.argv.index("--origen") + 1])
+if "--destinos" in sys.argv:
+    DESTINOS = [int(x) for x in sys.argv[sys.argv.index("--destinos") + 1].split(",")]
 
 
 def objetivo_de(g):
@@ -43,8 +49,8 @@ def goals_de(puesto):
 
 plantilla = goals_de(ORIGEN)
 print(f"Plantilla: puesto {ORIGEN} tiene {len(plantilla)} competencias en el periodo {PERIODO}")
-if len(plantilla) != 12:
-    sys.exit(f"ABORTA: se esperaban 12 competencias en el puesto {ORIGEN}, hay {len(plantilla)}")
+if not plantilla:
+    sys.exit(f"ABORTA: el puesto {ORIGEN} no tiene competencias en el periodo {PERIODO}")
 
 total_creadas = total_saltadas = total_fallidas = 0
 
