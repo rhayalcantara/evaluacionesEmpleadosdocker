@@ -1,0 +1,151 @@
+.dgn {
+  padding: 16px 8px;
+}
+
+.dgn-barra {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.dgn-paso {
+  font-size: 13px;
+  color: #666;
+}
+
+.dgn-contexto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 13px;
+  color: #444;
+  margin: 12px 0;
+}
+
+.dgn-incidencias p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c62828;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.dgn-tarjeta {
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.dgn-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dgn-cabecera h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dgn-conteo {
+  background: #1565c0;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1px 10px;
+  font-size: 13px;
+}
+
+.dgn-conteo-alerta {
+  background: #e65100;
+}
+
+.dgn-ayuda {
+  font-size: 13px;
+  color: #555;
+  margin: 8px 0 12px;
+}
+
+.dgn-ayuda code,
+.dgn-alerta code {
+  background: #f0f0f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.dgn-alerta {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fff8e1;
+  border-left: 4px solid #f9a825;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.dgn-alerta-fuerte {
+  background: #fff3e0;
+  border-left-color: #e65100;
+}
+
+.dgn-alerta mat-icon {
+  color: #e65100;
+  flex: 0 0 auto;
+}
+
+.dgn-noverif {
+  margin-top: 20px;
+  border-top: 1px dashed #ccc;
+  padding-top: 12px;
+}
+
+.dgn-noverif h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #e65100;
+}
+
+.dgn-fila-alerta {
+  background: #fff8f2;
+}
+
+.dgn-tabla {
+  overflow: auto;
+  max-height: 420px;
+}
+
+.dgn-tabla-alta {
+  max-height: 520px;
+}
+
+.dgn-tabla table {
+  width: 100%;
+}
+
+.dgn-tabla th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dgn-tabla td {
+  font-size: 13px;
+  padding-right: 12px;
+}
+
+.dgn-vacio {
+  font-size: 13px;
+  color: #2e7d32;
+  margin: 8px 0;
+}

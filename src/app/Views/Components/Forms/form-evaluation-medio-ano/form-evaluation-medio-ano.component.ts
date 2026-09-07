@@ -461,7 +461,29 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
   }
 
   public async onSubmit() {
-    if (!this.evaluacionempleado) return;
+    const estado = this.supervisor ? 'EvaluadoPorSupervisor' : 'AutoEvaluado';
+    await this.persistir(estado);
+  }
+
+  /**
+   * Someter al colaborador (solo supervisor): graba TODO lo que hay en pantalla y
+   * deja el estado en 'Enviado' en una sola operacion. Antes el diálogo padre
+   * releía la evaluación del API y la grababa como 'Enviado', descartando las
+   * respuestas no guardadas del supervisor (61 evaluaciones del periodo 8
+   * quedaron sin calificación del supervisor, 2026-09-07).
+   * Devuelve true si se persistió; el padre decide cómo cerrar el diálogo.
+   */
+  public async someterAlColaborador(): Promise<boolean> {
+    if (!this.supervisor) return false;
+    if (!this.evaluacionempleado || !this.evaluacionempleado.id) {
+      this.datos.showMessage('No hay evaluación cargada para enviar.', this.titulo, 'warning');
+      return false;
+    }
+    return this.persistir('Enviado');
+  }
+
+  private async persistir(estadoFinal: 'AutoEvaluado' | 'EvaluadoPorSupervisor' | 'Enviado'): Promise<boolean> {
+    if (!this.evaluacionempleado) return false;
 
     // Guardar estructurados de Retroalimentación en campos String de la base de datos
     this.evaluacionempleado.colaboradorContinuar = this.stringifyFeedback(this.feedbackColab.continuar);
@@ -478,11 +500,7 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     this.evaluacionempleado.supervisorCompromisos = this.stringifyCierre(this.supervisorComentarios, this.supervisorCompromisos);
 
     // Estado de la evaluación
-    if (this.supervisor) {
-      this.evaluacionempleado.estadoevaluacion = 'EvaluadoPorSupervisor';
-    } else {
-      this.evaluacionempleado.estadoevaluacion = 'AutoEvaluado';
-    }
+    this.evaluacionempleado.estadoevaluacion = estadoFinal;
 
     // Recalcular logros de todas las metas antes de persistir
     this.resultadologro.forEach((_, index) => {
@@ -504,18 +522,27 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       // Calcular totalCalculo, desempeñoFinal y puntuaciones de competencia
       await this.EvaluacionController.calculaelpromediodesempeno(this.supervisor, this.resultadologro);
 
-      await this.EvaluacionController.grabar(this.supervisor);
+      // grabar() nunca rechaza: resuelve false (y ya mostró el error) si el API falló
+      const ok = await this.EvaluacionController.grabar(this.supervisor);
       this.cerrarLoading();
+      if (!ok) return false;
+
+      if (estadoFinal === 'Enviado') {
+        // El padre (diálogo del supervisor) informa y cierra
+        return true;
+      }
       this.datos.showMessage("Evaluación de mitad de año guardada exitosamente.", this.titulo, "success");
       if (this.supervisor) {
         this.dataEmitter.emit("grabado");
       } else {
         this.router.navigate(['/Home']);
       }
+      return true;
     } catch (err) {
       this.cerrarLoading();
       console.error(err);
       this.datos.showMessage("Error al guardar la evaluación de mitad de año.", this.titulo, "error");
+      return false;
     }
   }
 

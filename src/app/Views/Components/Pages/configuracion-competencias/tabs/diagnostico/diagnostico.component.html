@@ -1,0 +1,236 @@
+<div class="dgn">
+
+  <div class="dgn-barra">
+    <button mat-raised-button color="primary" type="button" (click)="ejecutar()" [disabled]="cargando">
+      <mat-icon>fact_check</mat-icon>
+      Volver a diagnosticar
+    </button>
+    <span class="dgn-paso" *ngIf="cargando">{{ paso }}</span>
+  </div>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="cargando"></mat-progress-bar>
+
+  <div class="dgn-contexto" *ngIf="analizado">
+    <span><strong>{{ totalEmpleadosActivos }}</strong> empleados activos</span>
+    <span><strong>{{ totalPuestosOcupados }}</strong> puestos ocupados</span>
+    <span><strong>{{ totalCompetenciasPeriodo }}</strong> competencias listadas en el periodo</span>
+  </div>
+
+  <div class="dgn-incidencias" *ngIf="incidencias.length > 0">
+    <p *ngFor="let i of incidencias"><mat-icon>error_outline</mat-icon> {{ i }}</p>
+  </div>
+
+  <!-- ── LISTADO 1 ────────────────────────────────────────────────────────── -->
+  <mat-card class="dgn-tarjeta" *ngIf="analizado">
+    <div class="dgn-cabecera">
+      <h3>
+        1. Puestos con empleados activos y sin competencias
+        <span class="dgn-conteo">{{ sinCompetencias.length }}</span>
+      </h3>
+      <button mat-stroked-button type="button" (click)="exportarSinCompetencias()"
+              [disabled]="sinCompetencias.length + noVerificables.length === 0">
+        <mat-icon>download</mat-icon> Excel
+      </button>
+    </div>
+    <p class="dgn-ayuda">
+      Empleados que no podrán ser evaluados en este periodo porque su puesto no tiene competencias
+      configuradas. Equivale a cruzar <code>Empleados</code> con <code>positions</code> y <code>Goal</code>.
+    </p>
+
+    <!-- Aviso del punto ciego: siempre visible, no sólo cuando hay filas afectadas -->
+    <div class="dgn-alerta" [class.dgn-alerta-fuerte]="noVerificables.length > 0">
+      <mat-icon>warning</mat-icon>
+      <div>
+        <strong>Este listado tiene un límite conocido.</strong>
+        Los cuatro GET de <code>/api/Goals</code> cruzan el puesto con la tabla de departamentos,
+        así que un puesto cuyo departamento no exista en el catálogo aparece como si no tuviera
+        competencias aunque las tenga en base de datos (caso comprobado: el puesto 19,
+        GERENTE GESTIÓN HUMANA, con 12 competencias reales y 0 según el API).
+        <ng-container *ngIf="noVerificables.length > 0">
+          En este periodo hay <strong>{{ noVerificables.length }}</strong> puesto(s) en esa situación:
+          se listan aparte, más abajo, y <strong>no</strong> se dan por buenos.
+          <strong>No les cree competencias sin comprobarlo antes por SQL</strong> o las duplicará.
+        </ng-container>
+        <ng-container *ngIf="noVerificables.length === 0">
+          En este periodo ningún puesto ocupado cae en esa situación, así que el listado de arriba
+          está completo. Aun así, la confirmación definitiva es por SQL.
+        </ng-container>
+        De los {{ totalPuestosOcupados }} puestos ocupados, {{ totalPuestosCiegos }} del catálogo
+        completo son invisibles para ese endpoint.
+      </div>
+    </div>
+
+    <p class="dgn-vacio" *ngIf="sinCompetencias.length === 0">
+      Ningún puesto confirmado sin competencias en este periodo.
+    </p>
+
+    <div class="dgn-tabla" *ngIf="sinCompetencias.length > 0">
+      <table mat-table [dataSource]="sinCompetencias">
+        <ng-container matColumnDef="puestoSecuencial">
+          <th mat-header-cell *matHeaderCellDef>Puesto</th>
+          <td mat-cell *matCellDef="let f">{{ f.puestoSecuencial }}</td>
+        </ng-container>
+        <ng-container matColumnDef="puesto">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let f">{{ f.puesto }}</td>
+        </ng-container>
+        <ng-container matColumnDef="departamento">
+          <th mat-header-cell *matHeaderCellDef>Departamento</th>
+          <td mat-cell *matCellDef="let f">{{ f.departamento }}</td>
+        </ng-container>
+        <ng-container matColumnDef="empleadosActivos">
+          <th mat-header-cell *matHeaderCellDef>Empleados</th>
+          <td mat-cell *matCellDef="let f">{{ f.empleadosActivos }}</td>
+        </ng-container>
+        <ng-container matColumnDef="observacion">
+          <th mat-header-cell *matHeaderCellDef>Observación</th>
+          <td mat-cell *matCellDef="let f">{{ f.observacion }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnasSinCompetencias"></tr>
+        <tr mat-row *matRowDef="let fila; columns: columnasSinCompetencias"></tr>
+      </table>
+    </div>
+
+    <!-- Bloque aparte: lo que el API no puede confirmar -->
+    <div class="dgn-noverif" *ngIf="noVerificables.length > 0">
+      <h4>
+        <mat-icon>help_outline</mat-icon>
+        No verificables por el defecto del API
+        <span class="dgn-conteo dgn-conteo-alerta">{{ noVerificables.length }}</span>
+      </h4>
+      <p class="dgn-ayuda">
+        El API no puede listar las competencias de estos puestos, así que no se sabe si les faltan
+        o no. Compruébelo por SQL antes de tocarlos:
+        <code>SELECT PeriodId, COUNT(*) FROM Goal WHERE PositionSecuencial = &lt;puesto&gt; GROUP BY PeriodId</code>
+      </p>
+      <div class="dgn-tabla">
+        <table mat-table [dataSource]="noVerificables">
+          <ng-container matColumnDef="puestoSecuencial">
+            <th mat-header-cell *matHeaderCellDef>Puesto</th>
+            <td mat-cell *matCellDef="let f">{{ f.puestoSecuencial }}</td>
+          </ng-container>
+          <ng-container matColumnDef="puesto">
+            <th mat-header-cell *matHeaderCellDef>Descripción</th>
+            <td mat-cell *matCellDef="let f">{{ f.puesto }}</td>
+          </ng-container>
+          <ng-container matColumnDef="departamento">
+            <th mat-header-cell *matHeaderCellDef>Departamento</th>
+            <td mat-cell *matCellDef="let f">{{ f.departamento }}</td>
+          </ng-container>
+          <ng-container matColumnDef="empleadosActivos">
+            <th mat-header-cell *matHeaderCellDef>Empleados</th>
+            <td mat-cell *matCellDef="let f">{{ f.empleadosActivos }}</td>
+          </ng-container>
+          <ng-container matColumnDef="observacion">
+            <th mat-header-cell *matHeaderCellDef>Observación</th>
+            <td mat-cell *matCellDef="let f">{{ f.observacion }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columnasSinCompetencias"></tr>
+          <tr mat-row *matRowDef="let fila; columns: columnasSinCompetencias" class="dgn-fila-alerta"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- ── LISTADO 2 ────────────────────────────────────────────────────────── -->
+  <mat-card class="dgn-tarjeta" *ngIf="analizado">
+    <div class="dgn-cabecera">
+      <h3>
+        2. Puestos sin categoría válida
+        <span class="dgn-conteo">{{ sinCategoria.length }}</span>
+      </h3>
+      <button mat-stroked-button type="button" (click)="exportarSinCategoria()"
+              [disabled]="sinCategoria.length === 0">
+        <mat-icon>download</mat-icon> Excel
+      </button>
+    </div>
+    <p class="dgn-ayuda">
+      Puestos ocupados por empleados activos cuyo <code>CategoriaPuestoId</code> es 0, o cuyo
+      <code>SCARGO</code> no existe en <code>positions</code>. En ambos casos el empleado no ve
+      ninguna competencia, porque la categoría es lo que decide qué competencias le tocan.
+      La categoría real se pide puesto por puesto con <code>GET /api/Positions/{{ '{' }}id{{ '}' }}</code>:
+      el listado general devuelve <code>categoriaPuestoId</code> en 0 para todos los puestos y no sirve.
+    </p>
+
+    <p class="dgn-vacio" *ngIf="sinCategoria.length === 0">
+      Todos los puestos ocupados resuelven a una categoría válida.
+    </p>
+
+    <div class="dgn-tabla" *ngIf="sinCategoria.length > 0">
+      <table mat-table [dataSource]="sinCategoria">
+        <ng-container matColumnDef="puestoSecuencial">
+          <th mat-header-cell *matHeaderCellDef>Puesto</th>
+          <td mat-cell *matCellDef="let f">{{ f.puestoSecuencial }}</td>
+        </ng-container>
+        <ng-container matColumnDef="puesto">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let f">{{ f.puesto }}</td>
+        </ng-container>
+        <ng-container matColumnDef="categoriaPuestoId">
+          <th mat-header-cell *matHeaderCellDef>Categoría</th>
+          <td mat-cell *matCellDef="let f">{{ f.categoriaPuestoId }}</td>
+        </ng-container>
+        <ng-container matColumnDef="problema">
+          <th mat-header-cell *matHeaderCellDef>Problema</th>
+          <td mat-cell *matCellDef="let f">{{ f.problema }}</td>
+        </ng-container>
+        <ng-container matColumnDef="empleadosActivos">
+          <th mat-header-cell *matHeaderCellDef>Empleados</th>
+          <td mat-cell *matCellDef="let f" [matTooltip]="f.empleados">{{ f.empleadosActivos }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnasSinCategoria"></tr>
+        <tr mat-row *matRowDef="let fila; columns: columnasSinCategoria"></tr>
+      </table>
+    </div>
+  </mat-card>
+
+  <!-- ── LISTADO 3 ────────────────────────────────────────────────────────── -->
+  <mat-card class="dgn-tarjeta" *ngIf="analizado">
+    <div class="dgn-cabecera">
+      <h3>
+        3. Empleados activos sin evaluación en el periodo
+        <span class="dgn-conteo">{{ sinEvaluacion.length }}</span>
+      </h3>
+      <button mat-stroked-button type="button" (click)="exportarSinEvaluacion()"
+              [disabled]="sinEvaluacion.length === 0">
+        <mat-icon>download</mat-icon> Excel
+      </button>
+    </div>
+    <p class="dgn-ayuda">
+      Sobre {{ totalEmpleadosActivos }} empleados activos (deduplicados por secuencial: la tabla de
+      empleados trae filas repetidas). Si el periodo aún no se ha generado, es normal que salgan todos.
+    </p>
+
+    <p class="dgn-vacio" *ngIf="sinEvaluacion.length === 0">
+      Todos los empleados activos tienen evaluación en este periodo.
+    </p>
+
+    <div class="dgn-tabla dgn-tabla-alta" *ngIf="sinEvaluacion.length > 0">
+      <table mat-table [dataSource]="sinEvaluacion">
+        <ng-container matColumnDef="secuencial">
+          <th mat-header-cell *matHeaderCellDef>Secuencial</th>
+          <td mat-cell *matCellDef="let f">{{ f.secuencial }}</td>
+        </ng-container>
+        <ng-container matColumnDef="codigousuario">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let f">{{ f.codigousuario }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Empleado</th>
+          <td mat-cell *matCellDef="let f">{{ f.nombre }}</td>
+        </ng-container>
+        <ng-container matColumnDef="cargo">
+          <th mat-header-cell *matHeaderCellDef>Cargo</th>
+          <td mat-cell *matCellDef="let f">{{ f.cargo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="departamento">
+          <th mat-header-cell *matHeaderCellDef>Departamento</th>
+          <td mat-cell *matCellDef="let f">{{ f.departamento }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnasSinEvaluacion"></tr>
+        <tr mat-row *matRowDef="let fila; columns: columnasSinEvaluacion"></tr>
+      </table>
+    </div>
+  </mat-card>
+
+</div>

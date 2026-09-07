@@ -25,10 +25,15 @@ const routes: Routes = [
     import ('loginapp/ComponentLogin').then((m)=>m.ShowmoduleModule)
   },
   { path: 'Home', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },  
-  { path:'Meta', 
+  { path:'Meta',
     loadComponent:()=> import('./Views/Components/Pages/metas/metas.component')
     .then((m)=> m.MetasComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
+  },
+  { path:'configuracion-competencias',
+    loadComponent:()=> import('./Views/Components/Pages/configuracion-competencias/configuracion-competencias.component')
+    .then((m)=> m.ConfiguracionCompetenciasComponent),
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] }
   },
   { path:'PlanEstrategico',
     loadComponent:()=> import('./Views/Components/Pages/plan-estrategico/plan-estrategico.component')

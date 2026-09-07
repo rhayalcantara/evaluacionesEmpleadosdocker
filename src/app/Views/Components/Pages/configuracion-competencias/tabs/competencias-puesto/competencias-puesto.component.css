@@ -1,0 +1,43 @@
+.cp{display:block;padding:12px 4px}
+.cp-filtros,.cp-panel-acc,.cp-detalle-cab{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cp-filtros{margin-bottom:4px}
+.cp-panel-acc{margin-bottom:10px}
+.cp-f{width:230px}
+.cp-toggle{margin:0 8px 18px 0}
+.cp-caja,.cp-alta{display:flex;gap:10px;align-items:flex-start}
+.cp-caja{border-radius:4px;padding:10px 12px;margin:8px 0;font-size:13px}
+.cp-caja-txt{flex:1}
+.cp-error{background:#ffebee;border-left:4px solid #c62828}
+.cp-aviso{background:#fff8e1;border-left:4px solid #f9a825}
+.cp-pre{white-space:pre-wrap;font-family:monospace;font-size:12px}
+.cp-conteo,.cp-nota{font-size:13px;color:#5f6368;margin:6px 2px}
+.cp-nota{background:#eee;border-radius:4px;padding:10px 12px}
+.cp-scroll{overflow-x:auto}
+.cp-tabla{width:100%}
+.cp-tabla th,.cp-tabla td{font-size:13px}
+.cp-id{color:#9aa0a6;font-size:11px}
+.cp-num{text-align:right}
+.cp-num,.cp-acc{white-space:nowrap}
+.cp-acc{text-align:right}
+.cp-desc{display:block;max-height:74px;overflow:auto}
+.cp-fila-sel{background:#e8f0fe}
+.cp-sem{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;font-weight:600}
+.cp-punto{width:10px;height:10px;border-radius:50%;background:#9aa0a6;flex:none}
+.cp-ok{color:#1e7e34}.cp-ok .cp-punto{background:#2e7d32}
+.cp-falta{color:#a06400}.cp-falta .cp-punto{background:#f9a825}
+.cp-exceso,.cp-vacio{color:#b3261e}
+.cp-exceso .cp-punto,.cp-vacio .cp-punto{background:#c62828}
+.cp-desconocido{color:#5f6368}
+.cp-warn-ico{font-size:16px;width:16px;height:16px;color:#f9a825}
+.cp-detalle{border:1px solid #dadce0;border-radius:6px;padding:12px;margin-top:16px}
+.cp-detalle-cab h3{margin:0;font-size:16px}
+.cp-detalle-cab>div:first-child{flex:1}
+.cp-sub{display:block;font-size:12px;color:#5f6368}
+.cp-edit{width:100%;font-size:12px;margin-top:4px}
+.cp-edit-num{width:96px}
+.cp-panel{margin-top:14px}
+.cp-sep{flex:1}
+.cp-alta{padding:8px 4px;border-bottom:1px solid #eee}
+.cp-alta-txt{flex:1;font-size:13px}
+.cp-ya{opacity:.55}
+.cp-ya-txt{font-size:11px;color:#1e7e34;font-weight:600}

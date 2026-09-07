@@ -1,0 +1,170 @@
+<div class="cat">
+
+  <mat-progress-bar mode="indeterminate" *ngIf="ocupado()"></mat-progress-bar>
+
+  <!-- Barra de acciones -->
+  <div class="cat-barra">
+    <button mat-flat-button color="primary" type="button"
+            [disabled]="ocupado()" (click)="abrirFormulario()">
+      <mat-icon>add</mat-icon> Nueva competencia
+    </button>
+
+    <button mat-stroked-button color="primary" type="button"
+            [disabled]="ocupado()" (click)="abrirCopiado()">
+      <mat-icon>content_copy</mat-icon> Copiar catálogo de otro periodo
+    </button>
+
+    <button mat-stroked-button type="button"
+            [disabled]="ocupado()" (click)="cargarTodo()">
+      <mat-icon>refresh</mat-icon> Recargar
+    </button>
+
+    <mat-form-field appearance="outline" class="cat-filtro" *ngIf="competencias.length > 0">
+      <mat-label>Filtrar competencias</mat-label>
+      <input matInput [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()"
+             placeholder="nombre, descripción o grupo" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Periodo sin competencias: se explica en vez de pintar una matriz en blanco -->
+  <mat-card class="cat-vacio" *ngIf="!cargando && competencias.length === 0">
+    <mat-icon class="cat-vacio-icono">info</mat-icon>
+    <h3>Este periodo no tiene competencias configuradas</h3>
+    <p>
+      El catálogo de <strong>{{ periodoDescripcion }}</strong> está vacío: no hay ninguna fila
+      en <em>Objetivo</em> para este periodo, así que no hay matriz que mostrar y ningún
+      empleado verá competencias en su evaluación.
+    </p>
+    <p>
+      Lo normal es <strong>copiar el catálogo del periodo anterior</strong> (competencias y su
+      vinculación con las categorías de puesto) y ajustar después lo que cambie. También puede
+      crear las competencias una a una.
+    </p>
+    <p class="cat-tenue">
+      Si le consta que este periodo sí tiene competencias, compruebe por base de datos que su
+      estado y su grupo de competencia existan: el listado del API las oculta si alguno de esos
+      ids no resuelve.
+    </p>
+    <div class="cat-vacio-acc">
+      <button mat-flat-button color="primary" type="button" [disabled]="ocupado()" (click)="abrirCopiado()">
+        <mat-icon>content_copy</mat-icon> Copiar catálogo de otro periodo
+      </button>
+      <button mat-stroked-button type="button" [disabled]="ocupado()" (click)="abrirFormulario()">
+        <mat-icon>add</mat-icon> Crear la primera competencia
+      </button>
+    </div>
+  </mat-card>
+
+  <ng-container *ngIf="competencias.length > 0">
+
+    <!-- 1. Catálogo del periodo, agrupado por grupo de competencia -->
+    <mat-card class="cat-bloque">
+      <div class="cat-cab">
+        <h3>Catálogo de {{ periodoDescripcion }}</h3>
+        <span class="cat-tenue">
+          {{ competencias.length }} competencia(s) ·
+          {{ totalVinculos }} vínculo(s) con categorías de puesto
+        </span>
+      </div>
+
+      <p class="cat-tenue" *ngIf="competenciasFiltradas.length === 0">
+        Ninguna competencia coincide con el filtro "{{ filtro }}".
+      </p>
+
+      <mat-accordion multi="true">
+        <mat-expansion-panel *ngFor="let grupo of gruposVisibles; trackBy: trackGrupo" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ grupo.nombre }}</mat-panel-title>
+            <mat-panel-description>{{ grupo.competencias.length }} competencia(s)</mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="cat-comp" *ngFor="let comp of grupo.competencias; trackBy: trackCompetencia">
+            <div class="cat-comp-txt">
+              <strong>{{ comp.nombre }}</strong>
+              <span class="cat-chip">{{ categoriasDe(comp.id) }} categoría(s)</span>
+              <span class="cat-chip" *ngIf="usoVerificado" [class.cat-chip-uso]="enUso(comp)">
+                {{ textoUso(comp) }}
+              </span>
+              <p class="cat-desc">{{ comp.descripcion }}</p>
+            </div>
+            <div class="cat-comp-acc">
+              <button mat-icon-button color="primary" type="button" matTooltip="Editar competencia"
+                      [disabled]="ocupado()" (click)="abrirFormulario(comp)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" type="button" matTooltip="Eliminar competencia"
+                      [disabled]="ocupado()" (click)="eliminarCompetencia(comp)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card>
+
+    <!-- 2. Matriz de vinculación competencia ↔ categoría de puesto -->
+    <mat-card class="cat-bloque">
+      <div class="cat-cab">
+        <h3>Matriz de vinculación</h3>
+        <button mat-stroked-button type="button" [disabled]="ocupado()" (click)="verificarUso()"
+                matTooltip="Recorre las metas de todos los periodos; puede tardar">
+          <mat-icon>fact_check</mat-icon>
+          {{ usoVerificado ? 'Uso verificado' : 'Verificar uso en metas' }}
+        </button>
+      </div>
+
+      <p class="cat-tenue">
+        Marcar una casilla crea el vínculo y desmarcarla lo borra; cada cambio se confirma
+        releyendo el API. Una competencia solo se le muestra al empleado si está vinculada a la
+        categoría de su puesto.
+      </p>
+
+      <p class="cat-aviso" *ngIf="periodoActivo">
+        <mat-icon inline="true">warning</mat-icon>
+        Periodo activo: lo que marque o desmarque afecta a las evaluaciones en curso.
+      </p>
+
+      <p class="cat-tenue" *ngIf="categorias.length === 0">
+        No hay categorías de puesto registradas, así que no se puede vincular nada.
+      </p>
+
+      <div class="cat-scroll" *ngIf="categorias.length > 0">
+        <table class="cat-matriz">
+          <thead>
+            <tr>
+              <th class="cat-col1">Competencia</th>
+              <th *ngFor="let cat of categorias; trackBy: trackCategoria">{{ cat.descripcion }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let comp of competenciasFiltradas; trackBy: trackCompetencia">
+              <th class="cat-col1">
+                <span class="cat-tenue cat-grupo">{{ nombreGrupo(comp) }}</span>
+                {{ comp.nombre }}
+              </th>
+              <td *ngFor="let cat of categorias; trackBy: trackCategoria">
+                <mat-checkbox color="primary"
+                              [checked]="estaVinculado(comp.id, cat.id)"
+                              [disabled]="celdaOcupada(comp.id, cat.id) || guardando || cargando"
+                              (change)="alternarVinculo(comp, cat, $event.checked)"
+                              [matTooltip]="comp.nombre + ' / ' + cat.descripcion">
+                </mat-checkbox>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th class="cat-col1">Competencias por categoría</th>
+              <td *ngFor="let cat of categorias; trackBy: trackCategoria">
+                {{ competenciasDe(cat.id) }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </mat-card>
+
+  </ng-container>
+
+</div>

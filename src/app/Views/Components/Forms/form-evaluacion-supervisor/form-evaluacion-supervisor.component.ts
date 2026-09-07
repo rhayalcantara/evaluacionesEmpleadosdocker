@@ -26,7 +26,12 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
   public puntuacionFinal: number=0;
 
   @ViewChild(FormEvaluationEmployeComponent)
-  private formEvaluationEmploye!: FormEvaluationEmployeComponent;
+  private formEvaluationEmploye?: FormEvaluationEmployeComponent;
+
+  // Formulario de medio año. Antes solo existía la referencia al formulario final,
+  // así que en periodos medio_ano "Guardar Avance" no hacía nada.
+  @ViewChild(FormEvaluationMedioAnoComponent)
+  private formMedioAno?: FormEvaluationMedioAnoComponent;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
@@ -57,7 +62,9 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
    * dejando estado 'EvaluadoPorSupervisor'). Equivale al botón "Grabar" del hijo.
    */
   public onGuardarAvance(): void {
-    if (this.formEvaluationEmploye) {
+    if (this.formMedioAno) {
+      this.formMedioAno.onSubmit();
+    } else if (this.formEvaluationEmploye) {
       this.formEvaluationEmploye.onSubmit();
     }
   }
@@ -65,23 +72,39 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
   /**
    * Aprobar Autoevaluación — graba sin exigir que todos los campos del supervisor
    * estén completos, cambiando el estado a 'EvaluadoPorSupervisor'.
-   * Delega al mismo onSubmit() del hijo (que ya maneja el estado parcial
-   * como 'Pendiente Terminar Supervisor' cuando falta alguna respuesta).
    */
   public onAprobarAutoevaluacion(): void {
-    if (this.formEvaluationEmploye) {
-      this.formEvaluationEmploye.onSubmit();
-    }
+    this.onGuardarAvance();
   }
 
   /**
-   * Someter al Colaborador — cambia el estado de la evaluación a 'Enviado'
-   * para que el colaborador pueda aceptarla. Reutiliza la lógica del método
-   * Enviar() de card-empleado.
+   * Enviar al Colaborador — cambia el estado a 'Enviado' para que el colaborador
+   * pueda aceptarla.
+   *
+   * Medio año: el hijo graba lo que hay en pantalla y pone 'Enviado' en la misma
+   * operación (someterAlColaborador). La versión anterior releía la evaluación
+   * del API y la grababa como 'Enviado', descartando lo no guardado: 61 evaluaciones
+   * del periodo 8 llegaron al colaborador sin calificación del supervisor.
+   *
+   * Evaluación final: se exige que exista un avance grabado ('EvaluadoPorSupervisor')
+   * antes de enviar, para no repetir la misma pérdida.
    */
-  public onSometerColaborador(): void {
+  public async onSometerColaborador(): Promise<void> {
     if (!this.empleado?.secuencial || !this.periodo?.id) {
       this.datos.showMessage('No se pudo determinar el empleado o el periodo.', 'Enviar al Colaborador', 'warning');
+      return;
+    }
+
+    if (this.formMedioAno) {
+      const ok = await this.formMedioAno.someterAlColaborador();
+      if (ok) {
+        this.datos.showMessage(
+          'La evaluación fue grabada y enviada al colaborador para su aceptación.',
+          'Enviar al Colaborador',
+          'success'
+        );
+        this.dialogre.close('enviado');
+      }
       return;
     }
 
@@ -91,6 +114,14 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
     ).subscribe({
       next: (rep: IEvaluacion) => {
         const ev: IEvaluacion = rep;
+        if (ev.estadoevaluacion !== 'EvaluadoPorSupervisor') {
+          this.datos.showMessage(
+            'Primero pulse "Guardar Avance" para grabar su evaluación; luego podrá enviarla al colaborador.',
+            'Enviar al Colaborador',
+            'warning'
+          );
+          return;
+        }
         ev.estadoevaluacion = 'Enviado';
         this.evaluacionController.Update(ev).subscribe({
           next: () => {
