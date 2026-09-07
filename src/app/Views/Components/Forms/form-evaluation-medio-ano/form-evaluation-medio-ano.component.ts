@@ -546,6 +546,17 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
     }
   }
 
+  /**
+   * La parte del supervisor (calificaciones, retroalimentación y compromisos) la ve
+   * el supervisor siempre, y el colaborador desde que la evaluación le fue sometida
+   * ('Enviado'): tiene que ver lo que va a aceptar. Antes solo se mostraba en
+   * 'Completado', o sea, después de aceptar a ciegas.
+   */
+  public get verEvaluacionSupervisor(): boolean {
+    const estado = this.evaluacionempleado?.estadoevaluacion;
+    return this.supervisor || estado === 'Enviado' || estado === 'Completado';
+  }
+
   public onAceptar() {
     if (!this.evaluacionempleado) return;
 

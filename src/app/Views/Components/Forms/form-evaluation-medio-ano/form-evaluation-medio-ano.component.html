@@ -104,7 +104,7 @@
             <th class="col-competencia">Competencia</th>
             <th class="col-calificacion text-center">Colaborador</th>
             <th class="col-calificacion text-center"
-                *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+                *ngIf="verEvaluacionSupervisor">
               Supervisor
             </th>
           </tr>
@@ -130,7 +130,7 @@
               </select>
             </td>
             <td class="text-center align-middle"
-                *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+                *ngIf="verEvaluacionSupervisor">
               <select class="form-select form-select-sm competencias-select"
                       [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor"
                       name="comp-rating-super-{{index}}"
@@ -276,7 +276,7 @@
     </div>
 
     <!-- BLOQUE SUPERVISOR (EVALUACIÓN EXTERNA) -->
-    <div class="mt-4" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+    <div class="mt-4" *ngIf="verEvaluacionSupervisor">
       <h4>Retroalimentación del Supervisor</h4>
       <div class="row">
         <!-- Estoy Haciendo Bien -->
@@ -433,7 +433,7 @@
             placeholder="Escriba su compromiso para el cumplimiento de los objetivos establecidos, incrementar la ejecución en el puesto y cualquier comentario adicional..."></textarea>
         </div>
       </div>
-      <div class="col-md-6" *ngIf="supervisor || evaluacionempleado.estadoevaluacion === 'Completado'">
+      <div class="col-md-6" *ngIf="verEvaluacionSupervisor">
         <div class="form-group">
           <label><strong>Compromiso y Comentario:</strong></label>
           <textarea
