@@ -62,3 +62,11 @@ test-results/
 
 # Config local de Claude Code (por máquina)
 .claude/settings.local.json
+
+# Reportes de claves en lote (credenciales en texto claro; nunca versionar)
+claveusuario*.csv
+respaldo_usuario_clave*.csv
+empleados-activos-sin-login*.csv
+
+# Borrador personal de autoevaluacion (no versionar)
+seccionevaluacionmedioano.md
