@@ -1,0 +1,61 @@
+# Historial de Evaluaciones — Fase 1 (plan de obra)
+
+**Metodología:** `CONFIGURACION-TRABAJO.md` — orquestador (Claude) planifica, escribe specs y
+baterías, integra y commitea; **constructores qwen3.8** (agente_core2 sobre Ollama .165)
+programan cada entregable en un workspace aislado; **crítico Opus** (`.claude/agents/critico-tareas.md`)
+verifica ejecutando y dictamina APROBADO/RECHAZADO; cada aprobación se integra con commit + push.
+Progreso visible en `Docs/progreso.html`.
+
+Origen: `Docs/plan-historial-evaluaciones.md` (problemas P1–P4, Fase 1). Rama: `feature/crud-competencias`.
+
+## Adaptación del protocolo a un proyecto Angular
+
+- **Entregable = un archivo TypeScript/HTML** por tarea. El workspace del constructor replica la
+  ruta relativa real (`build/T<N>/src/app/...`) para que los imports relativos sean los
+  definitivos y `npx tsc --noEmit -p build/T<N>/tsconfig.json` compile contra el `node_modules`
+  del proyecto (resolución hacia arriba).
+- **Baterías = Jasmine/Karma headless** (`npx ng test --watch=false --browsers=ChromeHeadless
+  --include=<spec>`). Viven en `src/**/*.spec.ts` (única ruta que compila el tsconfig.spec);
+  el constructor **nunca las ve** porque trabaja en `build/`.
+- **Verificación e2e del crítico:** Playwright (`e2e/`) contra `ng serve --configuration prueba`
+  (API :7071 / Evaluaciones_Test). Prohibido apuntar a producción.
+- **Contratos escritos por el orquestador** (no por constructores): interfaces en
+  `src/app/Models/HistorialEvaluacion/IHistorialEvaluacion.ts`.
+
+## Protocolo por tarea
+
+1. Spec exacta en `Docs/specs/T<N>.md` + batería antes de construir.
+2. Constructor lanzado con `Popen` detached (`build/T<N>/lanzar.py`), vigilado por `done_qwen2.txt`.
+3. Batería del orquestador → crítico Opus (ejecuta batería + pruebas propias) → veredicto.
+4. RECHAZADO → spec `T<N>-r<K>.md` con las críticas numeradas (máx. 3 rondas).
+5. APROBADO → copiar a `src/`, commit + push, tablero.
+
+## Fases y tareas
+
+### F1 — Lógica pura (T1, sin dependencias)
+- **T1 `src/app/Helpers/historial-utils.ts`** — funciones puras, sin Angular: catálogo de estados
+  reales con etiqueta, normalización de estado (`NULL` → "Sin iniciar"), clase CSS por estado,
+  mapeo evaluación→resumen con nombre de empleado y nombre/tipo de periodo, búsqueda sin
+  acentos por nombre/cédula/secuencial/usuario, estadísticas y evolución **solo con evaluaciones
+  finales**, regla de comparación (medio año no se compara), filas de Excel sin puntuación para
+  medio año.
+
+### F2 — Integración (T2 ∥ T3 tras T1; archivos distintos, contrato fijado por T1 y el modelo)
+- **T2 `src/app/Controllers/HistorialEvaluacion.ts`** — carga catálogos (empleados, periodos)
+  una sola vez con `shareReplay`, resuelve nombre/identificación/periodo en TODAS las rutas
+  (empleado, subordinados, filtros de admin), delega estadísticas/evolución/comparación/Excel a
+  `historial-utils`, rechaza comparaciones no válidas.
+- **T3 `historial-evaluaciones.component.ts` + `.html`** — filtro de estado con los estados
+  reales, búsqueda por secuencial/usuario, fila de medio año marcada y sin puntuaciones,
+  checkbox de comparar deshabilitado para medio año, panel de estadísticas con conteo de
+  finales/medio año, sin promedios cuando no hay finales.
+
+### F3 — Cierre (orquestador)
+- Regresión de baterías sobre lo integrado, `ng build --configuration prueba`, auditoría
+  Playwright con capturas en `Docs/auditoria-historial/`, commit final.
+
+## Criterios de verificación de la fase (de `plan-historial-evaluaciones.md`)
+- Admin, filtro periodo 8 + estado Completado → filas con nombre e identificación.
+- Buscar "ALCANTARA" y "525" encuentra al mismo empleado.
+- Promedio general de un empleado con evaluaciones en periodos 7 y 8 = su total del periodo 7.
+- Seleccionar una de periodo 8 y una de periodo 7 y Comparar → aviso, no diferencia numérica.

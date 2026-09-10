@@ -1,0 +1,193 @@
+/* Tablero de obra — Inventario de Activos Fijos
+   Dirección: libro mayor índigo como fondo; cada tarea es una PLACA DE INVENTARIO
+   (la chapa que se atornilla al activo) con su sello de estado estampado.
+   Display: Bahnschrift (la DIN de Windows — letra de placa industrial).
+   Datos: Cascadia Mono/Consolas. */
+
+:root {
+  --tablero: #1c2836;          /* índigo de tapa de libro mayor */
+  --tablero-veta: #223140;
+  --tinta-clara: #e9edf2;
+  --tinta-media: #9fadbd;
+  --placa: #eee9da;            /* chapa/ficha */
+  --placa-borde: #c9c2ad;
+  --placa-tinta: #2a3140;
+  --pendiente: #8a94a0;
+  --construyendo: #d99a2b;
+  --critica: #7d6bc4;          /* violeta Opus */
+  --revision: #c96a3b;
+  --aprobado: #2f7d4e;
+  --integrado: #1f6f4a;
+  --fallido: #b4392e;
+  --sello-rojo: #b4392e;
+  --display: "Bahnschrift", "Arial Narrow", "Segoe UI", sans-serif;
+  --cuerpo: "Segoe UI", system-ui, sans-serif;
+  --mono: "Cascadia Mono", Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 118px, rgba(255,255,255,.025) 118px 120px),
+    linear-gradient(180deg, var(--tablero-veta), var(--tablero) 320px);
+  background-color: var(--tablero);
+  color: var(--tinta-clara);
+  font-family: var(--cuerpo);
+  line-height: 1.45;
+  padding: 28px clamp(14px, 4vw, 48px) 60px;
+  min-height: 100vh;
+}
+
+h1, h2 { font-family: var(--display); letter-spacing: .02em; }
+
+/* ── Cabecera: la placa madre ─────────────────────────────────────────── */
+.cabecera { max-width: 1180px; margin: 0 auto 26px; }
+
+.placa-titulo {
+  display: flex; align-items: center; gap: 18px;
+  background: linear-gradient(175deg, #f3efe2, var(--placa) 60%, #e3ddca);
+  color: var(--placa-tinta);
+  border: 1px solid var(--placa-borde);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  padding: 18px 22px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+
+.perforacion {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #55606e, #141a22 70%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.6);
+  flex: none;
+}
+.perforacion.chica { width: 10px; height: 10px; position: absolute; top: 10px; left: 10px; }
+
+.placa-texto { flex: 1; min-width: 0; }
+.eyebrow {
+  font-family: var(--display); font-size: .72rem; letter-spacing: .28em;
+  color: #6e6650;
+}
+.cabecera h1 { font-size: clamp(1.3rem, 3.2vw, 2rem); text-transform: uppercase; }
+
+.meta {
+  display: flex; flex-wrap: wrap; gap: 4px 26px;
+  margin-top: 12px; font-family: var(--mono); font-size: .8rem;
+}
+.meta dt { color: var(--tinta-media); }
+.meta dt::after { content: ":"; }
+.meta dd { color: var(--tinta-clara); margin-right: 6px; }
+.meta dt, .meta dd { display: inline; }
+
+/* ── Avance ───────────────────────────────────────────────────────────── */
+.avance { max-width: 1180px; margin: 0 auto 30px; }
+.avance-encabezado { display: flex; justify-content: space-between; align-items: baseline; }
+.avance h2 { font-size: 1rem; text-transform: uppercase; color: var(--tinta-media); }
+.avance-cifra { font-family: var(--display); font-size: 1.15rem; }
+.avance-barra {
+  display: flex; gap: 6px; margin-top: 10px; height: 22px;
+}
+.segmento {
+  flex: 1; border-radius: 3px; border: 1px solid rgba(0,0,0,.4);
+  background: repeating-linear-gradient(45deg, #46505c 0 6px, #3c4650 6px 12px);
+}
+.segmento.construyendo { background: repeating-linear-gradient(45deg, var(--construyendo) 0 6px, #b57d1e 6px 12px); }
+.segmento.critica   { background: var(--critica); }
+.segmento.revision  { background: var(--revision); }
+.segmento.aprobado, .segmento.integrado { background: var(--aprobado); }
+.segmento.fallido   { background: var(--fallido); }
+.leyenda { margin-top: 8px; font-size: .74rem; color: var(--tinta-media); font-family: var(--mono); }
+
+/* ── Fases y placas ───────────────────────────────────────────────────── */
+main { max-width: 1180px; margin: 0 auto; display: grid; gap: 30px; }
+.fase-encabezado h2 {
+  font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  padding-bottom: 6px; margin-bottom: 4px;
+}
+.fase-nota { font-size: .8rem; color: var(--tinta-media); margin-bottom: 4px; }
+
+.placas {
+  display: grid; gap: 16px; margin-top: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.placa { position: relative; }
+.placa-borde {
+  position: relative;
+  background: linear-gradient(178deg, #f2eedf, var(--placa) 55%, #e6e0cc);
+  border: 1px solid var(--placa-borde);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  color: var(--placa-tinta);
+  padding: 14px 16px 12px 30px;
+  min-height: 150px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.3);
+  transition: transform .15s ease;
+}
+.placa:hover .placa-borde { transform: translateY(-2px); }
+
+.placa-cab { display: flex; align-items: baseline; gap: 10px; }
+.placa-id { font-family: var(--display); font-size: 1.7rem; }
+.placa-archivo { font-family: var(--mono); font-size: .82rem; color: #5a5342; }
+
+/* El sello: la firma del tablero */
+.sello {
+  position: absolute; top: 12px; right: 12px;
+  font-family: var(--display); font-size: .78rem; letter-spacing: .12em;
+  padding: 3px 9px;
+  border: 2px solid currentColor; border-radius: 4px;
+  transform: rotate(-5deg);
+  opacity: .92;
+  background: rgba(255,255,255,.35);
+}
+.sello.pendiente    { color: var(--pendiente); border-style: dashed; }
+.sello.construyendo { color: #a06f10; }
+.sello.critica      { color: var(--critica); }
+.sello.revision     { color: var(--revision); }
+.sello.aprobado, .sello.integrado {
+  color: var(--aprobado);
+  box-shadow: 0 0 0 2px rgba(47,125,78,.25);
+}
+.sello.fallido { color: var(--sello-rojo); }
+.placa.integrado .placa-borde { outline: 2px solid rgba(47,125,78,.5); outline-offset: -6px; }
+
+.placa-datos {
+  margin-top: 12px;
+  display: grid; grid-template-columns: auto 1fr; gap: 1px 10px;
+  font-size: .8rem;
+}
+.placa-datos dt { color: #6e6650; font-family: var(--mono); }
+.placa-datos dd { font-family: var(--mono); }
+.placa-nota { margin-top: 8px; font-size: .78rem; color: #4c4636; }
+
+/* ── Bitácora ─────────────────────────────────────────────────────────── */
+.bitacora { max-width: 1180px; margin: 34px auto 0; }
+.bitacora h2 {
+  font-size: 1rem; text-transform: uppercase; color: var(--tinta-media);
+  margin-bottom: 10px;
+}
+.bitacora ol {
+  list-style: none; font-family: var(--mono); font-size: .8rem;
+  border-left: 2px solid rgba(255,255,255,.15); padding-left: 14px;
+  display: grid; gap: 6px; max-height: 340px; overflow-y: auto;
+}
+.bitacora time { color: var(--tinta-media); margin-right: 10px; }
+.ev-tarea {
+  display: inline-block; min-width: 2.6em; margin-right: 8px;
+  color: var(--construyendo); font-weight: 600;
+}
+
+.pie {
+  max-width: 1180px; margin: 40px auto 0; font-size: .74rem;
+  color: var(--tinta-media); font-family: var(--mono);
+}
+.pie code { color: var(--tinta-clara); }
+
+@media (max-width: 640px) {
+  .placa-titulo { gap: 10px; padding: 14px; }
+  .meta { flex-direction: column; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .placa:hover .placa-borde { transform: none; }
+}

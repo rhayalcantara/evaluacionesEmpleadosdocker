@@ -70,3 +70,6 @@ empleados-activos-sin-login*.csv
 
 # Borrador personal de autoevaluacion (no versionar)
 seccionevaluacionmedioano.md
+
+# Workspaces de constructores (CONFIGURACION-TRABAJO.md)
+build/

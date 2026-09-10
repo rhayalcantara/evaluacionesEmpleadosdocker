@@ -6,14 +6,21 @@ export interface IHistorialEvaluacionResumen {
   evaluacionId: number;
   periodId: number;
   periodoNombre: string;
+  /** Tipo del periodo al que pertenece. Medio año no tiene puntuación comparable. */
+  periodoTipo: 'medio_ano' | 'final_ano';
+  /** Atajo de `periodoTipo === 'medio_ano'` para plantillas y filtros. */
+  esMedioAno: boolean;
   fechaInicio: string;
   fechaFin: string;
   empleadoSecuencial: number;
   empleadoNombre: string;
   empleadoIdentificacion?: string;
+  /** Código de usuario de red del empleado (p. ej. RALCANTARA). */
+  codigoUsuario?: string;
   departamento?: string;
   puesto?: string;
   fechaRespuesta: string;
+  /** Estado normalizado: uno de ESTADOS_EVALUACION (NULL/vacío → 'SIN_INICIAR'). */
   estadoEvaluacion: string;
   totalCalculo: number;
   puntuacionDesempenoColaborador: number;
@@ -24,6 +31,22 @@ export interface IHistorialEvaluacionResumen {
   totalSupervisor: number;
   supervisorNombre?: string;
   entrevistaConSupervisor: boolean;
+}
+
+/**
+ * Opción del filtro de estado: valor crudo de la BD y etiqueta legible.
+ */
+export interface IEstadoEvaluacionOpcion {
+  valor: string;
+  etiqueta: string;
+}
+
+/**
+ * Resultado de la regla "¿se pueden comparar estas dos evaluaciones?"
+ */
+export interface IResultadoComparable {
+  ok: boolean;
+  motivo?: string;
 }
 
 /**
@@ -52,14 +75,18 @@ export interface IComparacionEvaluaciones {
 }
 
 /**
- * Estadísticas del historial de un empleado
+ * Estadísticas del historial de un empleado.
+ * Los promedios, la mejor evaluación y la tendencia se calculan SOLO con
+ * evaluaciones finales; las de medio año se cuentan pero no puntúan.
  */
 export interface IEstadisticasHistorial {
   empleadoSecuencial: number;
   empleadoNombre: string;
   totalEvaluaciones: number;
+  evaluacionesFinales: number;
+  evaluacionesMedioAno: number;
   promedioGeneral: number;
-  mejorEvaluacion: IHistorialEvaluacionResumen;
+  mejorEvaluacion: IHistorialEvaluacionResumen | null;
   evaluacionMasReciente: IHistorialEvaluacionResumen;
   tendenciaGeneral: 'mejora' | 'estable' | 'decline';
   promedioDesempeno: number;
@@ -67,7 +94,7 @@ export interface IEstadisticasHistorial {
 }
 
 /**
- * Datos para gráfico de evolución
+ * Datos para gráfico de evolución (solo evaluaciones finales)
  */
 export interface IEvolucionEvaluacion {
   periodo: string;
