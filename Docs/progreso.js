@@ -1,6 +1,6 @@
 /* Datos del tablero — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-10 13:00",
+  actualizado: "2026-09-10 14:05",
   rama: "feature/crud-competencias",
   fases: [
     { id: "F1", nombre: "Lógica pura", nota: "T1 sin dependencias; contrato en IHistorialEvaluacion.ts (orquestador)",
@@ -11,10 +11,10 @@ window.PROGRESO = {
       ] },
     { id: "F2", nombre: "Integración", nota: "T2 y T3 en paralelo tras T1 (archivos distintos)",
       tareas: [
-        { id: "T2", archivo: "src/app/Controllers/HistorialEvaluacion.ts", estado: "construyendo", ronda: 1,
-          pruebas: "—", tokens: null, commit: null, nota: "Primer lanzamiento colgado 14 min en un bash hijo sin salida; matado y relanzado 12:59 (pid 15180)" },
+        { id: "T2", archivo: "src/app/Controllers/HistorialEvaluacion.ts", estado: "integrado", ronda: 2,
+          pruebas: "21/21 + 13 del crítico", tokens: null, commit: "pendiente", nota: "Lanzamientos 1 y 2 colgados en ejecutar_bash; 3º sin shell entregó en 6 min. Ronda 2 por un error de tipos inducido por la spec (getdatos<ModelResponse> anida dos veces)" },
         { id: "T3", archivo: "historial-evaluaciones.component.ts + .html", estado: "integrado", ronda: 1,
-          pruebas: "11/11 + 12 del crítico", tokens: 240655, commit: "pendiente", nota: "Crítico Opus: APROBADO 7/7 sin faltantes (112k tokens, 4 min). Integrado" }
+          pruebas: "11/11 + 12 del crítico", tokens: 240655, commit: "717f485", nota: "Crítico Opus: APROBADO 7/7 sin faltantes (112k tokens, 4 min). Integrado" }
       ] },
     { id: "F3", nombre: "Cierre (orquestador)", nota: "regresión, build prueba, Playwright + capturas",
       tareas: [
@@ -38,6 +38,11 @@ window.PROGRESO = {
     { hora: "13:14", tarea: "T1", texto: "Crítico Opus: APROBADO (9/9 criterios, 16 pruebas propias). Observación: coincideEstado trata filtro de solo espacios como sin filtro; aceptado" },
     { hora: "12:50", tarea: "T3", texto: "Constructor terminó: 241k tokens, 13 turnos; batería 11/11 tras corregir un fixture del orquestador → crítico Opus" },
     { hora: "12:58", tarea: "T2", texto: "Colgado: bash hijo 14 min sin salida, Ollama sin peticiones desde 12:34. Matado y relanzado" },
-    { hora: "13:08", tarea: "T3", texto: "Crítico Opus: APROBADO (7/7 criterios, 12 pruebas propias, tree limpio) → integrado" }
+    { hora: "13:08", tarea: "T3", texto: "Crítico Opus: APROBADO (7/7 criterios, 12 pruebas propias, tree limpio) → integrado" },
+    { hora: "13:18", tarea: "T2", texto: "Segundo lanzamiento también colgado en bash; relanzado con prohibición de ejecutar_bash (spec T2.md, restricción operativa)" },
+    { hora: "13:40", tarea: "T2", texto: "Archivo entregado a las 13:23; tsc: 1 error TS2740 en getHistorialConFiltros por getdatos<ModelResponse> (error de la spec del orquestador)" },
+    { hora: "13:48", tarea: "T2", texto: "Ronda 2 lanzada (T2-r2.md): cambiar a getdatos<IEvaluacion[]>" },
+    { hora: "13:55", tarea: "T2", texto: "Ronda 2 aplicada; tsc OK; batería 21/21 → crítico Opus" },
+    { hora: "14:03", tarea: "T2", texto: "Crítico Opus: APROBADO (7/7, 13 pruebas propias). Observación: fecha por defecto en UTC; anotada para F3" }
   ]
 };

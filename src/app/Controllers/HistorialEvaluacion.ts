@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, forkJoin, switchMap, of } from 'rxjs';
+import { Observable, forkJoin, map, switchMap, of, catchError, shareReplay } from 'rxjs';
 import { DatosServiceService } from '../Services/datos-service.service';
 import { LoggerService } from '../Services/logger.service';
 import { Evaluacion } from './Evaluacion';
@@ -13,13 +13,34 @@ import {
   IEvolucionEvaluacion
 } from '../Models/HistorialEvaluacion/IHistorialEvaluacion';
 import { IEvaluacion } from '../Models/Evaluacion/IEvaluacion';
+import { IEmpleado } from '../Models/Empleado/IEmpleado';
+import { IPeriodo } from '../Models/Periodos/IPeriodo';
 import { ModelResponse } from '../Models/Usuario/modelResponse';
+import {
+  mapearResumen,
+  coincideEstado,
+  ordenarPorFechaDesc,
+  calcularEstadisticas,
+  datosEvolucion,
+  compararResumenes,
+  filasExcel
+} from '../Helpers/historial-utils';
+
+/**
+ * Catálogos (empleados y periodos) resueltos una sola vez por servicio.
+ * Claves: «secuencial» para empleados e «id» para periodos.
+ */
+export interface ICatalogosHistorial {
+  empleados: Map<number, IEmpleado>;
+  periodos: Map<number, IPeriodo>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class HistorialEvaluacion {
-  private rutaapi: string = this.datos.URL + '/api/Evaluacions';
+  /** Caché de catálogos para toda la vida del servicio; `limpiarCacheCatalogos()` la descarta. */
+  private catalogosCache$?: Observable<ICatalogosHistorial>;
 
   constructor(
     private datos: DatosServiceService,
@@ -30,56 +51,100 @@ export class HistorialEvaluacion {
   ) {}
 
   /**
-   * Obtiene el historial completo de evaluaciones para un empleado
+   * Catálogos cacheados con shareReplay(1): dos llamadas seguidas implican
+   * UNA sola petición de empleados y UNA de periodos. Un fallo de cualquiera
+   * de las dos peticiones deriva en un Map vacío (el observable no emite error).
+   */
+  public getCatalogos(): Observable<ICatalogosHistorial> {
+    if (!this.catalogosCache$) {
+      const empleados$ = this.empleadosController.Gets().pipe(
+        map((respuesta: ModelResponse) => this.construirMapEmpleados(respuesta)),
+        catchError((err: Error) => {
+          this.logger.warn('Falló la carga del catálogo de empleados; se usa Map vacío', err);
+          return of(new Map<number, IEmpleado>());
+        })
+      );
+
+      const periodos$ = this.periodosController.Gets().pipe(
+        map((respuesta: ModelResponse) => this.construirMapPeriodos(respuesta)),
+        catchError((err: Error) => {
+          this.logger.warn('Falló la carga del catálogo de periodos; se usa Map vacío', err);
+          return of(new Map<number, IPeriodo>());
+        })
+      );
+
+      this.catalogosCache$ = forkJoin({ empleados: empleados$, periodos: periodos$ }).pipe(
+        map(({ empleados, periodos }) => ({ empleados, periodos })),
+        shareReplay(1)
+      );
+    }
+
+    return this.catalogosCache$;
+  }
+
+  /**
+   * Olvida la caché de catálogos; la siguiente llamada a getCatalogos()
+   * vuelve a pedir empleados y periodos.
+   */
+  public limpiarCacheCatalogos(): void {
+    this.catalogosCache$ = undefined;
+  }
+
+  /**
+   * Obtiene el historial completo de evaluaciones para un empleado.
    */
   public getHistorialPorEmpleado(empleadoSecuencial: number): Observable<IHistorialEvaluacionResumen[]> {
     this.logger.debug('Obteniendo historial para empleado', { empleadoSecuencial });
 
     return forkJoin({
       evaluaciones: this.evaluacionController.GetEvaluacionesPorEmpleado(empleadoSecuencial),
-      empleado: this.empleadosController.Get(empleadoSecuencial.toString())
+      catalogos: this.getCatalogos()
     }).pipe(
-      map(({ evaluaciones, empleado }) => {
-        return evaluaciones
-          .map(ev => this.mapearAResumen(ev, empleado))
-          .sort((a, b) => new Date(b.fechaRespuesta).getTime() - new Date(a.fechaRespuesta).getTime());
+      map(({ evaluaciones, catalogos }) => {
+        const resumenes = (evaluaciones ?? []).map(ev => this.aResumen(ev, catalogos));
+        return ordenarPorFechaDesc(resumenes);
       })
     );
   }
 
   /**
-   * Obtiene el historial de todos los subordinados de un supervisor
+   * Obtiene el historial de todos los subordinados de un supervisor.
+   * El catálogo se pide UNA vez para todos los subordinados.
    */
   public getHistorialSubordinados(
     supervisorSecuencial: number,
     fechaConsulta: string = new Date().toISOString().split('T')[0]
   ): Observable<IHistorialEvaluacionResumen[]> {
-    this.logger.debug('Obteniendo historial de subordinados', { supervisorSecuencial });
+    this.logger.debug('Obteniendo historial de subordinados', { supervisorSecuencial, fechaConsulta });
 
-    // Primero obtenemos los subordinados del supervisor usando Getsub
-    return this.empleadosController.Getsub(supervisorSecuencial.toString(), fechaConsulta).pipe(
-      switchMap((response: ModelResponse) => {
-        const subordinados: any[] = response.data;
+    return this.empleadosController.Getsub(String(supervisorSecuencial), fechaConsulta).pipe(
+      switchMap((respuesta: ModelResponse) => {
+        const subordinados: IEmpleado[] = respuesta?.data ?? [];
 
-        if (!subordinados || subordinados.length === 0) {
+        if (subordinados.length === 0) {
           this.logger.debug('No hay subordinados para este supervisor');
-          return of([]);
+          return of([] as IHistorialEvaluacionResumen[]);
         }
 
         this.logger.debug('Subordinados encontrados', { cantidad: subordinados.length });
 
-        const historiales: Observable<IHistorialEvaluacionResumen[]>[] = subordinados.map(sub =>
-          this.getHistorialPorEmpleado(sub.secuencial)
-        );
-
-        // Combinar todos los historiales
-        return forkJoin(historiales).pipe(
-          map(historiales => {
-            const todosLosHistoriales: IHistorialEvaluacionResumen[] = [];
-            historiales.forEach(hist => todosLosHistoriales.push(...hist));
-            return todosLosHistoriales.sort((a, b) =>
-              new Date(b.fechaRespuesta).getTime() - new Date(a.fechaRespuesta).getTime()
-            );
+        // Catálogo UNA vez + evaluaciones de cada subordinado en paralelo.
+        return forkJoin([
+          this.getCatalogos(),
+          ...subordinados.map(sub => this.evaluacionController.GetEvaluacionesPorEmpleado(sub.secuencial))
+        ]).pipe(
+          map((result: (ICatalogosHistorial | IEvaluacion[])[]) => {
+            const catalogos = result[0] as ICatalogosHistorial;
+            const historiales = result.slice(1) as IEvaluacion[][];
+            const todos: IHistorialEvaluacionResumen[] = [];
+            subordinados.forEach((sub, i) => {
+              (historiales[i] ?? []).forEach(ev => {
+                // El propio subordinado aporta nombre, identificación, usuario, etc.
+                const periodo = catalogos.periodos.get(ev.periodId) ?? null;
+                todos.push(mapearResumen(ev, sub, periodo));
+              });
+            });
+            return ordenarPorFechaDesc(todos);
           })
         );
       })
@@ -87,49 +152,65 @@ export class HistorialEvaluacion {
   }
 
   /**
-   * Obtiene historial filtrado
+   * Obtiene el historial global filtrado (empleado, periodo, estado y fechas).
+   * 'SIN_INICIAR' encuentra las evaluaciones con estado null; con filtro de
+   * fecha, las evaluaciones sin fecha válida quedan excluidas.
    */
   public getHistorialConFiltros(filtros: IHistorialEvaluacionFiltros): Observable<IHistorialEvaluacionResumen[]> {
     this.logger.debug('Obteniendo historial con filtros', filtros);
 
-    return this.datos.getdatos<ModelResponse>(this.rutaapi).pipe(
-      map((response: ModelResponse) => {
-        let evaluaciones: IEvaluacion[] = response.data;
+    return forkJoin({
+      respuesta: this.datos.getdatos<IEvaluacion[]>(this.datos.URL + '/api/Evaluacions'),
+      catalogos: this.getCatalogos()
+    }).pipe(
+      map(({ respuesta, catalogos }) => {
+        const evaluaciones: IEvaluacion[] = respuesta?.data ?? [];
 
-        // Aplicar filtros
-        if (filtros.empleadoSecuencial) {
-          evaluaciones = evaluaciones.filter(ev => ev.empleadoSecuencial === filtros.empleadoSecuencial);
-        }
+        const conFiltro = evaluaciones.filter(ev => {
+          if (typeof filtros.empleadoSecuencial === 'number' && filtros.empleadoSecuencial > 0) {
+            if (ev.empleadoSecuencial !== filtros.empleadoSecuencial) {
+              return false;
+            }
+          }
 
-        if (filtros.periodoId) {
-          evaluaciones = evaluaciones.filter(ev => ev.periodId === filtros.periodoId);
-        }
+          if (typeof filtros.periodoId === 'number' && filtros.periodoId > 0) {
+            if (ev.periodId !== filtros.periodoId) {
+              return false;
+            }
+          }
 
-        if (filtros.estadoEvaluacion) {
-          evaluaciones = evaluaciones.filter(ev => ev.estadoevaluacion === filtros.estadoEvaluacion);
-        }
+          if (filtros.estadoEvaluacion !== null && filtros.estadoEvaluacion !== undefined
+              && filtros.estadoEvaluacion.trim() !== '') {
+            if (!coincideEstado(ev.estadoevaluacion, filtros.estadoEvaluacion)) {
+              return false;
+            }
+          }
 
-        if (filtros.fechaDesde) {
-          evaluaciones = evaluaciones.filter(ev =>
-            new Date(ev.fechaRepuestas) >= new Date(filtros.fechaDesde!)
-          );
-        }
+          if (filtros.fechaDesde || filtros.fechaHasta) {
+            const timestamp = new Date(ev.fechaRepuestas).getTime();
+            if (Number.isNaN(timestamp)) {
+              return false; // sin fecha válida → excluido cuando hay filtro de fecha
+            }
+            if (filtros.fechaDesde && timestamp < new Date(filtros.fechaDesde).getTime()) {
+              return false;
+            }
+            if (filtros.fechaHasta && timestamp > new Date(filtros.fechaHasta).getTime()) {
+              return false;
+            }
+          }
 
-        if (filtros.fechaHasta) {
-          evaluaciones = evaluaciones.filter(ev =>
-            new Date(ev.fechaRepuestas) <= new Date(filtros.fechaHasta!)
-          );
-        }
+          return true;
+        });
 
-        return evaluaciones
-          .map(ev => this.mapearAResumen(ev))
-          .sort((a, b) => new Date(b.fechaRespuesta).getTime() - new Date(a.fechaRespuesta).getTime());
+        const resumenes = conFiltro.map(ev => this.aResumen(ev, catalogos));
+        return ordenarPorFechaDesc(resumenes);
       })
     );
   }
 
   /**
-   * Compara dos evaluaciones
+   * Compara dos evaluaciones. Si no son comparables (medio año o misma
+   * evaluación) el observable emite error con el motivo de puedeComparar.
    */
   public compararEvaluaciones(
     evaluacionId1: number,
@@ -138,167 +219,78 @@ export class HistorialEvaluacion {
     this.logger.debug('Comparando evaluaciones', { evaluacionId1, evaluacionId2 });
 
     return forkJoin({
-      eval1: this.evaluacionController.Get(evaluacionId1.toString()),
-      eval2: this.evaluacionController.Get(evaluacionId2.toString())
+      eval1: this.evaluacionController.Get(String(evaluacionId1)),
+      eval2: this.evaluacionController.Get(String(evaluacionId2)),
+      catalogos: this.getCatalogos()
     }).pipe(
-      map(({ eval1, eval2 }) => {
-        const resumen1 = this.mapearAResumen(eval1);
-        const resumen2 = this.mapearAResumen(eval2);
-
-        const diferenciaTotal = resumen2.totalCalculo - resumen1.totalCalculo;
-        const diferenciaDesempeno = resumen2.puntuacionDesempenoColaborador - resumen1.puntuacionDesempenoColaborador;
-        const diferenciaCompetencia = resumen2.puntuacionCompetenciaColaborador - resumen1.puntuacionCompetenciaColaborador;
-
-        let tendencia: 'mejora' | 'igual' | 'decline';
-        if (diferenciaTotal > 0) {
-          tendencia = 'mejora';
-        } else if (diferenciaTotal < 0) {
-          tendencia = 'decline';
-        } else {
-          tendencia = 'igual';
+      map(({ eval1, eval2, catalogos }) => {
+        try {
+          const resumen1 = this.aResumen(eval1, catalogos);
+          const resumen2 = this.aResumen(eval2, catalogos);
+          return compararResumenes(resumen1, resumen2);
+        } catch (e) {
+          // Mismo Error (con el motivo de puedeComparar) como error del observable.
+          throw e;
         }
-
-        return {
-          evaluacion1: resumen1,
-          evaluacion2: resumen2,
-          diferenciaTotal,
-          diferenciaDesempeno,
-          diferenciaCompetencia,
-          tendencia
-        };
       })
     );
   }
 
   /**
    * Obtiene estadísticas del historial de un empleado
+   * (promedios y tendencia solo con evaluaciones finales).
    */
   public getEstadisticasEmpleado(empleadoSecuencial: number): Observable<IEstadisticasHistorial> {
     this.logger.debug('Obteniendo estadísticas de empleado', { empleadoSecuencial });
 
     return this.getHistorialPorEmpleado(empleadoSecuencial).pipe(
-      map((historial: IHistorialEvaluacionResumen[]) => {
-        if (historial.length === 0) {
-          throw new Error('No hay evaluaciones para este empleado');
-        }
-
-        const totalEvaluaciones = historial.length;
-        const promedioGeneral = historial.reduce((sum, ev) => sum + ev.totalCalculo, 0) / totalEvaluaciones;
-        const promedioDesempeno = historial.reduce((sum, ev) => sum + ev.puntuacionDesempenoColaborador, 0) / totalEvaluaciones;
-        const promedioCompetencias = historial.reduce((sum, ev) => sum + ev.puntuacionCompetenciaColaborador, 0) / totalEvaluaciones;
-
-        // Mejor evaluación
-        const mejorEvaluacion = historial.reduce((max, ev) =>
-          ev.totalCalculo > max.totalCalculo ? ev : max
-        );
-
-        // Evaluación más reciente
-        const evaluacionMasReciente = historial[0];
-
-        // Calcular tendencia (comparar últimas 3 evaluaciones)
-        let tendenciaGeneral: 'mejora' | 'estable' | 'decline' = 'estable';
-        if (historial.length >= 2) {
-          const ultimaEval = historial[0].totalCalculo;
-          const penultimaEval = historial[1].totalCalculo;
-
-          if (ultimaEval > penultimaEval + 5) {
-            tendenciaGeneral = 'mejora';
-          } else if (ultimaEval < penultimaEval - 5) {
-            tendenciaGeneral = 'decline';
-          }
-        }
-
-        return {
-          empleadoSecuencial,
-          empleadoNombre: historial[0].empleadoNombre,
-          totalEvaluaciones,
-          promedioGeneral,
-          mejorEvaluacion,
-          evaluacionMasReciente,
-          tendenciaGeneral,
-          promedioDesempeno,
-          promedioCompetencias
-        };
-      })
+      map((historial: IHistorialEvaluacionResumen[]) => calcularEstadisticas(historial))
     );
   }
 
   /**
-   * Obtiene datos para gráfico de evolución
+   * Obtiene datos para gráfico de evolución (solo evaluaciones finales).
    */
   public getDatosEvolucion(empleadoSecuencial: number): Observable<IEvolucionEvaluacion[]> {
     this.logger.debug('Obteniendo datos de evolución', { empleadoSecuencial });
 
     return this.getHistorialPorEmpleado(empleadoSecuencial).pipe(
-      map((historial: IHistorialEvaluacionResumen[]) => {
-        return historial
-          .reverse() // Mostrar desde la más antigua a la más reciente
-          .map(ev => ({
-            periodo: ev.periodoNombre,
-            fecha: ev.fechaRespuesta,
-            totalCalculo: ev.totalCalculo,
-            desempeno: ev.puntuacionDesempenoColaborador,
-            competencias: ev.puntuacionCompetenciaColaborador
-          }));
-      })
+      map((historial: IHistorialEvaluacionResumen[]) => datosEvolucion(historial))
     );
   }
 
   /**
-   * Mapea una evaluación completa a un resumen para el historial
+   * Exporta el historial a un formato compatible con Excel (síncrono).
    */
-  private mapearAResumen(evaluacion: IEvaluacion, empleadoInfo?: any): IHistorialEvaluacionResumen {
-    // Intentar obtener info del empleado de varias fuentes
-    const empleado = empleadoInfo || (evaluacion.empleado as any);
-
-    return {
-      evaluacionId: evaluacion.id,
-      periodId: evaluacion.periodId,
-      periodoNombre: `Período ${evaluacion.periodId}`,
-      fechaInicio: '',
-      fechaFin: '',
-      empleadoSecuencial: evaluacion.empleadoSecuencial,
-      empleadoNombre: empleado?.nombreunido || empleado?.nombre || 'N/A',
-      empleadoIdentificacion: empleado?.identificacion || 'N/A',
-      departamento: empleado?.departamento || 'N/A',
-      puesto: empleado?.cargo || empleado?.puesto || 'N/A',
-      fechaRespuesta: evaluacion.fechaRepuestas,
-      estadoEvaluacion: evaluacion.estadoevaluacion,
-      totalCalculo: evaluacion.totalCalculo,
-      puntuacionDesempenoColaborador: evaluacion.puntuaciondesempenocolaborador,
-      puntuacionCompetenciaColaborador: evaluacion.puntuacioncompetenciacolaborador,
-      puntuacionDesempenoSupervisor: evaluacion.puntuaciondesempenosupervidor,
-      puntuacionCompetenciaSupervisor: evaluacion.puntuacioncompetenciasupervisor,
-      totalColaborador: evaluacion.totalcolaborador,
-      totalSupervisor: evaluacion.totalsupervisor,
-      supervisorNombre: undefined,
-      entrevistaConSupervisor: evaluacion.entrevistaConSupervisor
-    };
-  }
-
-  /**
-   * Exporta el historial a un formato compatible con Excel
-   */
-  public exportarHistorialAExcel(historial: IHistorialEvaluacionResumen[]): any[] {
+  public exportarHistorialAExcel(historial: IHistorialEvaluacionResumen[]): Record<string, string | number>[] {
     this.logger.info('Exportando historial a Excel', { cantidad: historial.length });
 
-    return historial.map(ev => ({
-      'ID Evaluación': ev.evaluacionId,
-      'Período': ev.periodoNombre,
-      'Empleado': ev.empleadoNombre,
-      'Identificación': ev.empleadoIdentificacion || 'N/A',
-      'Departamento': ev.departamento || 'N/A',
-      'Puesto': ev.puesto || 'N/A',
-      'Fecha': ev.fechaRespuesta,
-      'Estado': ev.estadoEvaluacion,
-      'Total': ev.totalCalculo.toFixed(2),
-      'Desempeño Colaborador': ev.puntuacionDesempenoColaborador.toFixed(2),
-      'Competencias Colaborador': ev.puntuacionCompetenciaColaborador.toFixed(2),
-      'Total Colaborador': ev.totalColaborador.toFixed(2),
-      'Desempeño Supervisor': ev.puntuacionDesempenoSupervisor.toFixed(2),
-      'Competencias Supervisor': ev.puntuacionCompetenciaSupervisor.toFixed(2),
-      'Total Supervisor': ev.totalSupervisor.toFixed(2),
-      'Entrevista con Supervisor': ev.entrevistaConSupervisor ? 'Sí' : 'No'
-    }));
+    return filasExcel(historial);
+  }
+
+  // ---------- Privados ----------
+
+  /**
+   * Mapea una evaluación cruda a resumen usando el catálogo de empleados
+   * y periodos (con `ev.empleado` como último recurso si existe).
+   */
+  private aResumen(evaluacion: IEvaluacion, catalogos: ICatalogosHistorial): IHistorialEvaluacionResumen {
+    const empleado = catalogos.empleados.get(evaluacion.empleadoSecuencial) ?? evaluacion.empleado ?? null;
+    const periodo = catalogos.periodos.get(evaluacion.periodId) ?? null;
+    return mapearResumen(evaluacion, empleado, periodo);
+  }
+
+  private construirMapEmpleados(respuesta: ModelResponse | null | undefined): Map<number, IEmpleado> {
+    const mapa = new Map<number, IEmpleado>();
+    const lista: IEmpleado[] = respuesta?.data ?? [];
+    lista.forEach(e => mapa.set(e.secuencial, e));
+    return mapa;
+  }
+
+  private construirMapPeriodos(respuesta: ModelResponse | null | undefined): Map<number, IPeriodo> {
+    const mapa = new Map<number, IPeriodo>();
+    const lista: IPeriodo[] = respuesta?.data ?? [];
+    lista.forEach(p => mapa.set(p.id, p));
+    return mapa;
   }
 }
