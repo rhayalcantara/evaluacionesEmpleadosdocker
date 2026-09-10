@@ -26,7 +26,7 @@ export class FormEmpleadoRolComponent implements OnInit {
     
     public empleadoSeleccionado: IEmpleado;
     public roles: IRol[] = [];
-    public model = this.empleadoRolController.model;
+    public model: IEmpleadoRol;
     public isSaving = false;
 
     constructor(
@@ -42,6 +42,21 @@ export class FormEmpleadoRolComponent implements OnInit {
 
     ) {
         this.empleadoSeleccionado = this.data.model
+        // El controlador es un singleton: si no se reinicia el modelo aqui, el
+        // formulario hereda el registro del ultimo empleado editado y al grabar
+        // hace un PUT sobre ese id, moviendo el rol de un administrador a otro.
+        this.model = this.modeloParaEmpleado();
+        this.empleadoRolController.model = this.model;
+    }
+
+    // Devuelve un modelo nuevo (id = 0) ligado exclusivamente al empleado seleccionado.
+    private modeloParaEmpleado(): IEmpleadoRol {
+        const m = this.empleadoRolController.inicializamodelo();
+        if (this.empleadoSeleccionado) {
+            m.empleadoSecuencial = this.empleadoSeleccionado.secuencial;
+            m.empleado = this.empleadoSeleccionado;
+        }
+        return m;
     }
 
     ngOnInit() {
@@ -67,19 +82,13 @@ export class FormEmpleadoRolComponent implements OnInit {
                     this.logger.debug('rep.data', rep.data);
                     let empleadorol: IEmpleadoRol[] = rep.data;
                     let elemprol: IEmpleadoRol | undefined = empleadorol.find(x => x.empleadoSecuencial == this.empleadoSeleccionado.secuencial);
-                    if (elemprol) {
-                        this.empleadoRolController.model = elemprol;
-                        this.model= elemprol;
-                        this.cd.detectChanges()
-                    }
+                    // Si el empleado ya tiene rol se edita ese registro; si no, se
+                    // conserva un modelo nuevo (id = 0) para que grabar haga un INSERT.
+                    this.model = elemprol ? elemprol : this.modeloParaEmpleado();
+                    this.empleadoRolController.model = this.model;
+                    this.cd.detectChanges()
                 }
             })
-   
-
-        if (this.empleadoSeleccionado) {
-            this.model.empleadoSecuencial = this.empleadoSeleccionado.secuencial;
-            this.model.empleado = this.empleadoSeleccionado;
-        }
     }
 
     onRolChange(event: any) {
@@ -104,8 +113,15 @@ export class FormEmpleadoRolComponent implements OnInit {
             return;
         }
 
+        // Salvaguarda: nunca actualizar un registro que pertenezca a otro empleado.
+        if (this.model.empleadoSecuencial !== this.empleadoSeleccionado.secuencial) {
+            this.datosService.showMessage('El registro de rol no corresponde al empleado seleccionado. Cierre el formulario y vuelva a intentarlo.', 'Error', 'error');
+            return;
+        }
+
         this.isSaving = true;
         try {
+            this.empleadoRolController.model = this.model;
             const resultado = await this.empleadoRolController.grabar();
             if (resultado) {
                 this.datosService.showMessage("Grabado",this.empleadoRolController.titulomensage,"success")
