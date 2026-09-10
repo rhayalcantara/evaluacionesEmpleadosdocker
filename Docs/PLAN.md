@@ -76,3 +76,9 @@ Origen: `Docs/plan-historial-evaluaciones.md` (problemas P1–P4, Fase 1). Rama:
    (rompe el mapeo `@commons-lib`).
 4. **El agente `critico-tareas` copiado a `.claude/agents/` durante la sesión no se carga**:
    el crítico se lanza como `general-purpose` con `model: opus` y sus instrucciones en el prompt.
+5. **`ejecutar_bash` del constructor puede colgarse sin salida** (T2: un bash hijo abierto 14 min
+   sin peticiones a Ollama). Señal: `api/ps` de Ollama con `expires_at` en el pasado y el
+   archivo objetivo sin cambios. Remedio: `taskkill /PID <pid> /T /F` y relanzar en el mismo
+   workspace; el monitor emite un latido cada 10 min con mtime del archivo e hijos del proceso.
+6. **Los shells en segundo plano de la sesión se matan por memoria baja** (1.2 GB libres de
+   16): usar Monitor con `sleep 60`, nunca varios waiters en paralelo.

@@ -26,8 +26,17 @@ import { EvolucionModalComponent } from './modals/evolucion-modal.component';
 import {
   IHistorialEvaluacionResumen,
   IHistorialEvaluacionFiltros,
-  IEstadisticasHistorial
+  IEstadisticasHistorial,
+  IEstadoEvaluacionOpcion
 } from '../../../../Models/HistorialEvaluacion/IHistorialEvaluacion';
+import {
+  ESTADOS_EVALUACION,
+  etiquetaEstado,
+  claseEstado,
+  coincideEstado,
+  coincideBusqueda,
+  puedeComparar
+} from '../../../../Helpers/historial-utils';
 
 @Component({
   selector: 'app-historial-evaluaciones',
@@ -86,13 +95,7 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
   evaluacionesSeleccionadas: number[] = [];
 
   // Opciones de estado
-  estadosDisponibles: string[] = [
-    'Completada',
-    'Pendiente',
-    'En Proceso',
-    'Aprobada',
-    'Rechazada'
-  ];
+  estadosDisponibles: IEstadoEvaluacionOpcion[] = ESTADOS_EVALUACION;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -242,25 +245,18 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
 
     // Filtro por texto de búsqueda
     if (this.textoBusqueda.trim()) {
-      const busqueda = this.textoBusqueda.toLowerCase();
-      resultado = resultado.filter(
-        (item) =>
-          item.empleadoNombre.toLowerCase().includes(busqueda) ||
-          item.empleadoIdentificacion?.toLowerCase().includes(busqueda) ||
-          item.periodoNombre.toLowerCase().includes(busqueda) ||
-          item.departamento?.toLowerCase().includes(busqueda)
-      );
+      resultado = resultado.filter(item => coincideBusqueda(item, this.textoBusqueda));
     }
 
     // Filtro por período
-    if (this.filtros.periodoId !== undefined) {
+    if (typeof this.filtros.periodoId === 'number') {
       resultado = resultado.filter(item => item.periodId === this.filtros.periodoId);
       this.logger.debug('Filtro por período aplicado', { periodoId: this.filtros.periodoId, resultados: resultado.length });
     }
 
     // Filtro por estado
-    if (this.filtros.estadoEvaluacion !== undefined) {
-      resultado = resultado.filter(item => item.estadoEvaluacion === this.filtros.estadoEvaluacion);
+    if (this.filtros.estadoEvaluacion !== undefined && this.filtros.estadoEvaluacion.trim() !== '') {
+      resultado = resultado.filter(item => coincideEstado(item.estadoEvaluacion, this.filtros.estadoEvaluacion));
       this.logger.debug('Filtro por estado aplicado', { estado: this.filtros.estadoEvaluacion, resultados: resultado.length });
     }
 
@@ -334,25 +330,31 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Obtiene la etiqueta legible del estado de la evaluación
+   */
+  etiquetaEstado(estado: string | null | undefined): string {
+    return etiquetaEstado(estado);
+  }
+
+  /**
    * Obtiene la clase CSS según el estado de la evaluación
    */
   getEstadoClass(estado: string): string {
-    // Validar que el estado no sea null o undefined
-    if (!estado) {
-      return 'estado-default';
-    }
+    return claseEstado(estado);
+  }
 
-    const estadoLower = estado.toLowerCase();
-    if (estadoLower.includes('completada') || estadoLower.includes('aprobada')) {
-      return 'estado-completada';
-    } else if (estadoLower.includes('pendiente')) {
-      return 'estado-pendiente';
-    } else if (estadoLower.includes('proceso')) {
-      return 'estado-proceso';
-    } else if (estadoLower.includes('rechazada')) {
-      return 'estado-rechazada';
-    }
-    return 'estado-default';
+  /**
+   * Indica si hay al menos una evaluación final en las estadísticas
+   */
+  get hayFinalesEnEstadisticas(): boolean {
+    return !!this.estadisticas && this.estadisticas.evaluacionesFinales > 0;
+  }
+
+  /**
+   * Indica si una evaluación es de medio año
+   */
+  esMedioAno(item: IHistorialEvaluacionResumen): boolean {
+    return !!item?.esMedioAno;
   }
 
   /**
@@ -374,6 +376,15 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
     if (index > -1) {
       this.evaluacionesSeleccionadas.splice(index, 1);
     } else {
+      const item = this.historial.find(ev => ev.evaluacionId === evaluacionId);
+      if (item?.esMedioAno) {
+        this.datosService.showMessage(
+          'Las evaluaciones de medio año no se comparan',
+          'Información',
+          'info'
+        );
+        return;
+      }
       if (this.evaluacionesSeleccionadas.length >= 2) {
         this.datosService.showMessage(
           'Solo puede seleccionar 2 evaluaciones para comparar',
@@ -408,8 +419,19 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
     const [id1, id2] = this.evaluacionesSeleccionadas;
+    const evaluacionA = this.historial.find(ev => ev.evaluacionId === id1);
+    const evaluacionB = this.historial.find(ev => ev.evaluacionId === id2);
+
+    if (evaluacionA && evaluacionB) {
+      const comprobacion = puedeComparar(evaluacionA, evaluacionB);
+      if (!comprobacion.ok) {
+        this.datosService.showMessage(comprobacion.motivo ?? 'Evaluaciones no comparables', 'Información', 'info');
+        return;
+      }
+    }
+
+    this.loading = true;
 
     const sub = this.historialController.compararEvaluaciones(id1, id2).subscribe({
       next: (comparacion) => {
@@ -430,7 +452,11 @@ export class HistorialEvaluacionesComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.loading = false;
         this.logger.error('Error al comparar evaluaciones', error);
-        this.datosService.showMessage('Error al comparar evaluaciones', 'Error', 'error');
+        this.datosService.showMessage(
+          (error as Error)?.message || 'Error al comparar evaluaciones',
+          'Error',
+          'error'
+        );
       }
     });
 

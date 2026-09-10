@@ -29,7 +29,7 @@ const MEDIO = fila({ evaluacionId: 2, periodId: 8, periodoNombre: 'Mitad de Año
   fechaRespuesta: '2026-07-10', estadoEvaluacion: 'EvaluadoPorSupervisor', totalCalculo: 40 });
 const OTRO = fila({ evaluacionId: 3, empleadoSecuencial: 55, empleadoNombre: 'PABLO RODRÍGUEZ', codigoUsuario: 'PRODRIGUEZ',
   empleadoIdentificacion: '001-9', estadoEvaluacion: 'SIN_INICIAR', fechaRespuesta: '2025-12-10' });
-const OTRO_FINAL = fila({ evaluacionId: 4, empleadoSecuencial: 55, empleadoNombre: 'PABLO RODRÍGUEZ', fechaRespuesta: '2024-12-10', totalCalculo: 80 });
+const OTRO_FINAL = fila({ evaluacionId: 4, empleadoSecuencial: 55, empleadoNombre: 'PABLO RODRÍGUEZ', codigoUsuario: 'PRODRIGUEZ', empleadoIdentificacion: '001-9', fechaRespuesta: '2024-12-10', totalCalculo: 80 });
 
 describe('HistorialEvaluacionesComponent (T3)', () => {
   let fixture: ComponentFixture<HistorialEvaluacionesComponent>;

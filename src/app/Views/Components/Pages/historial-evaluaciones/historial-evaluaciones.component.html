@@ -22,7 +22,7 @@
             matInput
             [(ngModel)]="textoBusqueda"
             (keyup.enter)="onBuscar()"
-            placeholder="Nombre, identificación, departamento..."
+            placeholder="Nombre, cédula, secuencial, usuario, departamento..."
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -43,8 +43,8 @@
           <mat-label>Estado</mat-label>
           <mat-select [(ngModel)]="filtros.estadoEvaluacion">
             <mat-option [value]="undefined">Todos</mat-option>
-            <mat-option *ngFor="let estado of estadosDisponibles" [value]="estado">
-              {{ estado }}
+            <mat-option *ngFor="let estado of estadosDisponibles" [value]="estado.valor">
+              {{ estado.etiqueta }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -138,7 +138,7 @@
     <div class="empty-state" *ngIf="totalItems === 0">
       <mat-icon>inbox</mat-icon>
       <h3>No hay evaluaciones en el historial</h3>
-      <p *ngIf="rolUsuario === 'Admin' || rolUsuario === 'Administrador'">
+      <p *ngIf="rolUsuario === 'admin'">
         Use los filtros para buscar evaluaciones específicas
       </p>
     </div>
@@ -163,15 +163,22 @@
         <tr
           *ngFor="let item of displayedHistorial"
           [class.row-selected]="estaSeleccionada(item.evaluacionId)"
+          [class.fila-medio-ano]="esMedioAno(item)"
+          [attr.data-tipo]="item.periodoTipo"
         >
           <td class="col-select">
             <input
               type="checkbox"
               [checked]="estaSeleccionada(item.evaluacionId)"
               (change)="toggleSeleccion(item.evaluacionId)"
+              [disabled]="esMedioAno(item)"
+              [title]="esMedioAno(item) ? 'Las evaluaciones de medio año no se comparan' : 'Seleccionar para comparar'"
             />
           </td>
-          <td>{{ item.periodoNombre }}</td>
+          <td>
+            {{ item.periodoNombre }}
+            <span class="badge badge-medio-ano" *ngIf="esMedioAno(item)">Medio año</span>
+          </td>
           <td>
             <div class="empleado-info">
               <strong>{{ item.empleadoNombre }}</strong>
@@ -182,19 +189,25 @@
           <td>{{ item.fechaRespuesta | date : 'dd/MM/yyyy' }}</td>
           <td>
             <span [class]="'badge ' + getEstadoClass(item.estadoEvaluacion)">
-              {{ item.estadoEvaluacion }}
+              {{ etiquetaEstado(item.estadoEvaluacion) }}
             </span>
           </td>
           <td class="col-number">
-            <span [class]="'puntuacion ' + getPuntuacionClass(item.totalCalculo)">
-              {{ item.totalCalculo | number : '1.2-2' }}
-            </span>
+            <ng-container *ngIf="!esMedioAno(item); else sinPuntuacion">
+              <span [class]="'puntuacion ' + getPuntuacionClass(item.totalCalculo)">
+                {{ item.totalCalculo | number : '1.2-2' }}
+              </span>
+            </ng-container>
           </td>
           <td class="col-number">
-            {{ item.puntuacionDesempenoColaborador | number : '1.2-2' }}
+            <ng-container *ngIf="!esMedioAno(item); else sinPuntuacion">
+              {{ item.puntuacionDesempenoColaborador | number : '1.2-2' }}
+            </ng-container>
           </td>
           <td class="col-number">
-            {{ item.puntuacionCompetenciaColaborador | number : '1.2-2' }}
+            <ng-container *ngIf="!esMedioAno(item); else sinPuntuacion">
+              {{ item.puntuacionCompetenciaColaborador | number : '1.2-2' }}
+            </ng-container>
           </td>
           <td class="col-actions">
             <button
@@ -220,7 +233,7 @@
               (click)="mostrarEstadisticasEmpleado(item.empleadoSecuencial)"
               matTooltip="Ver estadísticas del empleado"
               color="warn"
-              *ngIf="rolUsuario !== 'Empleado'"
+              *ngIf="rolUsuario !== 'empleado'"
             >
               <mat-icon>bar_chart</mat-icon>
             </button>
@@ -265,66 +278,72 @@
           <div>
             <p class="stat-label">Total Evaluaciones</p>
             <p class="stat-value">{{ estadisticas.totalEvaluaciones }}</p>
+            <small>Finales: {{ estadisticas.evaluacionesFinales }} · Medio año: {{ estadisticas.evaluacionesMedioAno }}</small>
           </div>
         </div>
 
-        <div class="stat-item">
-          <mat-icon>trending_up</mat-icon>
-          <div>
-            <p class="stat-label">Promedio General</p>
-            <p class="stat-value">
-              {{ estadisticas.promedioGeneral | number : '1.2-2' }}
-            </p>
+        <ng-container *ngIf="hayFinalesEnEstadisticas; else sinFinales">
+          <div class="stat-item">
+            <mat-icon>trending_up</mat-icon>
+            <div>
+              <p class="stat-label">Promedio General</p>
+              <p class="stat-value">
+                {{ estadisticas.promedioGeneral | number : '1.2-2' }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="stat-item">
-          <mat-icon>star</mat-icon>
-          <div>
-            <p class="stat-label">Mejor Evaluación</p>
-            <p class="stat-value">
-              {{ estadisticas.mejorEvaluacion.totalCalculo | number : '1.2-2' }}
-            </p>
-            <small>{{ estadisticas.mejorEvaluacion.periodoNombre }}</small>
+          <div class="stat-item">
+            <mat-icon>star</mat-icon>
+            <div>
+              <p class="stat-label">Mejor Evaluación</p>
+              <p class="stat-value">
+                {{ estadisticas.mejorEvaluacion?.totalCalculo | number : '1.2-2' }}
+              </p>
+              <small>{{ estadisticas.mejorEvaluacion?.periodoNombre }}</small>
+            </div>
           </div>
-        </div>
 
-        <div class="stat-item">
-          <mat-icon>show_chart</mat-icon>
-          <div>
-            <p class="stat-label">Tendencia</p>
-            <p class="stat-value" [class.tendencia-mejora]="estadisticas.tendenciaGeneral === 'mejora'" [class.tendencia-decline]="estadisticas.tendenciaGeneral === 'decline'">
-              {{
-                estadisticas.tendenciaGeneral === 'mejora'
-                  ? 'En Mejora'
-                  : estadisticas.tendenciaGeneral === 'decline'
-                  ? 'En Decline'
-                  : 'Estable'
-              }}
-            </p>
+          <div class="stat-item">
+            <mat-icon>show_chart</mat-icon>
+            <div>
+              <p class="stat-label">Tendencia</p>
+              <p class="stat-value" [class.tendencia-mejora]="estadisticas.tendenciaGeneral === 'mejora'" [class.tendencia-decline]="estadisticas.tendenciaGeneral === 'decline'">
+                {{
+                  estadisticas.tendenciaGeneral === 'mejora'
+                    ? 'En Mejora'
+                    : estadisticas.tendenciaGeneral === 'decline'
+                    ? 'En Decline'
+                    : 'Estable'
+                }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="stat-item">
-          <mat-icon>work</mat-icon>
-          <div>
-            <p class="stat-label">Promedio Desempeño</p>
-            <p class="stat-value">
-              {{ estadisticas.promedioDesempeno | number : '1.2-2' }}
-            </p>
+          <div class="stat-item">
+            <mat-icon>work</mat-icon>
+            <div>
+              <p class="stat-label">Promedio Desempeño</p>
+              <p class="stat-value">
+                {{ estadisticas.promedioDesempeno | number : '1.2-2' }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="stat-item">
-          <mat-icon>school</mat-icon>
-          <div>
-            <p class="stat-label">Promedio Competencias</p>
-            <p class="stat-value">
-              {{ estadisticas.promedioCompetencias | number : '1.2-2' }}
-            </p>
+          <div class="stat-item">
+            <mat-icon>school</mat-icon>
+            <div>
+              <p class="stat-label">Promedio Competencias</p>
+              <p class="stat-value">
+                {{ estadisticas.promedioCompetencias | number : '1.2-2' }}
+              </p>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </mat-card-content>
   </mat-card>
 </div>
+
+<ng-template #sinPuntuacion><span class="sin-puntuacion" title="Evaluación de medio año: sin puntuación comparable">—</span></ng-template>
+<ng-template #sinFinales><div class="stat-item stat-item-vacio"><mat-icon>info</mat-icon><div><p class="stat-label">Sin evaluaciones finales puntuables</p><p class="stat-value">Las evaluaciones de medio año no promedian</p></div></div></ng-template>
