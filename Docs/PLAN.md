@@ -82,3 +82,23 @@ Origen: `Docs/plan-historial-evaluaciones.md` (problemas P1–P4, Fase 1). Rama:
    workspace; el monitor emite un latido cada 10 min con mtime del archivo e hijos del proceso.
 6. **Los shells en segundo plano de la sesión se matan por memoria baja** (1.2 GB libres de
    16): usar Monitor con `sleep 60`, nunca varios waiters en paralelo.
+
+## Cierre F3 (2026-09-10)
+- Regresión de las tres baterías sobre lo integrado: **55/55**. `ng build --configuration prueba`: OK.
+- La suite Karma completa del proyecto arrastra fallos previos de specs "should create" de
+  componentes ajenos a esta fase (cobertura mínima preexistente); no son regresión.
+- Auditoría Playwright (`e2e/historial-evaluaciones.spec.js`) lista; requiere credenciales por
+  variables de entorno y `npx ng serve --configuration prueba --port 4300`. Capturas y resumen
+  irán a `Docs/auditoria-historial/`.
+- Observación del crítico en T2 (no bloqueante): `getHistorialSubordinados` usa la fecha de hoy
+  en UTC; entre 20:00 y 23:59 hora RD manda el día siguiente. Corregir en Fase 2 construyendo
+  la fecha con getFullYear/getMonth/getDate.
+
+## Métricas de la fase
+| Tarea | Rondas | Lanzamientos | Tokens qwen | Motivo de la ronda extra | Batería | Crítico |
+|---|:---:|:---:|---:|---|:---:|---|
+| T1 utils | 2 | 1 | 34k (r2; r1 no capturado) | 4 campos de texto en `undefined` en vez de `''` | 23/23 | APROBADO, 16 pruebas propias |
+| T2 controlador | 2 | 3 | no capturado | error de tipos inducido por la spec (`getdatos<ModelResponse>`) | 21/21 | APROBADO, 13 pruebas propias |
+| T3 componente | 1 | 1 | 241k | — | 11/11 | APROBADO, 12 pruebas propias |
+
+Costo facturado: orquestación + 3 corridas de crítico (≈310k tokens de subagentes Opus).
