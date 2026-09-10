@@ -33,7 +33,7 @@
           <mat-select [(ngModel)]="filtros.periodoId">
             <mat-option [value]="undefined">Todos</mat-option>
             <mat-option *ngFor="let periodo of periodosDisponibles" [value]="periodo.id">
-              {{ periodo.nombre || 'Período ' + periodo.id }}
+              {{ periodo.descripcion || 'Período ' + periodo.id }}
             </mat-option>
           </mat-select>
         </mat-form-field>

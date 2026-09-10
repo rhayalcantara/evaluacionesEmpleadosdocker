@@ -102,3 +102,17 @@ Origen: `Docs/plan-historial-evaluaciones.md` (problemas P1–P4, Fase 1). Rama:
 | T3 componente | 1 | 1 | 241k | — | 11/11 | APROBADO, 12 pruebas propias |
 
 Costo facturado: orquestación + 3 corridas de crítico (≈310k tokens de subagentes Opus).
+
+## Auditoría Playwright ejecutada (2026-09-10, usuario administrador, API :7071)
+`e2e/historial-evaluaciones.spec.js` → `Docs/auditoria-historial/auditoria.md` + 8 capturas.
+Resultado: login y rol admin, filtro de estado con los 6 estados reales, filas con nombre e
+identificación, fila de medio año marcada sin puntuación ni checkbox, badges legibles, panel de
+estadísticas con conteo finales/medio año. En Evaluaciones_Test solo hay 1 evaluación de medio
+año "Completado", por eso el paso de comparación no tuvo dos finales que seleccionar.
+
+Hallazgo corregido por el orquestador durante la auditoría (fuera de las specs): el desplegable
+de periodo leía `periodo.nombre` (campo inexistente) y mostraba "Período N"; ahora usa
+`periodo.descripcion`. Batería del componente 11/11 tras el cambio.
+
+Trampas del e2e: esperar el menú "Configuración" (el rol llega después del login) y dar
+500 ms a los `mat-option` antes de leerlos.

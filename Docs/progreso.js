@@ -1,6 +1,6 @@
 /* Datos del tablero — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-10 14:15 — F1 y F2 integradas; F3 pendiente de auditoría con credenciales",
+  actualizado: "2026-09-10 15:10 — FASE 1 COMPLETA",
   rama: "feature/crud-competencias",
   fases: [
     { id: "F1", nombre: "Lógica pura", nota: "T1 sin dependencias; contrato en IHistorialEvaluacion.ts (orquestador)",
@@ -18,8 +18,8 @@ window.PROGRESO = {
       ] },
     { id: "F3", nombre: "Cierre (orquestador)", nota: "regresión, build prueba, Playwright + capturas",
       tareas: [
-        { id: "AUD", archivo: "Docs/auditoria-historial/", estado: "pendiente", ronda: 0,
-          pruebas: "regresión 55/55 · build prueba OK", tokens: null, commit: null, nota: "Guion e2e/historial-evaluaciones.spec.js listo; falta correrlo con credenciales contra ng serve --configuration prueba" }
+        { id: "AUD", archivo: "Docs/auditoria-historial/", estado: "integrado", ronda: 1,
+          pruebas: "e2e 7/7 pasos · regresión 55/55 · build prueba OK", tokens: null, commit: "pendiente", nota: "Playwright contra ng serve prueba (:7071) con usuario admin: 8 capturas + auditoria.md. Corrección extra: desplegable de periodo usaba periodo.nombre" }
       ] }
   ],
   eventos: [
@@ -46,6 +46,7 @@ window.PROGRESO = {
     { hora: "14:03", tarea: "T2", texto: "Crítico Opus: APROBADO (7/7, 13 pruebas propias). Observación: fecha por defecto en UTC; anotada para F3" },
     { hora: "14:05", tarea: "T2", texto: "Integrado, commit 77129eb + push" },
     { hora: "14:12", tarea: "—", texto: "Regresión de las 3 baterías: 55/55; ng build --configuration prueba OK" },
-    { hora: "14:15", tarea: "AUD", texto: "Guion Playwright escrito; pendiente de credenciales para ejecutar" }
+    { hora: "14:15", tarea: "AUD", texto: "Guion Playwright escrito; pendiente de credenciales para ejecutar" },
+    { hora: "15:05", tarea: "AUD", texto: "Auditoría Playwright ejecutada: 7 verificaciones en verde, 8 capturas. Desplegable de periodo corregido (descripcion)" }
   ]
 };

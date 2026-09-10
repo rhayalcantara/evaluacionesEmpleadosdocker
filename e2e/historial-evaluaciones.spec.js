@@ -59,9 +59,11 @@ async function cerrarSwal(page) {
 async function elegirMatOption(page, formLabel, optionText) {
   const field = page.locator('mat-form-field').filter({ hasText: formLabel }).first();
   await field.locator('mat-select').click();
+  await page.waitForTimeout(500);
   const opt = page.locator('mat-option').filter({ hasText: optionText }).first();
   if (await opt.count() === 0) { await page.keyboard.press('Escape'); return false; }
   await opt.click();
+  await page.waitForTimeout(300);
   return true;
 }
 
@@ -70,15 +72,25 @@ test.setTimeout(240000);
 test('Historial de Evaluaciones — Fase 1', async ({ page }) => {
   // 1. Login
   await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-  const texto = page.locator('input[type="text"], input:not([type])');
-  await texto.first().fill(USUARIO);
+  await page.waitForSelector('input', { timeout: 20000 }).catch(() => null);
+  await shot(page, 'login');
+  const texto = page.locator('input[type="text"]');
+  if (await texto.count() >= 1) { await texto.first().fill(USUARIO); } else { issue('Login: sin campo de usuario'); }
   const clave = page.locator('input[type="password"]');
-  if (await clave.count() > 0) { await clave.first().fill(CLAVE); } else { await texto.nth(1).fill(CLAVE); }
+  if (await clave.count() > 0) { await clave.first().fill(CLAVE); } else if (await texto.count() >= 2) { await texto.nth(1).fill(CLAVE); }
+  const radio = page.locator('input[type="radio"]').first();
+  if (await radio.count() > 0) { await radio.check().catch(() => null); }
   await page.locator('button').filter({ hasText: /Entrar|Ingresar|Login/i }).first().click();
-  const menuEval = page.locator('li.nav-item.dropdown').filter({ hasText: 'Evaluaciones' });
-  for (let i = 0; i < 30 && await menuEval.count() === 0; i++) { await page.waitForTimeout(1000); }
-  if (await menuEval.count() === 0) { issue('Login: el menú Evaluaciones no apareció en 30 s'); }
-  else { ok('Login correcto'); }
+  await page.waitForSelector('nav.navbar', { timeout: 25000 }).catch(() => null);
+  await page.waitForTimeout(2500);
+  await cerrarSwal(page);
+  // El rol llega después del login (navmenu carga periodo → empleado → GET EmpleadoRols).
+  // Se espera al menú "Configuración" (solo admin) para no leer el rol antes de tiempo.
+  const menuConf = page.locator('li.nav-item.dropdown').filter({ hasText: 'Configuraci' });
+  for (let i = 0; i < 40 && await menuConf.count() === 0; i++) { await page.waitForTimeout(1000); }
+  if (await menuConf.count() === 0) { issue('Login: el menú Configuración (admin) no apareció en 40 s'); }
+  else { ok('Login correcto y rol de administrador cargado'); }
+  await page.waitForTimeout(1500);
   await shot(page, 'post-login');
 
   // 2. Navegar al historial
