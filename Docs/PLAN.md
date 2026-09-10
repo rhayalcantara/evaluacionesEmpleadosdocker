@@ -59,3 +59,20 @@ Origen: `Docs/plan-historial-evaluaciones.md` (problemas P1–P4, Fase 1). Rama:
 - Buscar "ALCANTARA" y "525" encuentra al mismo empleado.
 - Promedio general de un empleado con evaluaciones en periodos 7 y 8 = su total del periodo 7.
 - Seleccionar una de periodo 8 y una de periodo 7 y Comparar → aviso, no diferencia numérica.
+
+## Trampas pagadas en esta fase
+1. **Karma compila TODOS los `*.spec.ts`** aunque se use `--include`. Una batería escrita por
+   adelantado contra un contrato que aún no existe rompe la compilación de las demás. Las
+   baterías de tareas futuras se guardan como `*.spec.ts.pendiente` y se renombran al iniciar
+   su tarea.
+2. **El constructor no responde LISTO aunque el archivo esté completo**: T1 dejó el archivo
+   terminado y compilando a las 11:59 y siguió consumiendo turnos 35 min más. Si el archivo
+   objetivo no cambia en 15 min y `tsc` pasa, correr la batería sin esperar el marcador y
+   matar el proceso (`taskkill /PID <pid> /T /F`) antes de lanzar una ronda nueva en el mismo
+   workspace.
+3. **`tsc` completo del proyecto nunca está limpio** (errores previos en
+   `EvaluacionCursoCapacitacion.ts`, `IRela.ts`). El `tsconfig.json` de cada workspace usa
+   `include` solo con el archivo entregable (tsc sigue sus imports) y NO redefine `baseUrl`
+   (rompe el mapeo `@commons-lib`).
+4. **El agente `critico-tareas` copiado a `.claude/agents/` durante la sesión no se carga**:
+   el crítico se lanza como `general-purpose` con `model: opus` y sus instrucciones en el prompt.
