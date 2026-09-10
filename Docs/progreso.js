@@ -19,7 +19,7 @@ window.PROGRESO = {
     { id: "F3", nombre: "Cierre (orquestador)", nota: "regresión, build prueba, Playwright + capturas",
       tareas: [
         { id: "AUD", archivo: "Docs/auditoria-historial/", estado: "integrado", ronda: 1,
-          pruebas: "e2e 7/7 pasos · regresión 55/55 · build prueba OK", tokens: null, commit: "pendiente", nota: "Playwright contra ng serve prueba (:7071) con usuario admin: 8 capturas + auditoria.md. Corrección extra: desplegable de periodo usaba periodo.nombre" }
+          pruebas: "e2e 7/7 pasos · regresión 55/55 · build prueba OK", tokens: null, commit: "0a86b50", nota: "Playwright contra ng serve prueba (:7071) con usuario admin: 8 capturas + auditoria.md. Corrección extra: desplegable de periodo usaba periodo.nombre" }
       ] }
   ],
   eventos: [
