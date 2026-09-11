@@ -157,6 +157,25 @@ Controllers: `HistorialEvaluacion.ts`
 Models: `IHistorialEvaluacion.ts`
 Components: `src/app/Views/Components/Pages/historial-evaluaciones/`
 
+### 2b. Bitácora de Eventos de Desempeño (`Bitacora`, Fase 3 — 2026-09-11)
+Registro por colaborador de hechos observables (fecha del hecho, tipo Logro/Incumplimiento/Iniciativa/Conducta,
+impacto Alto/Medio/Bajo, descripción ≥ 30 caracteres, competencias evidenciadas). **Es evidencia, no puntuación**:
+no altera `repuestasupervisor` ni el cálculo. Construida con `CONFIGURACION-TRABAJO.md` (constructores qwen3.8 +
+crítico Opus); plan y decisiones en `Docs/PLAN-BITACORA.md`, tablero en `Docs/progreso-bitacora.html`.
+- API: `Controllers/BitacoraEventosController.cs` (`/api/BitacoraEventos`: lista con filtros, `{id}`, POST, PUT,
+  DELETE lógico con autoría por secuencial → 403, `resumen?empleadoid&periodoid` emparejado por **nombre
+  normalizado** porque `Objetivo` se duplica por periodo, `equipo?supervisor&desde&hasta`). Tablas `BitacoraEvento`
+  y `BitacoraEventoCompetencia` (`scripts/bitacora_crear_tablas.sql`; migración `AddBitacoraEventos` escrita a mano).
+- Frontend: `Models/Bitacora/IBitacora.ts`, `Helpers/bitacora-utils.ts` (puro), `Controllers/Bitacora.ts`,
+  página `Pages/bitacora/` (ruta `/Bitacora`, Admin+Supervisor), `evaluacioncomponents/bitacora-resumen/`
+  (incrustado bajo la calificación del supervisor en medio año y en `criterialitem`), reporte
+  `Pages/reporte-bitacora/` (ruta `/ReporteBitacora`).
+- Baterías: `tests/bitacora/test_api_bitacora.py` (pytest contra :7071) y `*.spec.ts` de cada pieza;
+  auditoría Playwright `e2e/bitacora-eventos.spec.js`.
+- Trampas: `Empleados` es una vista con duplicados (`FirstOrDefault`, nunca `Single`); las DataAnnotations
+  devuelven ProblemDetails `{errors}` antes que `{mensaje}` (lo lee `Bitacora.mensajeError`); el cuerpo del
+  POST no debe llevar `fechaRegistro: null`.
+
 ### 3. Performance Management
 - KPIs (Key Performance Indicators)
 - KRIs (Key Result Indicators)
