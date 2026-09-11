@@ -194,8 +194,12 @@ test('Bitácora de Eventos — Fase 3', async ({ page }) => {
   const fueEval = await navMenu(page, 'Evaluaciones', 'Evaluar Equipo');
   await page.waitForTimeout(3000); await cerrarSwal(page);
   if (fueEval) {
-    const card = page.locator('app-card-empleado, .card').filter({ hasText: new RegExp(COLAB, 'i') }).first();
-    const btnEval = card.locator('button').filter({ hasText: /Evaluar|Continuar|Ver/i }).first();
+    const card = page.locator('app-card-empleado, table tbody tr').filter({ hasText: new RegExp(COLAB, 'i') }).first();
+    for (let i = 0; i < 20 && await card.count() === 0; i++) { await page.waitForTimeout(1000); }
+    const btnEval = card.locator('button').filter({ hasText: /Evaluar/i }).first();
+    for (let i = 0; i < 15 && await btnEval.count() === 0; i++) { await page.waitForTimeout(1000); }
+    await shot(page, 'evaluar-equipo');
+    if (await btnEval.count() === 0) { nota(`La tarjeta de ${COLAB} no muestra "Evaluar Empleado" (estado de la evaluación no editable por el supervisor)`); }
     if (await btnEval.count() > 0) {
       await btnEval.click(); await page.waitForTimeout(5000); await cerrarSwal(page);
       const resumenes = page.locator('app-bitacora-resumen');
@@ -210,6 +214,29 @@ test('Bitácora de Eventos — Fase 3', async ({ page }) => {
       await cerrar.click().catch(() => null); await page.waitForTimeout(800);
     } else { nota('No se encontró el botón de evaluar del colaborador en Evaluar Equipo; se omite la verificación del resumen'); }
   }
+
+  // 8b. Reporte de bitácora (menú Reportes)
+  let fueRep = await navMenu(page, 'Evaluaciones', 'Reporte de mi Bitácora');
+  if (!fueRep) { fueRep = await navMenu(page, 'Reportes', 'Reporte Bitácora'); }
+  await page.waitForTimeout(3500); await cerrarSwal(page);
+  if (fueRep && /ReporteBitacora/i.test(page.url())) {
+    const filasRep = await page.locator('table tbody tr').count();
+    const tarjetas = await page.locator('.tarjeta-total').count();
+    await shot(page, 'reporte-equipo');
+    if (tarjetas === 7 && filasRep > 0) { ok(`Reporte de bitácora: ${tarjetas} tarjetas de totales y ${filasRep} filas de equipo`); }
+    else { issue(`Reporte de bitácora: ${tarjetas} tarjetas, ${filasRep} filas`); }
+    const filaCol = page.locator('table tbody tr').filter({ hasText: new RegExp(COLAB, 'i') }).first();
+    const ver = filaCol.locator('button').filter({ hasText: 'Ver' }).first();
+    if (await ver.count() > 0) {
+      await ver.click(); await page.waitForTimeout(2500); await cerrarSwal(page);
+      const det = await page.locator('.detalle').count();
+      const compFilas = await page.locator('.competencia-fila').count();
+      await shot(page, 'reporte-detalle');
+      if (det > 0 && compFilas >= 12) { ok(`Detalle del colaborador con ${compFilas} competencias y sus eventos`); } else { issue(`Detalle del reporte: detalle=${det}, competencias=${compFilas}`); }
+      const conMarca = (await page.locator('.detalle').textContent().catch(() => '') || '').includes(MARCA);
+      if (conMarca) { ok('El evento de prueba aparece en el detalle del reporte'); } else { nota('El evento de prueba no aparece en el detalle (revisar rango por defecto)'); }
+    } else { issue(`El reporte no tiene fila para ${COLAB} o falta el botón Ver`); }
+  } else { issue(`No se llegó a /ReporteBitacora (url: ${page.url()})`); }
 
   // 9. Eliminación y limpieza
   await navMenu(page, 'Evaluaciones', 'Bitácora'); await page.waitForTimeout(2500);

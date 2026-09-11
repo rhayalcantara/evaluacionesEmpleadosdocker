@@ -153,7 +153,13 @@ export class BitacoraComponent implements OnInit {
     const poll = setInterval(() => {
       if (this.empl.arraymodelsubordinados && this.empl.arraymodelsubordinados.length > 0) {
         clearInterval(poll);
-        this.equipo = [...this.empl.arraymodelsubordinados];
+        // La vista Empleados trae filas duplicadas por secuencial y el propio supervisor: se dejan únicos
+        // y se excluye al supervisor de su propia bitácora (PLAN-BITACORA §9.2).
+        const vistos = new Set<number>();
+        this.equipo = this.empl.arraymodelsubordinados.filter(e => {
+          if (!e || !e.secuencial || vistos.has(e.secuencial) || e.secuencial === this.supervisor?.secuencial) { return false; }
+          vistos.add(e.secuencial); return true;
+        });
         terminar();
       }
     }, 300);
