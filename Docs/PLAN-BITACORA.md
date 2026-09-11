@@ -206,3 +206,11 @@ Total de obra: ~8–10 días hábiles de orquestación, más la validación de R
    y se inserta la fila en `__EFMigrationsHistory` como se hizo en Test.
 4. **`GET /api/Periods/{id}`** existe y devuelve `fechaInicio`/`fechaFin`; el periodo 8 de Test va
    del 2026-06-01 al 2026-12-31.
+5. **Errores 400 del API en dos formatos** (crítico de B1): las DataAnnotations del modelo (`[Required]`,
+   `[MaxLength]`) se evalúan antes que `Validar` por el filtro de `[ApiController]`, así que descripción
+   vacía/nula, descripción > 2000, tipo/impacto vacíos o demasiado largos llegan como ProblemDetails
+   `{ errors: { Descripcion: [...] } }` y no como `{ mensaje }`. No se cambia `Program.cs` por esto:
+   en B6 `Bitacora.mensajeError` debe leer `error.error.mensaje ?? primer texto de error.error.errors`.
+   El frontend valida antes con `validarEvento`, así que en la práctica casi nunca se ve.
+6. **El filtro `tipo` del API es insensible a mayúsculas** por la collation de SQL Server; el frontend
+   siempre manda el valor canónico del catálogo.
