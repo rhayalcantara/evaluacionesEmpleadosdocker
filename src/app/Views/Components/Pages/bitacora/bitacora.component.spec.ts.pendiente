@@ -1,0 +1,153 @@
+/**
+ * Batería dura de B4 — página Bitácora (el constructor no la ve).
+ * Correr: npx ng test --watch=false --browsers=ChromeHeadless --include=src/app/Views/Components/Pages/bitacora/bitacora.component.spec.ts
+ */
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { of, throwError } from 'rxjs';
+import { BitacoraComponent } from './bitacora.component';
+import { Bitacora } from 'src/app/Controllers/Bitacora';
+import { Empleados } from 'src/app/Controllers/Empleados';
+import { DatosServiceService } from 'src/app/Services/datos-service.service';
+import { ExcelService } from 'src/app/Services/excel.service';
+import { IBitacoraEvento } from 'src/app/Models/Bitacora/IBitacora';
+import { IEmpleado } from 'src/app/Models/Empleado/IEmpleado';
+import { eventoNuevo, validarEvento, filasExcel } from 'src/app/Helpers/bitacora-utils';
+
+const DESC = 'Situación: reunión de cierre. Acción: entregó el informe a tiempo. Resultado: aprobado.';
+const emp = (o: Partial<IEmpleado> = {}): IEmpleado => ({
+  secuencial: 525, codigousuario: 'RALCANTARA', nombreunido: 'RHAY ALCANTARA', identificacion: '001-1', sdept: 1, departamento: 'TI',
+  codigoestado: 'A', scargo: 1, cargo: 'DBA', esjefatura: 0, tienejefe: 1, nivel: 1, fechapostulacion: '', jefeinmediatO_SECUENCIAL: 55, jefeinmediato: 'PABLO', oficina: 'SD', ...o
+});
+const ev = (o: Partial<IBitacoraEvento> = {}): IBitacoraEvento => ({
+  id: 1, empleadoSecuencial: 525, registradoPorSecuencial: 55, fechaEvento: '2026-09-05', fechaRegistro: '2026-09-06T09:00:00', tipo: 'Logro', impacto: 'Alto',
+  descripcion: DESC, activo: true, registradoPorNombre: 'PABLO', competencias: [{ id: 1, bitacoraEventoId: 1, objetivoId: 59, nombre: 'Enfoque al socio' }], ...o
+});
+
+describe('BitacoraComponent', () => {
+  let bitacora: jasmine.SpyObj<Bitacora>; let empl: any; let datos: jasmine.SpyObj<DatosServiceService>; let excel: jasmine.SpyObj<ExcelService>;
+  let fixture: ComponentFixture<BitacoraComponent>; let comp: BitacoraComponent;
+
+  beforeEach(() => {
+    bitacora = jasmine.createSpyObj<Bitacora>('Bitacora', ['listar', 'guardar', 'eliminar', 'catalogoCompetencias', 'periodoActivo', 'nuevo', 'validar', 'filasExcel', 'mensajeError']);
+    bitacora.listar.and.returnValue(of([ev({ id: 1 }), ev({ id: 2, tipo: 'Conducta', registradoPorSecuencial: 85, registradoPorNombre: 'OTRO' }), ev({ id: 3, activo: false })]));
+    bitacora.catalogoCompetencias.and.returnValue(of([{ objetivoId: 59, nombre: 'Enfoque al socio', grupoId: 1, grupo: 'G1' }, { objetivoId: 60, nombre: 'Enfoque a resultados', grupoId: 1, grupo: 'G1' }]));
+    bitacora.periodoActivo.and.returnValue(of({ id: 8, descripcion: 'Medio', fechaInicio: '2026-06-01', fechaFin: '2026-12-31', tipo: 'medio_ano' }));
+    bitacora.nuevo.and.callFake((e: number, a: number) => eventoNuevo(e, a));
+    bitacora.validar.and.callFake((e: IBitacoraEvento) => validarEvento(e));
+    bitacora.filasExcel.and.callFake((l: IBitacoraEvento[], n: string) => filasExcel(l, n));
+    bitacora.mensajeError.and.callFake((e: any) => e?.error?.mensaje ?? e?.message ?? 'Error desconocido');
+    bitacora.guardar.and.callFake((e: IBitacoraEvento) => of({ ...e, id: e.id || 99 }));
+    bitacora.eliminar.and.returnValue(of(true));
+    empl = { model: emp({ secuencial: 55, nombreunido: 'PABLO' }), arraymodelsubordinados: [] as IEmpleado[],
+      GetByUsuario: jasmine.createSpy('GetByUsuario').and.returnValue(of(emp({ secuencial: 55, nombreunido: 'PABLO' }))),
+      getsubordinados: jasmine.createSpy('getsubordinados').and.callFake(() => { empl.arraymodelsubordinados = [emp(), emp({ secuencial: 526, nombreunido: 'ANA PEREZ' })]; }) };
+    datos = jasmine.createSpyObj<DatosServiceService>('DatosServiceService', ['showMessage']);
+    excel = jasmine.createSpyObj<ExcelService>('ExcelService', ['exportAsExcelFile']);
+    TestBed.configureTestingModule({ imports: [BitacoraComponent], providers: [
+      { provide: Bitacora, useValue: bitacora }, { provide: Empleados, useValue: empl },
+      { provide: DatosServiceService, useValue: datos }, { provide: ExcelService, useValue: excel }] });
+    localStorage.setItem('usuario', JSON.stringify({ codigo: 'PRODRIGUEZ' }));
+    localStorage.setItem('periodo', JSON.stringify({ id: 8 }));
+  });
+  afterEach(() => { localStorage.removeItem('usuario'); localStorage.removeItem('periodo'); });
+
+  const iniciar = () => { fixture = TestBed.createComponent(BitacoraComponent); comp = fixture.componentInstance; fixture.detectChanges(); };
+
+  it('sin usuario en localStorage no llama a GetByUsuario ni rompe', () => {
+    localStorage.removeItem('usuario');
+    iniciar();
+    expect(empl.GetByUsuario).not.toHaveBeenCalled();
+  });
+
+  it('carga supervisor, equipo y catálogo del periodo', fakeAsync(() => {
+    iniciar(); tick(400); fixture.detectChanges();
+    expect(empl.GetByUsuario).toHaveBeenCalledWith('PRODRIGUEZ');
+    expect(comp.equipo.length).toBe(2);
+    expect(bitacora.catalogoCompetencias).toHaveBeenCalledWith(8);
+    expect(comp.grupos.length).toBe(1);
+    tick(10000);
+  }));
+
+  it('seleccionar limpia filtros y lista solo con empleadoSecuencial', fakeAsync(() => {
+    iniciar(); tick(400);
+    comp.filtro.tipo = 'Logro';
+    comp.seleccionar(emp());
+    expect(comp.filtro.tipo).toBe('');
+    expect(bitacora.listar).toHaveBeenCalledWith({ empleadoSecuencial: 525 });
+    expect(comp.eventos.length).toBe(3);
+    tick(10000);
+  }));
+
+  it('eventosVisibles excluye inactivos y respeta el filtro de tipo; conteo coherente', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp());
+    expect(comp.eventosVisibles.map(e => e.id)).toEqual([2, 1]);
+    comp.filtro.tipo = 'Conducta';
+    expect(comp.eventosVisibles.map(e => e.id)).toEqual([2]);
+    comp.filtro.tipo = '';
+    expect(comp.conteo).toEqual({ logros: 1, incumplimientos: 0, iniciativas: 0, conductas: 1, total: 2 });
+    tick(10000);
+  }));
+
+  it('nuevoEvento abre el diálogo con los secuenciales correctos', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp());
+    comp.nuevoEvento(); fixture.detectChanges();
+    expect(comp.editando?.id).toBe(0);
+    expect(comp.editando?.empleadoSecuencial).toBe(525);
+    expect(comp.editando?.registradoPorSecuencial).toBe(55);
+    expect((fixture.nativeElement as HTMLElement).querySelector('.modal')).not.toBeNull();
+    tick(10000);
+  }));
+
+  it('guardar inválido llena erroresForm y no llama al API; válido guarda, avisa, cierra y recarga', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp());
+    comp.nuevoEvento();
+    comp.editando!.descripcion = 'corta';
+    comp.guardar();
+    expect(comp.erroresForm.length).toBeGreaterThan(0);
+    expect(bitacora.guardar).not.toHaveBeenCalled();
+    comp.editando!.descripcion = DESC; comp.alternar(59);
+    const llamadas = bitacora.listar.calls.count();
+    comp.guardar();
+    expect(bitacora.guardar).toHaveBeenCalledTimes(1);
+    expect(datos.showMessage).toHaveBeenCalledWith(jasmine.any(String), jasmine.any(String), 'success');
+    expect(comp.editando).toBeNull();
+    expect(bitacora.listar.calls.count()).toBe(llamadas + 1);
+    tick(10000);
+  }));
+
+  it('esPropio y botones Editar/Eliminar solo en eventos propios', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp()); fixture.detectChanges();
+    expect(comp.esPropio(ev({ registradoPorSecuencial: 55 }))).toBeTrue();
+    expect(comp.esPropio(ev({ registradoPorSecuencial: 85 }))).toBeFalse();
+    const cards = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.evento-card'));
+    expect(cards.length).toBe(2);
+    const conBotones = cards.filter(c => Array.from(c.querySelectorAll('button')).some(b => /Editar/.test(b.textContent || '')));
+    expect(conBotones.length).toBe(1);
+    tick(10000);
+  }));
+
+  it('alternar dos veces deja las competencias vacías', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp()); comp.nuevoEvento();
+    comp.alternar(59); expect(comp.tiene(59)).toBeTrue();
+    comp.alternar(59); expect(comp.editando?.competencias.length).toBe(0);
+    tick(10000);
+  }));
+
+  it('exportar llama a Excel con las filas y el nombre esperado', fakeAsync(() => {
+    iniciar(); tick(400); comp.seleccionar(emp());
+    comp.exportar();
+    expect(excel.exportAsExcelFile).toHaveBeenCalled();
+    const [filas, nombre] = excel.exportAsExcelFile.calls.mostRecent().args;
+    expect(filas.length).toBe(2); expect(Object.keys(filas[0]).length).toBe(8);
+    expect(nombre).toBe('bitacora_525');
+    tick(10000);
+  }));
+
+  it('error del API en cargarEventos deja error y cargando=false', fakeAsync(() => {
+    bitacora.listar.and.returnValue(throwError(() => ({ error: { mensaje: 'Sin conexión' } })));
+    iniciar(); tick(400); comp.seleccionar(emp()); fixture.detectChanges();
+    expect(comp.error).toBe('Sin conexión'); expect(comp.cargando).toBeFalse();
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Sin conexión');
+    tick(10000);
+  }));
+});
