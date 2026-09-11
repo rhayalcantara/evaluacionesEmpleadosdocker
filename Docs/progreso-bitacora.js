@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 11:58 — F1 completa · B2 integrado · B3-r2, B4 y B5-r3 en crítico Opus",
+  actualizado: "2026-09-11 12:10 — B2, B3, B5 y B6 integrados · B4-r2 en crítico · B7 construyendo",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -21,14 +21,14 @@ window.PROGRESO = {
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
         { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "integrado", ronda: 1, pruebas: "Jasmine 22/22 + 110 aserciones del crítico", tokens: 46627, commit: "37edafd", nota: "Crítico Opus: APROBADO, 19/19 firmas, sin faltantes (108k tokens, 7 min). Observación: textoResumen con contadores incoherentes devuelve vacío" },
-        { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "en crítico", ronda: 2, pruebas: "tsc OK · Jasmine 12/12", tokens: null, commit: "", nota: "r1 RECHAZADO (fechaRegistro:null rompía el POST real); r2 en 6 min con fechaISO y cuerpo sin claves de solo lectura; crítico ronda 2 en curso" },
-        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en crítico", ronda: 1, pruebas: "tsc OK · Jasmine 10/10", tokens: null, commit: "", nota: "Tres archivos en 21 min (ts 10.5 KB, html 10.3 KB, css 2.5 KB); DONE 11:44" },
-        { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "en crítico", ronda: 3, pruebas: "tsc OK · Jasmine 8/8", tokens: null, commit: "", nota: "r1 sin plantilla (colgado 15 min); r2 escribió el .html en 2 min; r3 corrigió error:string en 1 min. Crítico en curso" },
-        { id: "B6", archivo: "form medio año, FormEvaluationEmploye, historial (integración)", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "orquestador" }
+        { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "integrado", ronda: 2, pruebas: "Jasmine 12/12 · POST 201 / PUT 204 reales por el crítico", tokens: null, commit: "6f16d8f", nota: "Crítico Opus r2: APROBADO (80k tokens, 2 min). Observación: el PUT manda nombre/grupo de competencias (el API los ignora)" },
+        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en crítico", ronda: 2, pruebas: "tsc OK · Jasmine 12/12 (batería endurecida con Empleados fiel)", tokens: null, commit: "", nota: "r1 RECHAZADO por 4 puntos (equipo nunca cargaba: faltaba empl.model=rep y periodo sin fechas; class.active; normalizarTexto). r2 en 8 min; crítico ronda 2 en curso" },
+        { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "integrado", ronda: 3, pruebas: "Jasmine 8/8 + 17 del crítico", tokens: null, commit: "8b57e95", nota: "Crítico Opus: APROBADO (112k tokens, 7 min). Observación (petición en vuelo al pasar inputs a 0) cerrada en B6" },
+        { id: "B6", archivo: "app-routing, navmenu, form medio año, criterialitem, Bitacora.ts, bitacora-resumen", estado: "integrado", ronda: 1, pruebas: "ng build prueba OK · B3 12/12 · B5 8/8", tokens: null, commit: "32b7218", nota: "Orquestador: ruta /Bitacora (Admin+Supervisor) y menú; resumen bajo la calificación del supervisor en medio año y evaluación final; mensajeError lee ProblemDetails. Pestaña en historial pospuesta a F3 (cierre)" }
       ] },
     { id: "F3", nombre: "Reporte y cierre", nota: "B7 reporte RRHH; regresión, Playwright, despliegue a prueba, validación con Lissette",
       tareas: [
-        { id: "B7", archivo: "Pages/reporte-bitacora/", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" },
+        { id: "B7", archivo: "Pages/reporte-bitacora/", estado: "en curso", ronda: 1, pruebas: "batería .pendiente (10 specs)", tokens: null, commit: "", nota: "Spec ajustada: el rol en localStorage es el JSON de EmpleadoRol (rolId)" },
         { id: "AUD", archivo: "Docs/auditoria-bitacora/", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" }
       ] }
   ],
@@ -66,6 +66,12 @@ window.PROGRESO = {
     { hora: "11:48", tarea: "B1", texto: "Crítico Opus ronda 2: APROBADO (lista 0.30 s, resumen 0.32 s, 38/38, sin regresiones). Integrado + commit + push en el repo del API. F1 COMPLETA" },
     { hora: "11:52", tarea: "B3", texto: "r2 DONE en 6 min: tsc OK, Jasmine 12/12 (incluido el spec nuevo del cuerpo del POST). Crítico ronda 2 lanzado" },
     { hora: "11:53", tarea: "B5", texto: "r2 DONE (plantilla, 2 min): 7/8 — `error` iniciaba en null; r3 lanzada y DONE en 1 min: 8/8. Crítico lanzado" },
+    { hora: "11:53", tarea: "B3", texto: "Crítico Opus r2: APROBADO con POST/PUT reales contra :7071. Integrado: commit 6f16d8f + push" },
+    { hora: "11:55", tarea: "B4", texto: "Crítico Opus r1: RECHAZADO (4 críticas, dos de integración real). B4-r2.md + batería con mock fiel de Empleados; relanzado" },
+    { hora: "11:57", tarea: "B5", texto: "Crítico Opus: APROBADO (17 pruebas propias). Integrado: commit 8b57e95 + push" },
+    { hora: "12:02", tarea: "B6", texto: "Integración del orquestador: ruta, menú, resumen en medio año y final, ProblemDetails, unsubscribe. ng build prueba OK (solo avisos NG8107, limpiados). Commit 32b7218 + push" },
+    { hora: "12:05", tarea: "B4", texto: "r2 DONE en 8 min: tsc OK, Jasmine 12/12 (incluye los 3 specs nuevos). Crítico ronda 2 lanzado" },
+    { hora: "12:08", tarea: "B7", texto: "Workspace y constructor lanzados; batería .pendiente escrita" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
