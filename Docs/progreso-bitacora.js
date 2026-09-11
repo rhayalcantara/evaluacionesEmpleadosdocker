@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 12:10 — B2, B3, B5 y B6 integrados · B4-r2 en crítico · B7 construyendo",
+  actualizado: "2026-09-11 12:25 — F2 COMPLETA · B7 en crítico · regresión 87/87 · build prueba OK",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -18,18 +18,18 @@ window.PROGRESO = {
       tareas: [
         { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "integrado", ronda: 2, pruebas: "pytest 38/38 · 15 eventos 0.30 s · crítico: forma idéntica, limpieza ok", tokens: null, commit: "API", nota: "Crítico Opus r2: APROBADO sin faltantes (81k tokens, 4 min). Integrado en el repo del API (rama feature/bitacora-eventos) y desplegado en :7071" }
       ] },
-    { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
+    { id: "F2", nombre: "Frontend (COMPLETA)", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
         { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "integrado", ronda: 1, pruebas: "Jasmine 22/22 + 110 aserciones del crítico", tokens: 46627, commit: "37edafd", nota: "Crítico Opus: APROBADO, 19/19 firmas, sin faltantes (108k tokens, 7 min). Observación: textoResumen con contadores incoherentes devuelve vacío" },
         { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "integrado", ronda: 2, pruebas: "Jasmine 12/12 · POST 201 / PUT 204 reales por el crítico", tokens: null, commit: "6f16d8f", nota: "Crítico Opus r2: APROBADO (80k tokens, 2 min). Observación: el PUT manda nombre/grupo de competencias (el API los ignora)" },
-        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en crítico", ronda: 2, pruebas: "tsc OK · Jasmine 12/12 (batería endurecida con Empleados fiel)", tokens: null, commit: "", nota: "r1 RECHAZADO por 4 puntos (equipo nunca cargaba: faltaba empl.model=rep y periodo sin fechas; class.active; normalizarTexto). r2 en 8 min; crítico ronda 2 en curso" },
+        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "integrado", ronda: 2, pruebas: "Jasmine 12/12 + 6 del crítico", tokens: null, commit: "dc57f02", nota: "Crítico Opus r2: APROBADO (98k tokens, 4 min). Observaciones: pantalla muda si periodoActivo falla; validar fechaFin del periodo guardado" },
         { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "integrado", ronda: 3, pruebas: "Jasmine 8/8 + 17 del crítico", tokens: null, commit: "8b57e95", nota: "Crítico Opus: APROBADO (112k tokens, 7 min). Observación (petición en vuelo al pasar inputs a 0) cerrada en B6" },
         { id: "B6", archivo: "app-routing, navmenu, form medio año, criterialitem, Bitacora.ts, bitacora-resumen", estado: "integrado", ronda: 1, pruebas: "ng build prueba OK · B3 12/12 · B5 8/8", tokens: null, commit: "32b7218", nota: "Orquestador: ruta /Bitacora (Admin+Supervisor) y menú; resumen bajo la calificación del supervisor en medio año y evaluación final; mensajeError lee ProblemDetails. Pestaña en historial pospuesta a F3 (cierre)" }
       ] },
     { id: "F3", nombre: "Reporte y cierre", nota: "B7 reporte RRHH; regresión, Playwright, despliegue a prueba, validación con Lissette",
       tareas: [
-        { id: "B7", archivo: "Pages/reporte-bitacora/", estado: "en curso", ronda: 1, pruebas: "batería .pendiente (10 specs)", tokens: null, commit: "", nota: "Spec ajustada: el rol en localStorage es el JSON de EmpleadoRol (rolId)" },
-        { id: "AUD", archivo: "Docs/auditoria-bitacora/", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" }
+        { id: "B7", archivo: "Pages/reporte-bitacora/", estado: "en crítico", ronda: 3, pruebas: "tsc OK · Jasmine 10/10", tokens: null, commit: "", nota: "r1 con 2 errores Date→string (r2 en 3 min); r3 por el aviso de sin resultados colgado del else de !cargando (2 min). Ruta /ReporteBitacora y menú Reportes añadidos por el orquestador" },
+        { id: "AUD", archivo: "e2e/bitacora-eventos.spec.js → Docs/auditoria-bitacora/", estado: "en curso", ronda: 1, pruebas: "regresión Jasmine 87/87 · ng build prueba OK", tokens: null, commit: "", nota: "Guion escrito; la ejecución necesita credenciales del supervisor (EVAL_USERNAME/EVAL_PASSWORD) y ng serve prueba" }
       ] }
   ],
   eventos: [
@@ -72,6 +72,10 @@ window.PROGRESO = {
     { hora: "12:02", tarea: "B6", texto: "Integración del orquestador: ruta, menú, resumen en medio año y final, ProblemDetails, unsubscribe. ng build prueba OK (solo avisos NG8107, limpiados). Commit 32b7218 + push" },
     { hora: "12:05", tarea: "B4", texto: "r2 DONE en 8 min: tsc OK, Jasmine 12/12 (incluye los 3 specs nuevos). Crítico ronda 2 lanzado" },
     { hora: "12:08", tarea: "B7", texto: "Workspace y constructor lanzados; batería .pendiente escrita" },
+    { hora: "12:12", tarea: "B4", texto: "Crítico Opus r2: APROBADO. Integrado: commit dc57f02 + push. F2 COMPLETA" },
+    { hora: "12:14", tarea: "B7", texto: "DONE con 2 errores de tipo → r2 (3 min, tsc OK); batería 9/10 → r3 por el aviso de vacío (2 min); 10/10. Crítico lanzado" },
+    { hora: "12:18", tarea: "AUD", texto: "Guion Playwright e2e/bitacora-eventos.spec.js escrito; CLAUDE.md documentado; borrador de correo a Lissette" },
+    { hora: "12:24", tarea: "AUD", texto: "ng build --configuration prueba OK con ambas rutas; regresión Jasmine de 6 baterías: 87/87" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
