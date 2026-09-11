@@ -1,0 +1,43 @@
+/* Página: Reporte de Bitácora de Eventos */
+.reporte-bitacora { max-width: 1200px; margin: 0 auto; }
+
+/* Tarjetas de totales */
+.tarjeta-total {
+  background: #fff; border: 1px solid var(--bs-border-color); border-radius: .5rem;
+  padding: .6rem .75rem; text-align: center; height: 100%;
+}
+.tarjeta-valor { font-size: 1.35rem; font-weight: 700; line-height: 1.2; }
+.tarjeta-etiqueta { font-size: .75rem; color: #6c757d; text-transform: uppercase; letter-spacing: .02em; }
+.tarjeta-total-gris .tarjeta-valor { color: #495057; }
+
+/* Filas sin eventos en gris */
+.sin-eventos { color: #9aa0a6 !important; background-color: #f6f7f8; }
+.sin-eventos .fw-semibold { color: #9aa0a6; }
+
+/* Panel de detalle (debajo de la tabla) */
+.detalle {
+  margin-top: 1.5rem; border: 1px solid var(--bs-border-color);
+  border-top: 4px solid #0d6efd; border-radius: .5rem;
+  padding: 1rem 1.25rem; background: #fff;
+}
+.detalle-cargo { color: #6c757d; font-weight: 400; font-size: 1rem; }
+
+.competencia-fila { white-space: nowrap; }
+.competencia-fila .text-nowrap { overflow: hidden; text-overflow: ellipsis; }
+
+/* Eventos del detalle (misma paleta que la bitácora) */
+.evento {
+  background: #fff; border: 1px solid var(--bs-border-color);
+  border-radius: .5rem; padding: .6rem .9rem;
+}
+.evento-fecha { font-variant-numeric: tabular-nums; color: #495057; }
+.evento-competencias { font-size: .85rem; color: #6c757d; flex-basis: 100%; }
+.evento-descripcion { margin: 0 0 .35rem; white-space: pre-line; }
+.evento-registrado { font-size: .8rem; }
+
+/* Badges de tipo (texto blanco) */
+.evento-logro { background-color: #198754 !important; color: #fff; }
+.evento-incumplimiento { background-color: #dc3545 !important; color: #fff; }
+.evento-iniciativa { background-color: #0d6efd !important; color: #fff; }
+.evento-conducta { background-color: #fd7e14 !important; color: #fff; }
+.evento-otro { background-color: #6c757d !important; color: #fff; }

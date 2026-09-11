@@ -89,6 +89,11 @@ const routes: Routes = [
     .then((m)=> m.BitacoraComponent),
     canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin, RolUsuario.Supervisor] }
   },
+  { path:'ReporteBitacora',
+    loadComponent:()=> import('./Views/Components/Pages/reporte-bitacora/reporte-bitacora.component')
+    .then((m)=> m.ReporteBitacoraComponent),
+    canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin, RolUsuario.Supervisor] }
+  },
   { path:'evaluation-periods', component: EvaluationPeriodsComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RolUsuario.Admin] } },
   { path:'Estado',
     loadComponent:()=> import('./Views/Components/Pages/Estado/estado.component')

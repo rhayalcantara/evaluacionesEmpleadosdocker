@@ -1,0 +1,169 @@
+<div class="reporte-bitacora">
+  <h1 class="mb-4">Reporte de Bitácora de Eventos</h1>
+
+  <!-- Filtros -->
+  <div class="filtros row g-2 align-items-end mb-4">
+    <div class="col-md-4">
+      <label class="form-label" for="supervisor">Supervisor</label>
+      <select id="supervisor" class="form-select" [(ngModel)]="supervisorSel" [disabled]="!esAdmin">
+        <option *ngFor="let s of supervisores" [ngValue]="s.secuencial">{{ s.nombreunido }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="desde">Desde</label>
+      <input id="desde" type="date" class="form-control" [(ngModel)]="rango.desde">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label" for="hasta">Hasta</label>
+      <input id="hasta" type="date" class="form-control" [(ngModel)]="rango.hasta">
+    </div>
+    <div class="col-md-2 d-flex gap-2">
+      <button class="btn btn-primary flex-grow-1" (click)="consultar()" [disabled]="cargando || !supervisores.length">
+        Consultar
+      </button>
+      <button class="btn btn-outline-success flex-grow-1" (click)="exportarEquipo()" [disabled]="!filas.length">
+        Exportar Excel
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="d-flex align-items-center gap-2 my-3">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando…</span></div>
+    <span class="text-secondary">Consultando equipo…</span>
+  </div>
+
+  <ng-container *ngIf="!cargando">
+    <!-- Sin filas tras consultar -->
+    <div *ngIf="consultado && !filas.length && !error" class="alert alert-light border">
+      Sin colaboradores o sin eventos en el rango.
+    </div>
+
+    <!-- Tarjetas de totales -->
+    <div class="totales row g-2 mb-4" *ngIf="filas.length">
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.colaboradores }}</div>
+          <div class="tarjeta-etiqueta">Colaboradores</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.conEventos }}</div>
+          <div class="tarjeta-etiqueta">Con eventos</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.logros }}</div>
+          <div class="tarjeta-etiqueta">Logros</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.incumplimientos }}</div>
+          <div class="tarjeta-etiqueta">Incumplimientos</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.iniciativas }}</div>
+          <div class="tarjeta-etiqueta">Iniciativas</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total">
+          <div class="tarjeta-valor">{{ totales.conductas }}</div>
+          <div class="tarjeta-etiqueta">Conductas</div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="tarjeta-total tarjeta-total-gris">
+          <div class="tarjeta-valor">{{ totales.total }}</div>
+          <div class="tarjeta-etiqueta">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla del equipo -->
+    <div class="table-responsive mb-1" *ngIf="filas.length">
+      <table class="table table-sm table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Colaborador</th>
+            <th>Cargo</th>
+            <th class="text-center">Logros</th>
+            <th class="text-center">Incumplimientos</th>
+            <th class="text-center">Iniciativas</th>
+            <th class="text-center">Conductas</th>
+            <th class="text-center">Total</th>
+            <th>Último evento</th>
+            <th class="text-end">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of filas" [class.sin-eventos]="f.total === 0">
+            <td class="fw-semibold">{{ f.nombre }}</td>
+            <td>{{ f.cargo }}</td>
+            <td class="text-center">{{ f.logros }}</td>
+            <td class="text-center">{{ f.incumplimientos }}</td>
+            <td class="text-center">{{ f.iniciativas }}</td>
+            <td class="text-center">{{ f.conductas }}</td>
+            <td class="text-center fw-semibold">{{ f.total }}</td>
+            <td>{{ fechaCorta(f.ultimoEvento) }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(f)">Ver</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel de detalle del colaborador -->
+    <section *ngIf="detalle" class="detalle">
+      <div class="detalle-cabecera d-flex flex-wrap align-items-center gap-2 mb-3">
+        <div class="me-auto">
+          <h2 class="h5 mb-1">
+            {{ detalle.empleado.nombre }}
+            <span class="detalle-cargo">{{ detalle.empleado.cargo }}</span>
+          </h2>
+          <small class="text-secondary">Rango: {{ fechaCorta(rango.desde) }} — {{ fechaCorta(rango.hasta) }} · Periodo #{{ periodoId }}</small>
+        </div>
+        <button class="btn btn-outline-success" (click)="exportarDetalle()">Exportar Excel</button>
+        <button class="btn btn-outline-secondary" (click)="cerrarDetalle()">Cerrar</button>
+      </div>
+
+      <h3 class="h6 text-uppercase text-secondary mb-2">Resumen por competencia</h3>
+      <ul class="list-group mb-4">
+        <li *ngFor="let c of detalle.competencias" class="competencia-fila py-2 d-flex flex-wrap align-items-center gap-2"
+            [class.sin-eventos]="c.total === 0">
+          <span class="fw-semibold me-auto">
+            {{ c.nombre }}
+            <small class="text-secondary ms-2">{{ c.grupo }}</small>
+          </span>
+          <span class="text-nowrap">{{ textoResumen(c) }}</span>
+        </li>
+        <li *ngIf="!detalle.competencias.length" class="competencia-fila py-2 sin-eventos">Sin competencias registradas en el periodo.</li>
+      </ul>
+
+      <h3 class="h6 text-uppercase text-secondary mb-2">Eventos en el rango</h3>
+      <div *ngIf="!detalle.eventos.length" class="alert alert-light border">Sin eventos en el rango indicado.</div>
+      <div *ngFor="let ev of detalle.eventos" class="evento mb-2">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+          <span class="evento-fecha">{{ fechaCorta(ev.fechaEvento) }}</span>
+          <span class="badge rounded-pill" [ngClass]="claseTipo(ev.tipo)">{{ ev.tipo }}</span>
+          <span class="evento-impacto">{{ ev.impacto }}</span>
+          <span class="evento-competencias ms-auto">{{ nombresCompetencias(ev) }}</span>
+        </div>
+        <p class="evento-descripcion mb-1">{{ ev.descripcion }}</p>
+        <div class="evento-registrado text-secondary">
+          Registrado por: <strong>{{ ev.registradoPorNombre || '—' }}</strong>
+          <span *ngIf="ev.fechaRegistro"> · {{ fechaCorta(ev.fechaRegistro) }}</span>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+</div>

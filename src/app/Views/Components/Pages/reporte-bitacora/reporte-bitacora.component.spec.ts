@@ -138,6 +138,18 @@ describe('ReporteBitacoraComponent', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Caído');
   });
 
+  it('elegir supervisor en el select mantiene supervisorSel como number (ronda 4)', async () => {
+    localStorage.setItem('rol', JSON.stringify({ rolId: 1 }));
+    iniciar(); await fixture.whenStable(); fixture.detectChanges();
+    const sel = (fixture.nativeElement as HTMLElement).querySelector('select') as HTMLSelectElement;
+    const idx = Array.from(sel.options).findIndex(o => /ZOILA/.test(o.textContent || ''));
+    sel.selectedIndex = idx; sel.dispatchEvent(new Event('change')); fixture.detectChanges(); await fixture.whenStable();
+    expect(typeof comp.supervisorSel).toBe('number');
+    expect(comp.supervisorSel).toBe(90);
+    comp.consultar();
+    expect(bitacora.equipo.calls.mostRecent().args[0]).toBe(90);
+  });
+
   it('sin filas tras consultar muestra el mensaje', () => {
     localStorage.setItem('rol', JSON.stringify({ rolId: 2 }));
     bitacora.equipo.and.returnValue(of([]));
