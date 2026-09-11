@@ -1,0 +1,58 @@
+/* Página Bitácora */
+.bitacora-page { max-width: 1400px; margin: 0 auto; }
+.subtitulo { color: #6c757d; margin-bottom: 1.25rem; }
+
+/* Columna del equipo */
+.equipo-box .list-group { max-height: 420px; overflow-y: auto; }
+.equipo-item { text-align: left; border: 1px solid var(--bs-border-color); }
+.equipo-item.active { background-color: #cfe2ff; color: #052c65; }
+.equipo-nombre { font-weight: 600; }
+.equipo-cargo { color: inherit; opacity: .7; }
+
+/* Cabecera del colaborador */
+.cabecera-colaborador { background: #f8f9fa; border-radius: .5rem; padding: .75rem 1rem; }
+
+/* Bloque guía sin selección */
+.alerta-guia {
+  background: #fffbe6; border: 1px solid #ffe58f; border-radius: .5rem;
+  padding: 1.25rem; color: #333; display: grid; gap: .35rem;
+}
+
+/* Tarjeta de evento: borde izquierdo de 4px por tipo */
+.evento-lista { display: grid; gap: .75rem; }
+.evento-card {
+  background: #fff; border: 1px solid var(--bs-border-color);
+  border-left: 4px solid #adb5bd; border-radius: .5rem;
+  padding: .75rem 1rem;
+}
+.evento-card.evento-logro { border-left-color: #198754; }
+.evento-card.evento-incumplimiento { border-left-color: #dc3545; }
+.evento-card.evento-iniciativa { border-left-color: #0d6efd; }
+.evento-card.evento-conducta { border-left-color: #fd7e14; }
+.evento-descripcion { margin-top: .5rem; white-space: pre-line; }
+.evento-pie { margin-top: .5rem; }
+
+/* Grupos del formulario */
+.grupo-competencias {
+  border: 1px solid var(--bs-border-color); border-radius: .5rem;
+  padding: .5rem .75rem; margin-bottom: .75rem;
+}
+.grupo-competencias legend { font-weight: 600; float: none; width: auto; }
+
+/* Badges de tipo (texto blanco) */
+.evento-logro { background-color: #198754 !important; color: #fff; }
+.evento-incumplimiento { background-color: #dc3545 !important; color: #fff; }
+.evento-iniciativa { background-color: #0d6efd !important; color: #fff; }
+.evento-conducta { background-color: #fd7e14 !important; color: #fff; }
+.evento-otro { background-color: #6c757d !important; color: #fff; }
+
+/* Badges de impacto */
+.impacto-alto { background-color: #f8d7da !important; color: #842029; }
+.impacto-medio { background-color: #fff3cd !important; color: #664d03; }
+.impacto-bajo { background-color: #e9ecef !important; color: #41464b; }
+.impacto-otro { background-color: #f8f9fa !important; color: #6c757d; }
+
+/* Responsive: en pantallas < 992px la columna del equipo va arriba */
+@media (max-width: 991.98px) {
+  .equipo-box .list-group { max-height: 240px; }
+}

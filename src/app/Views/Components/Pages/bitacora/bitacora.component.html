@@ -1,0 +1,199 @@
+<!-- Bitácora de Eventos de Desempeño -->
+<div class="bitacora-page container-fluid px-4 py-3">
+  <h2>Bitácora de Eventos de Desempeño</h2>
+  <p class="subtitulo">Registro de comportamientos observables · Insumo para la evaluación formal</p>
+
+  <div class="row g-3">
+    <!-- Columna izquierda: equipo -->
+    <div class="col-lg-3">
+      <div class="equipo-box">
+        <h6 class="mb-2">Mi equipo</h6>
+        <input type="text" class="form-control mb-2" placeholder="Buscar colaborador" [(ngModel)]="busqueda">
+
+        <div *ngIf="equipoCargado && !equipo.length" class="alert alert-secondary small mb-0">No tiene colaboradores a cargo en este periodo.</div>
+
+        <div *ngIf="equipo.length && !equipoVisible.length" class="alert alert-secondary small mb-0">Sin coincidencias.</div>
+
+        <div *ngIf="equipo.length && equipoVisible.length" class="list-group">
+          <button *ngFor="let e of equipoVisible" type="button"
+                  class="list-group-item list-group-item-action equipo-item"
+                  [class.active]="seleccionado?.secuencial === e.secuencial"
+                  (click)="seleccionar(e)">
+            <span class="equipo-nombre">{{ e.nombreunido }}</span>
+            <small class="equipo-cargo d-block">{{ e.cargo }}</small>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: contenido -->
+    <div class="col-lg-9">
+      <!-- Sin colaborador: principio guía -->
+      <div *ngIf="!seleccionado" class="alerta-guia">
+        <strong>Registra HECHOS observables (situación · acción · resultado), no interpretaciones.</strong>
+        <span>La fecha es la del hecho, no la del registro.</span>
+      </div>
+
+      <ng-container *ngIf="seleccionado">
+        <!-- a. Cabecera del colaborador -->
+        <div class="cabecera-colaborador d-flex flex-wrap align-items-center gap-2 mb-3">
+          <div class="me-3">
+            <h4 class="mb-0">{{ seleccionado.nombreunido }}</h4>
+            <small class="text-secondary d-block">{{ seleccionado.cargo }} · {{ seleccionado.departamento }}</small>
+            <small class="text-secondary d-block">Identificación: {{ seleccionado.identificacion }}</small>
+          </div>
+          <span class="badge evento-logro">{{ conteo.logros }} logros</span>
+          <span class="badge evento-incumplimiento">{{ conteo.incumplimientos }} incumplimientos</span>
+          <span class="badge evento-iniciativa">{{ conteo.iniciativas }} iniciativas</span>
+          <span class="badge evento-conducta">{{ conteo.conductas }} conductas</span>
+        </div>
+
+        <!-- b. Barra de acciones -->
+        <div class="d-flex gap-2 mb-3">
+          <button type="button" class="btn btn-primary" (click)="nuevoEvento()">Registrar evento</button>
+          <button type="button" class="btn btn-outline-success" (click)="exportar()" [disabled]="!eventosVisibles.length">Exportar Excel</button>
+        </div>
+
+        <!-- c. Filtros -->
+        <div class="row g-2 align-items-end mb-3">
+          <div class="col-6 col-md-3">
+            <label class="form-label small mb-1">Desde</label>
+            <input type="date" class="form-control" [(ngModel)]="filtro.desde" (ngModelChange)="cargarEventos()">
+          </div>
+          <div class="col-6 col-md-3">
+            <label class="form-label small mb-1">Hasta</label>
+            <input type="date" class="form-control" [(ngModel)]="filtro.hasta" (ngModelChange)="cargarEventos()">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small mb-1">Tipo</label>
+            <select class="form-select" [(ngModel)]="filtro.tipo" (ngModelChange)="cargarEventos()">
+              <option value="">Todos</option>
+              <option *ngFor="let t of tipos" [value]="t.valor">{{ t.etiqueta }}</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-3">
+            <label class="form-label small mb-1">Competencia</label>
+            <select class="form-select" [(ngModel)]="filtro.objetivoId" (ngModelChange)="cargarEventos()">
+              <option [ngValue]="null">Todas</option>
+              <optgroup *ngFor="let g of grupos" [label]="g.grupo">
+                <option *ngFor="let c of g.competencias" [ngValue]="c.objetivoId">{{ c.nombre }}</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="col-12 col-md-1">
+            <button type="button" class="btn btn-outline-secondary w-100" (click)="limpiarFiltros(); cargarEventos()">Limpiar</button>
+          </div>
+        </div>
+
+        <!-- d. Lista de eventos -->
+        <div *ngIf="cargando" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="small text-secondary mt-2">Cargando eventos…</p>
+        </div>
+
+        <div *ngIf="!cargando && error" class="alert alert-danger">{{ error }}</div>
+
+        <div *ngIf="!cargando && !error && !eventosVisibles.length" class="alert alert-light">
+          Sin eventos registrados con estos filtros.
+        </div>
+
+        <div *ngIf="!cargando && !error && eventosVisibles.length" class="evento-lista">
+          <div *ngFor="let ev of eventosVisibles" class="evento-card" [ngClass]="claseTipo(ev.tipo)">
+            <div class="evento-cabecera d-flex flex-wrap align-items-center gap-2">
+              <span class="badge" [ngClass]="claseTipo(ev.tipo)">{{ ev.tipo }}</span>
+              <span class="badge" [ngClass]="claseImpacto(ev.impacto)">Impacto {{ ev.impacto }}</span>
+              <small class="text-secondary">{{ fechaCorta(ev.fechaEvento) }}</small>
+              <span class="ms-auto" *ngIf="esPropio(ev)">
+                <button type="button" class="btn btn-sm btn-outline-secondary me-1" (click)="editar(ev)">Editar</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminar(ev)">Eliminar</button>
+              </span>
+            </div>
+            <p class="evento-descripcion mb-1">{{ ev.descripcion }}</p>
+            <small class="evento-pie text-secondary d-block">
+              <ng-container *ngIf="nombresCompetencias(ev)">{{ nombresCompetencias(ev) }} · </ng-container>
+              Registrado por {{ ev.registradoPorNombre }} el {{ fechaCorta(ev.fechaRegistro) }}
+            </small>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Diálogo del formulario (Bootstrap, sin MatDialog) -->
+  <ng-container *ngIf="editando">
+    <div class="modal-backdrop show"></div>
+    <div class="modal d-block" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ editando.id ? 'Editar evento' : 'Registrar evento' }}</h5>
+            <button type="button" class="btn-close" (click)="cancelar()" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Fecha del hecho -->
+            <div class="mb-3">
+              <label class="form-label" for="f-fecha">Fecha del evento</label>
+              <input type="date" class="form-control" id="f-fecha" name="fechaEvento"
+                     [(ngModel)]="editando.fechaEvento" [max]="hoy">
+              <small class="text-secondary">Fecha en que ocurrió el hecho, no cuando lo anotas.</small>
+            </div>
+
+            <!-- Tipo: grupo de botones -->
+            <div class="mb-3">
+              <label class="form-label d-block">Tipo de evento</label>
+              <div class="btn-group w-100" role="group" aria-label="Tipo de evento">
+                <button *ngFor="let t of tipos" type="button"
+                        class="btn" [class.btn-primary]="editando.tipo === t.valor" [class.btn-outline-secondary]="editando.tipo !== t.valor"
+                        [class.active]="editando.tipo === t.valor"
+                        (click)="editando.tipo = t.valor">
+                  {{ t.etiqueta }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Impacto -->
+            <div class="mb-3">
+              <label class="form-label" for="f-impacto">Impacto</label>
+              <select class="form-select" id="f-impacto" name="impacto" [(ngModel)]="editando.impacto">
+                <option *ngFor="let i of impactos" [value]="i.valor">{{ i.etiqueta }}</option>
+              </select>
+            </div>
+
+            <!-- Descripción -->
+            <div class="mb-3">
+              <label class="form-label" for="f-descripcion">Descripción</label>
+              <textarea class="form-control" id="f-descripcion" name="descripcion" rows="4"
+                        placeholder="¿Qué ocurrió? ¿En qué contexto? ¿Cuál fue el resultado o impacto inmediato?"
+                        [(ngModel)]="editando.descripcion" [maxlength]="descMax"></textarea>
+              <small [class.text-danger]="caracteres < descMin">{{ caracteres }}/{{ descMax }} (mínimo {{ descMin }})</small>
+            </div>
+
+            <!-- Competencias impactadas -->
+            <fieldset *ngFor="let g of grupos" class="grupo-competencias">
+              <legend>{{ g.grupo }}</legend>
+              <div class="row" *ngFor="let c of g.competencias">
+                <div class="col-sm-6">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input"
+                           [id]="'c-' + c.objetivoId" name="competencias"
+                           [checked]="tiene(c.objetivoId)" (change)="alternar(c.objetivoId)">
+                    <label class="form-check-label" [for]="'c-' + c.objetivoId">{{ c.nombre }}</label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Errores de validación -->
+            <ul *ngIf="erroresForm.length" class="alert alert-warning mb-0">
+              <li *ngFor="let e of erroresForm">{{ e }}</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="btn btn-primary" [disabled]="guardando" (click)="guardar()">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
