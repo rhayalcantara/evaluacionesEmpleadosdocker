@@ -1,0 +1,29 @@
+<div class="bitacora-resumen" [class.sin-eventos]="!hayEventos">
+  <ng-container *ngIf="cargando; else estadoCargado">
+    <small class="text-muted">Cargando bitácora…</small>
+  </ng-container>
+  <ng-template #estadoCargado>
+    <ng-container *ngIf="error; else estadoNormal">
+      <small class="text-danger" [title]="error">Bitácora no disponible</small>
+    </ng-container>
+    <ng-template #estadoNormal>
+      <small class="resumen-texto">{{ texto }}</small>
+      <button
+        *ngIf="hayEventos && modo === 'compacto'"
+        type="button"
+        class="btn btn-link btn-sm p-0 ms-1"
+        (click)="alternar()">
+        {{ abierto ? 'Ocultar' : 'Ver' }}
+      </button>
+      <ul *ngIf="hayEventos && (abierto || modo === 'lista')" class="lista-eventos">
+        <li *ngFor="let ev of fila?.eventos">
+          <span class="badge" [ngClass]="claseTipo(ev.tipo)">{{ ev.tipo }}</span>
+          <span class="badge" [ngClass]="claseImpacto(ev.impacto)">{{ ev.impacto }}</span>
+          <span class="fecha">{{ fechaCorta(ev.fechaEvento) }}</span>
+          <div class="descripcion">{{ ev.descripcion }}</div>
+          <small class="text-muted">{{ ev.registradoPorNombre }}</small>
+        </li>
+      </ul>
+    </ng-template>
+  </ng-template>
+</div>
