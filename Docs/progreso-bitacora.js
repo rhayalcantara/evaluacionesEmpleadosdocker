@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 11:40 — B2 integrado · B1 y B3 en crítico · B4 y B5 construyendo",
+  actualizado: "2026-09-11 12:00 — B2 integrado · B1 y B3 en ronda 2 · B4 y B5 construyendo",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -16,12 +16,12 @@ window.PROGRESO = {
       ] },
     { id: "F1", nombre: "Backend", nota: "B1 controlador del API (constructor C#); despliegue de la DLL a :7071",
       tareas: [
-        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en crítico", ronda: 1, pruebas: "dotnet build OK · pytest 38/38 contra :7071", tokens: null, commit: "", nota: "El constructor corrigió solo los 7 errores en 8 min (sin shell); detenido a las 11:12 con el archivo estable. DLL desplegada a prueba con scripts/deploy_api_prueba_dll.ps1" }
+        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "ronda 2", ronda: 2, pruebas: "pytest 38/38 (r1)", tokens: null, commit: "", nota: "Crítico Opus RECHAZADO (141k tokens, 15 min): 1 faltante real: N+1 del nombre del autor (0.27 s/evento, 4 s con 15 filas). Todo lo demás ok. B1-r2 lanzado 11:50" }
       ] },
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
         { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "integrado", ronda: 1, pruebas: "Jasmine 22/22 + 110 aserciones del crítico", tokens: 46627, commit: "37edafd", nota: "Crítico Opus: APROBADO, 19/19 firmas, sin faltantes (108k tokens, 7 min). Observación: textoResumen con contadores incoherentes devuelve vacío" },
-        { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "en crítico", ronda: 1, pruebas: "tsc OK · Jasmine 11/11", tokens: null, commit: "", nota: "Entregó en 3 min; crítico Opus lanzado" },
+        { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "ronda 2", ronda: 2, pruebas: "Jasmine 11/11 (r1) · +1 spec para r2", tokens: null, commit: "", nota: "Crítico Opus RECHAZADO (118k tokens, 8 min): el POST manda fechaRegistro:null y el API real lo rechaza con 400 (la batería con HttpTestingController no lo veía). B3-r2 lanzado 11:58" },
         { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en curso", ronda: 1, pruebas: "batería .pendiente lista", tokens: null, commit: "", nota: "Lanzado 11:32 en paralelo (2 constructores)" },
         { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "en curso", ronda: 1, pruebas: "batería .pendiente lista", tokens: null, commit: "", nota: "Lanzado 11:32 en paralelo (2 constructores)" },
         { id: "B6", archivo: "form medio año, FormEvaluationEmploye, historial (integración)", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "orquestador" }
@@ -55,6 +55,10 @@ window.PROGRESO = {
     { hora: "11:26", tarea: "B3", texto: "Archivo entregado en 3 min; tsc OK; Jasmine 11/11; DONE. Crítico Opus lanzado" },
     { hora: "11:32", tarea: "B4/B5", texto: "Trampa: robocopy desde PowerShell copió src a ~/build por cwd distinto; constructores relanzados con rutas absolutas" },
     { hora: "11:40", tarea: "B2", texto: "Crítico Opus APROBADO (110 aserciones propias, tree limpio). Integrado: commit 37edafd + push" },
+    { hora: "11:48", tarea: "B1", texto: "Crítico Opus RECHAZADO: N+1 en el nombre del autor (medido 0.267 s/evento). Observación: las DataAnnotations devuelven ProblemDetails antes que Validar → anotado en PLAN §9.5 para B6" },
+    { hora: "11:50", tarea: "B1", texto: "B1-r2.md (una sola corrección) y constructor relanzado sobre el mismo workspace" },
+    { hora: "11:57", tarea: "B3", texto: "Crítico Opus RECHAZADO: fechaRegistro:null rompe el POST real (400). Lección: la batería HTTP simulada no valida el contrato del API; el crítico sí lo ejecutó contra :7071" },
+    { hora: "11:58", tarea: "B3", texto: "B3-r2.md (omitir claves de solo lectura, fechaISO) + spec nuevo en la batería; constructor relanzado" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
