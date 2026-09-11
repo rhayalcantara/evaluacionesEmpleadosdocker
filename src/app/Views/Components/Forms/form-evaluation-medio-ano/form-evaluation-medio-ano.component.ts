@@ -479,6 +479,13 @@ export class FormEvaluationMedioAnoComponent implements OnInit {
       this.datos.showMessage('No hay evaluación cargada para enviar.', this.titulo, 'warning');
       return false;
     }
+    // No se envía con competencias sin calificar: el desplegable arranca en
+    // "— Seleccione —" (0) y 16 evaluaciones llegaron así al colaborador (sep-2026).
+    const faltan = this.EvaluacionController.competenciasSinCalificarSupervisor(this.evaluacionempleado);
+    if (faltan > 0) {
+      this.datos.showMessage(this.EvaluacionController.mensajeCompetenciasSinCalificar(faltan), this.titulo, 'warning');
+      return false;
+    }
     return this.persistir('Enviado');
   }
 

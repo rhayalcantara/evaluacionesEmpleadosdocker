@@ -133,6 +133,7 @@
                 *ngIf="verEvaluacionSupervisor">
               <select class="form-select form-select-sm competencias-select"
                       [(ngModel)]="evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor"
+                      [class.is-invalid]="supervisor && !sololectura && !(evaluacionempleado.goalEmpleadoRespuestas[index].repuestasupervisor > 0)"
                       name="comp-rating-super-{{index}}"
                       [disabled]="!supervisor || sololectura">
                 <option *ngFor="let op of calificaciones" [ngValue]="op.valor">{{ op.etiqueta }}</option>

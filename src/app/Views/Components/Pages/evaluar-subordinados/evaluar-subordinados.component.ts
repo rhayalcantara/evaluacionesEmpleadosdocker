@@ -174,6 +174,15 @@ export class EvaluarSubordinadosComponent implements OnInit {
     this.evaluacion.GetEvaluacionePorEmpleadoyPeriodo(emp.secuencial, this.periodo.id).subscribe({
       next: (rep: IEvaluacion) => {
         const t: IEvaluacion = rep;
+        if (t.estadoevaluacion !== 'EvaluadoPorSupervisor') {
+          this.datos.showMessage('Primero abra la evaluación, califique y pulse "Guardar Avance"; luego podrá enviarla al colaborador.', 'Envio de Evaluacion', 'warning');
+          return;
+        }
+        const faltan = this.evaluacion.competenciasSinCalificarSupervisor(t);
+        if (faltan > 0) {
+          this.datos.showMessage(this.evaluacion.mensajeCompetenciasSinCalificar(faltan), 'Envio de Evaluacion', 'warning');
+          return;
+        }
         t.estadoevaluacion = 'Enviado';
         this.evaluacion.Update(t).subscribe({
           next: () => {

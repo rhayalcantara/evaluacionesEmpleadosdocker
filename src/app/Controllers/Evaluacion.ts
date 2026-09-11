@@ -525,6 +525,24 @@ export class Evaluacion implements OnInit {
         return this.datos.getbyid<IEvaluacion>(`${this.rutaapi}/evaluacion?empleadoid=${secuencialempleado}&periodoid=${periodId}`)
                
     }
+    /**
+     * Competencias que el supervisor aún no calificó (repuestasupervisor en 0 o
+     * vacío). El desplegable arranca en "— Seleccione —" (0) y nada obligaba a
+     * cambiarlo: entre el 7 y el 11 de septiembre de 2026, 16 evaluaciones de medio
+     * año llegaron al colaborador con todas las competencias del supervisor en cero.
+     * Se usa como guarda en todos los caminos que ponen la evaluación en 'Enviado'.
+     */
+    public competenciasSinCalificarSupervisor(ev: IEvaluacion | null | undefined): number {
+        const respuestas = ev?.goalEmpleadoRespuestas;
+        if (!Array.isArray(respuestas)) return 0;
+        return respuestas.filter(r => !r || !(Number(r.repuestasupervisor) > 0)).length;
+    }
+
+    public mensajeCompetenciasSinCalificar(faltan: number): string {
+        const detalle = faltan === 1 ? '1 competencia sin calificar' : `${faltan} competencias sin calificar`;
+        return `El supervisor tiene ${detalle}. Califique todas las competencias en la sección "Competencias" y pulse "Guardar Avance" antes de enviar al colaborador.`;
+    }
+
     public GetEvaluacionEstadoDts(periodId: number, EmpleadoSecuencial: number): Observable<ModelResponse> {
         return this.datos.getdatos<ModelResponse>(this.rutaapi + `/EstadoEvaluacionSub?empleadoids=${EmpleadoSecuencial}&periodoid=${periodId}`);
     }

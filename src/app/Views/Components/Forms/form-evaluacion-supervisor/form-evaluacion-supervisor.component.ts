@@ -122,6 +122,11 @@ export class FormEvaluacionSupervisorComponent implements OnInit{
           );
           return;
         }
+        const faltan = this.evaluacionController.competenciasSinCalificarSupervisor(ev);
+        if (faltan > 0) {
+          this.datos.showMessage(this.evaluacionController.mensajeCompetenciasSinCalificar(faltan), 'Enviar al Colaborador', 'warning');
+          return;
+        }
         ev.estadoevaluacion = 'Enviado';
         this.evaluacionController.Update(ev).subscribe({
           next: () => {
