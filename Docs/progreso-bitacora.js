@@ -14,9 +14,9 @@ window.PROGRESO = {
         { id: "BAT", archivo: "tests/bitacora/test_api_bitacora.py", estado: "integrado", ronda: 1,
           pruebas: "38 casos recolectados (se ejecutan tras desplegar B1 en :7071)", tokens: null, commit: "01f0cac", nota: "El constructor nunca la ve. Ids de competencias del periodo 8 en Test: 59..70" }
       ] },
-    { id: "F1", nombre: "Backend", nota: "B1 controlador del API (constructor C#); despliegue de la DLL a :7071",
+    { id: "F1", nombre: "Backend (COMPLETA)", nota: "B1 controlador del API (constructor C#, 2 rondas); DLL desplegada en :7071",
       tareas: [
-        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en crítico", ronda: 2, pruebas: "pytest 38/38 · lista de 15 eventos 0.30 s (antes 3.99 s)", tokens: null, commit: "", nota: "r1 RECHAZADO por N+1 del autor; r2 corregida en 4 min, DLL redesplegada a :7071; crítico ronda 2 en curso" }
+        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "integrado", ronda: 2, pruebas: "pytest 38/38 · 15 eventos 0.30 s · crítico: forma idéntica, limpieza ok", tokens: null, commit: "API", nota: "Crítico Opus r2: APROBADO sin faltantes (81k tokens, 4 min). Integrado en el repo del API (rama feature/bitacora-eventos) y desplegado en :7071" }
       ] },
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
@@ -63,6 +63,7 @@ window.PROGRESO = {
     { hora: "11:42", tarea: "B3", texto: "Trampa: copié a src el archivo de B3-r2 a medio editar (import roto) y rompió Karma para B4; restaurada la v1. Regla: solo integrar tras DONE o archivo estable" },
     { hora: "11:43", tarea: "B4", texto: "Batería Jasmine 10/10 con los tres archivos; DONE 11:44; crítico Opus lanzado" },
     { hora: "11:44", tarea: "B5", texto: "Sin avance 15 min tras el .ts: detenido y relanzado como B5-r2 (solo la plantilla)" },
+    { hora: "11:48", tarea: "B1", texto: "Crítico Opus ronda 2: APROBADO (lista 0.30 s, resumen 0.32 s, 38/38, sin regresiones). Integrado + commit + push en el repo del API. F1 COMPLETA" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
