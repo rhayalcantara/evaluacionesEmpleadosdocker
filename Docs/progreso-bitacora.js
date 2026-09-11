@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 10:35 — F0 COMPLETA; F1 lista para arrancar",
+  actualizado: "2026-09-11 11:05 — F1 EN CURSO (B1 construyendo)",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -16,7 +16,7 @@ window.PROGRESO = {
       ] },
     { id: "F1", nombre: "Backend", nota: "B1 controlador del API (constructor C#); despliegue de la DLL a :7071",
       tareas: [
-        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "Contrato §3 de PLAN-BITACORA.md" }
+        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en curso", ronda: 1, pruebas: "dotnet build: 7 errores en el primer borrador (10:59)", tokens: null, commit: "", nota: "Constructor qwen3.8 pid 1392 desde 10:50; spec B1-r2.md preparada con las 7 correcciones" }
       ] },
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
@@ -42,6 +42,9 @@ window.PROGRESO = {
     { hora: "10:19", tarea: "CON", texto: "Contratos TypeScript IBitacora.ts escritos" },
     { hora: "10:20", tarea: "—", texto: "Tablero de la fase 3 publicado (Docs/progreso-bitacora.html)" },
     { hora: "10:30", tarea: "BAT", texto: "Batería pytest del API escrita: 38 casos (POST/GET/PUT/DELETE/resumen/equipo). Hallazgo: el catálogo Objetivo se duplica por periodo y Empleados es una vista con duplicados (PLAN §9)" },
+    { hora: "10:50", tarea: "B1", texto: "Spec B1.md escrita; workspace build/B1 (copia del API, dotnet build OK); constructor qwen3.8 lanzado detached (pid 1392)" },
+    { hora: "10:55", tarea: "—", texto: "Specs B2–B5 y baterías Jasmine .pendiente de B2, B3, B4 y B5 escritas mientras B1 construye (commits 4f6d008, f9d2b09, 9847627)" },
+    { hora: "10:59", tarea: "B1", texto: "Primer borrador del controlador (20 KB): dotnet build con 7 errores (Ok() faltante, nombres de helpers inconsistentes, await en lambda, primer/primero, cast DateTime?). B1-r2.md lista" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
