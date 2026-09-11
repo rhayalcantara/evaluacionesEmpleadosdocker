@@ -190,3 +190,19 @@ Monitor.
 | F3 | B7 + cierre + QA | 1 | 1–2 rondas | 2 días + validación RRHH |
 
 Total de obra: ~8–10 días hábiles de orquestación, más la validación de RRHH y la ventana de despliegue.
+
+## 9. Hallazgos de F0 que condicionan las specs (2026-09-11)
+
+1. **El catálogo de competencias se duplica por periodo**: `Objetivo` tiene una copia de las 12
+   competencias por `PeriodoId` (prod: 1–12 en el 7 y 22–34 en el 8; Test: 1–12 y 59–70). La bitácora
+   es continua entre periodos, así que un evento guarda el `ObjetivoId` de la copia vigente al
+   registrarlo y el endpoint `resumen` empareja por **nombre normalizado** (sin acentos, minúsculas,
+   espacios colapsados) contra las competencias del periodo consultado. B2 expone esa normalización.
+2. **`Empleados` es una vista con filas duplicadas** (el secuencial 55 aparece 5 veces en Test):
+   toda consulta por secuencial en B1 usa `FirstOrDefault`/`Any`, nunca `Single`, y los nombres de
+   equipo se agrupan por secuencial.
+3. **`dotnet ef` no arranca en la estación** (falta runtime .NET 7): la migración se escribió a mano
+   y el `ModelSnapshot` no se regeneró; en producción se aplica `scripts/bitacora_crear_tablas.sql`
+   y se inserta la fila en `__EFMigrationsHistory` como se hizo en Test.
+4. **`GET /api/Periods/{id}`** existe y devuelve `fechaInicio`/`fechaFin`; el periodo 8 de Test va
+   del 2026-06-01 al 2026-12-31.

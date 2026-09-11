@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="30">
+<title>Tablero de Obra — Bitácora de Eventos (Fase 3)</title>
+<link rel="stylesheet" href="progreso.css">
+</head>
+<body>
+<header class="cabecera">
+  <div class="placa-titulo">
+    <span class="perforacion" aria-hidden="true"></span>
+    <div class="placa-texto">
+      <span class="eyebrow">COOPASPIRE · PROPIEDAD PLANTA Y EQUIPO</span>
+      <h1>Tablero de obra — Bitácora de Eventos de Desempeño (Fase 3)</h1>
+    </div>
+    <span class="perforacion" aria-hidden="true"></span>
+  </div>
+  <dl class="meta" id="meta"></dl>
+</header>
+
+<section class="avance" aria-label="Avance general">
+  <div class="avance-encabezado">
+    <h2>Avance de obra</h2>
+    <span class="avance-cifra" id="avance-cifra"></span>
+  </div>
+  <div class="avance-barra" id="avance-barra" role="img" aria-label="Barra de avance por tarea"></div>
+  <p class="leyenda" id="leyenda"></p>
+</section>
+
+<main id="fases"></main>
+
+<section class="bitacora" aria-label="Bitácora de auditoría">
+  <h2>Bitácora</h2>
+  <ol id="eventos"></ol>
+</section>
+
+<footer class="pie">
+  La página se recarga sola cada 30 s · Datos: <code>progreso-bitacora.js</code> ·
+  Metodología: constructores qwen3.8 · crítico Opus · commit+push por tarea aprobada
+</footer>
+
+<script src="progreso-bitacora.js"></script>
+<script>
+(function () {
+  "use strict";
+  var P = window.PROGRESO || { fases: [], eventos: [] };
+
+  var ESTADOS = {
+    pendiente:    { texto: "PENDIENTE",    clase: "pendiente" },
+    construyendo: { texto: "CONSTRUYENDO", clase: "construyendo" },
+    critica:      { texto: "EN CRÍTICA",   clase: "critica" },
+    revision:     { texto: "EN REVISIÓN",  clase: "revision" },
+    aprobado:     { texto: "APROBADO",     clase: "aprobado" },
+    integrado:    { texto: "INTEGRADO",    clase: "integrado" },
+    fallido:      { texto: "BLOQUEADO",    clase: "fallido" }
+  };
+
+  function el(tag, clase, texto) {
+    var n = document.createElement(tag);
+    if (clase) n.className = clase;
+    if (texto !== undefined) n.textContent = texto;
+    return n;
+  }
+
+  // ── Meta ────────────────────────────────────────────────────────────────
+  var meta = document.getElementById("meta");
+  [["Actualizado", P.actualizado || "—"],
+   ["Rama", P.rama || "—"],
+   ["Constructor", "qwen3.8 · agente_core2 (DGX .165)"],
+   ["Crítico", "Opus"]].forEach(function (par) {
+    meta.appendChild(el("dt", null, par[0]));
+    meta.appendChild(el("dd", null, par[1]));
+  });
+
+  // ── Avance ──────────────────────────────────────────────────────────────
+  var tareas = [];
+  (P.fases || []).forEach(function (f) { (f.tareas || []).forEach(function (t) { tareas.push(t); }); });
+  var hechas = tareas.filter(function (t) { return t.estado === "integrado" || t.estado === "aprobado"; }).length;
+  document.getElementById("avance-cifra").textContent = hechas + " de " + tareas.length + " tareas selladas";
+  var barra = document.getElementById("avance-barra");
+  tareas.forEach(function (t) {
+    var seg = el("span", "segmento " + (ESTADOS[t.estado] || ESTADOS.pendiente).clase);
+    seg.title = t.id + " · " + (ESTADOS[t.estado] || ESTADOS.pendiente).texto;
+    barra.appendChild(seg);
+  });
+  document.getElementById("leyenda").textContent =
+    "pendiente · construyendo · en crítica · en revisión · aprobado · integrado (commit+push)";
+
+  // ── Fases y placas ──────────────────────────────────────────────────────
+  var cont = document.getElementById("fases");
+  (P.fases || []).forEach(function (fase) {
+    var sec = el("section", "fase");
+    var enc = el("div", "fase-encabezado");
+    enc.appendChild(el("h2", null, fase.id + " — " + fase.nombre));
+    if (fase.nota) enc.appendChild(el("p", "fase-nota", fase.nota));
+    sec.appendChild(enc);
+    var fila = el("div", "placas");
+    (fase.tareas || []).forEach(function (t) {
+      var est = ESTADOS[t.estado] || ESTADOS.pendiente;
+      var placa = el("article", "placa " + est.clase);
+      var borde = el("div", "placa-borde");
+      borde.appendChild(el("span", "perforacion chica", ""));
+      var cab = el("div", "placa-cab");
+      cab.appendChild(el("span", "placa-id", t.id));
+      cab.appendChild(el("code", "placa-archivo", t.archivo));
+      borde.appendChild(cab);
+      var sello = el("div", "sello " + est.clase, est.texto);
+      borde.appendChild(sello);
+      var datos = el("dl", "placa-datos");
+      function dato(k, v) {
+        if (v === null || v === undefined || v === "") return;
+        datos.appendChild(el("dt", null, k));
+        datos.appendChild(el("dd", null, String(v)));
+      }
+      dato("Ronda", t.ronda);
+      dato("Pruebas", t.pruebas);
+      dato("Tokens", t.tokens ? t.tokens.toLocaleString("es-DO") : null);
+      dato("Commit", t.commit);
+      borde.appendChild(datos);
+      if (t.nota) borde.appendChild(el("p", "placa-nota", t.nota));
+      placa.appendChild(borde);
+      fila.appendChild(placa);
+    });
+    sec.appendChild(fila);
+    cont.appendChild(sec);
+  });
+
+  // ── Bitácora ────────────────────────────────────────────────────────────
+  var lista = document.getElementById("eventos");
+  (P.eventos || []).slice().reverse().forEach(function (ev) {
+    var li = el("li");
+    li.appendChild(el("time", null, ev.hora));
+    li.appendChild(el("span", "ev-tarea", ev.tarea || "—"));
+    li.appendChild(el("span", null, ev.texto));
+    lista.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>
