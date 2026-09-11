@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 11:05 — F1 EN CURSO (B1 construyendo)",
+  actualizado: "2026-09-11 11:15 — B1 en crítico Opus · B2 construyendo",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -16,11 +16,11 @@ window.PROGRESO = {
       ] },
     { id: "F1", nombre: "Backend", nota: "B1 controlador del API (constructor C#); despliegue de la DLL a :7071",
       tareas: [
-        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en curso", ronda: 1, pruebas: "dotnet build: 7 errores en el primer borrador (10:59)", tokens: null, commit: "", nota: "Constructor qwen3.8 pid 1392 desde 10:50; spec B1-r2.md preparada con las 7 correcciones" }
+        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en crítico", ronda: 1, pruebas: "dotnet build OK · pytest 38/38 contra :7071", tokens: null, commit: "", nota: "El constructor corrigió solo los 7 errores en 8 min (sin shell); detenido a las 11:12 con el archivo estable. DLL desplegada a prueba con scripts/deploy_api_prueba_dll.ps1" }
       ] },
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
-        { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" },
+        { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "en curso", ronda: 1, pruebas: "batería .pendiente lista (≈45 aserciones)", tokens: null, commit: "", nota: "Lanzado en paralelo con el crítico de B1: no depende del API" },
         { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" },
         { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" },
         { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "" },
@@ -45,6 +45,10 @@ window.PROGRESO = {
     { hora: "10:50", tarea: "B1", texto: "Spec B1.md escrita; workspace build/B1 (copia del API, dotnet build OK); constructor qwen3.8 lanzado detached (pid 1392)" },
     { hora: "10:55", tarea: "—", texto: "Specs B2–B5 y baterías Jasmine .pendiente de B2, B3, B4 y B5 escritas mientras B1 construye (commits 4f6d008, f9d2b09, 9847627)" },
     { hora: "10:59", tarea: "B1", texto: "Primer borrador del controlador (20 KB): dotnet build con 7 errores (Ok() faltante, nombres de helpers inconsistentes, await en lambda, primer/primero, cast DateTime?). B1-r2.md lista" },
+    { hora: "11:07", tarea: "B1", texto: "El constructor corrigió los 7 errores por su cuenta: dotnet build 0 errores; archivo estable desde 11:07" },
+    { hora: "11:09", tarea: "B1", texto: "DLL publicada y desplegada a :7071 (solo la DLL; respaldo .bak). Batería pytest: 37/38; el fallo era formato de fecha con offset en el POST vs GET → aserción relajada" },
+    { hora: "11:12", tarea: "B1", texto: "38/38. Constructor detenido (pid 1392). Crítico Opus lanzado con la spec, el entregable y la batería" },
+    { hora: "11:15", tarea: "B2", texto: "Workspace build/B2 (copia de src sin specs) y constructor qwen3.8 lanzado" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };

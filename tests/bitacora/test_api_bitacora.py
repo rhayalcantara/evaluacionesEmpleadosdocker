@@ -156,7 +156,8 @@ def test_put_actualiza_y_reemplaza_competencias():
     g = requests.get(f"{R}/{e['id']}", timeout=30).json()
     assert g["tipo"] == "Iniciativa" and g["impacto"] == "Bajo" and "editado" in g["descripcion"]
     assert [c["objetivoId"] for c in g["competencias"]] == [COMP_B]
-    assert g["fechaModificacion"] is not None and g["fechaRegistro"] == e["fechaRegistro"]
+    # el POST serializa FechaRegistro con offset (-04:00) y el GET sin el: se compara hasta los segundos
+    assert g["fechaModificacion"] is not None and g["fechaRegistro"][:19] == e["fechaRegistro"][:19]
 
 def test_put_otro_autor_403():
     e = crear(); e["registradoPorSecuencial"] = OTRO
