@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 12:40 — OBRA CONSTRUIDA (B1–B7 integrados) · pendiente: auditoría Playwright con credenciales, despliegue a prueba y validación RRHH",
+  actualizado: "2026-09-11 13:35 — DESPLEGADA EN PRUEBA y auditada (22/22) · pendiente: validación de Rhay y RRHH, luego producción",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -26,10 +26,10 @@ window.PROGRESO = {
         { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "integrado", ronda: 3, pruebas: "Jasmine 8/8 + 17 del crítico", tokens: null, commit: "8b57e95", nota: "Crítico Opus: APROBADO (112k tokens, 7 min). Observación (petición en vuelo al pasar inputs a 0) cerrada en B6" },
         { id: "B6", archivo: "app-routing, navmenu, form medio año, criterialitem, Bitacora.ts, bitacora-resumen", estado: "integrado", ronda: 1, pruebas: "ng build prueba OK · B3 12/12 · B5 8/8", tokens: null, commit: "32b7218", nota: "Orquestador: ruta /Bitacora (Admin+Supervisor) y menú; resumen bajo la calificación del supervisor en medio año y evaluación final; mensajeError lee ProblemDetails. Pestaña en historial pospuesta a F3 (cierre)" }
       ] },
-    { id: "F3", nombre: "Reporte y cierre (B7 integrado; auditoría pendiente de credenciales)", nota: "B7 reporte RRHH; regresión, Playwright, despliegue a prueba, validación con Lissette",
+    { id: "F3", nombre: "Reporte y cierre (COMPLETA: desplegada en prueba)", nota: "B7 reporte RRHH; regresión, Playwright, despliegue a prueba, validación con Lissette",
       tareas: [
         { id: "B7", archivo: "Pages/reporte-bitacora/", estado: "integrado", ronda: 4, pruebas: "Jasmine 11/11 + pruebas DOM del crítico", tokens: null, commit: "B7", nota: "4 rondas: Date→string; aviso de vacío en el else; nombresCompetencias duplicado y [ngValue] (crítico r3); r4 APROBADA (88k tokens, 4 min)" },
-        { id: "AUD", archivo: "e2e/bitacora-eventos.spec.js → Docs/auditoria-bitacora/", estado: "en curso", ronda: 1, pruebas: "regresión Jasmine 87/87 · ng build prueba OK", tokens: null, commit: "", nota: "Guion escrito; la ejecución necesita credenciales del supervisor (EVAL_USERNAME/EVAL_PASSWORD) y ng serve prueba" }
+        { id: "AUD", archivo: "e2e/bitacora-eventos.spec.js → Docs/auditoria-bitacora/ (14 capturas)", estado: "integrado", ronda: 3, pruebas: "Playwright 22/22 con prodriguez contra evaluacionempleado-prueba · regresión 87/87", tokens: null, commit: "783c29f+", nota: "La auditoría real encontró 2 defectos que las baterías simuladas no veían: ExcelService sin proveedor (NullInjectorError al abrir /Bitacora) y equipo con duplicados de la vista Empleados" }
       ] }
   ],
   eventos: [
@@ -78,6 +78,9 @@ window.PROGRESO = {
     { hora: "12:24", tarea: "AUD", texto: "ng build --configuration prueba OK con ambas rutas; regresión Jasmine de 6 baterías: 87/87" },
     { hora: "12:30", tarea: "B7", texto: "Crítico r3 RECHAZADO (nombresCompetencias duplicado; [value] convertía el secuencial en string); r4 en 2 min; 11/11; crítico r4 APROBADO" },
     { hora: "12:40", tarea: "B7", texto: "Integrado con ruta /ReporteBitacora y menú Reportes; commit + push. OBRA CONSTRUIDA: 7 tareas, 15 rondas de constructor, 10 corridas de crítico" },
+    { hora: "13:05", tarea: "AUD", texto: "Clave de prodriguez puesta en 1234 (hash respaldado). Despliegue a evaluacionempleado-prueba con deploy_prueba_staging (el script aborta con stderr de node: build aparte + -SkipBuild)" },
+    { hora: "13:15", tarea: "AUD", texto: "Primera auditoría: /Bitacora redirigía a Home sin aviso → NullInjectorError por ExcelService sin proveedor en las páginas standalone. Corregido, redesplegado" },
+    { hora: "13:30", tarea: "AUD", texto: "Segunda auditoría: 16/16 pero el equipo mostraba 5 veces al propio supervisor (vista Empleados) y el menú Reportes es solo admin → deduplicado + enlace Reporte de mi Bitácora. Tercera auditoría: 22/22" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
