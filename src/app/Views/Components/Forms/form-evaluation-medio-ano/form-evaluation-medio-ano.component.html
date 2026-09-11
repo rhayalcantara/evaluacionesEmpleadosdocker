@@ -138,6 +138,13 @@
                       [disabled]="!supervisor || sololectura">
                 <option *ngFor="let op of calificaciones" [ngValue]="op.valor">{{ op.etiqueta }}</option>
               </select>
+              <!-- Bitácora de eventos del periodo que evidencian esta competencia (evidencia, no puntuación) -->
+              <app-bitacora-resumen class="d-block mt-1 text-start"
+                                    [empleadoSecuencial]="empleado.secuencial"
+                                    [periodoId]="periodo.id"
+                                    [objetivoId]="met.goal.objetivo.id"
+                                    [nombreCompetencia]="met.goal.objetivo.nombre">
+              </app-bitacora-resumen>
             </td>
           </tr>
         </tbody>

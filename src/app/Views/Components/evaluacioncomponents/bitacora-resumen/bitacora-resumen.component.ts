@@ -76,6 +76,9 @@ export class BitacoraResumenComponent implements OnChanges, OnDestroy {
   ngOnChanges(cambios: SimpleChanges): void {
     const identicoCambiado = Boolean(cambios['empleadoSecuencial'] || cambios['periodoId']);
     if (identicoCambiado) {
+      // Una petición en vuelo de la clave anterior no debe repoblar la fila (observación del crítico)
+      this.suscripcion?.unsubscribe();
+      this.suscripcion = null;
       this.cargando = false;
       this.error = '';
       this.abierto = false;

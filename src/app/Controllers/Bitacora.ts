@@ -191,9 +191,17 @@ export class Bitacora {
    * luego `error.message`, por último 'Error desconocido'.
    */
   mensajeError(error: unknown): string {
-    const e = error as { error?: { mensaje?: unknown }; message?: unknown } | null;
+    const e = error as { error?: { mensaje?: unknown; errors?: Record<string, unknown> }; message?: unknown } | null;
     if (e && e.error && typeof e.error.mensaje === 'string' && e.error.mensaje.length > 0) {
       return e.error.mensaje;
+    }
+    // ProblemDetails de ASP.NET ({ errors: { Campo: ['texto'] } }): las DataAnnotations del modelo
+    // se evalúan antes que la validación propia del API (PLAN-BITACORA §9.5).
+    if (e && e.error && e.error.errors && typeof e.error.errors === 'object') {
+      const textos = Object.values(e.error.errors)
+        .flatMap(v => (Array.isArray(v) ? v : [v]))
+        .filter((v): v is string => typeof v === 'string' && v.length > 0);
+      if (textos.length > 0) { return textos.join(' '); }
     }
     if (e && typeof e.message === 'string' && e.message.length > 0) {
       return e.message;

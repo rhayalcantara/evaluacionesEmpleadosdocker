@@ -175,9 +175,16 @@
     <td *ngIf="supervisor">
       <app-emojirating class="emoji-container"  [namex]="index"
       [goalempleadorepuesta]="evaluacion.goalEmpleadoRespuestas[index]"
-      [supervisor]="supervisor"   
-      [sololectura]="sololectura"  
+      [supervisor]="supervisor"
+      [sololectura]="sololectura"
       (selecionemoji)="onRespuestaChange($event,index)"></app-emojirating>
+      <!-- Bitácora de eventos del periodo que evidencian esta competencia (evidencia, no puntuación) -->
+      <app-bitacora-resumen class="d-block mt-1"
+                            [empleadoSecuencial]="empleado.secuencial"
+                            [periodoId]="periodo.id"
+                            [objetivoId]="met.goal.objetivo.id"
+                            [nombreCompetencia]="met.goal.objetivo.nombre">
+      </app-bitacora-resumen>
     </td>
     </tr>
     

@@ -19,12 +19,13 @@ import { IPorcientoDesempenoCompetencia } from 'src/app/Models/PorcientoDesempen
 import { GrupoCompetencia } from 'src/app/Controllers/GrupoCompetencia';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingComponent } from '../../loading/loading.component';
+import { BitacoraResumenComponent } from '../bitacora-resumen/bitacora-resumen.component';
 
 
 @Component({
   selector: 'app-criterialitem',
   standalone:true,
-  imports:[FormsModule,CommonModule,EmojiratingComponent],
+  imports:[FormsModule,CommonModule,EmojiratingComponent,BitacoraResumenComponent],
   templateUrl: './criterialitem.component.html',
   styleUrls: ['./criterialitem.component.css']
 })

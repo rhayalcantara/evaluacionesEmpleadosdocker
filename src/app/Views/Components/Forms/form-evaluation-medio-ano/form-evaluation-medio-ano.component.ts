@@ -18,6 +18,7 @@ import { IResultadoLogro } from 'src/app/Models/EvaluacionDesempenoMeta/IEvaluac
 import { IAccionPlan } from 'src/app/Models/Evaluacion/IAccionPlan';
 import { PlanAccionMatrizComponent } from '../plan-accion-matriz/plan-accion-matriz.component';
 import { finalize } from 'rxjs/operators';
+import { BitacoraResumenComponent } from '../../evaluacioncomponents/bitacora-resumen/bitacora-resumen.component';
 
 interface IQualitativeFeedback {
   texto: string;
@@ -33,7 +34,7 @@ interface ICierreFeedback {
 @Component({
   selector: 'app-form-evaluation-medio-ano',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule],
+  imports: [CommonModule, FormsModule, MatDialogModule, BitacoraResumenComponent],
   templateUrl: './form-evaluation-medio-ano.component.html',
   styleUrls: ['./form-evaluation-medio-ano.component.css']
 })
