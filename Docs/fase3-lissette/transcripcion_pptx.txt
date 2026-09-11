@@ -1,0 +1,55 @@
+===== ppt/slides/slide1.xml
+  BITÁCORA DE EVENTOS
+  DE DESEMPEÑO
+  Registro de comportamientos observables · Insumo para evaluación formal
+  DATOS DEL COLABORADOR
+  NOMBRE
+  [ Sistema ]
+  CARGO
+  [ Sistema ]
+  FECHA DE INGRESO
+  [ Sistema ]
+  Seleccione el nombre del colaborador
+  Colaborador 1
+  Colaborador 2
+  IR A BITACORA
+===== ppt/slides/slide2.xml
+  ¿CÓMO USAR ESTA BITÁCORA?
+  Fecha del evento
+  Registra la fecha en que ocurrió el hecho, no cuando lo anotás.
+  1
+  Descripción
+  Describe el hecho observable: situación · acción · resultado. Evita juicios subjetivos.
+  2
+  Competencias
+  Indica cuál(es) competencia(s) organizacional(es) evidencia el evento registrado.
+  3
+  Principio clave: registrar HECHOS, no interpretaciones. La bitácora es evidencia objetiva.
+===== ppt/slides/slide3.xml
+  REGISTRO DE EVENTO
+  Impacto
+  FECHA DEL EVENTO
+  DD / MM / AAAA
+  TIPO DE EVENTO
+  Logro
+  Incumplimiento
+  Iniciativa
+  Conducta
+  DESCRIPCIÓN DEL EVENTO
+  Describe el hecho observable: ¿Qué ocurrió? ¿En qué contexto? ¿Cuál fue el resultado o impacto inmediato?
+  COMPETENCIAS QUE IMPACTA
+  Enfoque al Socio
+  Enfoque a Resultados
+  Flexibilidad y adaptación
+  Trabajo en Equipo, comunicación Interpersonal e Inteligencia Emocional
+  Desarrollo Personal y Auto Aprendizaje
+  Enfoque a los Sistemas Institucionales / Regulaciones y Cultura
+  Habilidades de comunicación y Presencia Profesional
+  Toma de Decisiones, Coraje Gerencial y Estilo de colaboración
+  Supervisión, Desarrollo y motivación de Otros
+  Toma de Decisiones y solución Creativa de Problemas
+  Pensamiento analítico y Rigor Intelectual
+  Conocimiento del Negocio, Enfoque estratégico, Visión y Propósito
+  +
+  −
+media: ['ppt/media/image3.png', 'ppt/media/image2.png', 'ppt/media/image1.png', 'ppt/media/image4.png']
