@@ -25,7 +25,8 @@ import {
   templateUrl: './bitacora.component.html',
   styleUrls: ['./bitacora.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
+  providers: [ExcelService],   // no está en root: lo provee cada página que exporta (igual que historial-evaluaciones)
 })
 export class BitacoraComponent implements OnInit {
   constructor(

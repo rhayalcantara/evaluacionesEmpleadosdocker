@@ -29,7 +29,8 @@ interface IDetalleColaborador {
   templateUrl: './reporte-bitacora.component.html',
   styleUrls: ['./reporte-bitacora.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
+  providers: [ExcelService],   // no está en root: lo provee cada página que exporta (igual que historial-evaluaciones)
 })
 export class ReporteBitacoraComponent implements OnInit {
   constructor(

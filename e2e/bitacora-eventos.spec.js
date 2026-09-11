@@ -45,7 +45,7 @@ const DESC = `${MARCA} Situación: cierre de mes. Acción: presentó el informe 
 async function navMenu(page, menuText, itemText) {
   const navItem = page.locator('li.nav-item.dropdown').filter({ hasText: menuText });
   if (await navItem.count() === 0) { issue(`Menú "${menuText}" no encontrado`); return false; }
-  await navItem.first().locator('a.nav-link.dropdown-toggle').click();
+  await navItem.first().locator('.dropdown-toggle').first().click();
   await page.waitForTimeout(500);
   const item = navItem.first().locator('a.dropdown-item').filter({ hasText: itemText });
   if (await item.count() === 0) { issue(`Ítem "${itemText}" no está bajo "${menuText}"`); return false; }
@@ -62,6 +62,11 @@ async function cerrarSwal(page) {
 test.setTimeout(300000);
 
 test('Bitácora de Eventos — Fase 3', async ({ page }) => {
+  const diag = [];
+  page.on('console', m => { if (m.type() === 'error') diag.push('console: ' + m.text().slice(0, 220)); });
+  page.on('pageerror', e => diag.push('pageerror: ' + String(e).slice(0, 220)));
+  page.on('response', r => { if (r.status() >= 400) diag.push(`HTTP ${r.status()} ${r.url()}`); });
+  page.on('requestfailed', r => diag.push(`requestfailed ${r.url()} ${r.failure()?.errorText}`));
   // 1. Login
   await page.goto(BASE, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('input', { timeout: 20000 }).catch(() => null);
@@ -85,7 +90,13 @@ test('Bitácora de Eventos — Fase 3', async ({ page }) => {
 
   // 2. Navegar a la bitácora
   const llego = await navMenu(page, 'Evaluaciones', 'Bitácora');
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(1200);
+  const swalNav = (await page.locator('.swal2-title, .swal2-html-container').allTextContents()).map(t => t.trim()).filter(Boolean);
+  if (swalNav.length) { nota(`Aviso al navegar: ${swalNav.join(' — ')}`); }
+  nota(`URL tras el clic: ${page.url()} · rol en localStorage: ${await page.evaluate(() => { try { return JSON.parse(localStorage.getItem('rol') || 'null')?.rolId; } catch { return 'ERR'; } })}`);
+  await shot(page, 'tras-clic-bitacora');
+  if (diag.length) { nota('Diagnóstico del navegador: ' + diag.slice(-6).join(' || ')); }
+  await page.waitForTimeout(1300);
   await cerrarSwal(page);
   await shot(page, 'bitacora-inicial');
   if (!llego || !/\/Bitacora/i.test(page.url())) { issue(`No se llegó a /Bitacora (url: ${page.url()})`); }
