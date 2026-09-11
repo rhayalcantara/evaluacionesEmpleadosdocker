@@ -1,6 +1,6 @@
 /* Datos del tablero de la Fase 3 (bitácora) — regenerado por el orquestador en cada evento. */
 window.PROGRESO = {
-  actualizado: "2026-09-11 12:00 — B2 integrado · B1 y B3 en ronda 2 · B4 y B5 construyendo",
+  actualizado: "2026-09-11 11:46 — B2 integrado · B1-r2 y B4 en crítico · B3-r2 y B5-r2 construyendo",
   rama: "feature/bitacora-eventos (frontend y API)",
   fases: [
     { id: "F0", nombre: "Contratos y base (orquestador)", nota: "modelo EF, migración, tablas en Evaluaciones_Test, contratos TS, baterías adelantadas",
@@ -16,14 +16,14 @@ window.PROGRESO = {
       ] },
     { id: "F1", nombre: "Backend", nota: "B1 controlador del API (constructor C#); despliegue de la DLL a :7071",
       tareas: [
-        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "ronda 2", ronda: 2, pruebas: "pytest 38/38 (r1)", tokens: null, commit: "", nota: "Crítico Opus RECHAZADO (141k tokens, 15 min): 1 faltante real: N+1 del nombre del autor (0.27 s/evento, 4 s con 15 filas). Todo lo demás ok. B1-r2 lanzado 11:50" }
+        { id: "B1", archivo: "API: Controllers/BitacoraEventosController.cs", estado: "en crítico", ronda: 2, pruebas: "pytest 38/38 · lista de 15 eventos 0.30 s (antes 3.99 s)", tokens: null, commit: "", nota: "r1 RECHAZADO por N+1 del autor; r2 corregida en 4 min, DLL redesplegada a :7071; crítico ronda 2 en curso" }
       ] },
     { id: "F2", nombre: "Frontend", nota: "B2 primero; B3 ∥ B4 ∥ B5 (máx. 2 constructores a la vez); B6 integración fina (orquestador)",
       tareas: [
         { id: "B2", archivo: "src/app/Helpers/bitacora-utils.ts", estado: "integrado", ronda: 1, pruebas: "Jasmine 22/22 + 110 aserciones del crítico", tokens: 46627, commit: "37edafd", nota: "Crítico Opus: APROBADO, 19/19 firmas, sin faltantes (108k tokens, 7 min). Observación: textoResumen con contadores incoherentes devuelve vacío" },
         { id: "B3", archivo: "src/app/Controllers/Bitacora.ts", estado: "ronda 2", ronda: 2, pruebas: "Jasmine 11/11 (r1) · +1 spec para r2", tokens: null, commit: "", nota: "Crítico Opus RECHAZADO (118k tokens, 8 min): el POST manda fechaRegistro:null y el API real lo rechaza con 400 (la batería con HttpTestingController no lo veía). B3-r2 lanzado 11:58" },
-        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en curso", ronda: 1, pruebas: "batería .pendiente lista", tokens: null, commit: "", nota: "Lanzado 11:32 en paralelo (2 constructores)" },
-        { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "en curso", ronda: 1, pruebas: "batería .pendiente lista", tokens: null, commit: "", nota: "Lanzado 11:32 en paralelo (2 constructores)" },
+        { id: "B4", archivo: "Pages/bitacora/bitacora.component.ts|.html|.css", estado: "en crítico", ronda: 1, pruebas: "tsc OK · Jasmine 10/10", tokens: null, commit: "", nota: "Tres archivos en 21 min (ts 10.5 KB, html 10.3 KB, css 2.5 KB); DONE 11:44" },
+        { id: "B5", archivo: "evaluacioncomponents/bitacora-resumen/", estado: "ronda 2", ronda: 2, pruebas: "ts compila", tokens: null, commit: "", nota: "Escribió el .ts (6.6 KB, caché estática y shareReplay) y se quedó 15 min sin escribir el .html: detenido y relanzado con B5-r2.md" },
         { id: "B6", archivo: "form medio año, FormEvaluationEmploye, historial (integración)", estado: "pendiente", ronda: 0, pruebas: "—", tokens: null, commit: "", nota: "orquestador" }
       ] },
     { id: "F3", nombre: "Reporte y cierre", nota: "B7 reporte RRHH; regresión, Playwright, despliegue a prueba, validación con Lissette",
@@ -59,6 +59,10 @@ window.PROGRESO = {
     { hora: "11:50", tarea: "B1", texto: "B1-r2.md (una sola corrección) y constructor relanzado sobre el mismo workspace" },
     { hora: "11:57", tarea: "B3", texto: "Crítico Opus RECHAZADO: fechaRegistro:null rompe el POST real (400). Lección: la batería HTTP simulada no valida el contrato del API; el crítico sí lo ejecutó contra :7071" },
     { hora: "11:58", tarea: "B3", texto: "B3-r2.md (omitir claves de solo lectura, fechaISO) + spec nuevo en la batería; constructor relanzado" },
+    { hora: "11:39", tarea: "B1", texto: "r2 compila; DLL redesplegada; 38/38; lista de 15 eventos 0.30 s y resumen 0.32 s (antes ~4 s). Crítico ronda 2 lanzado" },
+    { hora: "11:42", tarea: "B3", texto: "Trampa: copié a src el archivo de B3-r2 a medio editar (import roto) y rompió Karma para B4; restaurada la v1. Regla: solo integrar tras DONE o archivo estable" },
+    { hora: "11:43", tarea: "B4", texto: "Batería Jasmine 10/10 con los tres archivos; DONE 11:44; crítico Opus lanzado" },
+    { hora: "11:44", tarea: "B5", texto: "Sin avance 15 min tras el .ts: detenido y relanzado como B5-r2 (solo la plantilla)" },
     { hora: "10:35", tarea: "—", texto: "F0 COMPLETA: commits 01f0cac (frontend) y faa177f (API). Pendiente de F2: specs Jasmine .pendiente de B2–B5 se escriben al abrir esa fase" }
   ]
 };
